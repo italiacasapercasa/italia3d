@@ -14,7 +14,7 @@ import { listarPasta } from './zip.mjs';
 const RAIZ = path.resolve(import.meta.dirname, '..');
 const CFG = path.join(RAIZ, 'config', 'hostinger.json');
 const CURL = process.platform === 'win32' ? 'curl.exe' : 'curl';
-export const CONFIG_GIOCO = ['correzioni.json', 'moderazione.json', 'doppi.json', 'storie-manuali.json'];
+export const CONFIG_GIOCO = ['correzioni.json', 'moderazione.json', 'doppi.json', 'storie-manuali.json', 'commerci.json'];
 
 export function lerCfg() {
   const c = JSON.parse(fs.readFileSync(CFG, 'utf8'));
@@ -75,6 +75,13 @@ export function conectar(log = console.log) {
         const r = curl(cfg, args, inseguro);
         if (!r.ok) throw new Error(`envio falhou (${lote.map(a => a.remoto).join(', ')}): ${r.erro}`);
       }
+    },
+    listar(remoto) {   // nomes dos arquivos de uma pasta ([] se não existe)
+      const r = curl(cfg, ['--list-only', url(remoto.replace(/\/?$/, '/'))], inseguro);
+      return r.ok ? nomes(r.saida) : [];
+    },
+    apagar(remoto) {   // remove um arquivo do servidor (o DELE vai antes do CWD: caminho a partir da raiz do FTP)
+      return curl(cfg, ['-Q', `DELE ${remoto}`, '--list-only', `ftp://${cfg.host}/`], inseguro).ok;
     },
     baixar(remoto, local) {   // devolve false se o arquivo não existe no servidor
       fs.mkdirSync(path.dirname(local), { recursive: true });

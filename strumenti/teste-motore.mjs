@@ -59,5 +59,24 @@ ok(s.cariche.presidente?.conta === 'anna', `presidente eleito no domingo = anna 
 ok(s.cariche.sindaci['015146']?.conta === 'carla', `sindaca de Milano = carla (deu ${s.cariche.sindaci['015146']?.conta})`);
 ok(s.cariche.leader?.conta === 'dario', `líder do mandato 2 = dario, story +20 (deu ${s.cariche.leader?.conta})`);
 ok(s.contatori.commenti_rifiutati === 1 && s.contatori.case_nascoste === 1, 'contadores: 1 rejeitado, 1 casa escondida');
+
+// comércios: reservam o próximo lote na hora da aprovação; expirados somem mas o lote continua reservado
+const s2 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 3 * H, { luogo: '058091' }), c('carla', qui + 5 * H, { luogo: '058091' })],
+    storie: [], bloccati: [],
+    commerci: [
+      { id: 'n1', istat: '058091', ts: qui + 2 * H, prodotto: 'negozio', nome: 'Pizzeria' },               // entre anna e bruno: lote 1
+      { id: 'n2', istat: '058091', ts: qui + 4 * H, fino: qui + 4.5 * H, prodotto: 'cartellone', nome: 'X' }, // expirado: lote 3 fica reservado
+      { id: 'n3', istat: '015146', ts: qui + 4 * H, nome: 'Milano' },                                     // cidade sem casas: ignorado
+    ],
+  },
+  comuni, regioni, agora,
+});
+const lote = conta => s2.case.find(x => x[0] === conta)[2];
+ok(lote('anna') === 0 && lote('bruno') === 2 && lote('carla') === 4, `casas pulam os lotes dos comércios (anna 0, bruno 2, carla 4; deu ${lote('anna')}, ${lote('bruno')}, ${lote('carla')})`);
+ok(s2.commerci.length === 1 && s2.commerci[0].id === 'n1' && s2.commerci[0].lote === 1 && s2.commerci[0].li === 0, `só o comércio ativo aparece, no lote 1 (${JSON.stringify(s2.commerci.map(n => [n.id, n.lote]))})`);
+ok(s2.luoghi[0][4] === 5, `Roma: 5 lotes ocupados (3 casas + 2 comércios; deu ${s2.luoghi[0][4]})`);
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);

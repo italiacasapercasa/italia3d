@@ -3,6 +3,7 @@ import { REGOLE, NOMI_CARICHE, DESCR_CARICHE, FONTI, COME_GUADAGNARE, num, punti
 import { iconaLivello } from './icone.js';
 import { Fotografo } from './foto.js';
 import { immagineCasa, immagineFondazione, immagineCitta, PERFIL } from './storie.js';
+import { tipoDi, linkWhatsapp } from './commerci.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -73,6 +74,7 @@ export class UI {
       else if (d.storia) this.storiaCasa(this.D.porConta.get(d.storia));
       else if (d.atto) this.attoFondazione(this.D.luoghi[+d.atto]);
       else if ('condividi' in d) this.condividir(d.condividi);
+      else if ('copia' in d) this.copiarConvite(t);
       else if (d.ir) this.rota(d.ir);
     });
   }
@@ -298,6 +300,55 @@ export class UI {
       <div class="sub">${esc(r.nome)} · ${num(c.pop)} abitanti · ancora nessuna casa</div>
       <div class="carta meta"><b>Diventa il fondatore o la fondatrice di ${esc(c.nome)}!</b><small>Commenta <b>${esc(c.nome)}, ${esc(r.nome)}</b> nell’ultimo post di @${PERFIL}: la prima casa della città sarà tua, per sempre.</small></div>
       <p class="nota">Conosci qualcuno di ${esc(c.nome)}? Taggalo nei commenti: se entra, guadagni +${REGOLE.punti.recluta} punti.</p>`);
+  }
+
+  // ---------- lote livre, outdoor e comércios ----------
+  convite(l) {
+    const url = `${location.origin}${location.pathname}?luogo=${encodeURIComponent(l.nome)}`;
+    return `Vieni a vivere a ${l.nome}! 🏠 Commenta «${l.nome}, ${l.regione.nome}» nell’ultimo post di @${PERFIL} e ricevi la tua casa con il tuo @ sulla mappa 3D dell’Italia: ${url}`;
+  }
+  lotto(a) {
+    const l = a.luogo;
+    this.abrir(`
+      <h2>🏡 Lotto libero a ${esc(l.nome)}</h2>
+      <div class="sub">${esc(l.regione.nome)} · ${num(l.case)} ${l.case === 1 ? 'casa' : 'case'} · ${a.stato === 'lavori' ? 'lavori in corso' : 'in vendita'}</div>
+      <div class="carta meta"><b>${a.ordem === 0 ? `Qui vivrà il prossimo vicino di ${esc(l.nome)}.` : 'Questo lotto aspetta il tuo amico.'}</b><small>Tagga un amico nei commenti dell’ultimo post di @${PERFIL}. Se commenta «${esc(l.nome)}, ${esc(l.regione.nome)}», la sua casa nasce qui e tu guadagni <b>+${REGOLE.punti.recluta} punti</b>.</small></div>
+      <h3>Invito pronto da mandare</h3>
+      <textarea class="convite" readonly rows="4">${esc(this.convite(l))}</textarea>
+      <div class="bottoni"><button data-copia>📋 Copia l’invito</button><button class="sec" data-luogo="${l.id}">vedi ${esc(l.nome)}</button></div>
+      <p class="nota">I lotti liberi sono solo un disegno: non contano come case e non hanno un proprietario finché qualcuno non commenta.</p>`);
+  }
+  copiarConvite(botao) {
+    const ta = this.conteudo.querySelector('textarea.convite');
+    if (!ta) return;
+    const ok = () => { botao.textContent = '✅ Copiato! Incollalo in un commento o su WhatsApp'; };
+    if (navigator.clipboard) navigator.clipboard.writeText(ta.value).then(ok, () => { ta.select(); });
+    else { ta.select(); try { document.execCommand('copy'); ok(); } catch { /* seleção manual */ } }
+  }
+  pubblicita(l) {
+    this.abrir(`
+      <h2>📣 Spazio pubblicitario a ${esc(l.nome)}</h2>
+      <div class="sub">${esc(l.regione.nome)} · ${num(l.case)} case · cartellone libero</div>
+      <div class="carta meta"><b>Il tuo marchio qui, in 3D.</b><small>Questo cartellone lo vede chi cerca la sua casa a ${esc(l.nome)} e dintorni. Metti il tuo nome, un messaggio e il tuo logo: con un tocco i clienti ti scrivono su WhatsApp.</small></div>
+      <div class="bottoni"><a class="botao" href="negozio.html?prodotto=cartellone&citta=${l.comune.istat}">Prenota il cartellone</a><a class="botao sec" href="negozio.html?citta=${l.comune.istat}">🏪 Un negozio in città</a></div>
+      <p class="nota">Ogni attività viene controllata prima di andare sulla mappa.</p>`);
+  }
+  commercio(cm) {
+    if (!cm) return;
+    const l = cm.luogo, [, emoji, tipo] = tipoDi(cm.tipo);
+    const wa = linkWhatsapp(cm.whatsapp, `Ciao! Vi ho trovato su Italia Casa per Casa 🏠`);
+    const ig = cm.instagram ? `https://instagram.com/${encodeURIComponent(cm.instagram)}` : null;
+    this.abrir(`
+      <div class="tag-luogo" data-luogo="${l.id}">📍 ${esc(l.nome)} · ${esc(l.regione.nome)}</div>
+      <h2>${emoji} ${esc(cm.nome)}</h2>
+      <div class="sub">${esc(tipo)}${cm.prodotto === 'cartellone' ? ' · cartellone' : ''}</div>
+      ${cm.logo ? `<img class="logo-commercio" src="${esc(cm.logo)}" alt="">` : ''}
+      ${cm.descrizione ? `<p class="intro">${esc(cm.descrizione)}</p>` : ''}
+      <div class="bottoni">
+        ${wa ? `<a class="botao" href="${esc(wa)}" target="_blank" rel="noopener">💬 Scrivi su WhatsApp</a>` : ''}
+        ${ig ? `<a class="botao sec" href="${esc(ig)}" target="_blank" rel="noopener">📸 @${esc(cm.instagram)}</a>` : ''}
+      </div>
+      <p class="nota">Attività sulla mappa di ${esc(l.nome)}. <a href="negozio.html?citta=${l.comune.istat}">Vuoi anche tu la tua?</a></p>`);
   }
 
   // ---------- região ----------

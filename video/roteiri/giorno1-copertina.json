@@ -1,0 +1,467 @@
+{
+ "nome": "giorno1",
+ "durata": 15.29,
+ "testa": {
+  "titolo": "GIORNO 1",
+  "unita": "CASE",
+  "contatore": 0,
+  "contatore_da": 2.129
+ },
+ "luogo": {
+  "nome": "Napoli",
+  "regione": "Campania",
+  "sigla": "NA",
+  "x": 144.8,
+  "z": 110.6
+ },
+ "vulcano": {
+  "nome": "Vesuvio",
+  "x": 159.3,
+  "z": 130.4
+ },
+ "frasi": [
+  {
+   "ini": 0.03,
+   "fim": 1.698,
+   "linee": [
+    [
+     [
+      "QUESTA",
+      0.03
+     ],
+     [
+      "È",
+      0.455
+     ],
+     [
+      "L'ITALIA",
+      0.699,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 1.728,
+   "fim": 3.261,
+   "linee": [
+    [
+     [
+      "E",
+      1.728
+     ],
+     [
+      "NON",
+      1.945
+     ],
+     [
+      "C'È",
+      2.162
+     ],
+     [
+      "NESSUNO",
+      2.379,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 3.291,
+   "fim": 3.923,
+   "linee": [
+    [
+     [
+      "CHI",
+      3.291
+     ],
+     [
+      "COMMENTA",
+      3.481,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 3.953,
+   "fim": 4.633,
+   "linee": [
+    [
+     [
+      "LA",
+      3.953
+     ],
+     [
+      "SUA",
+      4.142
+     ],
+     [
+      "CITTÀ",
+      4.332,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 4.663,
+   "fim": 5.484,
+   "linee": [
+    [
+     [
+      "E",
+      4.663
+     ],
+     [
+      "LA",
+      4.853
+     ],
+     [
+      "REGIONE",
+      5.043,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 5.514,
+   "fim": 6.616,
+   "linee": [
+    [
+     [
+      "RICEVE",
+      5.514
+     ],
+     [
+      "UNA",
+      5.985
+     ],
+     [
+      "CASA",
+      6.316,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 6.646,
+   "fim": 7.621,
+   "linee": [
+    [
+     [
+      "COL",
+      6.646
+     ],
+     [
+      "SUO",
+      6.836
+     ],
+     [
+      "@",
+      7.026,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 7.651,
+   "fim": 8.386,
+   "linee": [
+    [
+     [
+      "E",
+      7.651
+     ],
+     [
+      "IL",
+      7.855
+     ],
+     [
+      "PRIMO",
+      8.06,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 8.416,
+   "fim": 9.302,
+   "linee": [
+    [
+     [
+      "DI",
+      8.416
+     ],
+     [
+      "OGNI",
+      8.62
+     ],
+     [
+      "CITTÀ",
+      8.976,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 9.332,
+   "fim": 11.013,
+   "linee": [
+    [
+     [
+      "DIVENTA",
+      9.332
+     ]
+    ],
+    [
+     [
+      "FONDATORE",
+      9.84,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 11.043,
+   "fim": 11.65,
+   "linee": [
+    [
+     [
+      "QUALE",
+      11.043
+     ],
+     [
+      "CITTÀ",
+      11.362,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 11.68,
+   "fim": 13.143,
+   "linee": [
+    [
+     [
+      "SI",
+      11.68
+     ],
+     [
+      "RIEMPIRÀ",
+      11.863
+     ]
+    ],
+    [
+     [
+      "PER",
+      12.316,
+      true
+     ],
+     [
+      "PRIMA?",
+      12.499,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "ini": 13.173,
+   "fim": 14.99,
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      13.173,
+      true
+     ],
+     [
+      "LA",
+      13.564
+     ]
+    ],
+    [
+     [
+      "TUA",
+      13.788,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "commento": {
+  "utente": "il.tuo.nome",
+  "testo": "Napoli, Campania",
+  "ini": 3.781,
+  "scrivi_da": 3.931,
+  "scrivi_a": 5.043,
+  "fim": 5.414
+ },
+ "etichetta": {
+  "esempio": "ESEMPIO",
+  "conta": "@il.tuo.nome",
+  "luogo": "Napoli, NA",
+  "ini": 6.546,
+  "fondatore": 9.84
+ },
+ "eventi": {
+  "zoom": 3.241,
+  "casa": 5.514,
+  "pali": 7.651,
+  "bandierine": 8.416,
+  "zoomout": 11.043,
+  "punti": 11.73,
+  "banner": 13.073,
+  "paese": 1.728
+ },
+ "domande": [
+  [
+   "Milano?",
+   45.4642,
+   9.19
+  ],
+  [
+   "Roma?",
+   41.9028,
+   12.4964
+  ],
+  [
+   "Napoli?",
+   40.8518,
+   14.2681
+  ]
+ ],
+ "banner": "COMMENTA LA TUA CITTÀ E REGIONE",
+ "fondatore": "FONDATORE",
+ "parlato": [
+  "Questa è l'Italia.",
+  "E non c'è nessuno.",
+  "Chi commenta la sua città e la regione riceve una casa col suo nome.",
+  "E il primo di ogni città diventa fondatore.",
+  "Quale città si riempirà per prima?",
+  "Scrivi la tua!"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5
+ ],
+ "sincro": {
+  "eventi.paese": [
+   1,
+   0,
+   0
+  ],
+  "testa.contatore_da": [
+   1,
+   3,
+   -0.25
+  ],
+  "eventi.zoom": [
+   2,
+   0,
+   -0.05
+  ],
+  "commento.ini": [
+   2,
+   1,
+   0.3
+  ],
+  "commento.scrivi_da": [
+   2,
+   1,
+   0.45
+  ],
+  "commento.scrivi_a": [
+   2,
+   7,
+   0
+  ],
+  "commento.fim": [
+   2,
+   8,
+   -0.1
+  ],
+  "eventi.casa": [
+   2,
+   8,
+   0
+  ],
+  "etichetta.ini": [
+   2,
+   11,
+   -0.1
+  ],
+  "eventi.pali": [
+   3,
+   0,
+   0
+  ],
+  "eventi.bandierine": [
+   3,
+   3,
+   0
+  ],
+  "etichetta.fondatore": [
+   3,
+   7,
+   0
+  ],
+  "eventi.zoomout": [
+   4,
+   0,
+   0
+  ],
+  "eventi.punti": [
+   4,
+   2,
+   0.05
+  ],
+  "eventi.banner": [
+   5,
+   0,
+   -0.1
+  ]
+ },
+ "audio": {
+  "arquivo": "giorno1.mp3",
+  "durata": 14.21
+ },
+ "copertina": {
+  "t": 10.74,
+  "testa_top": 250,
+  "titolo_top": 500,
+  "giu": 330,
+  "linee": [
+   [
+    "COMMENTA LA TUA CITTÀ",
+    false,
+    72
+   ],
+   [
+    "AVRAI UNA CASA",
+    true,
+    112
+   ]
+  ]
+ }
+}

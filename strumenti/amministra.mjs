@@ -24,6 +24,15 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   storia <conta> ["AAAA-MM-GG HH:MM"]    credita uma story manualmente (hora de Roma; padrão: agora)
   doppi "<início>" "<fim>" [storia|tutto]  pontos em dobro (hora de Roma, ex.: "2026-11-08 10:00")
   doppi lista | doppi limpa
+
+  Lojas e outdoors (pedidos feitos em negozio.html):
+  negozi [tutti]                         pedidos novos (baixa do servidor); "tutti" mostra também os já tratados
+  vedi <id>                              detalhes de um pedido
+  approva <id> [giorni]                  põe no mapa (padrão: data/negozio.json durata_giorni) — reserva um lote fixo
+  rifiuta <id>                           recusa o pedido (devolva o pagamento na Hotmart, se houve)
+  rinnova <id> [giorni]                  prolonga um comércio aprovado
+  rimuovi <id>                           tira do mapa agora (o lote continua reservado: nenhuma casa muda de lugar)
+  commerci                               comércios aprovados e até quando ficam
 `;
 
 function comune(arg) {
@@ -107,11 +116,74 @@ try {
       console.log(`ok: pontos em dobro (${d.tipi[0]}) de ${args[0]} a ${args[1]} (hora de Roma)`);
       break;
     }
+    case 'negozi': case 'vedi': case 'approva': case 'rifiuta': {
+      const { conectar } = await import('./pubblica.mjs');
+      const ftp = conectar(() => {}), remoto = `${ftp.priv}dati/negozi/`, local = path.join(RAIZ, 'dati-grezzi', 'negozi');
+      const baixarPedido = id => {
+        if (!/^\d{6}-[0-9a-f]{8}$/.test(id ?? '')) throw new Error('id inválido (ex.: 261025-1a2b3c4d)');
+        if (!ftp.baixar(`${remoto}${id}.json`, path.join(local, `${id}.json`))) throw new Error(`pedido ${id} não encontrado no servidor`);
+        return ler(path.join(local, `${id}.json`), null);
+      };
+      const salvarPedido = p => { gravar(path.join(local, `${p.id}.json`), p); ftp.enviar([{ local: path.join(local, `${p.id}.json`), remoto: `${remoto}${p.id}.json` }]); };
+      const r = new Risolutore(), nomeCom = ist => { const c = r.comuni.get(ist); return c ? `${c.nome} (${c.sigla})` : ist; };
+      const linhaPedido = p => `${p.id}  ${p.stato.padEnd(9)} ${(p.pagamento ?? 'non pagato').padEnd(10)} ${p.prodotto === 'cartellone' ? '📣' : '🏪'} ${p.nome} · ${nomeCom(p.istat)} · ${p.email}`;
+      if (cmd === 'negozi') {
+        const ids = ftp.listar(remoto).filter(n => /^\d{6}-[0-9a-f]{8}\.json$/.test(n)).map(n => n.slice(0, -5)).sort();
+        const lista = ids.map(id => { ftp.baixar(`${remoto}${id}.json`, path.join(local, `${id}.json`)); return ler(path.join(local, `${id}.json`), null); }).filter(Boolean);
+        const mostrar = args[0] === 'tutti' ? lista : lista.filter(p => p.stato === 'nuovo');
+        console.log(mostrar.length ? mostrar.map(linhaPedido).join('\n') : `Nenhum pedido ${args[0] === 'tutti' ? '' : 'novo '}(${lista.length} no total).`);
+        break;
+      }
+      const p = baixarPedido(args[0]);
+      if (cmd === 'vedi') { console.log(linhaPedido(p)); console.log(JSON.stringify({ ...p, logo: p.logo || '(sem logo)' }, null, 2)); break; }
+      if (cmd === 'rifiuta') { p.stato = 'rifiutato'; salvarPedido(p); console.log(`ok: ${p.id} recusado${p.pagamento === 'pagato' ? ' · ATENÇÃO: está pago, faça o reembolso na Hotmart' : ''}`); break; }
+      // approva: confere vagas, publica o logo e acrescenta em config/commerci.json
+      const cfgNeg = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}), com = r.comuni.get(p.istat);
+      if (!com) throw new Error(`comune ${p.istat} não existe`);
+      const lista = ler(path.join(CFG, 'commerci.json'), []);
+      if (lista.some(x => x.id === p.id)) throw new Error(`${p.id} já está aprovado (use rinnova)`);
+      const piano = cfgNeg.piani.find(x => com.pop >= x.da) ?? cfgNeg.piani.at(-1);
+      const ativos = lista.filter(x => x.istat === p.istat && (x.prodotto ?? 'negozio') === p.prodotto && Date.parse(x.fino) > Date.now()).length;
+      if (ativos >= piano.posti[p.prodotto]) throw new Error(`${com.nome} já tem ${ativos}/${piano.posti[p.prodotto]} ${p.prodotto} ativos`);
+      if (p.pagamento !== 'pagato') console.log('aviso: a Hotmart ainda não confirmou o pagamento deste pedido');
+      let logo = '';
+      if (p.logo) {
+        const arq = path.join(RAIZ, 'sito', 'data', 'loghi', p.logo);
+        if (ftp.baixar(`${remoto}${p.logo}`, arq)) { ftp.enviar([{ local: arq, remoto: `${ftp.web}data/loghi/${p.logo}` }]); logo = `data/loghi/${p.logo}`; }
+        else console.log('aviso: não consegui baixar o logo; vai sem logo');
+      }
+      const giorni = +(args[1] ?? cfgNeg.durata_giorni ?? 30), agora = new Date();
+      lista.push({
+        id: p.id, istat: p.istat, approvato: agora.toISOString(), fino: new Date(agora.getTime() + giorni * 86400e3).toISOString(),
+        prodotto: p.prodotto, nome: p.nome, tipo: p.tipo, colore: p.colore, whatsapp: p.whatsapp, instagram: p.instagram,
+        descrizione: p.descrizione, testo: p.testo, logo,
+      });
+      gravar(path.join(CFG, 'commerci.json'), lista);
+      p.stato = 'approvato'; p.approvato = agora.toISOString();
+      salvarPedido(p);
+      console.log(`ok: ${p.nome} aprovado em ${com.nome} por ${giorni} dias (aparece na próxima atualização do mapa)`);
+      break;
+    }
+    case 'rinnova': case 'rimuovi': {
+      const lista = ler(path.join(CFG, 'commerci.json'), []), x = lista.find(n => n.id === args[0]);
+      if (!x) throw new Error(`${args[0]} não está entre os comércios aprovados`);
+      // nunca apagar da lista: o lote reservado precisa continuar existindo, senão as casas seguintes mudam de lugar
+      if (cmd === 'rimuovi') x.fino = new Date().toISOString();
+      else x.fino = new Date(Math.max(Date.parse(x.fino), Date.now()) + +(args[1] ?? 30) * 86400e3).toISOString();
+      gravar(path.join(CFG, 'commerci.json'), lista);
+      console.log(`ok: ${x.nome} ${cmd === 'rimuovi' ? 'sai do mapa na próxima atualização' : `fica até ${new Date(x.fino).toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}`}`);
+      break;
+    }
+    case 'commerci': {
+      const lista = ler(path.join(CFG, 'commerci.json'), []), r = new Risolutore();
+      console.log(lista.length ? lista.map(x => `${x.id}  ${Date.parse(x.fino) > Date.now() ? 'no mapa até' : 'expirou em'} ${new Date(x.fino).toLocaleDateString('it-IT')}  ${x.prodotto === 'cartellone' ? '📣' : '🏪'} ${x.nome} · ${r.comuni.get(x.istat)?.nome ?? x.istat}`).join('\n') : 'Nenhum comércio aprovado.');
+      break;
+    }
     default:
       console.log(AJUDA);
   }
   // mudou alguma configuração do jogo: envia para o servidor (o robô do GitHub usa a de lá)
-  const muda = ['correggi', 'assegna', 'blocca', 'sblocca', 'storia'].includes(cmd) || (cmd === 'doppi' && args[0] !== 'lista');
+  const muda = ['correggi', 'assegna', 'blocca', 'sblocca', 'storia', 'approva', 'rinnova', 'rimuovi'].includes(cmd) || (cmd === 'doppi' && args[0] !== 'lista');
   if (muda && fs.existsSync(path.join(CFG, 'hostinger.json'))) {
     try { (await import('./pubblica.mjs')).pubblicare({ config: true, log: () => {} }); console.log('configuração enviada ao servidor (vale na próxima atualização automática)'); }
     catch (e) { console.log(`aviso: não consegui enviar ao servidor (${e.message}); rode "node strumenti/pubblica.mjs --config" depois`); }

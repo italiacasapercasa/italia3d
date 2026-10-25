@@ -1,12 +1,14 @@
 // Cidades 3D: quadras em espiral ao redor da piazza, casas por nível e prédios especiais.
 // Só as cidades perto da câmera entram nos InstancedMesh (atualizado quando a câmera anda).
 import * as THREE from 'three';
-import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor } from './modelli.js';
-import { REGOLE } from './regole.js';
+import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, INSEGNA, geometriaFaccia, geometriaLuminaria, geometriaNegozio } from './modelli.js';
+import { REGOLE, nataleAttivo } from './regole.js';
+import { texturaVendita, texturaLavori, texturaPubblicita, texturaInsegna, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
 
 export const LOTE = 0.05, RUA = 0.035;                 // km
 export const QW = 4 * LOTE + RUA, QH = 2 * LOTE + RUA; // quadra: 4 x 2 lotes + meia rua de cada lado
 export const DIST_CIDADE = 32;                          // abaixo disso (km) a cidade aparece
+const CALCADA = 0.006;                                  // largura da calçada (km)
 
 // ordem das quadras: da piazza para fora
 const ORDEM = (() => {
@@ -35,12 +37,21 @@ export function posLote(n) {
   return { x: i * QW + (col - 1.5) * LOTE, z: j * QH + (linha - 0.5) * LOTE, rot: linha === 0 ? Math.PI : 0 };
 }
 
-const variante = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h) % 3; };
+const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
+const variante = s => hash(s) % 3;
+
+// lotes desenhados depois da última casa: livres (convite) e, nas cidades maiores, o outdoor
+export const liberiDi = l => REGOLE.lotti_liberi;
+export const temCartellone = l => l.case >= REGOLE.cartellone_da;
+const extraLotti = l => liberiDi(l) + (temCartellone(l) ? 1 : 0);
+// lote livre n: "lavori in corso" em 1 de cada 3, "in vendita" nos outros (fixo enquanto o lote estiver livre)
+export const tipoLibero = (l, n) => (hash(`${l.comune.istat}:${n}`) % 3 === 0 ? 'lavori' : 'vendita');
 
 // ---------- geometrias do chão ----------
 function geometriaCela(piazza) {
   const b = new Construtor();
   b.quad(QW, QH, 0, 0, 0, '#8C95A1');
+  b.quad(QW - RUA + 2 * CALCADA, QH - RUA + 2 * CALCADA, 0, 0.0004, 0, '#E4E1DA');
   b.quad(QW - RUA, QH - RUA, 0, 0.0007, 0, piazza ? '#E9DDC1' : '#B6DC8F');
   if (piazza) b.quad(QW - RUA - 0.03, QH - RUA - 0.03, 0, 0.0009, 0, '#F1E8D3');
   for (const x of [-QW / 4, QW / 4]) b.quad(0.032, 0.0035, x, 0.0003, -QH / 2, '#FFFFFF');
@@ -105,15 +116,38 @@ export class Citta {
     this.perto = [];
     this.ultimo = null;
     const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
+    const brilho = new THREE.MeshBasicMaterial({ vertexColors: true });
+    this.mat = mat;
     const add = (nome, geo, m = mat) => new Camada(this.grupo, geo, m, nome);
     this.camadas = {
       cela: add('cela', geometriaCela(false)),
       celaP: add('celaP', geometriaCela(true)),
       borda: add('borda', geometriaBorda()),
-      fiamma: add('fiamma', geometriaEspecial('fiamma'), new THREE.MeshBasicMaterial({ vertexColors: true })),
+      fiamma: add('fiamma', geometriaEspecial('fiamma'), brilho),
     };
-    for (const t of ['piazza', 'bandiera', 'chiesa', 'palazzina', 'ospedale', 'stadio', 'parco']) this.camadas[t] = add(t, geometriaEspecial(t));
+    for (const t of ['piazza', 'bandiera', 'chiesa', 'palazzina', 'ospedale', 'stadio', 'parco', 'liberoV', 'liberoL', 'cartellone']) this.camadas[t] = add(t, geometriaEspecial(t));
     for (let n = 0; n < REGOLE.livelli.length; n++) for (let v = 0; v < 3; v++) this.camadas[`c${n}_${v}`] = add(`c${n}_${v}`, geometriaCasa(n, v));
+    // faces com texto (redesenhadas quando a fonte do site carrega)
+    const faces = { facciaV: [PLACCA, texturaVendita, 0.011], facciaL: [PLACCA, texturaLavori, 0.011], facciaP: [CARTELLONE, texturaPubblicita, 0.02] };
+    for (const [k, [p, tex, dz]] of Object.entries(faces)) this.camadas[k] = add(k, geometriaFaccia(p, dz), new THREE.MeshBasicMaterial({ map: tex() }));
+    fontePronta.then(() => {
+      for (const [k, [, tex]] of Object.entries(faces)) { const m = this.camadas[k].mat; m.map.dispose(); m.map = tex(); m.needsUpdate = true; }
+      mappa.sujo = true;
+    });
+    // Natal: árvore na piazza e luminárias nas ruas do centro
+    this.natale = nataleAttivo();
+    if (this.natale) {
+      const lum = geometriaLuminaria(RUA / LOTE + 0.12);
+      Object.assign(this.camadas, {
+        albero: add('albero', geometriaEspecial('alberoNatale')),
+        stella: add('stella', geometriaEspecial('stellaNatale'), brilho),
+        lumPali: add('lumPali', lum.postes),
+        lumLuci: add('lumLuci', lum.luci, brilho),
+      });
+    }
+    // lojas e outdoors comprados: malhas próprias (poucas), por cidade
+    this.extras = new THREE.Group();
+    this.grupo.add(this.extras);
     this.chamas = [];
     mappa.aoMover.push(() => this.atualizar());
     mappa.aoFrame.push(t => this.animar(t));
@@ -134,10 +168,11 @@ export class Citta {
     }
     return melhor;
   }
+  // última quadra desenhada: a das casas mais os lotes livres e o outdoor
+  ultimoBloco(l) { return BLOCOS_CASAS[Math.floor(Math.max(0, l.lotti + extraLotti(l) - 1) / 8)]; }
   raioCidade(l) {
     if (l._raio) return l._raio;
-    const ultimo = BLOCOS_CASAS[Math.floor(Math.max(0, l.lotti - 1) / 8)];
-    const [i, j] = ORDEM[ultimo];
+    const [i, j] = ORDEM[this.ultimoBloco(l)];
     return (l._raio = Math.hypot(i * QW, j * QH) + QW);
   }
 
@@ -145,7 +180,7 @@ export class Citta {
   dadosCidade(l) {
     let c = this.cache.get(l.id);
     if (c) return c;
-    const mp = this.mappa, ultimo = BLOCOS_CASAS[Math.floor(Math.max(0, l.lotti - 1) / 8)];
+    const mp = this.mappa, ultimo = this.ultimoBloco(l);
     const raio = this.raioCidade(l);
     let hmax = -Infinity, hmin = Infinity;
     for (let a = -1; a <= 1; a += 0.5) for (let b = -1; b <= 1; b += 0.5) {
@@ -153,7 +188,7 @@ export class Citta {
       hmax = Math.max(hmax, h); hmin = Math.min(hmin, h);
     }
     const hc = hmax + 0.004;
-    c = { hc, raio, partes: {}, casas: [] };
+    c = { hc, raio, partes: {}, casas: [], alvos: [], extras: null };
     const push = (k, el) => { (c.partes[k] ??= []).push(...el); };
     const usados = new Set();
     for (let r = 0; r <= ultimo; r++) usados.add(ORDEM[r].join(','));
@@ -171,6 +206,14 @@ export class Citta {
       else if (p === 'palazzina') esp(l.case >= (palazzinaN(r) + 1) * M.palazzinaOgni ? 'palazzina' : 'parco');
       else if (p === 'ospedale') esp(l.case >= M.ospedale ? 'ospedale' : 'parco');
       else if (p === 'stadio') esp(l.case >= M.stadio ? 'stadio' : 'parco');
+      // Natal: árvore na piazza; luminárias nas ruas da piazza e das quadras em volta
+      if (this.natale) {
+        if (p === 'piazza') { push('albero', matriz(cx - LOTE, hc + 0.001, cz, 0, LOTE)); push('stella', matriz(cx - LOTE, hc + 0.001, cz, 0, LOTE)); }
+        if (r <= 8) {
+          for (const s of [-1, 1]) for (const k of ['lumPali', 'lumLuci']) push(k, matriz(cx + s * QW / 4, hc + 0.0009, cz - QH / 2, Math.PI / 2, LOTE));
+          for (const k of ['lumPali', 'lumLuci']) push(k, matriz(cx - QW / 2, hc + 0.0009, cz, 0, LOTE));
+        }
+      }
     }
     for (const ci of l.casas) {
       const casa = this.D.casas[ci], q = posLote(casa.lote);
@@ -179,9 +222,54 @@ export class Citta {
       push(`c${casa.livello}_${variante(casa.conta)}`, matriz(x, hc + 0.0009, z, q.rot, LOTE));
       c.casas.push(ci);
     }
+    // lotes livres depois da última casa (só desenho) e o outdoor à venda
+    const nl = liberiDi(l);
+    for (let k = 0; k < extraLotti(l); k++) {
+      const n = l.lotti + k, q = posLote(n), x = l.x + q.x, z = l.z + q.z;
+      if (k < nl) {
+        const t = tipoLibero(l, n), m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
+        push(t === 'lavori' ? 'liberoL' : 'liberoV', m); push(t === 'lavori' ? 'facciaL' : 'facciaV', m);
+        c.alvos.push({ tipo: 'lotto', x, z, y: hc, h: 0.55, r: 0.46, luogo: l, ordem: k, stato: t });
+      } else {
+        const m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
+        push('cartellone', m); push('facciaP', m);
+        c.alvos.push({ tipo: 'pubblicita', x, z, y: hc, h: 0.95, r: 0.5, luogo: l });
+      }
+    }
+    // comércios aprovados: cada um ocupa o lote que o motor reservou
+    for (const cm of l.commerci ?? []) {
+      const q = posLote(cm.lote), x = l.x + q.x, z = l.z + q.z;
+      cm.x = x; cm.z = z; cm.y = hc;
+      if (cm.prodotto === 'cartellone') push('cartellone', matriz(x, hc + 0.0009, z, q.rot, LOTE));
+      c.alvos.push({ tipo: 'commercio', x, z, y: hc, h: cm.prodotto === 'cartellone' ? 0.95 : 0.66, r: 0.5, commercio: cm, rot: q.rot });
+    }
     for (const k of Object.keys(c.partes)) c.partes[k] = new Float32Array(c.partes[k]);
     this.cache.set(l.id, c);
     return c;
+  }
+
+  // malhas próprias dos comércios de uma cidade (letreiro com nome, cor e logo)
+  extrasCidade(l) {
+    const c = this.dadosCidade(l);
+    if (c.extras || !l.commerci?.length) return c.extras;
+    const g = c.extras = new THREE.Group(), y = c.hc + 0.0009;
+    for (const a of c.alvos) {
+      if (a.tipo !== 'commercio') continue;
+      const cm = a.commercio, m = new THREE.Matrix4().fromArray(matriz(a.x, y, a.z, a.rot, LOTE));
+      const face = new THREE.Mesh(geometriaFaccia(cm.prodotto === 'cartellone' ? CARTELLONE : INSEGNA, cm.prodotto === 'cartellone' ? 0.02 : 0.014), new THREE.MeshBasicMaterial());
+      const pintar = logo => {
+        face.material.map?.dispose();
+        face.material.map = cm.prodotto === 'cartellone' ? texturaCartellone(cm.nome, cm.testo, cm.colore, logo) : texturaInsegna(cm.nome, cm.colore, logo);
+        face.material.needsUpdate = true;
+        this.mappa.sujo = true;
+      };
+      pintar(null);
+      Promise.all([carregarImagem(cm.logo), fontePronta]).then(([logo]) => pintar(logo));
+      const partes = [face];
+      if (cm.prodotto !== 'cartellone') partes.push(new THREE.Mesh(geometriaNegozio(cm.colore), this.mat));
+      for (const p of partes) { p.matrixAutoUpdate = false; p.matrix.copy(m); g.add(p); }
+    }
+    return g;
   }
 
   atualizar(forcar = false) {
@@ -202,6 +290,7 @@ export class Citta {
     for (const c of Object.values(this.camadas)) c.iniciar();
     this.perto = [];
     this.chamas = [];
+    this.extras.clear();
     const agora = Date.now() / 1000;
     for (const l of this.D.luoghi) {
       if (Math.hypot(l.x - cx, l.z - cz) - this.raioCidade(l) > R) continue;
@@ -209,6 +298,8 @@ export class Citta {
       this.perto.push(l);
       for (const [k, arr] of Object.entries(c.partes)) if (arr.length) this.camadas[k].push(arr);
       for (const ci of c.casas) { const casa = this.D.casas[ci]; if (casa.fiamme > agora) this.chamas.push(casa); }
+      const ex = this.extrasCidade(l);
+      if (ex) this.extras.add(ex);
     }
     for (const c of Object.values(this.camadas)) c.finalizar();
   }
@@ -234,6 +325,12 @@ export class Citta {
         const c = this.D.casas[ci], h = ALTURA_NIVEL[c.livello] * LOTE, m = LOTE * 0.46;
         caixa.min.set(c.x - m, c.y, c.z - m); caixa.max.set(c.x + m, c.y + h, c.z + m);
         if (ray.intersectBox(caixa, ponto)) { const d = ponto.distanceTo(ray.origin); if (d < md) { md = d; melhor = { tipo: 'casa', casa: c }; } }
+      }
+      // lotes livres, outdoor e comércios
+      for (const a of this.dadosCidade(l).alvos) {
+        const m = a.r * LOTE;
+        caixa.min.set(a.x - m, a.y, a.z - m); caixa.max.set(a.x + m, a.y + a.h * LOTE, a.z + m);
+        if (ray.intersectBox(caixa, ponto)) { const d = ponto.distanceTo(ray.origin); if (d < md) { md = d; melhor = a; } }
       }
       // piazza / bandeira abrem a cidade
       const hc = this.dadosCidade(l).hc;

@@ -26,6 +26,8 @@ export function montarEventi({ posts, comentarios, storie, cfg, log = console.lo
   const corr = ler(path.join(CFG, 'correzioni.json'), { testi: {}, conte: {} });
   const doppi = ler(path.join(CFG, 'doppi.json'), []).map(d => ({ da: Date.parse(d.da), a: Date.parse(d.a), tipi: d.tipi ?? ['storia'] }));
   const manuali = ler(path.join(CFG, 'storie-manuali.json'), []);
+  // comércios aprovados (amministra.mjs approva): ts = aprovação, fino = fim do período pago
+  const commerci = ler(path.join(CFG, 'commerci.json'), []).map(n => ({ ...n, ts: Date.parse(n.approvato), fino: n.fino ? Date.parse(n.fino) : null }));
   const proprio = (cfg.username ?? '').toLowerCase();
   const bloccati = new Set(mod.bloccati.map(s => s.toLowerCase()));
 
@@ -68,6 +70,7 @@ export function montarEventi({ posts, comentarios, storie, cfg, log = console.lo
     storie: storieEventi,
     bloccati: [...bloccati],
     doppi,
+    commerci,
   };
 }
 

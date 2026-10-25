@@ -185,6 +185,8 @@ button.storia small { display: block; font-size: 12px; font-weight: 700; opacity
 .anteprima.vuota { aspect-ratio: 9 / 16; display: flex; align-items: center; justify-content: center; background: var(--crema); }
 a.botao { display: inline-block; margin-top: 10px; background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 8px 16px; font-weight: 900; font-size: 14px; text-decoration: none; }
 a.botao.sec { background: #fff; }
+textarea.convite { width: 100%; box-sizing: border-box; font: 700 14px 'Nunito', sans-serif; border: 3px solid var(--inchiostro); border-radius: 12px; padding: 9px 12px; resize: none; background: var(--crema); }
+.logo-commercio { display: block; max-width: 120px; max-height: 120px; margin: 10px 0; border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; }
 #chips .chip { animation: entra .35s ease; }
 @keyframes entra { from { opacity: 0; transform: translateY(-4px); } }
 

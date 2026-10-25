@@ -3,43 +3,278 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Il tuo negozio sulla mappa · Italia Casa per Casa</title>
+<title>La tua attività sulla mappa · Italia Casa per Casa</title>
+<meta name="description" content="Metti il tuo negozio o il tuo cartellone sulla mappa 3D di Italia Casa per Casa: con il tuo nome, il tuo colore, il tuo logo e il tuo WhatsApp.">
+<meta name="theme-color" content="#8EBFD2">
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 <style>
-  body { margin: 0; background: #8EBFD2; font-family: 'Nunito', system-ui, sans-serif; color: #152033; }
-  main { max-width: 560px; margin: 24px auto; background: #fff; border: 4px solid #152033; border-radius: 24px; padding: 24px 22px; box-sizing: border-box; width: calc(100% - 24px); }
+  :root { --ink: #152033; --giallo: #FFC93C; --crema: #FFF6E5; --grigio: #5B6475; --rosso: #E0473C; }
+  body { margin: 0; background: #8EBFD2; font-family: 'Nunito', system-ui, sans-serif; color: var(--ink); }
+  main { max-width: 560px; margin: 24px auto; background: #fff; border: 4px solid var(--ink); border-radius: 24px; padding: 22px 20px; box-sizing: border-box; width: calc(100% - 24px); }
   h1 { font-size: 26px; font-weight: 900; margin: 0 0 6px; }
+  h2 { font-size: 19px; font-weight: 900; margin: 18px 0 6px; }
   p { font-weight: 700; font-size: 15px; line-height: 1.5; }
-  .sub { color: #5B6475; }
-  form { display: grid; gap: 10px; margin-top: 16px; }
+  .sub, .aiuto { color: var(--grigio); }
+  .aiuto { font-size: 12.5px; font-weight: 700; }
+  .passi { display: flex; gap: 6px; margin: 12px 0 4px; }
+  .passi span { flex: 1; text-align: center; font-weight: 900; font-size: 13px; padding: 6px 4px; border: 3px solid var(--ink); border-radius: 99px; background: #fff; color: var(--grigio); }
+  .passi span.on { background: var(--giallo); color: var(--ink); }
+  form, .blocco { display: grid; gap: 12px; margin-top: 12px; }
   label { display: grid; gap: 4px; font-weight: 800; font-size: 14px; }
-  input { font: 700 16px 'Nunito', sans-serif; border: 3px solid #152033; border-radius: 12px; padding: 9px 12px; }
-  button { background: #FFC93C; border: 3px solid #152033; border-radius: 99px; padding: 10px 18px; font: 900 15px 'Nunito', sans-serif; cursor: pointer; }
-  a { color: #152033; }
+  input, select, textarea { font: 700 16px 'Nunito', sans-serif; border: 3px solid var(--ink); border-radius: 12px; padding: 9px 12px; background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; }
+  textarea { resize: vertical; }
+  .errore { color: var(--rosso); font-size: 13px; font-weight: 800; }
+  .prodotti { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .prodotti label { display: block; border: 3px solid var(--ink); border-radius: 16px; padding: 10px; cursor: pointer; background: #fff; }
+  .prodotti input { display: none; }
+  .prodotti label:has(input:checked) { background: var(--crema); box-shadow: inset 0 0 0 3px var(--giallo); }
+  .prodotti b { display: block; font-size: 15px; } .prodotti small { color: var(--grigio); font-weight: 700; }
+  .cerca-citta { position: relative; }
+  #citta-lista { position: absolute; z-index: 5; left: 0; right: 0; top: 100%; background: #fff; border: 3px solid var(--ink); border-radius: 12px; max-height: 240px; overflow: auto; }
+  #citta-lista button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1.5px dashed #D9DDE3; background: #fff; padding: 9px 12px; font: 800 15px 'Nunito', sans-serif; cursor: pointer; }
+  #citta-lista small { color: var(--grigio); font-weight: 700; }
+  .piano { border: 3px solid var(--ink); border-radius: 14px; padding: 10px 12px; font-weight: 900; background: #F4FBFF; }
+  .piano s { color: var(--grigio); font-weight: 800; } .piano .prezzo { font-size: 18px; } .piano.pieno { background: #FDE8EC; }
+  .colori { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+  .colori label { width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--ink); cursor: pointer; display: block; }
+  .colori input[type=radio] { display: none; }
+  .colori label:has(input:checked) { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--ink); }
+  .colori input[type=color] { width: 46px; height: 42px; padding: 2px; }
+  .riga { display: flex; gap: 10px; align-items: center; }
+  .spunta { display: flex; gap: 10px; align-items: flex-start; font-weight: 700; font-size: 14px; }
+  .spunta input { width: auto; margin-top: 3px; }
+  button, a.botao { background: var(--giallo); border: 3px solid var(--ink); border-radius: 99px; padding: 11px 18px; font: 900 16px 'Nunito', sans-serif; cursor: pointer; color: var(--ink); text-decoration: none; display: inline-block; text-align: center; }
+  button.sec, a.botao.sec { background: #fff; }
+  button:disabled { opacity: .5; cursor: default; }
+  .bottoni { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  #anteprima canvas { display: block; width: 100%; height: auto; border-radius: 12px; }
+  #anteprima { background: var(--crema); border: 3px solid var(--ink); border-radius: 16px; padding: 12px; }
+  .linha { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1.5px dashed #D9DDE3; font-weight: 700; font-size: 14px; }
+  .linha span:last-child { text-align: right; font-weight: 900; }
+  .ok { background: var(--crema); border: 3px solid var(--ink); border-radius: 16px; padding: 14px; }
+  details { font-size: 13px; font-weight: 700; color: var(--grigio); } details summary { cursor: pointer; font-weight: 900; color: var(--ink); }
+  a { color: var(--ink); }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
 <main>
   <p><a href="./">← torna alla mappa</a></p>
-  <h1>🏪 Il tuo negozio sulla mappa</h1>
-  <p class="sub">Un negozio in 3D con il tuo nome e il tuo colore, nella tua città, vicino alla piazza. Lo vedono tutti quelli che cercano la loro casa, e con un tocco ti scrivono su WhatsApp. Solo 3 negozi per città.</p>
-  <p><b>Presto disponibile.</b> Lascia i tuoi dati e ti avvisiamo per primo quando apriamo le iscrizioni.</p>
-  <form id="f">
-    <label>Nome del negozio<input name="nome" required maxlength="40"></label>
-    <label>Città<input name="citta" required></label>
-    <label>La tua email<input name="email" type="email" required></label>
-    <button type="submit">Avvisami</button>
+  <h1>🏪 La tua attività sulla mappa</h1>
+  <p class="sub">Un negozio in 3D con il tuo nome, il tuo colore e il tuo logo, nella tua città, oppure un cartellone gigante. Lo vede chi cerca la sua casa sulla mappa, e con un tocco ti scrive su WhatsApp.</p>
+  <div class="passi"><span data-p="1" class="on">1 · La tua attività</span><span data-p="2">2 · Controlla</span><span data-p="3">3 · Paga</span></div>
+
+  <form id="f1" novalidate>
+    <div class="prodotti">
+      <label><input type="radio" name="prodotto" value="negozio" checked><b>🏪 Negozio in città</b><small>il tuo negozio 3D, vicino alle case</small></label>
+      <label><input type="radio" name="prodotto" value="cartellone"><b>📣 Cartellone</b><small>un cartellone gigante con il tuo messaggio</small></label>
+    </div>
+    <label>Nome dell’attività<input name="nome" maxlength="40" autocomplete="organization" placeholder="es. Pizzeria Da Mario"><span class="errore" data-e="nome"></span></label>
+    <label>Instagram dell’attività (facoltativo)<input name="instagram" maxlength="31" placeholder="@la_tua_attivita"><span class="errore" data-e="instagram"></span></label>
+    <label>Che tipo di attività è?<select name="tipo"></select></label>
+    <div class="cerca-citta">
+      <label>Città<input id="citta-q" autocomplete="off" placeholder="scrivi la tua città"><span class="aiuto">Solo città che hanno già case sulla mappa.</span><span class="errore" data-e="citta"></span></label>
+      <div id="citta-lista" hidden></div>
+    </div>
+    <input type="hidden" name="istat">
+    <div id="piano" class="piano" hidden></div>
+    <div><b style="font-size:14px">Colore del tuo marchio</b><div class="colori" id="colori"></div></div>
+    <label>Logo (facoltativo)<input type="file" id="logo" accept="image/png,image/jpeg,image/webp"><span class="aiuto">PNG, JPG o WebP, fino a 1 MB.</span><span class="errore" data-e="logo"></span></label>
+    <label id="l-descr">Descrizione (facoltativa)<textarea name="descrizione" maxlength="200" rows="3" placeholder="cosa fai, orari, cosa ti rende speciale"></textarea><span class="aiuto"><span id="n-descr">0</span>/200</span><span class="errore" data-e="descrizione"></span></label>
+    <label id="l-testo" hidden>Messaggio sul cartellone<input name="testo" maxlength="60" placeholder="es. La pizza più buona di Napoli"><span class="aiuto">Fino a 60 caratteri.</span><span class="errore" data-e="testo"></span></label>
+    <label>WhatsApp dell’attività<input name="whatsapp" type="tel" inputmode="tel" placeholder="es. 333 123 4567"><span class="aiuto">Appare sulla mappa: i clienti ti scrivono qui. Numero italiano o con prefisso internazionale.</span><span class="errore" data-e="whatsapp"></span></label>
+    <label>La tua email<input name="email" type="email" autocomplete="email" placeholder="nome@esempio.it"><span class="aiuto">Qui ricevi la ricevuta e le nostre risposte. Non viene pubblicata.</span><span class="errore" data-e="email"></span></label>
+    <label class="spunta"><input type="checkbox" name="consenso"><span>Accetto le <a href="#condizioni">condizioni</a> e la <a href="privacy.html" target="_blank" rel="noopener">privacy</a>.</span></label>
+    <span class="errore" data-e="consenso"></span>
+    <button type="submit">Continua</button>
   </form>
-  <p id="ok" hidden><b>Fatto! Ti avvisiamo per primo. 🎉</b></p>
+
+  <section id="p2" class="blocco" hidden>
+    <h2>Così apparirà sulla mappa</h2>
+    <div id="anteprima"></div>
+    <div id="riepilogo"></div>
+    <div class="bottoni"><button class="sec" id="correggi" type="button">← Correggi</button><button id="vai-pagare" type="button">Continua</button></div>
+    <span class="errore" id="errore-invio"></span>
+  </section>
+
+  <section id="p3" class="blocco" hidden></section>
+
+  <details id="condizioni">
+    <summary>Condizioni</summary>
+    <p>La tua attività resta sulla mappa per il periodo indicato, a partire dal giorno in cui viene approvata. Controlliamo ogni attività prima di metterla sulla mappa: non accettiamo contenuti offensivi, ingannevoli, politici, per adulti, gioco d’azzardo, armi o tabacco. Se non approviamo la tua attività, ti restituiamo l’intero importo. Puoi chiedere il rimborso entro 7 giorni dal pagamento scrivendo a privacy@italiacasapercasa.com. Il pagamento è gestito da Hotmart: i tuoi dati di pagamento non passano da noi e la ricevuta arriva per email da Hotmart. Il posto in città è garantito solo dopo il pagamento e l’approvazione. Il negozio occupa un lotto della città: la sua posizione non cambia. Il gioco e la mappa possono cambiare aspetto nel tempo.</p>
+  </details>
 </main>
-<script>
-  document.getElementById('f').onsubmit = e => {
-    e.preventDefault();
-    try { localStorage.setItem('negozio_attesa', JSON.stringify(Object.fromEntries(new FormData(e.target)))); } catch {}
-    e.target.hidden = true;
-    document.getElementById('ok').hidden = false;
+
+<script type="module">
+import { TIPI, PRODOTTI, pianoDi, euro } from './js/commerci.js';
+import { texturaInsegna, texturaCartellone, carregarImagem, fontePronta } from './js/insegne.js';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const f = $('#f1'), qs = new URLSearchParams(location.search);
+const COLORI = ['#E0473C', '#F28C28', '#FFC93C', '#3E8E4E', '#1F9E89', '#2F7DD1', '#6C4FD3', '#D94F8A', '#7A4B2A', '#152033'];
+let cfg, citta = [], scelta = null, logoDato = '', logoImg = null, idPedido = null;
+
+$('select[name=tipo]').innerHTML = TIPI.map(([k, e, n]) => `<option value="${k}">${e} ${n}</option>`).join('');
+$('#colori').innerHTML = COLORI.map((c, i) => `<label style="background:${c}" title="${c}"><input type="radio" name="colore" value="${c}" ${i ? '' : 'checked'}></label>`).join('') + '<input type="color" id="colore-libero" value="#E0473C" title="un altro colore">';
+$('#colore-libero').addEventListener('input', e => { f.querySelectorAll('input[name=colore]').forEach(r => { r.checked = false; }); e.target.dataset.on = '1'; });
+f.querySelectorAll('input[name=colore]').forEach(r => r.addEventListener('change', () => { delete $('#colore-libero').dataset.on; }));
+const colore = () => $('#colore-libero').dataset.on ? $('#colore-libero').value.toUpperCase() : f.querySelector('input[name=colore]:checked')?.value ?? COLORI[0];
+const prodotto = () => f.querySelector('input[name=prodotto]:checked').value;
+if (qs.get('prodotto') === 'cartellone') f.querySelector('input[value=cartellone]').checked = true;
+
+const aggiornaProdotto = () => {
+  const c = prodotto() === 'cartellone';
+  $('#l-testo').hidden = !c;
+  mostraPiano();
+};
+f.querySelectorAll('input[name=prodotto]').forEach(r => r.addEventListener('change', aggiornaProdotto));
+f.descrizione.addEventListener('input', () => { $('#n-descr').textContent = f.descrizione.value.length; });
+
+// cidades com casas + quantos comércios já aprovados em cada uma
+async function carregarDati() {
+  const [c, comuni, snap] = await Promise.all([
+    fetch('data/negozio.json', { cache: 'no-store' }).then(r => r.json()),
+    fetch('data/comuni.json').then(r => r.json()),
+    fetch(`data/snapshot.json?t=${Date.now()}`).then(r => r.json()),
+  ]);
+  cfg = c;
+  const usati = new Map();
+  for (const cm of snap.commerci ?? []) { const k = `${cm.li}:${cm.prodotto}`; usati.set(k, (usati.get(k) ?? 0) + 1); }
+  const regioni = new Map();
+  citta = snap.luoghi.map(([ci, n], li) => {
+    const [istat, nome, sigla, , , , pop] = comuni.dados[ci];
+    return { li, istat, nome, sigla, pop, case: n, chiave: norm(nome), usati: p => usati.get(`${li}:${p}`) ?? 0 };
+  }).sort((a, b) => b.case - a.case);
+  if (!cfg.aperto) { f.innerHTML = '<p><b>Le iscrizioni sono chiuse in questo momento.</b> Torna presto!</p>'; return; }
+  const pre = qs.get('citta') && citta.find(x => x.istat === qs.get('citta'));
+  if (pre) scegliCitta(pre);
+  aggiornaProdotto();
+}
+
+const lista = $('#citta-lista'), q = $('#citta-q');
+q.addEventListener('input', () => {
+  scelta = null; f.istat.value = ''; mostraPiano();
+  const t = norm(q.value);
+  if (t.length < 2) { lista.hidden = true; return; }
+  const r = citta.filter(x => x.chiave.startsWith(t)).slice(0, 8);
+  lista.innerHTML = r.length ? r.map(x => `<button type="button" data-istat="${x.istat}">${esc(x.nome)} <small>(${x.sigla}) · ${x.case} case</small></button>`).join('') : '<button type="button" disabled>Nessuna città con case con questo nome</button>';
+  lista.hidden = false;
+});
+lista.addEventListener('click', e => { const b = e.target.closest('[data-istat]'); if (b) scegliCitta(citta.find(x => x.istat === b.dataset.istat)); });
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.cerca-citta')) lista.hidden = true; });
+function scegliCitta(c) {
+  scelta = c; f.istat.value = c.istat; q.value = `${c.nome} (${c.sigla})`; lista.hidden = true;
+  $('[data-e=citta]').textContent = '';
+  mostraPiano();
+}
+const piano = () => scelta && cfg ? pianoDi(cfg, scelta.pop) : null;
+const restanti = () => { const p = piano(); return p ? p.posti[prodotto()] - scelta.usati(prodotto()) : 0; };
+function mostraPiano() {
+  const el = $('#piano'), p = piano();
+  if (!p) { el.hidden = true; return; }
+  const pr = p.prezzo[prodotto()], r = restanti();
+  el.hidden = false;
+  el.className = `piano${r <= 0 ? ' pieno' : ''}`;
+  el.innerHTML = r <= 0
+    ? `Non ci sono più posti a ${esc(scelta.nome)} per ora. Scegli una città vicina.`
+    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}`;
+}
+
+$('#logo').addEventListener('change', async e => {
+  $('[data-e=logo]').textContent = ''; logoDato = ''; logoImg = null;
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!/^image\/(png|jpeg|webp)$/.test(file.type) || file.size > 1048576) { $('[data-e=logo]').textContent = 'Il logo deve essere PNG, JPG o WebP fino a 1 MB.'; e.target.value = ''; return; }
+  logoDato = await new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(file); });
+  logoImg = await carregarImagem(logoDato);
+});
+
+function dati() {
+  const d = Object.fromEntries(new FormData(f));
+  return {
+    prodotto: prodotto(), nome: d.nome.trim(), instagram: d.instagram.trim().replace(/^@/, ''), tipo: d.tipo, istat: d.istat,
+    colore: colore(), descrizione: d.descrizione.trim(), testo: prodotto() === 'cartellone' ? d.testo.trim() : '',
+    whatsapp: d.whatsapp.trim(), email: d.email.trim(), consenso: !!d.consenso, logo: logoDato, piano: piano()?.id ?? '',
   };
+}
+function valida(d) {
+  const e = {};
+  if (d.nome.length < 2) e.nome = 'Scrivi il nome dell’attività (da 2 a 40 caratteri).';
+  if (d.instagram && !/^[A-Za-z0-9._]{1,30}$/.test(d.instagram)) e.instagram = 'Solo lettere, numeri, punto e trattino basso (fino a 30).';
+  if (!d.istat) e.citta = 'Scegli la città dalla lista.';
+  else if (restanti() <= 0) e.citta = 'Non ci sono più posti in questa città.';
+  const cifre = d.whatsapp.replace(/\D/g, '');
+  if (cifre.length < 8 || cifre.length > 15) e.whatsapp = 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).';
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) e.email = 'Controlla la tua email.';
+  if (d.prodotto === 'cartellone' && !d.testo) e.testo = 'Scrivi il messaggio del cartellone.';
+  if (!d.consenso) e.consenso = 'Per continuare, accetta le condizioni.';
+  return e;
+}
+const passo = n => {
+  document.querySelectorAll('.passi span').forEach(s => s.classList.toggle('on', +s.dataset.p === n));
+  f.hidden = n !== 1; $('#p2').hidden = n !== 2; $('#p3').hidden = n !== 3;
+  scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const d = dati(), err = valida(d);
+  f.querySelectorAll('[data-e]').forEach(s => { s.textContent = err[s.dataset.e] ?? ''; });
+  if (Object.keys(err).length) { f.querySelector(`[data-e=${Object.keys(err)[0]}]`).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  await fontePronta;
+  const tex = d.prodotto === 'cartellone' ? texturaCartellone(d.nome, d.testo, d.colore, logoImg) : texturaInsegna(d.nome, d.colore, logoImg);
+  $('#anteprima').replaceChildren(tex.image);
+  const p = piano(), pr = p.prezzo[d.prodotto];
+  $('#riepilogo').innerHTML = [
+    ['Cosa', `${PRODOTTI[d.prodotto].emoji} ${PRODOTTI[d.prodotto].nome}`],
+    ['Dove', `${esc(scelta.nome)} (${scelta.sigla})`],
+    ['Tipo', esc(TIPI.find(t => t[0] === d.tipo)[2])],
+    ['WhatsApp', esc(d.whatsapp)],
+    ...(d.instagram ? [['Instagram', `@${esc(d.instagram)}`]] : []),
+    ['Durata', `${cfg.durata_giorni} giorni dall’approvazione`],
+    ['Prezzo', `${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}${euro(pr.lancio)}`],
+  ].map(([a, b]) => `<div class="linha"><span>${a}</span><span>${b}</span></div>`).join('') + (d.descrizione ? `<p class="sub">«${esc(d.descrizione)}»</p>` : '');
+  passo(2);
+});
+$('#correggi').onclick = () => passo(1);
+
+$('#vai-pagare').onclick = async () => {
+  const b = $('#vai-pagare'), d = dati();
+  b.disabled = true; $('#errore-invio').textContent = '';
+  try {
+    if (!idPedido) {
+      const r = await fetch('api/negozio.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+      const j = await r.json().catch(() => ({}));
+      if (!j.ok) throw new Error(j.erro || 'Non siamo riusciti a inviare la richiesta. Riprova.');
+      idPedido = j.id;
+    }
+    const p = piano(), link = cfg.checkout?.[p.id]?.[d.prodotto];
+    if (link) {
+      const u = new URL(link);
+      u.searchParams.set('sck', idPedido); u.searchParams.set('email', d.email); u.searchParams.set('name', d.nome);
+      $('#p3').innerHTML = `
+        <h2>Ultimo passo: il pagamento</h2>
+        <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: carta, PayPal e altri metodi. I tuoi dati di pagamento non passano da noi.</p>
+        <a class="botao" href="${esc(u.href)}">💳 Vai al pagamento</a>
+        <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
+    } else {
+      $('#p3').innerHTML = `
+        <div class="ok"><h2>Richiesta ricevuta! 🎉</h2>
+        <p>Controlliamo la tua attività e ti scriviamo entro 24 ore a <b>${esc(d.email)}</b> con il link per pagare. Dopo il pagamento, la tua attività appare sulla mappa di ${esc(scelta.nome)}.</p>
+        <p class="aiuto">Codice richiesta: <b>${idPedido}</b></p></div>
+        <div class="bottoni"><a class="botao" href="./">Torna alla mappa</a></div>`;
+    }
+    passo(3);
+  } catch (err) {
+    $('#errore-invio').textContent = err.message;
+  } finally { b.disabled = false; }
+};
+
+carregarDati().catch(() => { $('#piano').hidden = false; $('#piano').textContent = 'Non riusciamo a caricare le città. Controlla la connessione e ricarica la pagina.'; });
 </script>
 </body>
 </html>

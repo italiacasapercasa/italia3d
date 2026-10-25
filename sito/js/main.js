@@ -40,6 +40,9 @@ async function iniciar() {
       const alvo = citta.escolher(mappa.raio(x, y));
       if (alvo?.tipo === 'casa') return ui.casa(alvo.casa, false);
       if (alvo?.tipo === 'luogo') return ui.luogo(alvo.luogo, false);
+      if (alvo?.tipo === 'lotto') return ui.lotto(alvo);
+      if (alvo?.tipo === 'pubblicita') return ui.pubblicita(alvo.luogo);
+      if (alvo?.tipo === 'commercio') return ui.commercio(alvo.commercio);
     } else {
       // clique perto de uma bolinha: abre a cidade
       let melhor = null, md = 18;

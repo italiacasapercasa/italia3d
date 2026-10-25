@@ -8,6 +8,9 @@
 //   storie:  [{ conta, ts }],                     // story que marcou o perfil
 //   bloccati:[conta],                             // escondidos do mapa (lote fica reservado)
 //   doppi:   [{ da: ms, a: ms, tipi: ['storia'] | ['tutto'] }],
+//   commerci:[{ id, istat, ts, fino: ms|null, prodotto, nome, tipo, colore, whatsapp, instagram, descrizione, testo, logo }],
+//            // aprovados: na hora "ts" reservam o próximo lote da cidade (as casas seguintes pulam esse lote);
+//            // depois de "fino" somem do mapa, mas o lote continua reservado (nenhuma casa muda de lugar)
 // }
 import { REGOLE, livelloDi } from '../sito/js/regole.js';
 import { giornoRoma, limitiMandati, mandatoDi } from '../sito/js/tempo.js';
@@ -67,10 +70,15 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const linha = [
     ...eventi.commenti.map(c => ({ t: 'c', ts: c.ts, c })),
     ...eventi.storie.map(s => ({ t: 's', ts: s.ts, s })),
+    ...(eventi.commerci ?? []).map(n => ({ t: 'n', ts: n.ts, n })),
   ].filter(e => e.ts <= agora).sort((a, b) => a.ts - b.ts);
+  const commerci = [];
 
   for (const e of linha) {
-    if (e.t === 'c') {
+    if (e.t === 'n') {
+      const ci = comIdx.get(e.n.istat), l = ci == null ? null : luoghi.get(ci);
+      if (l) commerci.push({ ...e.n, ci, lote: l.lotti++ });   // só cidades que já têm casas
+    } else if (e.t === 'c') {
       const c = e.c;
       cont.commenti++;
       if (c.stato === 'pendente') { cont.pendenti++; continue; }
@@ -197,6 +205,10 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     luoghi: lugares.map(l => [l.ci, l.visiveis.length, l.visiveis[0].conta, Math.round(l.visiveis[0].casa.ts / 1000), l.lotti]),
     // [conta, luogo, lote, ts, punti_totali, punti_settimana, fiamme_fino, [fonti], serie_giorni]
     case: saidaCasas,
+    commerci: commerci.filter(n => liDe.has(n.ci) && !(n.fino && n.fino <= agora)).map(n => ({
+      li: liDe.get(n.ci), lote: n.lote, id: n.id, prodotto: n.prodotto ?? 'negozio', nome: n.nome, tipo: n.tipo ?? 'altro', colore: n.colore ?? '#E0473C',
+      whatsapp: n.whatsapp ?? '', instagram: n.instagram ?? '', descrizione: n.descrizione ?? '', testo: n.testo ?? '', logo: n.logo ?? '',
+    })),
     cariche,
     derby,
     eventi: eventos.filter(e => e.ts <= agora).sort((a, b) => b.ts - a.ts).slice(0, 40).map(e => ({ ...e, ts: new Date(e.ts).toISOString() })),

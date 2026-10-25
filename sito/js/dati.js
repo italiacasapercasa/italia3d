@@ -33,6 +33,13 @@ export async function carregar(versao, demo = false) {
   });
   const porConta = new Map(casas.map(c => [c.conta, c]));
 
+  // comércios e outdoors aprovados, no lote que o motor reservou
+  const commerci = (snap.commerci ?? []).filter(cm => luoghi[cm.li]).map(cm => {
+    const x = { ...cm, luogo: luoghi[cm.li] };
+    (x.luogo.commerci ??= []).push(x);
+    return x;
+  });
+
   // cargos: conta -> { tipo, regione?, comune? }
   const k = snap.cariche;
   const dar = (x, carica) => { const c = x && porConta.get(x.conta); if (c) c.carica = carica; };
@@ -49,5 +56,5 @@ export async function carregar(versao, demo = false) {
   const ranking = [...casas].sort((a, b) => b.sett - a.sett || a.ts - b.ts);
   ranking.forEach((c, i) => { c.pos = i + 1; });
 
-  return { geo, snap, regioni, regPorCod, comuni, comunePorIstat, luoghi, casas, porConta, ranking, rilievo: new Uint16Array(ril), imagem: img };
+  return { geo, snap, regioni, regPorCod, comuni, comunePorIstat, luoghi, casas, porConta, ranking, commerci, rilievo: new Uint16Array(ril), imagem: img };
 }

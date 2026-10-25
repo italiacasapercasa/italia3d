@@ -198,6 +198,79 @@ export function geometriaEspecial(tipo) {
     for (const [x, z] of [[-1.2, -0.3], [0, 0.35], [1.2, -0.2], [-0.5, 0.5]]) albero(b, x, z, 0.17);
   } else if (tipo === 'fiamma') {
     b.cone(0.13, 0.5, 0, 0, 0, '#FF8A00', 5).cone(0.08, 0.34, 0.07, 0, 0.04, '#FFD23F', 5).cone(0.07, 0.3, -0.07, 0, -0.03, '#FF5A1F', 5);
+  } else if (tipo === 'liberoV' || tipo === 'liberoL') {
+    // lote livre: estacas nos cantos + placa (a face com texto é um plano à parte, ver PLACCA)
+    for (const [x, z] of [[-0.4, -0.4], [0.4, -0.4], [-0.4, 0.4], [0.4, 0.4]]) b.caixa(0.03, 0.07, 0.03, x, 0, z, T.bianco);
+    if (tipo === 'liberoL') {
+      b.quad(0.78, 0.78, 0, 0.002, 0, '#B98D5F');
+      b.piramide(0.36, 0.3, 0.13, -0.16, 0, -0.14, '#9C7148');
+      for (const [w, d, x, z] of [[0.6, 0.05, 0, -0.3], [0.05, 0.5, -0.3, -0.05], [0.05, 0.5, 0.3, -0.05]]) b.caixa(w, 0.06, d, x, 0, z, T.grigio);
+      for (let k = 0; k < 4; k++) b.caixa(0.11, 0.07, 0.03, -0.27 + k * 0.11, 0.06, 0.4, k % 2 ? T.bianco : '#E0473C');
+      for (const x of [-0.33, 0.06]) b.caixa(0.025, 0.13, 0.025, x, 0, 0.4, T.scuro);
+      b.cone(0.04, 0.1, 0.3, 0, 0.2, '#FF7A1A', 6);
+    }
+    const p = PLACCA;
+    b.cilindro(0.016, p.y + p.h, p.x, 0, p.z - 0.012, T.tronco, 5);
+    b.caixa(p.w + 0.02, p.h + 0.02, 0.018, p.x, p.y - 0.01, p.z, T.bianco);
+  } else if (tipo === 'cartellone') {
+    // outdoor: dois postes e moldura; a face com texto é um plano à parte (CARTELLONE)
+    const c = CARTELLONE;
+    for (const x of [-c.w * 0.33, c.w * 0.33]) b.caixa(0.04, c.y + c.h * 0.5, 0.04, x, 0, c.z - 0.03, T.scuro);
+    b.caixa(c.w + 0.05, c.h + 0.05, 0.03, 0, c.y - 0.025, c.z, T.scuro);
+    b.caixa(c.w * 0.7, 0.02, 0.08, 0, c.y - 0.03, c.z + 0.03, T.grigio);
+  } else if (tipo === 'alberoNatale') {
+    b.cilindro(0.05, 0.14, 0, 0, 0, T.tronco, 6);
+    for (const [r, h, y] of [[0.36, 0.42, 0.1], [0.28, 0.38, 0.38], [0.19, 0.34, 0.64]]) b.cone(r, h, 0, y, 0, '#2E7D45', 8);
+    const pallina = ['#E0473C', '#F2C230', '#4FA3E8', '#F6F3EC'];
+    for (let k = 0; k < 16; k++) {
+      const a = k * 2.4, y = 0.16 + (k % 8) * 0.085, r = 0.33 - y * 0.32;
+      b.esfera(0.028, Math.cos(a) * r, y, Math.sin(a) * r, pallina[k % 4]);
+    }
+    b.cilindro(0.17, 0.05, 0, 0, 0, '#B23A30', 10);
+  } else if (tipo === 'stellaNatale') {
+    b.esfera(0.075, 0, 1.02, 0, T.oro);
   }
+  return b.geometria();
+}
+
+// placas de texto (em lotes): posição do centro da face, largura e altura
+export const PLACCA = { x: 0.2, y: 0.24, z: 0.3, w: 0.44, h: 0.25 };
+export const CARTELLONE = { y: 0.42, z: 0, w: 1.0, h: 0.48 };
+// plano com UV para a face da placa, virado para +z, um pouco à frente da moldura
+export function geometriaFaccia(p, dz = 0.011) {
+  const g = new THREE.PlaneGeometry(p.w, p.h);
+  g.translate(p.x ?? 0, p.y + p.h / 2, p.z + dz);
+  return g;
+}
+
+// luminária de Natal sobre a rua: dois postes e um fio de lâmpadas (vão ao longo de x)
+export function geometriaLuminaria(vao) {
+  const postes = new Construtor(), luci = new Construtor(), a = vao / 2, cores = ['#FFE7A0', '#FFD23F', '#FF6B5A', '#FFF6DA'];
+  for (const x of [-a, a]) postes.cilindro(0.014, 0.62, x, 0, 0, T.scuro, 5);
+  const n = 13;
+  for (let k = 0; k <= n; k++) {
+    const t = k / n, x = -a + t * vao, y = 0.6 - Math.sin(t * Math.PI) * 0.12;
+    luci.esfera(0.022, x, y, 0, cores[k % cores.length]);
+  }
+  // arco de estrelas no meio
+  luci.esfera(0.05, 0, 0.66, 0, T.oro);
+  return { postes: postes.geometria(), luci: luci.geometria() };
+}
+
+// loja de um comércio (em lotes), com a cor da marca no toldo; o letreiro é um plano à parte (INSEGNA)
+export const INSEGNA = { x: 0, y: 0.47, z: 0.215, w: 0.66, h: 0.15 };
+export function geometriaNegozio(cor) {
+  const b = new Construtor(), escuro = '#' + new THREE.Color(cor).multiplyScalar(0.72).getHexString();
+  b.caixa(0.72, 0.62, 0.4, 0, 0, 0, T.muri[1]).caixa(0.76, 0.04, 0.44, 0, 0.62, 0, T.bianco);
+  b.caixa(0.36, 0.24, 0.02, -0.12, 0.06, 0.2, T.vetro).caixa(0.13, 0.26, 0.02, 0.22, 0, 0.2, T.porta);
+  // toldo listrado
+  for (let k = 0; k < 6; k++) {
+    const g = new THREE.BoxGeometry(0.13, 0.015, 0.16);
+    g.rotateX(0.45);
+    b.add(g, k % 2 ? T.bianco : cor, -0.325 + k * 0.13, 0.36, 0.27);
+  }
+  b.caixa(0.7, INSEGNA.h + 0.02, 0.025, 0, INSEGNA.y - 0.01, 0.2, escuro);
+  // vasos na calçada
+  for (const x of [-0.3, 0.33]) { b.caixa(0.06, 0.06, 0.06, x, 0, 0.32, '#B0623A'); b.esfera(0.05, x, 0.1, 0.32, T.foglia); }
   return b.geometria();
 }

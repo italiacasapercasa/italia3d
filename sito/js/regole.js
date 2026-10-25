@@ -41,7 +41,21 @@ export const REGOLE = {
   cariche: ['presidente', 'senatore', 'presidente_regione', 'deputato', 'sindaco', 'consigliere'],
   posti: { presidente: 1, senatoriPerRegione: 3, deputati: 400, deputatiMinimo: 2, consiglieri: 10 },
   marchi: { chiesa: 30, palazzinaOgni: 100, ospedale: 1000, stadio: 5000 },
+  // lotes livres desenhados depois da última casa (só desenho: convite para marcar amigos)
+  lotti_liberi: 3,
+  cartellone_da: 15,           // cidades com pelo menos estas casas mostram um outdoor "LA TUA PUBBLICITÀ QUI"
+  // Natal na piazza (mês-dia, hora de Roma): árvore e luminárias
+  natale: { da: '11-28', a: '01-06' },
 };
+
+// o Natal está ativo nesta data? (?natale=1 / ?natale=0 forçam nos testes)
+export function nataleAttivo(ts = Date.now()) {
+  const f = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('natale') : null;
+  if (f !== null) return f !== '0';
+  const md = new Date(ts).toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' }).slice(5);
+  const { da, a } = REGOLE.natale;
+  return da <= a ? md >= da && md <= a : md >= da || md <= a;
+}
 
 export const NOMI_CARICHE = {
   presidente: 'Presidente del Consiglio',
