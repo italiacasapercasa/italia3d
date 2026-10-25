@@ -1,0 +1,54 @@
+# Atualiza o mapa italiacasapercasa.com sem depender do PC.
+# O GitHub pode atrasar execuções agendadas em alguns minutos quando está sobrecarregado.
+name: Aggiorna mappa
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # a cada 10 minutos
+    - cron: '15 2 * * *'     # conferência completa de madrugada (02:15 UTC = 03:15/04:15 em Roma)
+  workflow_dispatch:
+    inputs:
+      completo:
+        description: 'Rebaixar os comentários de todos os posts'
+        type: boolean
+        default: false
+
+concurrency:
+  group: aggiorna
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # comentários já baixados: só acelera (se o cache sumir, tudo é rebaixado do Instagram)
+      - uses: actions/cache/restore@v4
+        with:
+          path: dati-grezzi/instagram
+          key: stato-${{ github.run_id }}
+          restore-keys: stato-
+
+      - name: Atualizar e publicar
+        run: node strumenti/ci.mjs ${{ (github.event.schedule == '15 2 * * *' || inputs.completo) && '--completo' || '' }}
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          STORIE_URL: ${{ secrets.STORIE_URL }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: dati-grezzi/instagram
+          key: stato-${{ github.run_id }}

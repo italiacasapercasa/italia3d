@@ -1,0 +1,27 @@
+PERFIL INSTAGRAM - ITALIA 3D
+
+=== NOME DO PERFIL ===
+IT: Italia Casa per Casa | Mappa 3D
+PT: Itália Casa por Casa | Mapa 3D
+
+=== @ (usuário) ===
+@italiacasapercasa
+(alternativas: @italia.casapercasa, @italiacasapercasa3d)
+
+=== BIO (141 caracteres, limite 150) ===
+IT:
+Ogni commento diventa una casa 🏠🇮🇹
+Scrivi città e regione: avrai una casa col tuo @ nell'Italia 3D 👇
+Più punti fai, più in alto arrivi 👑
+
+PT:
+Cada comentário vira uma casa 🏠🇮🇹
+Escreva cidade e região: você ganha uma casa com seu @ na Itália 3D 👇
+Quanto mais pontos, mais alto você chega 👑
+
+=== CATEGORIA ===
+IT: Videogioco / Sito web di intrattenimento
+PT: Videogame / Site de entretenimento
+
+=== LOGO ===
+logo-500.png (500x500). Fonte editável: logo.html

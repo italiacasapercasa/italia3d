@@ -1,0 +1,117 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;padding:0;width:500px;height:500px;overflow:hidden;background:#BFE3F5}</style>
+</head><body>
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500"></svg>
+<script>
+// Projecao isometrica: x vai pra direita-baixo, y pra esquerda-baixo, z pra cima
+const S = 54, CX = 250, CY = 186;
+const P = (x, y, z) => [CX + (x - y) * 0.866 * S, CY + (x + y) * 0.5 * S - z * S];
+const pts = a => a.map(p => P(...p).map(v => v.toFixed(1)).join(',')).join(' ');
+const out = [];
+const poly = (a, fill, extra = '') => out.push(`<polygon points="${pts(a)}" fill="${fill}" ${extra}/>`);
+const line = (a, b, stroke, w) => { const [x1, y1] = P(...a), [x2, y2] = P(...b); out.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${stroke}" stroke-width="${w}" stroke-linecap="round"/>`); };
+// faces: Y = parede da frente-esquerda, X = parede da direita, T = topo
+const fY = (y, x0, x1, z0, z1) => [[x0, y, z1], [x1, y, z1], [x1, y, z0], [x0, y, z0]];
+const fX = (x, y0, y1, z0, z1) => [[x, y0, z1], [x, y1, z1], [x, y1, z0], [x, y0, z0]];
+const fT = (z, x0, x1, y0, y1) => [[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]];
+
+out.push(`<defs>
+<radialGradient id="bg" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#E6F5FC"/><stop offset="1" stop-color="#9ACFE8"/></radialGradient>
+<filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#2B5F78" flood-opacity=".28"/></filter>
+</defs>`);
+out.push(`<rect width="500" height="500" fill="url(#bg)"/>`);
+
+// sombra do terreno
+const g = P(2, 2, -0.6);
+out.push(`<ellipse cx="${g[0]}" cy="${g[1] + 22}" rx="190" ry="102" fill="#3E7F9C" opacity=".35" filter="url(#blur)"/>`);
+
+// terreno com laterais na tricolor (verde, branco, vermelho da esquerda pra direita)
+const B = -0.6, LIP = -0.14, T3 = 8 / 3;
+poly(fY(4, 0, T3, B, LIP), '#2E9B55');
+poly(fY(4, T3, 4, B, LIP), '#E7E2D5');
+poly(fX(4, 4, 4 - (T3 - (4 - T3)) , B, LIP), '#FAF7EF');
+poly(fX(4, 4 - (T3 - (4 - T3)), 0, B, LIP), '#E0473C');
+poly(fY(4, 0, 4, LIP, 0), '#7DBA5C');
+poly(fX(4, 4, 0, LIP, 0), '#97CE70');
+poly(fT(0, 0, 4, 0, 4), '#A9DA84');
+// caminho de pedra ate a porta
+poly(fT(0, 1.8, 2.2, 3, 4), '#EAD9B0');
+for (let y = 3.25; y < 4; y += 0.25) line([1.8, y, 0], [2.2, y, 0], '#D6C28F', 1.2);
+
+// cipreste toscano
+function cipreste(x, y, h, w) {
+  const [bx, by] = P(x, y, 0), top = by - h * S, ww = w * S;
+  out.push(`<rect x="${bx - 3}" y="${by - 10}" width="6" height="12" fill="#7A4E2D"/>`);
+  out.push(`<path d="M${bx},${top} Q${bx + ww * 1.45},${by - h * S * 0.42} ${bx + ww * 0.55},${by - 6} L${bx - ww * 0.55},${by - 6} Q${bx - ww * 1.45},${by - h * S * 0.42} ${bx},${top} Z" fill="#2C6B3B"/>`);
+  out.push(`<path d="M${bx},${top} Q${bx + ww * 1.45},${by - h * S * 0.42} ${bx + ww * 0.55},${by - 6} L${bx},${by - 6} Z" fill="#3F8A4D"/>`);
+}
+cipreste(0.6, 0.7, 3.0, 0.3);
+cipreste(0.3, 2.9, 2.5, 0.27);
+cipreste(3.5, 0.5, 2.1, 0.25);
+
+// casa
+const X0 = 1, X1 = 3, Y0 = 1, Y1 = 3, SL = 0.95 / 1.15, ZT = 1.4 + 0.15 * SL, ZR = 2.35;
+poly(fY(Y1, X0, X1, 0, ZT), '#E8B866');
+poly(fX(X1, Y1, Y0, 0, ZT), '#F8D58C');
+poly([[X1, Y0, ZT], [X1, Y1, ZT], [X1, 2, ZR]], '#F8D58C');
+
+// persiana verde fechada
+function persianaY(x0, x1, z0, z1) {
+  poly(fY(Y1 + 0.001, x0 - 0.04, x1 + 0.04, z0 - 0.07, z0), '#FFF6E2');
+  poly(fY(Y1 + 0.001, x0, x1, z0, z1), '#3E8E4E');
+  const xm = (x0 + x1) / 2;
+  line([xm, Y1, z0], [xm, Y1, z1], '#2B6B39', 1.6);
+  for (let z = z0 + 0.1; z < z1; z += 0.1) line([x0 + 0.03, Y1, z], [x1 - 0.03, Y1, z], '#337C44', 1);
+}
+function persianaX(y0, y1, z0, z1) {
+  poly(fX(X1 + 0.001, y0 + 0.04, y1 - 0.04, z0 - 0.07, z0), '#FFF6E2');
+  poly(fX(X1 + 0.001, y0, y1, z0, z1), '#4BA05A');
+  const ym = (y0 + y1) / 2;
+  line([X1, ym, z0], [X1, ym, z1], '#2F7440', 1.6);
+  for (let z = z0 + 0.1; z < z1; z += 0.1) line([X1, y0 - 0.03, z], [X1, y1 + 0.03, z], '#3C8A4B', 1);
+}
+// porta
+poly(fY(Y1 + 0.001, 1.8, 2.2, 0, 0.8), '#8A5432');
+line([2.13, Y1, 0.38], [2.13, Y1, 0.42], '#F6D23C', 2.5);
+persianaY(1.22, 1.6, 0.85, 1.25);
+persianaY(2.4, 2.78, 0.85, 1.25);
+persianaX(2.75, 2.35, 0.55, 1.05);
+persianaX(1.65, 1.25, 0.55, 1.05);
+// floreira com geranios
+poly(fX(X1 + 0.002, 2.8, 2.3, 0.4, 0.5), '#B5532F');
+for (const y of [2.72, 2.6, 2.48, 2.36]) { const [px, py] = P(X1, y, 0.53); out.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3.4" fill="#E0473C"/>`); }
+
+// chamine
+poly(fY(1.6, 2.35, 2.65, 1.9, 2.75), '#C9A15A');
+poly(fX(2.65, 1.6, 1.3, 1.9, 2.75), '#E4BF73');
+poly(fT(2.75, 2.35, 2.65, 1.3, 1.6), '#8C6B3A');
+
+// telhado de telha (coppi)
+const RX0 = 0.85, RX1 = 3.15, RY0 = 0.85, RY1 = 3.15, ZE = 1.4, TH = 0.12;
+poly([[RX0, 2, ZR], [RX1, 2, ZR], [RX1, RY0, ZE], [RX0, RY0, ZE]], '#C4562F');
+poly([[RX0, 2, ZR], [RX1, 2, ZR], [RX1, RY1, ZE], [RX0, RY1, ZE]], '#E2703F');
+for (let x = RX0 + 0.19; x < RX1 - 0.05; x += 0.19) line([x, 2.03, ZR - 0.03], [x, RY1, ZE], '#BF5530', 1.8);
+poly([[RX0, RY1, ZE], [RX1, RY1, ZE], [RX1, RY1, ZE - TH], [RX0, RY1, ZE - TH]], '#A9452A');
+poly([[RX1, RY0, ZE], [RX1, 2, ZR], [RX1, RY1, ZE], [RX1, RY1, ZE - TH], [RX1, 2, ZR - TH], [RX1, RY0, ZE - TH]], '#B84B2C');
+line([RX0, 2, ZR], [RX1, 2, ZR], '#A9452A', 3);
+
+// limoeiro
+const [lx, ly] = P(3.68, 3.68, 0);
+out.push(`<ellipse cx="${lx}" cy="${ly + 2}" rx="20" ry="9" fill="#6FA650" opacity=".7"/>`);
+out.push(`<rect x="${lx - 3.5}" y="${ly - 26}" width="7" height="27" rx="2" fill="#7A4E2D"/>`);
+out.push(`<circle cx="${lx}" cy="${ly - 42}" r="24" fill="#3F8A3D"/>`);
+out.push(`<circle cx="${lx + 5}" cy="${ly - 47}" r="17" fill="#55A84A"/>`);
+for (const [dx, dy] of [[-13, -40], [9, -54], [12, -32], [-4, -58], [-2, -28]]) out.push(`<circle cx="${lx + dx}" cy="${ly + dy}" r="4.2" fill="#F6D23C"/>`);
+
+// balao de comentario com @
+out.push(`<g filter="url(#sh)">
+<path d="M356,128 L342,160 L380,138 Z" fill="#fff"/>
+<circle cx="384" cy="100" r="40" fill="#fff"/>
+</g>
+<text x="384" y="102" text-anchor="middle" dominant-baseline="central" font-family="'Arial Black','Segoe UI Black',Arial,sans-serif" font-weight="900" font-size="54" fill="#E0473C">@</text>`);
+
+document.getElementById('logo').innerHTML = out.join('\n');
+</script>
+</body></html>

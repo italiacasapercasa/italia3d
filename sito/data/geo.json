@@ -1,0 +1,206 @@
+{
+ "proj": {
+  "LON0": 12.5,
+  "LAT0": 42,
+  "KX": 82.72688197214352,
+  "KZ": 110.57
+ },
+ "bbox": {
+  "x0": -496,
+  "x1": 506,
+  "z0": -570,
+  "z1": 730
+ },
+ "terreno": {
+  "arquivo": "terreno.png",
+  "w": 2004,
+  "h": 2600
+ },
+ "rilievo": {
+  "arquivo": "rilievo.bin",
+  "w": 401,
+  "h": 520
+ },
+ "regioni": [
+  {
+   "cod": "01",
+   "nome": "Piemonte",
+   "sigla": "PIEM.",
+   "lx": -380,
+   "lz": -332,
+   "pop": 4363916,
+   "comuni": 1181
+  },
+  {
+   "cod": "02",
+   "nome": "Valle d'Aosta/Vallée d'Aoste",
+   "sigla": "VALLE D'AOSTA",
+   "lx": -412,
+   "lz": -414,
+   "pop": 126806,
+   "comuni": 74
+  },
+  {
+   "cod": "03",
+   "nome": "Lombardia",
+   "sigla": "LOMB.",
+   "lx": -222,
+   "lz": -398,
+   "pop": 9704151,
+   "comuni": 1506
+  },
+  {
+   "cod": "04",
+   "nome": "Trentino-Alto Adige/Südtirol",
+   "sigla": "TRENTINO-A.A.",
+   "lx": -114,
+   "lz": -484,
+   "pop": 1029475,
+   "comuni": 282
+  },
+  {
+   "cod": "05",
+   "nome": "Veneto",
+   "sigla": "VENETO",
+   "lx": -54,
+   "lz": -382,
+   "pop": 4855904,
+   "comuni": 563
+  },
+  {
+   "cod": "06",
+   "nome": "Friuli-Venezia Giulia",
+   "sigla": "FRIULI-V.G.",
+   "lx": 50,
+   "lz": -462,
+   "pop": 1220291,
+   "comuni": 215
+  },
+  {
+   "cod": "07",
+   "nome": "Liguria",
+   "sigla": "LIGURIA",
+   "lx": -264,
+   "lz": -272,
+   "pop": 1570694,
+   "comuni": 234
+  },
+  {
+   "cod": "08",
+   "nome": "Emilia-Romagna",
+   "sigla": "EMILIA-R.",
+   "lx": -62,
+   "lz": -282,
+   "pop": 4342135,
+   "comuni": 328
+  },
+  {
+   "cod": "09",
+   "nome": "Toscana",
+   "sigla": "TOSCANA",
+   "lx": -116,
+   "lz": -156,
+   "pop": 3672202,
+   "comuni": 273
+  },
+  {
+   "cod": "10",
+   "nome": "Umbria",
+   "sigla": "UMBRIA",
+   "lx": -6,
+   "lz": -106,
+   "pop": 884268,
+   "comuni": 92
+  },
+  {
+   "cod": "11",
+   "nome": "Marche",
+   "sigla": "MARCHE",
+   "lx": 62,
+   "lz": -142,
+   "pop": 1541319,
+   "comuni": 228
+  },
+  {
+   "cod": "12",
+   "nome": "Lazio",
+   "sigla": "LAZIO",
+   "lx": 10,
+   "lz": -16,
+   "pop": 5502886,
+   "comuni": 378
+  },
+  {
+   "cod": "13",
+   "nome": "Abruzzo",
+   "sigla": "ABRUZZO",
+   "lx": 106,
+   "lz": -20,
+   "pop": 1307309,
+   "comuni": 305
+  },
+  {
+   "cod": "14",
+   "nome": "Molise",
+   "sigla": "MOLISE",
+   "lx": 174,
+   "lz": 38,
+   "pop": 313660,
+   "comuni": 136
+  },
+  {
+   "cod": "15",
+   "nome": "Campania",
+   "sigla": "CAMPANIA",
+   "lx": 192,
+   "lz": 116,
+   "pop": 5766810,
+   "comuni": 550
+  },
+  {
+   "cod": "16",
+   "nome": "Puglia",
+   "sigla": "PUGLIA",
+   "lx": 256,
+   "lz": 62,
+   "pop": 4052566,
+   "comuni": 257
+  },
+  {
+   "cod": "17",
+   "nome": "Basilicata",
+   "sigla": "BASILICATA",
+   "lx": 308,
+   "lz": 172,
+   "pop": 578036,
+   "comuni": 131
+  },
+  {
+   "cod": "18",
+   "nome": "Calabria",
+   "sigla": "CALABRIA",
+   "lx": 334,
+   "lz": 306,
+   "pop": 1959050,
+   "comuni": 404
+  },
+  {
+   "cod": "19",
+   "nome": "Sicilia",
+   "sigla": "SICILIA",
+   "lx": 168,
+   "lz": 490,
+   "pop": 5002904,
+   "comuni": 390
+  },
+  {
+   "cod": "20",
+   "nome": "Sardegna",
+   "sigla": "SARDEGNA",
+   "lx": -288,
+   "lz": 180,
+   "pop": 1639362,
+   "comuni": 377
+  }
+ ]
+}

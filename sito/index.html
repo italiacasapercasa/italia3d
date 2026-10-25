@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="versione" content="dev-0001">
+<title>Italia Casa per Casa</title>
+<meta name="description" content="Un'Italia in 3D costruita dai commenti: chi commenta città e regione riceve una casa con il suo @, e chi fa più punti governa. Trova la tua casa e la tua carica.">
+<meta name="theme-color" content="#8EBFD2">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="etichette"></div>
+
+<div id="avviso-demo" hidden>DEMO · dati fittizi di prova</div>
+
+<header id="testa">
+  <div class="marchio">Italia <b>Casa per Casa</b></div>
+  <h1 class="titolo">Trova <b>la tua casa</b></h1>
+  <button id="aiuto" type="button" aria-label="Come funziona?">?</button>
+  <form id="cerca" autocomplete="off">
+    <span class="chiocciola" aria-hidden="true">@</span>
+    <input id="q" type="search" placeholder="il_tuo_account, città o regione" aria-label="Cerca" enterkeyhint="search">
+    <button type="submit">cerca</button>
+  </form>
+  <div id="risultati" hidden></div>
+  <div id="chips"><button id="chip-fiamme" type="button" class="chip" hidden></button></div>
+</header>
+
+<div id="controlli">
+  <button id="zoom-piu" type="button" aria-label="Avvicina">+</button>
+  <button id="zoom-meno" type="button" aria-label="Allontana">−</button>
+  <button id="vedi-paese" type="button" aria-label="Vedi tutta l'Italia">⤢</button>
+  <button id="vai-casa" type="button" aria-label="Vai alla mia casa" hidden>🏠</button>
+</div>
+
+<section id="pannello" hidden>
+  <button class="maniglia" type="button" aria-label="Riduci"></button>
+  <button class="chiudi" type="button" aria-label="Chiudi">×</button>
+  <div id="pannello-contenuto"></div>
+</section>
+
+<div id="pillole">
+  <button id="fai-video" type="button">🎬 Crea video così</button>
+  <a id="tuo-negozio" href="negozio.html">＋ il tuo negozio sulla mappa</a>
+</div>
+
+<nav id="schede">
+  <button data-aba="mappa" class="attiva" type="button">mappa</button>
+  <button data-aba="palazzo" type="button">🏛 Palazzo</button>
+  <button data-aba="classifica" type="button">🏆 Classifica</button>
+  <button data-aba="tabellone" type="button">📊 Tabellone</button>
+  <button data-aba="senzapadrone" type="button">senza padrone</button>
+</nav>
+
+<footer id="piede"><span id="versione">caricamento…</span> · <a href="privacy.html">privacy</a></footer>
+
+<div id="caricamento"><div class="palla"></div><p>Costruendo l'Italia…</p></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

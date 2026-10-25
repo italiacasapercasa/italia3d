@@ -1,0 +1,3 @@
+# pasta privada: ninguém acessa pela internet
+Require all denied
+Deny from all
