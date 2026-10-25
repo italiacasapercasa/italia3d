@@ -53,8 +53,10 @@ try {
     fs.mkdirSync(saida, { recursive: true });
     for (const t of soltos.split(',').map(Number)) {
       await avaliar(`window.quadro(${t})`);
-      const r = await cdp('Page.captureScreenshot', { format: 'jpeg', quality: 85, clip: { x: 0, y: 0, width: W, height: H, scale: 0.5 } });
-      fs.writeFileSync(path.join(saida, `t${t.toFixed(2)}.jpg`), Buffer.from(r.result.data, 'base64'));
+      // --scala 1 --png: resolução cheia em PNG (capa do reel)
+      const png = args.includes('--png'), scala = +opt('--scala', 0.5);
+      const r = await cdp('Page.captureScreenshot', { format: png ? 'png' : 'jpeg', ...(png ? {} : { quality: 85 }), clip: { x: 0, y: 0, width: W, height: H, scale: scala } });
+      fs.writeFileSync(path.join(saida, `t${t.toFixed(2)}.${png ? 'png' : 'jpg'}`), Buffer.from(r.result.data, 'base64'));
     }
     console.log(`${soltos.split(',').length} quadros em ${saida}`);
     throw Object.assign(new Error('ok'), { fim: true });

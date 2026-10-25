@@ -25,12 +25,23 @@ export function lerCfg() {
 const aspas = s => `"${String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
 // roda o curl com a senha pelo stdin (não aparece na linha de comando)
+// --ssl-reqd: só conecta com criptografia (a senha nunca trafega aberta)
+// o FTP da Hostinger às vezes demora a responder: tenta de novo até 3 vezes antes de desistir
+const espera = ms => { const fim = Date.now() + ms; while (Date.now() < fim) { /* espera síncrona curta entre tentativas */ } };
 export function curl(cfg, args, inseguro = false) {
-  const base = ['-K', '-', '--ssl', '--silent', '--show-error', '--connect-timeout', '20'];
+  const base = ['-K', '-', '--ssl-reqd', '--silent', '--show-error', '--connect-timeout', '30'];
   if (process.platform === 'win32') base.push('--ssl-no-revoke');
   if (inseguro) base.push('--insecure');
-  const r = spawnSync(CURL, [...base, ...args], { input: `user = ${aspas(`${cfg.utente}:${cfg.password}`)}\n`, encoding: 'utf8', maxBuffer: 1 << 24 });
-  return { ok: r.status === 0, codigo: r.status, saida: r.stdout ?? '', erro: (r.stderr ?? '').trim() };
+  let res;
+  for (let t = 0; t < 3; t++) {
+    const r = spawnSync(CURL, [...base, ...args], { input: `user = ${aspas(`${cfg.utente}:${cfg.password}`)}\n`, encoding: 'utf8', maxBuffer: 1 << 24 });
+    const linhas = (r.stderr ?? '').split(/\r?\n/).filter(l => l.trim() && !/insecure option/i.test(l));
+    res = { ok: r.status === 0, codigo: r.status, saida: r.stdout ?? '', erro: linhas.join(' | ').trim() };
+    // não insiste em erro de certificado (tratado por quem chama) nem em senha errada (67)
+    if (res.ok || [35, 51, 60, 67].includes(r.status)) break;
+    espera(5000 * (t + 1));
+  }
+  return res;
 }
 
 // descobre onde ficam public_html e privato na conta FTP

@@ -200,6 +200,9 @@ function camera(t) {
   c.near = Math.max(0.002, d * 0.02);
   c.far = d * 14 + 400;
   c.updateProjectionMatrix();
+  // capa: desloca a cena para baixo, abrindo espaço para o título
+  if (R.copertina?.giu) c.setViewOffset(1080, 1920, 0, -R.copertina.giu, 1080, 1920);
+  c.updateMatrixWorld(true);   // rótulos projetados com a câmera deste quadro, não a do anterior
   const f = mappa.scene.fog;
   if (d < 60) { f.near = d * 2.4; f.far = d * 8; } else { f.near = 1e5; f.far = 2e5; }
   return k;
@@ -255,6 +258,7 @@ function quadro(t) {
   bn.style.opacity = sb;
   bn.style.transform = `translateY(${(1 - sb) * 20}px)`;
   legenda(t);
+  if (R.copertina) { $('#sott').innerHTML = ''; ct.style.display = R.copertina.contatore ? 'block' : 'none'; }
 
   // balão do comentário digitando
   const cm = R.commento, cel = $('#commento');
@@ -342,6 +346,16 @@ async function preparar(roteiro) {
     pontos.push({ el, v: v3(c[4], c[5]), ini: R.eventi.punti + 0.5 + rnd() * 1.6 });
   }
   cena.pontos = pontos;
+  // capa do reel: título grande no lugar da legenda, cabeçalho mais baixo (o perfil recorta a capa em 3:4)
+  if (R.copertina) {
+    const cp = R.copertina;
+    $('#testa').style.top = `${cp.testa_top ?? 120}px`;
+    const el = document.createElement('div');
+    el.id = 'copertina'; el.className = 'forte';
+    el.style.cssText = `position:absolute;left:30px;right:30px;top:${cp.titolo_top}px;text-align:center;line-height:1.05;`;
+    el.innerHTML = cp.linee.map(([txt, giallo, size]) => `<div style="font-size:${size}px;-webkit-text-stroke-width:${Math.round(size * 0.19)}px"${giallo ? ' class="g"' : ''}>${esc(txt)}</div>`).join('');
+    document.body.appendChild(el);
+  }
   quadro(0);
   return { durata: R.durata, fps: 30 };
 }
