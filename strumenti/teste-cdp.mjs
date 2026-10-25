@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 
-const URL_SITE = process.argv[2] ?? 'http://localhost:5173/';
+const URL_SITE = process.argv[2] ?? 'http://localhost:5173/?demo=1';
 const SAIDA = process.argv[3] ?? os.tmpdir();
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const PORTA = 9333;

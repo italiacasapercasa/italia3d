@@ -7,6 +7,7 @@ import { Etichette } from './etichette.js';
 import { UI } from './ui.js';
 
 const VERSAO = document.querySelector('meta[name="versione"]')?.content ?? 'dev';
+const DEMO = new URLSearchParams(location.search).has('demo');   // ?demo=1: mapa de demonstração
 
 // recarrega sozinho quando sai um snapshot novo
 async function checarVersao(atual) {
@@ -17,7 +18,7 @@ async function checarVersao(atual) {
 }
 
 async function iniciar() {
-  const D = await carregar(VERSAO);
+  const D = await carregar(VERSAO, DEMO);
   const mappa = new Mappa(document.getElementById('mappa'), D.geo, D.rilievo, D.imagem);
   const citta = new Citta(mappa, D);
   criarPuntiCase(mappa, D);
@@ -64,7 +65,7 @@ async function iniciar() {
   }
   document.getElementById('caricamento').classList.add('fora');
   setTimeout(() => document.getElementById('caricamento').remove(), 600);
-  checarVersao(D.snap.versao);
+  if (!DEMO) checarVersao(D.snap.versao);
 }
 
 iniciar().catch(e => {

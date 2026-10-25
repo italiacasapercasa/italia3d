@@ -1,5 +1,5 @@
 // Simula a atividade do Instagram (posts, comentários, marcações, votos, stories) com dados FICTÍCIOS
-// e passa tudo pelo motor de regras: dati-grezzi/eventi-demo.json -> sito/data/snapshot.json.
+// e passa tudo pelo motor de regras: dati-grezzi/eventi-demo.json -> sito/data/demo/snapshot.json (site: ?demo=1).
 // Uso: node strumenti/demo-dati.mjs [semente]
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,8 +34,10 @@ function nomeConta() {
     const s = [
       `${n}_${c}`, `${n}.${c}`, `${n}${c}${num}`, `${n}_${anno % 100}`, `${n}.${escolher(PAROLE)}`, `its${n}`, `${n}__${c[0]}`,
       `${escolher(PAROLE)}_${n}`, `${n}${c[0]}${c[1]}_`, `x${n}x`, `${n}_${c}_${num}`, `il.${n}`, `la_${n}${num}`,
-    ][Math.floor(rnd() * 13)].replace(/[^a-z0-9._]/g, '').slice(0, 30);
-    if (!usados.has(s)) { usados.add(s); return s; }
+    ][Math.floor(rnd() * 13)].replace(/[^a-z0-9._]/g, '').slice(0, 28);
+    // sempre com hífen: o Instagram não aceita "-" em nomes de usuário, então nenhum nome fictício é de pessoa real
+    const seguro = /[._]/.test(s) ? s.replace(/[._]/, '-') : `${s.slice(0, n.length)}-${s.slice(n.length) || 'it'}`;
+    if (!usados.has(seguro)) { usados.add(seguro); return seguro; }
   }
 }
 
@@ -103,4 +105,5 @@ const eventi = { inizio: INICIO, posts, commenti, storie, bloccati: [contas[500]
 fs.mkdirSync(path.join(RAIZ, 'dati-grezzi'), { recursive: true });
 fs.writeFileSync(path.join(RAIZ, 'dati-grezzi', 'eventi-demo.json'), JSON.stringify(eventi));
 console.log(`${posts.length} posts · ${commenti.length} comentários · ${storie.length} stories`);
-gerarSnapshot(eventi, { agora: AGORA, demo: true, follower: 11870 });
+// vai para sito/data/demo (site: ?demo=1); os dados reais em sito/data ficam intactos
+gerarSnapshot(eventi, { agora: AGORA, demo: true, follower: 11870, pasta: path.join(DATA, 'demo') });

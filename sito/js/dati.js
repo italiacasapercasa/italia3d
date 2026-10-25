@@ -1,12 +1,13 @@
 // Carrega geo + comuni + snapshot e monta o modelo usado pelo site.
 import { livelloDi } from './regole.js';
 
-export async function carregar(versao) {
+export async function carregar(versao, demo = false) {
   const v = `?v=${versao}`;
   const [geo, comuniJ, snap, ril, img] = await Promise.all([
     fetch(`data/geo.json${v}`).then(r => r.json()),
     fetch(`data/comuni.json${v}`).then(r => r.json()),
-    fetch(`data/snapshot.json${v}`).then(r => r.json()),
+    // ?demo=1: dados fictícios (nomes com hífen, que não existem no Instagram)
+    fetch(`data/${demo ? 'demo/' : ''}snapshot.json?t=${Date.now()}`).then(r => r.json()),
     fetch(`data/rilievo.bin${v}`).then(r => r.arrayBuffer()),
     new Promise((ok, erro) => { const i = new Image(); i.onload = () => ok(i); i.onerror = erro; i.src = `data/terreno.png${v}`; }),
   ]);

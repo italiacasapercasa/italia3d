@@ -85,7 +85,8 @@ export function pubblicare({ tutto = false, privato = false, config = false, log
     arquivos = listarPasta(path.join(RAIZ, 'privato'), '', rel => rel.startsWith('dati') || rel.startsWith('config-gioco') || rel.endsWith('.esempio.php') || rel === 'ig-token.json').map(a => ({ local: path.join(RAIZ, 'privato', a.nome), remoto: ftp.priv + a.nome }));
   } else if (tutto) {
     // dados por último: quem abrir o site no meio do envio não pega código novo com dado velho
-    const todos = listarPasta(path.join(RAIZ, 'sito'), '', rel => rel.startsWith('video')).map(a => ({ local: path.join(RAIZ, 'sito', a.nome), remoto: ftp.web + a.nome }));
+    // fora do site no ar: gravador de vídeo e dados de demonstração (só para testes no PC)
+    const todos = listarPasta(path.join(RAIZ, 'sito'), '', rel => rel.startsWith('video') || rel.startsWith('data/demo')).map(a => ({ local: path.join(RAIZ, 'sito', a.nome), remoto: ftp.web + a.nome }));
     arquivos = [...todos.filter(a => !a.remoto.includes('data/')), ...todos.filter(a => a.remoto.includes('data/') && !a.remoto.endsWith('versao.txt')), ...todos.filter(a => a.remoto.endsWith('versao.txt'))];
   } else {
     arquivos = ['data/snapshot.json', 'data/versao.txt'].map(n => ({ local: path.join(RAIZ, 'sito', n), remoto: ftp.web + n }));

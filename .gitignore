@@ -17,3 +17,6 @@ sito/data/versao.txt
 # vídeos gerados e áudios de narração
 video/output/
 video/audio/
+
+# dados de demonstração (só testes locais, nunca no site)
+sito/data/demo/
