@@ -340,6 +340,11 @@ export class Citta {
     return melhor;
   }
 
+  posCommercio(cm) {
+    this.dadosCidade(cm.luogo);
+    return { x: cm.x, y: cm.y, z: cm.z };
+  }
+
   posCasa(casa) {
     const l = this.D.luoghi[casa.luogo];
     this.dadosCidade(l);

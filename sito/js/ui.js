@@ -63,13 +63,14 @@ export class UI {
     this.painel.querySelector('.maniglia').onclick = () => this.painel.classList.toggle('mini');
     // ações dentro dos painéis (delegadas)
     this.painel.addEventListener('click', e => {
-      const t = e.target.closest('button, [data-casa], [data-luogo], [data-regione], [data-comune]');
+      const t = e.target.closest('button, [data-casa], [data-luogo], [data-regione], [data-comune], [data-commercio]');
       if (!t) return;
       const d = t.dataset;
       if (d.casa) this.casa(this.D.porConta.get(d.casa));
       else if (d.luogo) this.luogo(this.D.luoghi[+d.luogo]);
       else if (d.regione) this.regione(this.D.regPorCod.get(d.regione));
       else if (d.comune) this.comuneVuoto(this.D.comunePorIstat.get(d.comune));
+      else if (d.commercio) { const cm = this.D.commerci.find(x => x.id === d.commercio); if (cm) { const p = this.citta.posCommercio?.(cm); if (p) this.focar(p.x, p.z, 0.4, 0.6); this.commercio(cm); } }
       else if ('minha' in d) this.definirMinha(d.minha);
       else if (d.storia) this.storiaCasa(this.D.porConta.get(d.storia));
       else if (d.atto) this.attoFondazione(this.D.luoghi[+d.atto]);
@@ -288,7 +289,17 @@ export class UI {
       <div class="carta"><b>${ed}</b> a ${num(alvo)} case · mancano <b>${num(alvo - l.case)}</b><div class="progresso"><i style="width:${pct}%"></i></div></div>
       <h3>Classifica di ${esc(l.nome)} <small>(punti del mandato)</small></h3>
       <ol class="ranking">${casas.slice(0, 10).map((c, i) => this.linhaRank(c, i)).join('')}</ol>
-      <div class="bottoni"><button data-condividi="luogo:${l.id}">📸 Condividi ${esc(l.nome)}</button><button class="sec" data-atto="${l.id}">📜 Atto di fondazione</button></div>`);
+      <div class="bottoni"><button data-condividi="luogo:${l.id}">📸 Condividi ${esc(l.nome)}</button><button class="sec" data-atto="${l.id}">📜 Atto di fondazione</button></div>
+      ${this.attivitaCitta(l)}`);
+  }
+  // comércios da cidade + convite para anunciar
+  attivitaCitta(l) {
+    const lista = l.commerci ?? [];
+    return `
+      <h3>🏪 Attività a ${esc(l.nome)}</h3>
+      ${lista.length ? `<ol class="ranking citta">${lista.map(cm => { const [, e, t] = tipoDi(cm.tipo); return `<li data-commercio="${esc(cm.id)}"><span class="pos">${e}</span><span class="quem"><b>${esc(cm.nome)}</b><small>${esc(t)}${cm.prodotto === 'cartellone' ? ' · cartellone' : ''}</small></span></li>`; }).join('')}</ol>` : ''}
+      <div class="carta meta"><b>${lista.length ? 'Vuoi esserci anche tu?' : `Ancora nessuna attività a ${esc(l.nome)}: la prima si vede di più!`}</b><small>Un negozio in 3D con il tuo nome, il tuo logo e il tuo WhatsApp, qui in città. Lo vede chi cerca la sua casa a ${esc(l.nome)}.</small>
+      <div class="bottoni"><a class="botao" href="negozio.html?citta=${l.comune.istat}">🏪 Il tuo negozio a ${esc(l.nome)}</a><a class="botao sec" href="negozio.html?prodotto=cartellone&citta=${l.comune.istat}">📣 Cartellone</a></div></div>`;
   }
   comuneVuoto(c) {
     if (!c) return;
