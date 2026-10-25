@@ -1,6 +1,7 @@
 # segredos e dados baixados: nunca vão para o repositório
 config/instagram.json
 config/hostinger.json
+config/github.json
 privato/config.php
 privato/dati/
 dati-grezzi/
@@ -8,3 +9,7 @@ dati-grezzi/
 pubblicare/
 privato/ig-token.json
 privato/config-gioco/
+
+# gerados a cada atualização
+sito/data/snapshot.json
+sito/data/versao.txt
