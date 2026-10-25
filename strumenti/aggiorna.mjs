@@ -29,7 +29,9 @@ export function montarEventi({ posts, comentarios, storie, cfg, log = console.lo
   const proprio = (cfg.username ?? '').toLowerCase();
   const bloccati = new Set(mod.bloccati.map(s => s.toLowerCase()));
 
-  const lista = Object.values(comentarios).filter(c => c.conta && c.conta !== proprio).sort((a, b) => a.ts - b.ts);
+  // só o que é do jogo: posts a partir de "inizio" (comentários de posts antigos podem estar no cache)
+  const inizio = Date.parse(cfg.inizio), postsDoJogo = new Set(posts.map(p => p.id));
+  const lista = Object.values(comentarios).filter(c => c.conta && c.conta !== proprio && postsDoJogo.has(c.post) && c.ts >= inizio).sort((a, b) => a.ts - b.ts);
   const comCidade = new Set(), revisao = new Map(), motivos = {};
   const commenti = lista.map(c => {
     if (contaProibida(c.conta, mod.parole_vietate ?? [])) bloccati.add(c.conta);
@@ -54,13 +56,13 @@ export function montarEventi({ posts, comentarios, storie, cfg, log = console.lo
   const storieEventi = [
     ...storie.filter(s => s.conta).map(s => ({ conta: s.conta, ts: s.ts })),
     ...manuali.map(s => ({ conta: s.conta.toLowerCase(), ts: Date.parse(s.ts) })),
-  ];
+  ].filter(s => s.ts >= inizio);   // stories de teste antes do lançamento não contam
   const rev = [...revisao.values()].sort((a, b) => b.n - a.n);
   fs.writeFileSync(path.join(PASTA_IG, '..', 'revisione.json'), JSON.stringify(rev, null, 1));
   log(`cidades: ${Object.entries(motivos).map(([k, v]) => `${k} ${v}`).join(' · ')} · ${rev.length} textos para revisar`);
 
   return {
-    inizio: Date.parse(cfg.inizio),
+    inizio,
     posts: posts.map(p => ({ id: p.id, ts: p.ts })),
     commenti,
     storie: storieEventi,

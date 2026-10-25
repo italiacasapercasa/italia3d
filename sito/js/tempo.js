@@ -45,8 +45,11 @@ export const fineMandato = ts => inizioMandato(inizioMandato(ts) + 8 * 86400e3);
 // limites dos mandatos desde o início do jogo: mandato k (1..) = [lim[k-1], lim[k])
 export function limitiMandati(inizioGioco, ate) {
   const lim = [inizioMandato(inizioGioco)];
-  while (lim[lim.length - 1] <= ate) lim.push(fineMandato(lim[lim.length - 1]));
-  lim[0] = Math.min(lim[0], inizioGioco);
+  const proximo = () => lim.push(fineMandato(lim[lim.length - 1]));
+  proximo();   // pelo menos o mandato 1, mesmo antes do lançamento
+  // primeiro mandato com menos de 3 dias (ex.: lançamento no domingo): vai até o domingo seguinte
+  if (lim[1] - inizioGioco < 3 * 86400e3) lim[1] = fineMandato(lim[1]);
+  while (lim[lim.length - 1] <= ate) proximo();
   return lim;
 }
 export function mandatoDi(lim, ts) {
