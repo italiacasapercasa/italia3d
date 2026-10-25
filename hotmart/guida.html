@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>La tua attività sulla mappa · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --ink: #152033; --giallo: #FFC93C; --crema: #FFF6E5; --grigio: #5B6475; --mare: #8EBFD2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; color: var(--ink); background: var(--mare); }
+  .pagina { width: 210mm; height: 297mm; padding: 14mm; display: flex; flex-direction: column; }
+  .carta { flex: 1; background: #fff; border: 4px solid var(--ink); border-radius: 28px; padding: 12mm 12mm 10mm; display: flex; flex-direction: column; }
+  .testa { display: flex; align-items: center; gap: 16px; }
+  .testa img { width: 74px; height: 74px; border-radius: 18px; border: 3px solid var(--ink); }
+  .marchio { font-weight: 900; font-size: 15px; color: var(--grigio); }
+  h1 { font-size: 30px; font-weight: 900; margin: 2px 0 0; line-height: 1.1; }
+  h1 b { background: var(--giallo); padding: 0 6px; border-radius: 8px; }
+  p { font-weight: 700; font-size: 14.5px; line-height: 1.55; margin: 8px 0; }
+  .grazie { margin-top: 16px; background: var(--crema); border: 3px solid var(--ink); border-radius: 18px; padding: 12px 16px; }
+  h2 { font-size: 19px; font-weight: 900; margin: 18px 0 6px; }
+  ol { margin: 0; padding: 0; list-style: none; counter-reset: p; }
+  ol li { counter-increment: p; position: relative; padding: 9px 0 9px 46px; border-bottom: 1.5px dashed #D9DDE3; font-weight: 700; font-size: 14.5px; line-height: 1.5; }
+  ol li::before { content: counter(p); position: absolute; left: 0; top: 8px; width: 32px; height: 32px; border-radius: 50%; background: var(--giallo); border: 3px solid var(--ink); font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  ol li b { font-weight: 900; }
+  .riquadri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+  .riquadri div { border: 3px solid var(--ink); border-radius: 16px; padding: 10px 12px; font-size: 13.5px; font-weight: 700; line-height: 1.45; }
+  .riquadri b { display: block; font-size: 15px; font-weight: 900; margin-bottom: 2px; }
+  .piede { margin-top: auto; padding-top: 14px; font-size: 12px; font-weight: 700; color: var(--grigio); line-height: 1.5; }
+  .link { font-weight: 900; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="pagina"><div class="carta">
+  <div class="testa">
+    <img src="../perfil/icona-app-1024.png" alt="">
+    <div><div class="marchio">Italia Casa per Casa</div><h1>La tua attività <b>sulla mappa</b></h1></div>
+  </div>
+
+  <div class="grazie"><p><b>Grazie per il tuo acquisto!</b> Hai prenotato un negozio o un cartellone in 3D sulla mappa di Italia Casa per Casa. Ecco cosa succede adesso.</p></div>
+
+  <h2>I prossimi passi</h2>
+  <ol>
+    <li><b>Hai già compilato il modulo?</b> Se hai pagato dalla pagina <span class="link">italiacasapercasa.com/negozio.html</span>, abbiamo già il nome, la città, il colore, il logo e il WhatsApp della tua attività. Se non l’hai ancora fatto, compilalo ora con la stessa email usata per il pagamento.</li>
+    <li><b>Controlliamo la tua attività</b> entro 24 ore (nei giorni lavorativi di solito molto prima).</li>
+    <li><b>La tua attività appare sulla mappa</b> nella tua città, in un lotto tutto suo che non cambia posto. Ti scriviamo per email quando è online.</li>
+    <li><b>Con un tocco</b> sul tuo negozio o sul tuo cartellone, chi cerca la sua casa sulla mappa vede la tua descrizione e ti scrive su WhatsApp.</li>
+    <li><b>Resta sulla mappa per 30 giorni</b> dall’approvazione. Prima della scadenza ti avvisiamo, se vuoi rinnovare.</li>
+  </ol>
+
+  <h2>Da sapere</h2>
+  <div class="riquadri">
+    <div><b>Vuoi cambiare qualcosa?</b>Nome, colore, logo, messaggio o numero: scrivici e lo aggiorniamo.</div>
+    <div><b>Rimborso</b>Se non approviamo la tua attività ti restituiamo tutto. Puoi chiedere il rimborso entro 7 giorni dal pagamento.</div>
+    <div><b>Cosa non accettiamo</b>Contenuti offensivi, ingannevoli, politici, per adulti, gioco d’azzardo, armi o tabacco.</div>
+    <div><b>Fatti vedere</b>Condividi la tua attività sulla mappa nelle storie e tagga <b style="display:inline">@italiacasapercasa</b>.</div>
+  </div>
+
+  <div class="piede">
+    Domande? Scrivici a <span class="link">privacy@italiacasapercasa.com</span> indicando l’email usata per il pagamento.<br>
+    La mappa: <span class="link">italiacasapercasa.com</span> · Instagram: <span class="link">@italiacasapercasa</span>
+  </div>
+</div></div>
+</body>
+</html>

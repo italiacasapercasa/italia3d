@@ -4,8 +4,10 @@
 declare(strict_types=1);
 require is_file(__DIR__ . '/../../privato/config.php') ? __DIR__ . '/../../privato/config.php' : __DIR__ . '/../privato/config.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !defined('HOTMART_HOTTOK') || !HOTMART_HOTTOK) { http_response_code(403); exit; }
-if (!hash_equals(HOTMART_HOTTOK, (string)($_SERVER['HTTP_X_HOTMART_HOTTOK'] ?? ''))) { http_response_code(403); exit; }
+// a Hotmart testa a URL ao cadastrar o webhook: responde 200 sempre, mas só processa com o hottok certo
+$valido = $_SERVER['REQUEST_METHOD'] === 'POST' && defined('HOTMART_HOTTOK') && HOTMART_HOTTOK
+    && hash_equals(HOTMART_HOTTOK, (string)($_SERVER['HTTP_X_HOTMART_HOTTOK'] ?? ''));
+if (!$valido) { http_response_code(200); echo 'ok'; exit; }
 
 $corpo = (string)file_get_contents('php://input');
 $d = json_decode($corpo, true) ?: [];

@@ -115,6 +115,8 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const f = $('#f1'), qs = new URLSearchParams(location.search);
+// a Hotmart soma o IVA no checkout (22% na Itália) e zera para quem informa Partita IVA da UE
+const NOTA_IVA = '<div class="aiuto" style="margin-top:6px">IVA 22% calcolata al pagamento. Con Partita IVA UE è azzerata.</div>';
 const COLORI = ['#E0473C', '#F28C28', '#FFC93C', '#3E8E4E', '#1F9E89', '#2F7DD1', '#6C4FD3', '#D94F8A', '#7A4B2A', '#152033'];
 let cfg, citta = [], scelta = null, logoDato = '', logoImg = null, idPedido = null;
 
@@ -181,7 +183,7 @@ function mostraPiano() {
   el.className = `piano${r <= 0 ? ' pieno' : ''}`;
   el.innerHTML = r <= 0
     ? `Non ci sono più posti a ${esc(scelta.nome)} per ora. Scegli una città vicina.`
-    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}`;
+    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> + IVA per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}${NOTA_IVA}`;
 }
 
 $('#logo').addEventListener('change', async e => {
@@ -236,8 +238,8 @@ f.addEventListener('submit', async e => {
     ['WhatsApp', esc(d.whatsapp)],
     ...(d.instagram ? [['Instagram', `@${esc(d.instagram)}`]] : []),
     ['Durata', `${cfg.durata_giorni} giorni dall’approvazione`],
-    ['Prezzo', `${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}${euro(pr.lancio)}`],
-  ].map(([a, b]) => `<div class="linha"><span>${a}</span><span>${b}</span></div>`).join('') + (d.descrizione ? `<p class="sub">«${esc(d.descrizione)}»</p>` : '');
+    ['Prezzo', `${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}${euro(pr.lancio)} + IVA`],
+  ].map(([a, b]) => `<div class="linha"><span>${a}</span><span>${b}</span></div>`).join('') + NOTA_IVA + (d.descrizione ? `<p class="sub">«${esc(d.descrizione)}»</p>` : '');
   passo(2);
 });
 $('#correggi').onclick = () => passo(1);
