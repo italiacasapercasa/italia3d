@@ -1,6 +1,7 @@
 // Coletor do Instagram (Instagram API com login do Instagram, graph.instagram.com).
 // Baixa posts e comentários (com respostas) do perfil e as menções em stories recebidas pelo webhook.
 // Incremental: só rebaixa os comentários de um post quando o comments_count dele mudou.
+// Comentários nunca são apagados pela coleta (a API devolve listas incompletas); casa só sai do mapa com "amministra blocca".
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -123,12 +124,31 @@ export async function raccogliere({ completo = false, log = console.log } = {}) 
     const ant = postsAnt.get(p.id);
     // rebaixa se o total mudou ou se temos menos comentários guardados do que o Instagram informa
     if (!completo && ant && ant.n === p.n && (guardados.get(p.id) ?? 0) >= p.n) continue;
-    const lista = await ig.comentarios(p.id);
-    const vistos = new Set(lista.map(c => c.id));
-    for (const c of lista) { if (!comentarios[c.id]) novos++; comentarios[c.id] = c; }
-    // comentário apagado no Instagram: some do jogo também
-    for (const [id, c] of Object.entries(comentarios)) if (c.post === p.id && !vistos.has(id)) delete comentarios[id];
+    // a API às vezes corta a paginação no meio (posts com milhares de comentários): a lista vem incompleta.
+    // Por isso só ACRESCENTA (nunca apaga o que não veio) e tenta de novo enquanto faltar muito.
+    for (let tentativa = 0; tentativa < 3; tentativa++) {
+      const lista = await ig.comentarios(p.id);
+      for (const c of lista) { if (!comentarios[c.id]) { novos++; guardados.set(p.id, (guardados.get(p.id) ?? 0) + 1); } comentarios[c.id] = c; }
+      if ((guardados.get(p.id) ?? 0) >= p.n * 0.97) break;
+      log(`  post ${p.id}: ${guardados.get(p.id) ?? 0} de ${p.n} comentários; tentando de novo`);
+    }
     baixados++;
+  }
+  // comentários recebidos pelo webhook (rede de segurança para os que a API não devolver)
+  if (cfg.webhook_storie) {
+    try {
+      const r = await fetch(`${cfg.webhook_storie}&tipo=commenti`);
+      if (r.ok) {
+        const doJogo = new Set(posts.map(p => p.id));
+        let viaWebhook = 0;
+        for (const linha of (await r.text()).split('\n')) {
+          let c; try { c = JSON.parse(linha); } catch { continue; }
+          if (!c?.id || !doJogo.has(c.post) || comentarios[c.id] || !c.conta) continue;
+          comentarios[c.id] = c; novos++; viaWebhook++;
+        }
+        if (viaWebhook) log(`${viaWebhook} comentários recuperados do webhook`);
+      }
+    } catch (e) { log(`aviso: comentários do webhook não lidos (${e.message})`); }
   }
   log(`${baixados} posts atualizados · ${novos} comentários novos · ${Object.keys(comentarios).length} no total`);
 

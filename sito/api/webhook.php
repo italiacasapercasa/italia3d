@@ -37,9 +37,24 @@ foreach ($dados['entry'] ?? [] as $entrada) {
         }
     }
 }
-if ($linhas !== '') {
+// comentários (campo "comments"): cópia de segurança, porque a API às vezes devolve a lista incompleta
+$comentarios = '';
+foreach ($dados['entry'] ?? [] as $entrada) {
+    foreach ($entrada['changes'] ?? [] as $ch) {
+        if (($ch['field'] ?? '') !== 'comments') continue;
+        $v = $ch['value'] ?? [];
+        if (empty($v['id']) || empty($v['media']['id'])) continue;
+        $comentarios .= json_encode([
+            'id' => (string)$v['id'], 'post' => (string)$v['media']['id'], 'pai' => isset($v['parent_id']) ? (string)$v['parent_id'] : null,
+            'conta' => strtolower((string)($v['from']['username'] ?? '')), 'uid' => (string)($v['from']['id'] ?? ''),
+            'ts' => (int)($entrada['time'] ?? time()) * 1000, 'testo' => (string)($v['text'] ?? ''),
+        ], JSON_UNESCAPED_UNICODE) . "\n";
+    }
+}
+if ($linhas !== '' || $comentarios !== '') {
     if (!is_dir(CARTELLA)) mkdir(CARTELLA, 0750, true);
-    file_put_contents(CARTELLA . '/storie.jsonl', $linhas, FILE_APPEND | LOCK_EX);
+    if ($linhas !== '') file_put_contents(CARTELLA . '/storie.jsonl', $linhas, FILE_APPEND | LOCK_EX);
+    if ($comentarios !== '') file_put_contents(CARTELLA . '/commenti.jsonl', $comentarios, FILE_APPEND | LOCK_EX);
 }
 http_response_code(200);
 echo 'ok';
