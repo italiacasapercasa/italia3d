@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Registra video · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "../vendor/three.module.min.js", "three/addons/": "../vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #cena { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g { color: var(--giallo); }
+  #testa { position: absolute; top: 120px; left: 0; right: 0; text-align: center; }
+  #giorno { font-size: 128px; line-height: 1; }
+  #picto { margin-top: 18px; display: flex; justify-content: center; align-items: center; gap: 14px; height: 70px; }
+  #picto svg { height: 70px; width: auto; }
+  #contatore { margin-top: 14px; font-size: 56px; line-height: 1; -webkit-text-stroke-width: 12px; opacity: 0; }
+  #banner { position: absolute; top: 560px; left: 0; right: 0; text-align: center; font-size: 46px; -webkit-text-stroke-width: 11px; opacity: 0; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1240px; text-align: center; font-size: 84px; line-height: 1.12; }
+  #commento { position: absolute; left: 160px; width: 760px; top: 600px; background: #fff; border: 5px solid var(--ink); border-radius: 30px; padding: 22px 26px; display: flex; align-items: center; gap: 22px; box-shadow: 0 8px 0 rgba(21,32,51,.25); transform-origin: 50% 0; opacity: 0; box-sizing: border-box; }
+  #commento img { width: 74px; height: 74px; border-radius: 50%; border: 4px solid var(--ink); }
+  #commento .corpo { flex: 1; min-width: 0; }
+  #commento .chi { font-size: 28px; font-weight: 900; color: var(--ink); }
+  #commento .chi span { color: #8A93A3; font-weight: 700; }
+  #commento .testo { font-size: 40px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+  #commento .cursore { display: inline-block; width: 4px; height: 40px; background: #E0473C; vertical-align: -6px; margin-left: 3px; }
+  #commento .cuore { font-size: 44px; color: var(--ink); }
+  #etichetta { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; transform-origin: 50% 100%; }
+  #etichetta .esempio { background: #4A5568; color: #fff; font-weight: 900; font-size: 22px; letter-spacing: 2px; padding: 4px 14px; border-radius: 8px; border: 3px solid var(--ink); }
+  #etichetta .pillola { background: #fff; border: 5px solid var(--ink); border-radius: 26px; padding: 10px 26px; text-align: center; }
+  #etichetta .pillola b { display: block; font-size: 38px; font-weight: 900; color: var(--ink); line-height: 1.1; }
+  #etichetta .pillola small { display: block; font-size: 22px; font-weight: 800; color: #5B6475; }
+  #etichetta .fond { background: var(--giallo); border: 4px solid var(--ink); border-radius: 12px; padding: 3px 14px; font-size: 24px; font-weight: 900; color: var(--ink); transform: scale(0); }
+  #etichetta .freccia { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 14px solid var(--ink); }
+  #punti { position: absolute; inset: 0; }
+  .p { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #fff; border: 4px solid var(--ink); box-sizing: border-box; transform: scale(0); }
+  .p.giallo { width: 30px; height: 30px; margin: -15px 0 0 -15px; background: var(--giallo); border-width: 5px; }
+  .dom { position: absolute; font-size: 34px; white-space: nowrap; -webkit-text-stroke-width: 9px; transform: translate(-50%, -150%) scale(0); text-transform: none; }
+</style>
+</head>
+<body>
+<canvas id="cena"></canvas>
+<div id="punti"></div>
+<div id="etichetta">
+  <div class="esempio"></div>
+  <div class="pillola"><b></b><small></small></div>
+  <div class="fond"></div>
+  <div class="freccia"></div>
+</div>
+<div id="commento">
+  <img src="../img/logo.png" alt="">
+  <div class="corpo"><div class="chi"></div><div class="testo"></div></div>
+  <div class="cuore">♡</div>
+</div>
+<div id="testa" class="forte">
+  <div id="giorno"></div>
+  <div id="picto"></div>
+  <div id="contatore"></div>
+</div>
+<div id="banner" class="forte"></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="registra.js"></script>
+</body>
+</html>

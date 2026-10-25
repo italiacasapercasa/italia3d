@@ -62,7 +62,8 @@ try {
 
   // clique numa casa no mapa (fecha painel, clica no centro da tela)
   await avaliar(`__italia.ui.fechar(); __italia.mappa.voar({ x: __italia.D.luoghi.find(l => l.nome === 'Milano').x, z: __italia.D.luoghi.find(l => l.nome === 'Milano').z, dist: 0.8, az: 0.6 }, 10)`);
-  await espera(800);
+  for (let t = 0; t < 40 && (await avaliar('!!__italia.mappa.voo || __italia.mappa.dist > 1')); t++) await espera(250);
+  await espera(1200);   // deixa montar as casas de Milano antes de clicar
   let achou = false;
   for (const [x, y] of [[250, 470], [230, 500], [280, 440], [250, 540], [200, 470]]) {
     await clicar(x, y); await espera(400);
@@ -73,9 +74,15 @@ try {
   await foto('cdp-2-clique.png');
 
   // rótulo de casa clicável
-  const rot = await avaliar(`(() => { const e = [...document.querySelectorAll('.et-casa:not([hidden])')][0]; if (!e) return null; e.click(); return e.innerText; })()`);
+  // os rótulos não capturam toque: o clique na posição dele passa pelo mapa
+  await avaliar('__italia.ui.fechar()');
+  await espera(300);
+  const alvoRot = await avaliar(`(() => { const e = [...document.querySelectorAll('.et-casa:not([hidden])')].find(x => { const r = x.getBoundingClientRect(); return r.top > 200 && r.bottom < innerHeight - 160 && r.left > 0 && r.right < innerWidth - 60; }); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, txt: e.innerText }; })()`);
+  if (alvoRot) await clicar(alvoRot.x, alvoRot.y);
+  const rot = alvoRot?.txt;
   await espera(600);
-  ok(rot && (await avaliar(`document.querySelector('#pannello h2')?.innerText`))?.includes(rot.replace(/^[^@]*/, '')), `clique no rótulo ${rot}`);
+  const h2rot = await avaliar(`document.querySelector('#pannello:not([hidden]) h2')?.innerText`);
+  ok(rot && h2rot?.includes(rot.replace(/^[^@]*/, '')), `clique no rótulo ${rot} em (${alvoRot?.x?.toFixed(0)},${alvoRot?.y?.toFixed(0)}) → painel: ${h2rot ?? 'nenhum'}`);
 
   // "è la mia casa" + botão casa
   await avaliar(`document.querySelector('[data-minha]:not([data-minha=""])')?.click()`);

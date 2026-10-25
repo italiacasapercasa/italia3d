@@ -12,11 +12,17 @@ export class Etichette {
     this.destaque = null;       // conta destacada (minha casa / busca)
     this.presCasa = D.porConta.get(D.snap.cariche.presidente?.conta);
     this.topLuoghi = [...D.luoghi].sort((a, b) => b.case - a.case);
-    el.addEventListener('click', e => {
-      const t = e.target.closest('[data-k]');
-      if (t) aoClicar(t.dataset.k);
-    });
+    this.postos = [];
     mappa.aoFrame.push(() => this.atualizar());
+  }
+
+  // os rótulos não capturam toque (zoom, arrastar e pinça passam para o mapa); o clique é testado aqui
+  emPonto(x, y) {
+    for (let i = this.postos.length - 1; i >= 0; i--) {
+      const { r, chave } = this.postos[i];
+      if (x >= r.x0 && x <= r.x1 && y >= r.y0 && y <= r.y1) return chave;
+    }
+    return null;
   }
 
   item(chave, classe, html) {
@@ -86,11 +92,14 @@ export class Etichette {
       const r = { x0: p.x - it.w / 2 - 2, x1: p.x + it.w / 2 + 2, y0: p.y - it.h - 2, y1: p.y + 2 };
       if (!c.fixo && postos.some(q => r.x0 < q.x1 && r.x1 > q.x0 && r.y0 < q.y1 && r.y1 > q.y0)) continue;
       postos.push(r);
+      r.chave = c.chave;
       vistos.add(c.chave);
       it.div.style.transform = `translate3d(${(p.x - it.w / 2).toFixed(1)}px, ${(p.y - it.h).toFixed(1)}px, 0)`;
       it.div.style.zIndex = String(1000 - Math.min(999, c.prio));
       if (it.div.hidden) it.div.hidden = false;
     }
     for (const [k, it] of this.pool) if (!vistos.has(k) && !it.div.hidden) it.div.hidden = true;
+    // prioridade maior primeiro na lista de colisão; para o clique, o de maior prioridade deve ganhar
+    this.postos = postos.map(r => ({ r, chave: r.chave })).reverse();
   }
 }

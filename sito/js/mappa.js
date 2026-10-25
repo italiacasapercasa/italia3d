@@ -10,7 +10,7 @@ const suave = t => t * t * (3 - 2 * t);
 const facilitar = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 export class Mappa {
-  constructor(canvas, geo, rilievo, imagemTerreno) {
+  constructor(canvas, geo, rilievo, imagemTerreno, opcoes = {}) {
     this.canvas = canvas;
     this.geo = geo;
     this.ril = rilievo;
@@ -20,8 +20,10 @@ export class Mappa {
     this.sujo = true;
     this.animando = 0;         // >0 força render contínuo (chamas etc.)
 
-    const r = this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    r.setPixelRatio(Math.min(devicePixelRatio, 2));
+    // opcoes.gravacao: renderização manual quadro a quadro (modo vídeo)
+    const r = this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: !!opcoes.gravacao });
+    r.setPixelRatio(opcoes.gravacao ? 1 : Math.min(devicePixelRatio, 2));
+    this.gravacao = !!opcoes.gravacao;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(COR_MAR);
     this.scene.fog = new THREE.Fog(COR_MAR, 1e5, 2e5);
@@ -132,6 +134,7 @@ export class Mappa {
     c.near = Math.max(0.004, d * 0.02);
     c.far = d * 12 + 400;
     c.updateProjectionMatrix();
+    c.updateMatrixWorld(true);   // raios (zoom no ponto, arrastar, clique) usam a câmera já movida, não a do último quadro
     if (d < 60) { this.scene.fog.near = d * 2.2; this.scene.fog.far = d * 7; }
     else { this.scene.fog.near = 1e5; this.scene.fog.far = 2e5; }
     this.sujo = true;
@@ -158,6 +161,17 @@ export class Mappa {
     const t = (y - ray.origin.y) / ray.direction.y;
     return t > 0 ? ray.origin.clone().addScaledVector(ray.direction, t) : null;
   }
+  // ponto do relevo sob o cursor (o plano é ajustado à altura do terreno naquele ponto)
+  pontoTerreno(sx, sy) {
+    let p = this.raioChao(sx, sy, this.alvo.y);
+    for (let i = 0; i < 4 && p; i++) {
+      const y = this.altura(p.x, p.z);
+      const q = this.raioChao(sx, sy, y);
+      if (!q) break;
+      p = q;
+    }
+    return p;
+  }
   projetar(x, y, z) {
     const v = new THREE.Vector3(x, y, z).project(this.camera);
     return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, ok: v.z < 1 && v.z > -1 };
@@ -183,6 +197,22 @@ export class Mappa {
     if (t >= 1) this.voo = null;
     this.atualizarCamera();
   }
+  // zoom mantendo fixo o ponto do mapa sob o cursor/dedo (a inclinação da câmera muda com a distância,
+  // então reposiciona depois de mudar a distância, como no arrastar)
+  zoomNoPonto(sx, sy, f) {
+    const antes = this.pontoTerreno(sx, sy);
+    this.dist = clamp(this.dist * f, DIST_MIN, DIST_MAX);
+    this.atualizarCamera();
+    if (!antes) return;
+    for (let i = 0; i < 3; i++) {   // alguns passos: a altura do alvo muda ao andar sobre o relevo
+      const depois = this.raioChao(sx, sy, antes.y);
+      if (!depois) return;
+      this.alvo.x += antes.x - depois.x;
+      this.alvo.z += antes.z - depois.z;
+      this.atualizarCamera();
+    }
+  }
+
   zoom(f, ms = 350) {
     this.voar({ x: this.alvo.x, z: this.alvo.z, dist: clamp(this.dist * f, DIST_MIN, DIST_MAX) }, ms);
   }
@@ -196,7 +226,8 @@ export class Mappa {
     const cv = this.canvas, dedos = new Map();
     let arr = null, pinca = null;
     const iniciarArrasto = (e) => {
-      arr = { ponto: this.raioChao(e.clientX, e.clientY), x0: e.clientX, y0: e.clientY, t0: performance.now(), moveu: false, girar: e.button === 2 || e.shiftKey, az0: this.az };
+      // t0 = hora real do toque (e.timeStamp): com o processador ocupado o evento chega atrasado
+      arr = { ponto: this.pontoTerreno(e.clientX, e.clientY), x0: e.clientX, y0: e.clientY, t0: e.timeStamp ?? performance.now(), moveu: false, girar: e.button === 2 || e.shiftKey, az0: this.az };
     };
     cv.addEventListener('pointerdown', e => {
       cv.setPointerCapture(e.pointerId);
@@ -207,7 +238,7 @@ export class Mappa {
       else if (dedos.size === 2) {
         const [a, b] = [...dedos.values()];
         pinca = { d0: Math.hypot(a.x - b.x, a.y - b.y), ang0: Math.atan2(b.y - a.y, b.x - a.x), dist0: this.dist, az0: this.az, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
-        pinca.ponto = this.raioChao(pinca.mx, pinca.my);
+        pinca.ponto = this.pontoTerreno(pinca.mx, pinca.my);
         arr = null;
       }
     });
@@ -220,8 +251,11 @@ export class Mappa {
         this.dist = clamp(pinca.dist0 * pinca.d0 / Math.max(d, 1), DIST_MIN, DIST_MAX);
         this.az = pinca.az0 - (ang - pinca.ang0);
         this.atualizarCamera();
-        const p = this.raioChao((a.x + b.x) / 2, (a.y + b.y) / 2);
-        if (p && pinca.ponto) { this.alvo.x += pinca.ponto.x - p.x; this.alvo.z += pinca.ponto.z - p.z; this.atualizarCamera(); }
+        for (let i = 0; i < 2 && pinca.ponto; i++) {
+          const p = this.raioChao((a.x + b.x) / 2, (a.y + b.y) / 2, pinca.ponto.y);
+          if (!p) break;
+          this.alvo.x += pinca.ponto.x - p.x; this.alvo.z += pinca.ponto.z - p.z; this.atualizarCamera();
+        }
         return;
       }
       if (!arr) return;
@@ -229,13 +263,16 @@ export class Mappa {
       if (Math.hypot(dx, dy) > 6) arr.moveu = true;
       if (!arr.moveu) return;
       if (arr.girar) { this.az = arr.az0 - dx * 0.006; this.atualizarCamera(); return; }
-      const p = this.raioChao(e.clientX, e.clientY);
-      if (p && arr.ponto) { this.alvo.x += arr.ponto.x - p.x; this.alvo.z += arr.ponto.z - p.z; this.atualizarCamera(); }
+      for (let i = 0; i < 2 && arr.ponto; i++) {   // o ponto agarrado fica sob o dedo
+        const p = this.raioChao(e.clientX, e.clientY, arr.ponto.y);
+        if (!p) break;
+        this.alvo.x += arr.ponto.x - p.x; this.alvo.z += arr.ponto.z - p.z; this.atualizarCamera();
+      }
     });
     const fim = e => {
       if (!dedos.has(e.pointerId)) return;
       dedos.delete(e.pointerId);
-      if (arr && !arr.moveu && performance.now() - arr.t0 < 500 && e.type === 'pointerup' && this.aoClique) this.aoClique(e.clientX, e.clientY);
+      if (arr && !arr.moveu && (e.timeStamp ?? performance.now()) - arr.t0 < 500 && e.type === 'pointerup' && this.aoClique) this.aoClique(e.clientX, e.clientY);
       arr = null;
       if (dedos.size < 2) pinca = null;
       if (dedos.size === 1) { const [id, p] = [...dedos][0]; iniciarArrasto({ clientX: p.x, clientY: p.y, button: 0, pointerId: id }); arr.moveu = true; }
@@ -246,16 +283,13 @@ export class Mappa {
     cv.addEventListener('wheel', e => {
       e.preventDefault();
       this.voo = null;
-      const f = Math.exp(clamp(e.deltaY, -120, 120) * 0.0018);
-      const p = this.raioChao(e.clientX, e.clientY);
-      const nova = clamp(this.dist * f, DIST_MIN, DIST_MAX), k = 1 - nova / this.dist;
-      if (p) { this.alvo.x += (p.x - this.alvo.x) * k; this.alvo.z += (p.z - this.alvo.z) * k; }
-      this.dist = nova;
-      this.atualizarCamera();
+      this.tocou = true;
+      this.zoomNoPonto(e.clientX, e.clientY, Math.exp(clamp(e.deltaY, -120, 120) * 0.0018));
     }, { passive: false });
   }
 
   loop(agora) {
+    if (this.gravacao) return;
     requestAnimationFrame(t => this.loop(t));
     if (this.voo) this.passoVoo(agora);
     if (!this.sujo && !this.animando) return;

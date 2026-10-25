@@ -1,6 +1,57 @@
 // Bolinhas das cidades na visão de país/região (amarelas = cidades maiores, brancas = pequenas).
 import * as THREE from 'three';
-import { DIST_CIDADE } from './citta.js';
+import { DIST_CIDADE, posLote } from './citta.js';
+
+// Cada casa como um pontinho colorido: de longe as cidades viram manchas que crescem com o zoom
+// (de perto as casas 3D assumem). Tamanho em pixels proporcional ao tamanho real, com mínimo visível.
+const COR_NIVEL = { 10: '#D9C9A9', 11: '#7FB7D9', 12: '#FFFFFF', 13: '#F2C98A', 14: '#F2C230' };
+const CORES = ['#E2703F', '#E2703F', '#D9653B', '#F2C98A', '#F3E2C2', '#EDB49A'];
+export function criarPuntiCase(mappa, D) {
+  const n = D.casas.length;
+  const pos = new Float32Array(n * 3), cor = new Float32Array(n * 3), c = new THREE.Color();
+  const agora = Date.now() / 1000;
+  D.casas.forEach((casa, i) => {
+    const l = D.luoghi[casa.luogo], q = posLote(casa.lote), x = l.x + q.x, z = l.z + q.z;
+    pos.set([x, mappa.altura(x, z) + 0.03, z], i * 3);
+    let h = 0;
+    for (let k = 0; k < casa.conta.length; k++) h = (h * 31 + casa.conta.charCodeAt(k)) | 0;
+    c.set(casa.fiamme > agora ? '#FF8A00' : COR_NIVEL[casa.livello] ?? CORES[Math.abs(h) % CORES.length]);
+    c.toArray(cor, i * 3);
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('cor', new THREE.BufferAttribute(cor, 3));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { escala: { value: 1 }, pr: { value: mappa.renderer.getPixelRatio() } },
+    vertexShader: `
+      attribute vec3 cor; uniform float escala; uniform float pr; varying vec3 vCor;
+      void main() {
+        vCor = cor;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = clamp(0.055 * escala / -mv.z, 1.7, 9.0) * pr;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      varying vec3 vCor;
+      void main() {
+        if (length(gl_PointCoord - 0.5) > 0.5) discard;
+        gl_FragColor = vec4(vCor, 1.0);
+        #include <colorspace_fragment>
+      }`,
+  });
+  const pts = new THREE.Points(g, mat);
+  pts.frustumCulled = false;
+  pts.renderOrder = 5;
+  mappa.scene.add(pts);
+  const atualizar = () => {
+    pts.visible = mappa.dist > DIST_CIDADE * 0.55;
+    // pixels por unidade de mundo a 1 km de profundidade
+    mat.uniforms.escala.value = innerHeight / (2 * Math.tan(mappa.camera.fov * Math.PI / 360));
+  };
+  mappa.aoMover.push(atualizar);
+  atualizar();
+  return pts;
+}
 
 export function criarPunti(mappa, D) {
   const n = D.luoghi.length;

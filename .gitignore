@@ -13,3 +13,7 @@ privato/config-gioco/
 # gerados a cada atualização
 sito/data/snapshot.json
 sito/data/versao.txt
+
+# vídeos gerados e áudios de narração
+video/output/
+video/audio/

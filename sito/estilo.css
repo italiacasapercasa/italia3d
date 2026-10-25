@@ -21,7 +21,7 @@ a { color: inherit; }
 /* ---------- rótulos ---------- */
 #etichette { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
 .et[hidden] { display: none !important; }
-.et { position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: auto; cursor: pointer; will-change: transform; font-weight: 900; user-select: none; }
+.et { position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: none; will-change: transform; font-weight: 900; user-select: none; }
 .et-citta { color: #fff; font-size: 13px; text-shadow: var(--contorno); padding-bottom: 6px; }
 .et-citta b { color: var(--giallo); font-size: 11px; }
 .et-citta.grande { font-size: 16px; }
