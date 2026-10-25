@@ -1,6 +1,6 @@
 // Captura quadro a quadro uma página de vídeo (video/registra.html) no Chrome headless e monta o MP4 com ffmpeg.
 // A página expõe window.preparar(roteiro) -> { durata, fps } e window.quadro(t) -> Promise (desenha o instante t em segundos).
-// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5]
+// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5] [--pagina video/presidente.html]
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -43,7 +43,8 @@ try {
   await conectar();
   await cdp('Runtime.enable'); await cdp('Page.enable');
   await cdp('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
-  await cdp('Page.navigate', { url: 'http://localhost:5173/video/registra.html' });
+  // --pagina video/presidente.html: outro gravador (padrão: o do reel 1)
+  await cdp('Page.navigate', { url: `http://localhost:5173/${opt('--pagina', 'video/registra.html')}` });
   for (let t = 0; t < 120 && !(await avaliar('!!window.quadro').catch(() => false)); t++) await espera(250);
   const roteiro = fs.readFileSync(roteiroArq, 'utf8');
   const info = await avaliar(`window.preparar(${roteiro})`);

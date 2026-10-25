@@ -1,0 +1,748 @@
+{
+ "nome": "presidente",
+ "durata": 33.04,
+ "titolo": "ELEZIONI",
+ "unita": "CASE",
+ "esempio": {
+  "citta": "Napoli",
+  "conta": "@il.tuo.nome",
+  "luogo": "Napoli, NA"
+ },
+ "roma": "Roma",
+ "sindaci": [
+  "Milano",
+  "Napoli"
+ ],
+ "card": {
+  "sopra": "🏛 PALAZZO CHIGI",
+  "grande": "DOMENICA 1 NOVEMBRE",
+  "sotto": "ORE 21 · PRIMA ELEZIONE"
+ },
+ "commento": {
+  "utente": "il.tuo.nome",
+  "testo": "Napoli, Campania"
+ },
+ "tag": {
+  "utente": "il.tuo.nome",
+  "testo": "@il.tuo.amico vieni anche tu!"
+ },
+ "banner": "COMMENTA LA TUA CITTÀ E REGIONE",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0.03
+     ],
+     [
+      "DI",
+      0.24
+     ],
+     [
+      "4.000",
+      0.45,
+      true
+     ],
+     [
+      "CASE",
+      1.127,
+      true
+     ]
+    ],
+    [
+     [
+      "IN",
+      1.493
+     ],
+     [
+      "UN",
+      1.703
+     ],
+     [
+      "GIORNO",
+      1.913,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 2.624
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      2.654
+     ],
+     [
+      "L'ITALIA",
+      2.85
+     ],
+     [
+      "NON",
+      3.335
+     ],
+     [
+      "HA",
+      3.531
+     ]
+    ],
+    [
+     [
+      "ANCORA",
+      3.727
+     ],
+     [
+      "UN",
+      4.212
+     ],
+     [
+      "CAPO",
+      4.408,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.654,
+   "fim": 5.206
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      5.236,
+      true
+     ]
+    ],
+    [
+     [
+      "1°",
+      5.815,
+      true
+     ],
+     [
+      "NOVEMBRE",
+      6.128,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.236,
+   "fim": 6.674
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE",
+      6.704
+     ],
+     [
+      "21",
+      7.063,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.704,
+   "fim": 7.545
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGIAMO",
+      7.575
+     ],
+     [
+      "IL",
+      8.24
+     ],
+     [
+      "PRIMO",
+      8.446
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      8.805,
+      true
+     ]
+    ],
+    [
+     [
+      "DEL",
+      9.47
+     ],
+     [
+      "CONSIGLIO",
+      9.676
+     ]
+    ]
+   ],
+   "ini": 7.575,
+   "fim": 10.474
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      10.504
+     ],
+     [
+      "OGNI",
+      10.713
+     ],
+     [
+      "CITTÀ",
+      11.077
+     ]
+    ]
+   ],
+   "ini": 10.504,
+   "fim": 11.537
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      11.567
+     ],
+     [
+      "IL",
+      12
+     ],
+     [
+      "SUO",
+      12.175
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      12.35,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.567,
+   "fim": 13.175
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      13.205
+     ],
+     [
+      "CHI",
+      13.531
+     ],
+     [
+      "FA",
+      13.719
+     ]
+    ],
+    [
+     [
+      "PIÙ",
+      13.906,
+      true
+     ],
+     [
+      "PUNTI",
+      14.094,
+      true
+     ]
+    ],
+    [
+     [
+      "QUESTA",
+      14.42
+     ],
+     [
+      "SETTIMANA",
+      14.746
+     ]
+    ]
+   ],
+   "ini": 13.205,
+   "fim": 15.778
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      15.808,
+      true
+     ]
+    ],
+    [
+     [
+      "OGNI",
+      16.359
+     ],
+     [
+      "POST",
+      16.746
+     ]
+    ]
+   ],
+   "ini": 15.808,
+   "fim": 17.201
+  },
+  {
+   "linee": [
+    [
+     [
+      "+5",
+      17.231,
+      true
+     ],
+     [
+      "PUNTI",
+      17.625,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.231,
+   "fim": 18.388
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      18.418,
+      true
+     ]
+    ],
+    [
+     [
+      "UN",
+      18.679
+     ],
+     [
+      "AMICO",
+      18.828
+     ]
+    ]
+   ],
+   "ini": 18.418,
+   "fim": 19.459
+  },
+  {
+   "linee": [
+    [
+     [
+      "+3",
+      19.489,
+      true
+     ],
+     [
+      "PUNTI",
+      19.73,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.489,
+   "fim": 20.517
+  },
+  {
+   "linee": [
+    [
+     [
+      "METTI",
+      20.547
+     ],
+     [
+      "LA",
+      20.876
+     ],
+     [
+      "TUA",
+      21.066
+     ],
+     [
+      "CASA",
+      21.255
+     ]
+    ],
+    [
+     [
+      "NELLA",
+      21.584
+     ],
+     [
+      "STORIA",
+      21.914,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.547,
+   "fim": 22.429
+  },
+  {
+   "linee": [
+    [
+     [
+      "+20",
+      22.459,
+      true
+     ],
+     [
+      "PUNTI",
+      22.862,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.459,
+   "fim": 23.235
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      23.265
+     ],
+     [
+      "LA",
+      23.496
+     ],
+     [
+      "TUA",
+      23.728
+     ],
+     [
+      "CASA",
+      23.959
+     ]
+    ],
+    [
+     [
+      "VA",
+      24.362
+     ],
+     [
+      "IN",
+      24.594
+     ],
+     [
+      "FIAMME",
+      24.825,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.265,
+   "fim": 25.599
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      25.629
+     ],
+     [
+      "PUNTI",
+      25.851
+     ],
+     [
+      "FAI",
+      26.238
+     ]
+    ]
+   ],
+   "ini": 25.629,
+   "fim": 26.658
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      26.688
+     ],
+     [
+      "LA",
+      26.869
+     ],
+     [
+      "TUA",
+      27.051
+     ]
+    ],
+    [
+     [
+      "CASA",
+      27.233,
+      true
+     ],
+     [
+      "CRESCE",
+      27.549,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.688,
+   "fim": 28.246
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      28.276
+     ],
+     [
+      "SARÀ",
+      28.446
+     ]
+    ],
+    [
+     [
+      "IL",
+      28.743
+     ],
+     [
+      "PRIMO",
+      28.913
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE?",
+      29.21,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.276,
+   "fim": 30.089
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      30.119,
+      true
+     ],
+     [
+      "LA",
+      30.45
+     ],
+     [
+      "TUA",
+      30.641
+     ],
+     [
+      "CITTÀ",
+      30.831,
+      true
+     ]
+    ],
+    [
+     [
+      "E",
+      31.163
+     ],
+     [
+      "LA",
+      31.353
+     ],
+     [
+      "REGIONE",
+      31.543,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.119,
+   "fim": 32.74
+  }
+ ],
+ "parlato": [
+  "Più di quattromila case in un giorno.",
+  "Ma l'Italia non ha ancora un capo.",
+  "Domenica primo novembre,",
+  "alle ventuno, eleggiamo il primo Presidente del Consiglio.",
+  "E ogni città",
+  "elegge il suo sindaco.",
+  "Vince chi fa più punti questa settimana.",
+  "Commenta ogni post:",
+  "cinque punti.",
+  "Tagga un amico:",
+  "tre punti.",
+  "Metti la tua casa nella storia:",
+  "venti punti, e la tua casa va in fiamme.",
+  "Più punti fai,",
+  "più la tua casa cresce.",
+  "Chi sarà il primo Presidente?",
+  "Scrivi la tua città e la regione."
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  3,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "eventi": {
+  "contatore_a": 2.213,
+  "roma": 2.404,
+  "capo": 4.408,
+  "card": 5.086,
+  "sindaco": 10.384,
+  "sindaco2": 11.567,
+  "classifica": 13.055,
+  "commenta": 15.658,
+  "piu5": 17.231,
+  "tagga": 18.268,
+  "piu3": 19.489,
+  "storia": 20.347,
+  "piu20": 22.459,
+  "fiamme": 24.362,
+  "cresce": 25.529,
+  "livello2": 26.238,
+  "livello3": 27.233,
+  "livello4": 27.649,
+  "zoomout": 28.126,
+  "banner": 29.969
+ },
+ "sincro": {
+  "eventi.contatore_a": [
+   0,
+   6,
+   0.3
+  ],
+  "eventi.roma": [
+   1,
+   0,
+   -0.25
+  ],
+  "eventi.capo": [
+   1,
+   6,
+   0
+  ],
+  "eventi.card": [
+   2,
+   0,
+   -0.15
+  ],
+  "eventi.sindaco": [
+   4,
+   0,
+   -0.12
+  ],
+  "eventi.sindaco2": [
+   5,
+   0,
+   0
+  ],
+  "eventi.classifica": [
+   6,
+   0,
+   -0.15
+  ],
+  "eventi.commenta": [
+   7,
+   0,
+   -0.15
+  ],
+  "eventi.piu5": [
+   8,
+   0,
+   0
+  ],
+  "eventi.tagga": [
+   9,
+   0,
+   -0.15
+  ],
+  "eventi.piu3": [
+   10,
+   0,
+   0
+  ],
+  "eventi.storia": [
+   11,
+   0,
+   -0.2
+  ],
+  "eventi.piu20": [
+   12,
+   0,
+   0
+  ],
+  "eventi.fiamme": [
+   12,
+   6,
+   0
+  ],
+  "eventi.cresce": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.livello2": [
+   13,
+   2,
+   0
+  ],
+  "eventi.livello3": [
+   14,
+   3,
+   0
+  ],
+  "eventi.livello4": [
+   14,
+   4,
+   0.1
+  ],
+  "eventi.zoomout": [
+   15,
+   0,
+   -0.15
+  ],
+  "eventi.banner": [
+   16,
+   0,
+   -0.15
+  ]
+ },
+ "audio": {
+  "arquivo": "presidente.mp3",
+  "durata": 32.2
+ }
+}

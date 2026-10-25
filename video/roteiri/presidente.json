@@ -1,0 +1,685 @@
+{
+ "nome": "presidente",
+ "durata": 33,
+ "titolo": "ELEZIONI",
+ "unita": "CASE",
+ "esempio": {
+  "citta": "Napoli",
+  "conta": "@il.tuo.nome",
+  "luogo": "Napoli, NA"
+ },
+ "roma": "Roma",
+ "sindaci": [
+  "Milano",
+  "Napoli"
+ ],
+ "card": {
+  "sopra": "🏛 PALAZZO CHIGI",
+  "grande": "DOMENICA 1 NOVEMBRE",
+  "sotto": "ORE 21 · PRIMA ELEZIONE"
+ },
+ "commento": {
+  "utente": "il.tuo.nome",
+  "testo": "Napoli, Campania"
+ },
+ "tag": {
+  "utente": "il.tuo.nome",
+  "testo": "@il.tuo.amico vieni anche tu!"
+ },
+ "banner": "COMMENTA LA TUA CITTÀ E REGIONE",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "4.000",
+      0,
+      true
+     ],
+     [
+      "CASE",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "UN",
+      0
+     ],
+     [
+      "GIORNO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      0
+     ],
+     [
+      "L'ITALIA",
+      0
+     ],
+     [
+      "NON",
+      0
+     ],
+     [
+      "HA",
+      0
+     ]
+    ],
+    [
+     [
+      "ANCORA",
+      0
+     ],
+     [
+      "UN",
+      0
+     ],
+     [
+      "CAPO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "1°",
+      0,
+      true
+     ],
+     [
+      "NOVEMBRE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE",
+      0
+     ],
+     [
+      "21",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGIAMO",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "PRIMO",
+      0
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "DEL",
+      0
+     ],
+     [
+      "CONSIGLIO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "CITTÀ",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "SUO",
+      0
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      0
+     ],
+     [
+      "CHI",
+      0
+     ],
+     [
+      "FA",
+      0
+     ]
+    ],
+    [
+     [
+      "PIÙ",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "QUESTA",
+      0
+     ],
+     [
+      "SETTIMANA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "POST",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+5",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "UN",
+      0
+     ],
+     [
+      "AMICO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+3",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "METTI",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CASA",
+      0
+     ]
+    ],
+    [
+     [
+      "NELLA",
+      0
+     ],
+     [
+      "STORIA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+20",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CASA",
+      0
+     ]
+    ],
+    [
+     [
+      "VA",
+      0
+     ],
+     [
+      "IN",
+      0
+     ],
+     [
+      "FIAMME",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "PUNTI",
+      0
+     ],
+     [
+      "FAI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CASA",
+      0,
+      true
+     ],
+     [
+      "CRESCE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      0
+     ],
+     [
+      "SARÀ",
+      0
+     ]
+    ],
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "PRIMO",
+      0
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE?",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      0,
+      true
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "REGIONE",
+      0,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Più di quattromila case in un giorno.",
+  "Ma l'Italia non ha ancora un capo.",
+  "Domenica primo novembre,",
+  "alle ventuno, eleggiamo il primo Presidente del Consiglio.",
+  "E ogni città",
+  "elegge il suo sindaco.",
+  "Vince chi fa più punti questa settimana.",
+  "Commenta ogni post:",
+  "cinque punti.",
+  "Tagga un amico:",
+  "tre punti.",
+  "Metti la tua casa nella storia:",
+  "venti punti, e la tua casa va in fiamme.",
+  "Più punti fai,",
+  "più la tua casa cresce.",
+  "Chi sarà il primo Presidente?",
+  "Scrivi la tua città e la regione."
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  3,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.contatore_a": [
+   0,
+   6,
+   0.3
+  ],
+  "eventi.roma": [
+   1,
+   0,
+   -0.25
+  ],
+  "eventi.capo": [
+   1,
+   6,
+   0
+  ],
+  "eventi.card": [
+   2,
+   0,
+   -0.15
+  ],
+  "eventi.sindaco": [
+   4,
+   0,
+   -0.12
+  ],
+  "eventi.sindaco2": [
+   5,
+   0,
+   0
+  ],
+  "eventi.classifica": [
+   6,
+   0,
+   -0.15
+  ],
+  "eventi.commenta": [
+   7,
+   0,
+   -0.15
+  ],
+  "eventi.piu5": [
+   8,
+   0,
+   0
+  ],
+  "eventi.tagga": [
+   9,
+   0,
+   -0.15
+  ],
+  "eventi.piu3": [
+   10,
+   0,
+   0
+  ],
+  "eventi.storia": [
+   11,
+   0,
+   -0.2
+  ],
+  "eventi.piu20": [
+   12,
+   0,
+   0
+  ],
+  "eventi.fiamme": [
+   12,
+   6,
+   0
+  ],
+  "eventi.cresce": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.livello2": [
+   13,
+   2,
+   0
+  ],
+  "eventi.livello3": [
+   14,
+   3,
+   0
+  ],
+  "eventi.livello4": [
+   14,
+   4,
+   0.1
+  ],
+  "eventi.zoomout": [
+   15,
+   0,
+   -0.15
+  ],
+  "eventi.banner": [
+   16,
+   0,
+   -0.15
+  ]
+ }
+}
