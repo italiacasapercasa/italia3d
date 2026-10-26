@@ -1,6 +1,6 @@
 // Captura quadro a quadro uma página de vídeo (video/registra.html) no Chrome headless e monta o MP4 com ffmpeg.
 // A página expõe window.preparar(roteiro) -> { durata, fps } e window.quadro(t) -> Promise (desenha o instante t em segundos).
-// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5] [--pagina video/presidente.html]
+// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5] [--pagina video/presidente.html] [--suoni efeitos.json]
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -48,6 +48,8 @@ try {
   for (let t = 0; t < 120 && !(await avaliar('!!window.quadro').catch(() => false)); t++) await espera(250);
   const roteiro = fs.readFileSync(roteiroArq, 'utf8');
   const info = await avaliar(`window.preparar(${roteiro})`);
+  // --suoni efeitos.json: salva a lista de efeitos sonoros da página (window.suoni) para o strumenti/suoni.mjs
+  if (opt('--suoni')) fs.writeFileSync(opt('--suoni'), JSON.stringify(await avaliar('window.suoni ? window.suoni() : []')));
   // --quadri 0,1.5,6: só salva esses instantes como JPG na pasta <saida> (pré-visualização)
   const soltos = opt('--quadri');
   if (soltos) {

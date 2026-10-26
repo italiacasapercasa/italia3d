@@ -1,0 +1,536 @@
+{
+ "nome": "fondatori",
+ "durata": 25.08,
+ "periodo": "IN 2 GIORNI",
+ "dispute": [
+  {
+   "citta": "Firenze",
+   "commento": "Firenze, Toscana"
+  },
+  {
+   "citta": "Livorno",
+   "commento": "Livorno, Toscana"
+  }
+ ],
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0.03
+     ],
+     [
+      "DUE",
+      0.239
+     ],
+     [
+      "GIORNI",
+      0.447,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 0.78
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0.81
+     ],
+     [
+      "DI",
+      1.019
+     ],
+     [
+      "7.800",
+      1.227,
+      true
+     ]
+    ],
+    [
+     [
+      "PERSONE",
+      2.363,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.81,
+   "fim": 2.851
+  },
+  {
+   "linee": [
+    [
+     [
+      "HANNO",
+      2.881
+     ],
+     [
+      "CHIESTO",
+      3.244
+     ]
+    ],
+    [
+     [
+      "UNA",
+      3.607
+     ],
+     [
+      "CASA",
+      3.97,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.881,
+   "fim": 4.303
+  },
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      4.333
+     ],
+     [
+      "QUESTA",
+      4.542
+     ],
+     [
+      "MAPPA",
+      4.905,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.333,
+   "fim": 5.497
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      5.527
+     ],
+     [
+      "C'È",
+      5.717
+     ],
+     [
+      "CHI",
+      5.907
+     ],
+     [
+      "LOTTA",
+      6.098,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.527,
+   "fim": 6.399
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      6.429
+     ],
+     [
+      "FONDARE",
+      6.619
+     ]
+    ],
+    [
+     [
+      "FIRENZE",
+      7.092,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.429,
+   "fim": 8.006
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      8.036
+     ],
+     [
+      "HA",
+      8.525
+     ],
+     [
+      "SCRITTO",
+      8.805
+     ]
+    ]
+   ],
+   "ini": 8.036,
+   "fim": 9.264
+  },
+  {
+   "linee": [
+    [
+     [
+      "“FIRENZE,",
+      9.294,
+      true
+     ]
+    ],
+    [
+     [
+      "TOSCANA”",
+      9.99,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.294,
+   "fim": 11.136
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      11.166
+     ],
+     [
+      "L'ALTRO",
+      11.364
+     ]
+    ],
+    [
+     [
+      "È",
+      11.709
+     ],
+     [
+      "ARRIVATO",
+      11.906
+     ]
+    ]
+   ],
+   "ini": 11.166,
+   "fim": 12.514
+  },
+  {
+   "linee": [
+    [
+     [
+      "31",
+      12.544,
+      true
+     ],
+     [
+      "SECONDI",
+      13.036,
+      true
+     ]
+    ],
+    [
+     [
+      "PRIMA",
+      13.527
+     ]
+    ]
+   ],
+   "ini": 12.544,
+   "fim": 14.349
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      14.379
+     ],
+     [
+      "A",
+      14.515
+     ],
+     [
+      "LIVORNO?",
+      14.65,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.379,
+   "fim": 15.338
+  },
+  {
+   "linee": [
+    [
+     [
+      "16",
+      15.368,
+      true
+     ],
+     [
+      "SECONDI",
+      15.9,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.368,
+   "fim": 16.82
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      16.85
+     ],
+     [
+      "PRIMO",
+      17.052,
+      true
+     ],
+     [
+      "CHE",
+      17.405
+     ]
+    ],
+    [
+     [
+      "COMMENTA",
+      17.607
+     ]
+    ]
+   ],
+   "ini": 16.85,
+   "fim": 18.079
+  },
+  {
+   "linee": [
+    [
+     [
+      "DIVENTA",
+      18.109
+     ]
+    ],
+    [
+     [
+      "FONDATORE",
+      18.611,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.109,
+   "fim": 19.657
+  },
+  {
+   "linee": [
+    [
+     [
+      "SEGUI",
+      19.687,
+      true
+     ],
+     [
+      "LA",
+      19.998
+     ],
+     [
+      "PAGINA",
+      20.177
+     ]
+    ]
+   ],
+   "ini": 19.687,
+   "fim": 20.59
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      20.62
+     ],
+     [
+      "COMMENTA",
+      20.798
+     ]
+    ],
+    [
+     [
+      "LA",
+      21.242
+     ],
+     [
+      "TUA",
+      21.42
+     ],
+     [
+      "CITTÀ",
+      21.599,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.62,
+   "fim": 22.193
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRIMA",
+      22.223
+     ],
+     [
+      "CHE",
+      22.529
+     ],
+     [
+      "QUALCUNO",
+      22.705
+     ]
+    ],
+    [
+     [
+      "ARRIVI",
+      23.141
+     ],
+     [
+      "PRIMA",
+      23.577,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.223,
+   "fim": 24.78
+  }
+ ],
+ "parlato": [
+  "In due giorni, più di settemilaottocento persone hanno chiesto una casa su questa mappa.",
+  "E c'è chi lotta per fondare Firenze.",
+  "Una ha scritto Firenze, Toscana...",
+  "ma l'altro è arrivato trentuno secondi prima.",
+  "E a Livorno?",
+  "Sedici secondi.",
+  "Il primo che commenta diventa fondatore.",
+  "Segui la pagina e commenta la tua città,",
+  "prima che qualcuno arrivi prima."
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
+  4,
+  5,
+  6,
+  6,
+  7,
+  7,
+  8
+ ],
+ "eventi": {
+  "contatore_a": 3.181,
+  "tuffo": 5.227,
+  "secondo": 7.986,
+  "pan": 10.916,
+  "fondatore": 11.364,
+  "badge": 12.544,
+  "livorno": 14.079,
+  "livorno_lbl": 15.268,
+  "badge2": 15.9,
+  "regola": 16.75,
+  "segui": 19.637,
+  "commenta": 20.798,
+  "prima": 22.123
+ },
+ "sincro": {
+  "eventi.contatore_a": [
+   0,
+   7,
+   0.3
+  ],
+  "eventi.tuffo": [
+   1,
+   0,
+   -0.3
+  ],
+  "eventi.secondo": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.pan": [
+   3,
+   0,
+   -0.25
+  ],
+  "eventi.fondatore": [
+   3,
+   1,
+   0
+  ],
+  "eventi.badge": [
+   3,
+   4,
+   0
+  ],
+  "eventi.livorno": [
+   4,
+   0,
+   -0.3
+  ],
+  "eventi.livorno_lbl": [
+   5,
+   0,
+   -0.1
+  ],
+  "eventi.badge2": [
+   5,
+   1,
+   0
+  ],
+  "eventi.regola": [
+   6,
+   0,
+   -0.1
+  ],
+  "eventi.segui": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.commenta": [
+   7,
+   4,
+   0
+  ],
+  "eventi.prima": [
+   8,
+   0,
+   -0.1
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 5.mp3",
+  "durata": 24.03
+ }
+}
