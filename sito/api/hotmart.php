@@ -28,9 +28,11 @@ file_put_contents("$pasta/pagamenti.jsonl", json_encode($registro, JSON_UNESCAPE
 $novo = ['PURCHASE_APPROVED' => 'pagato', 'PURCHASE_COMPLETE' => 'pagato', 'PURCHASE_REFUNDED' => 'rimborsato', 'PURCHASE_CHARGEBACK' => 'rimborsato', 'PURCHASE_CANCELED' => 'annullato'][$evento] ?? null;
 if ($novo && preg_match('/^\d{6}-[0-9a-f]{8}$/', $sck) && is_file("$pasta/$sck.json")) {
     $p = json_decode((string)file_get_contents("$pasta/$sck.json"), true) ?: [];
-    $p['pagamento'] = $novo;
-    $p['transazione'] = $registro['transazione'];
-    $p['pagamento_em'] = $registro['em'];
+    // o adicional "su misura" é um produto à parte na Hotmart, pago com o mesmo código do pedido
+    $campo = stripos($registro['prodotto'], 'misura') !== false ? 'pagamento_su_misura' : 'pagamento';
+    $p[$campo] = $novo;
+    $p[$campo === 'pagamento' ? 'transazione' : 'transazione_su_misura'] = $registro['transazione'];
+    $p[$campo . '_em'] = $registro['em'];
     file_put_contents("$pasta/$sck.json", json_encode($p, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
 }
 http_response_code(200);

@@ -208,6 +208,7 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     commerci: commerci.filter(n => liDe.has(n.ci) && !(n.fino && n.fino <= agora)).map(n => ({
       li: liDe.get(n.ci), lote: n.lote, id: n.id, prodotto: n.prodotto ?? 'negozio', nome: n.nome, tipo: n.tipo ?? 'altro', colore: n.colore ?? '#E0473C',
       whatsapp: n.whatsapp ?? '', instagram: n.instagram ?? '', descrizione: n.descrizione ?? '', testo: n.testo ?? '', logo: n.logo ?? '',
+      ...(n.stile ? { stile: n.stile } : {}),   // loja "su misura" (editor)
     })),
     cariche,
     derby,

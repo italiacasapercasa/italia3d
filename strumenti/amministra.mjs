@@ -126,7 +126,7 @@ try {
       };
       const salvarPedido = p => { gravar(path.join(local, `${p.id}.json`), p); ftp.enviar([{ local: path.join(local, `${p.id}.json`), remoto: `${remoto}${p.id}.json` }]); };
       const r = new Risolutore(), nomeCom = ist => { const c = r.comuni.get(ist); return c ? `${c.nome} (${c.sigla})` : ist; };
-      const linhaPedido = p => `${p.id}  ${p.stato.padEnd(9)} ${(p.pagamento ?? 'non pagato').padEnd(10)} ${p.prodotto === 'cartellone' ? '📣' : '🏪'} ${p.nome} · ${nomeCom(p.istat)} · ${p.email}`;
+      const linhaPedido = p => `${p.id}  ${p.stato.padEnd(9)} ${(p.pagamento ?? 'non pagato').padEnd(10)} ${p.prodotto === 'cartellone' ? '📣' : '🏪'} ${p.nome} · ${nomeCom(p.istat)} · ${p.email}${p.su_misura ? ` · SU MISURA (${p.pagamento_su_misura ?? 'non pagato'})` : ''}`;
       if (cmd === 'negozi') {
         const ids = ftp.listar(remoto).filter(n => /^\d{6}-[0-9a-f]{8}\.json$/.test(n)).map(n => n.slice(0, -5)).sort();
         const lista = ids.map(id => { ftp.baixar(`${remoto}${id}.json`, path.join(local, `${id}.json`)); return ler(path.join(local, `${id}.json`), null); }).filter(Boolean);
@@ -146,6 +146,7 @@ try {
       const ativos = lista.filter(x => x.istat === p.istat && (x.prodotto ?? 'negozio') === p.prodotto && Date.parse(x.fino) > Date.now()).length;
       if (ativos >= piano.posti[p.prodotto]) throw new Error(`${com.nome} já tem ${ativos}/${piano.posti[p.prodotto]} ${p.prodotto} ativos`);
       if (p.pagamento !== 'pagato') console.log('aviso: a Hotmart ainda não confirmou o pagamento deste pedido');
+      if (p.su_misura && p.pagamento_su_misura !== 'pagato') console.log('aviso: o adicional «su misura» ainda não foi pago (a loja entra com a personalização mesmo assim; use rimuovi/approva de novo se preciso)');
       let logo = '';
       if (p.logo) {
         const arq = path.join(RAIZ, 'sito', 'data', 'loghi', p.logo);
@@ -157,6 +158,7 @@ try {
         id: p.id, istat: p.istat, approvato: agora.toISOString(), fino: new Date(agora.getTime() + giorni * 86400e3).toISOString(),
         prodotto: p.prodotto, nome: p.nome, tipo: p.tipo, colore: p.colore, whatsapp: p.whatsapp, instagram: p.instagram,
         descrizione: p.descrizione, testo: p.testo, logo,
+        ...(p.su_misura && p.stile ? { stile: p.stile } : {}),
       });
       gravar(path.join(CFG, 'commerci.json'), lista);
       p.stato = 'approvato'; p.approvato = agora.toISOString();

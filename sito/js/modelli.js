@@ -257,20 +257,148 @@ export function geometriaLuminaria(vao) {
   return { postes: postes.geometria(), luci: luci.geometria() };
 }
 
-// loja de um comércio (em lotes), com a cor da marca no toldo; o letreiro é um plano à parte (INSEGNA)
-export const INSEGNA = { x: 0, y: 0.47, z: 0.215, w: 0.66, h: 0.15 };
-export function geometriaNegozio(cor) {
-  const b = new Construtor(), escuro = '#' + new THREE.Color(cor).multiplyScalar(0.72).getHexString();
-  b.caixa(0.72, 0.62, 0.4, 0, 0, 0, T.muri[1]).caixa(0.76, 0.04, 0.44, 0, 0.62, 0, T.bianco);
-  b.caixa(0.36, 0.24, 0.02, -0.12, 0.06, 0.2, T.vetro).caixa(0.13, 0.26, 0.02, 0.22, 0, 0.2, T.porta);
-  // toldo listrado
-  for (let k = 0; k < 6; k++) {
-    const g = new THREE.BoxGeometry(0.13, 0.015, 0.16);
-    g.rotateX(0.45);
-    b.add(g, k % 2 ? T.bianco : cor, -0.325 + k * 0.13, 0.36, 0.27);
+// ---------- loja de um comércio ("su misura": todas as opções do editor) ----------
+// Em lotes, frente para +z. Devolve a geometria e as faces de texto (letreiros), que são planos à parte com textura.
+export const STILE_BASE = {
+  tenda: 'righe', coloreTenda: null, coloreRighe: '#FFFFFF', facciata: T.muri[1], porta: T.porta, bordo: T.bianco,
+  piani: 1, vetrina: 'normale', serranda: false, insegna: 'facciata', tetto: false, oggetto: 'nessuno', scala: 1, ornamenti: ['vasi'],
+};
+export const OPZIONI_STILE = {
+  tenda: [['righe', 'A righe'], ['liscia', 'Liscia'], ['nessuna', 'Senza tenda']],
+  coloreTenda: ['#E0473C', '#F28C28', '#FFC93C', '#3E8E4E', '#1F9E89', '#2F7DD1', '#6C4FD3', '#D94F8A', '#152033', '#FFFFFF'],
+  coloreRighe: ['#FFFFFF', '#152033', '#FFC93C', '#E0473C', '#3E8E4E', '#2F7DD1'],
+  facciata: ['#F3E2C2', '#F2C98A', '#EDB49A', '#F7D7DC', '#DDE8F2', '#E3EFD9', '#FFE08A', '#FFFFFF', '#9AA3AE', '#3A3F4A'],
+  porta: ['#7A4B2A', '#E0473C', '#2F7DD1', '#3E8E4E', '#152033', '#FFFFFF'],
+  bordo: ['#F6F3EC', '#9AA3AE', '#B0623A', '#FFC93C', '#152033', '#2F7DD1'],
+  piani: [[1, '1 piano'], [2, '2 piani']],
+  vetrina: [['normale', 'Normale'], ['larga', 'Larga'], ['finestre', 'Finestre']],
+  serranda: [[false, 'No'], [true, 'Sì']],
+  insegna: [['facciata', 'Sulla facciata'], ['cassonetto', 'Cassonetto'], ['neon', 'Neon'], ['bandiera', 'A bandiera']],
+  tetto: [[false, 'No'], [true, 'Sì']],
+  oggetto: [['pizza', '🍕 Pizza'], ['gelato', '🍦 Gelato'], ['caffe', '☕ Caffè'], ['cornetto', '🥐 Cornetto'], ['pane', '🥖 Pane'], ['torta', '🎂 Torta'],
+    ['ciambella', '🍩 Ciambella'], ['maglietta', '👕 Maglietta'], ['scarpa', '👟 Scarpa'], ['barbiere', '💈 Barbiere'], ['fiore', '🌸 Fiore'],
+    ['manubrio', '🏋️ Manubrio'], ['smartphone', '📱 Smartphone'], ['chiave', '🔧 Chiave inglese'], ['libro', '📚 Libro'], ['zampa', '🐾 Zampa'], ['nessuno', 'Nessuno']],
+  ornamenti: [['vasi', '🪴 Vasi'], ['dehors', '⛱️ Tavolini'], ['luci', '💡 Luci'], ['bandierine', '🇮🇹 Bandierine']],
+};
+const scuro = (c, k = 0.72) => '#' + new THREE.Color(c).multiplyScalar(k).getHexString();
+
+function oggettoGigante(b, tipo, y0, s) {
+  const S = v => v * s;
+  if (tipo === 'pizza') {
+    // fatia de pé, ponta para baixo, de frente para a rua
+    const forma = new THREE.Shape([new THREE.Vector2(-S(0.26), S(0.58)), new THREE.Vector2(S(0.26), S(0.58)), new THREE.Vector2(0, S(0.04))]);
+    const g = new THREE.ExtrudeGeometry(forma, { depth: S(0.05), bevelEnabled: false });
+    g.translate(0, 0, -S(0.025));
+    b.add(g, '#F5C04A', 0, y0, 0);
+    b.caixa(S(0.58), S(0.07), S(0.07), 0, y0 + S(0.56), 0, '#C98A3A');
+    for (const [x, y] of [[-0.08, 0.44], [0.08, 0.42], [0, 0.28], [0.03, 0.15]]) { const p = new THREE.CylinderGeometry(S(0.04), S(0.04), S(0.012), 10); p.rotateX(Math.PI / 2); b.add(p, '#C8402E', S(x), y0 + S(y), S(0.03)); }
+  } else if (tipo === 'gelato') {
+    const g = new THREE.ConeGeometry(S(0.11), S(0.36), 8); g.rotateX(Math.PI); g.translate(0, y0 + S(0.18), 0); b.add(g, '#D9A35A', 0, 0, 0);
+    b.esfera(S(0.12), 0, y0 + S(0.42), 0, '#F7B6C8').esfera(S(0.1), 0, y0 + S(0.56), 0, '#FFF3D6');
+  } else if (tipo === 'caffe') {
+    b.cilindro(S(0.2), S(0.025), 0, y0, 0, T.bianco, 16).cilindro(S(0.12), S(0.2), 0, y0 + S(0.025), 0, T.bianco, 16, S(0.15));
+    b.cilindro(S(0.135), S(0.01), 0, y0 + S(0.22), 0, '#5A3A22', 16);
+    const h = new THREE.TorusGeometry(S(0.06), S(0.018), 6, 12); b.add(h, T.bianco, S(0.17), y0 + S(0.13), 0);
+  } else if (tipo === 'cornetto') {
+    for (let k = -2; k <= 2; k++) { const r = S(0.09 - Math.abs(k) * 0.02); b.esfera(r, S(k * 0.09), y0 + S(0.12) + Math.abs(k) * S(0.03), 0, k % 2 ? '#D99A45' : '#E8AE5A'); }
+  } else if (tipo === 'pane') {
+    const g = new THREE.SphereGeometry(S(0.1), 10, 6); g.scale(3, 1, 1); b.add(g, '#D9A35A', 0, y0 + S(0.1), 0);
+    for (const x of [-0.12, 0, 0.12]) b.caixa(S(0.02), S(0.02), S(0.12), S(x), y0 + S(0.19), 0, '#F2D49A');
+  } else if (tipo === 'torta') {
+    b.cilindro(S(0.24), S(0.12), 0, y0, 0, '#F7B6C8', 16).cilindro(S(0.17), S(0.1), 0, y0 + S(0.12), 0, '#FFF3D6', 16).cilindro(S(0.1), S(0.08), 0, y0 + S(0.22), 0, '#F7B6C8', 16);
+    b.cilindro(S(0.012), S(0.1), 0, y0 + S(0.3), 0, '#2F7DD1', 6).esfera(S(0.02), 0, y0 + S(0.42), 0, '#FFC93C');
+  } else if (tipo === 'ciambella') {
+    const g = new THREE.TorusGeometry(S(0.17), S(0.08), 8, 18); b.add(g, '#E8AE5A', 0, y0 + S(0.26), 0);
+    const gl = new THREE.TorusGeometry(S(0.17), S(0.07), 8, 18, Math.PI * 2); gl.translate(0, 0, S(0.025)); b.add(gl, '#F27FA8', 0, y0 + S(0.26), 0);
+  } else if (tipo === 'maglietta') {
+    b.caixa(S(0.3), S(0.36), S(0.06), 0, y0, 0, '#2F7DD1').caixa(S(0.5), S(0.11), S(0.06), 0, y0 + S(0.25), 0, '#2F7DD1').caixa(S(0.1), S(0.03), S(0.065), 0, y0 + S(0.34), 0, T.bianco);
+  } else if (tipo === 'scarpa') {
+    b.caixa(S(0.44), S(0.06), S(0.16), 0, y0, 0, T.bianco).caixa(S(0.4), S(0.1), S(0.15), S(-0.01), y0 + S(0.06), 0, '#E0473C').caixa(S(0.18), S(0.12), S(0.15), S(-0.11), y0 + S(0.16), 0, '#E0473C');
+  } else if (tipo === 'barbiere') {
+    for (let k = 0; k < 6; k++) b.cilindro(S(0.08), S(0.09), 0, y0 + S(k * 0.09), 0, ['#E0473C', T.bianco, '#2F7DD1'][k % 3], 12);
+    b.esfera(S(0.09), 0, y0 + S(0.58), 0, '#DDE1E8');
+  } else if (tipo === 'fiore') {
+    b.cilindro(S(0.02), S(0.34), 0, y0, 0, T.foglia, 6);
+    for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2; b.esfera(S(0.08), Math.cos(a) * S(0.11), y0 + S(0.42), Math.sin(a) * S(0.04), '#F27FA8'); }
+    b.esfera(S(0.07), 0, y0 + S(0.42), S(0.04), '#FFC93C');
+  } else if (tipo === 'manubrio') {
+    const g = new THREE.CylinderGeometry(S(0.025), S(0.025), S(0.5), 8); g.rotateZ(Math.PI / 2); b.add(g, T.grigio, 0, y0 + S(0.16), 0);
+    for (const x of [-0.2, 0.2]) { const d = new THREE.CylinderGeometry(S(0.14), S(0.14), S(0.07), 14); d.rotateZ(Math.PI / 2); b.add(d, T.scuro, S(x), y0 + S(0.16), 0); }
+  } else if (tipo === 'smartphone') {
+    b.caixa(S(0.24), S(0.46), S(0.04), 0, y0, 0, T.scuro).caixa(S(0.2), S(0.38), S(0.01), 0, y0 + S(0.04), S(0.022), '#4FA3E8');
+  } else if (tipo === 'chiave') {
+    // chave inglesa inclinada: cabo + boca aberta
+    const cabo = new THREE.BoxGeometry(S(0.09), S(0.5), S(0.05)); cabo.rotateZ(-0.6); b.add(cabo, '#B8BEC6', 0, y0 + S(0.3), 0);
+    for (const dx of [-0.07, 0.07]) { const d = new THREE.BoxGeometry(S(0.06), S(0.14), S(0.05)); d.rotateZ(-0.6); b.add(d, '#9AA3AE', S(0.16 + dx * 0.8), y0 + S(0.52 + dx * 0.55), 0); }
+    const base = new THREE.CylinderGeometry(S(0.08), S(0.08), S(0.05), 12); base.rotateX(Math.PI / 2); b.add(base, '#9AA3AE', S(-0.14), y0 + S(0.1), 0);
+  } else if (tipo === 'libro') {
+    for (const s0 of [-1, 1]) { const g = new THREE.BoxGeometry(S(0.24), S(0.03), S(0.32)); g.rotateZ(s0 * -0.35); b.add(g, s0 < 0 ? '#2F7DD1' : '#E0473C', s0 * S(0.12), y0 + S(0.08), 0); }
+    for (const s0 of [-1, 1]) { const g = new THREE.BoxGeometry(S(0.22), S(0.02), S(0.29)); g.rotateZ(s0 * -0.35); b.add(g, T.bianco, s0 * S(0.115), y0 + S(0.1), 0); }
+  } else if (tipo === 'zampa') {
+    b.esfera(S(0.13), 0, y0 + S(0.13), 0, '#7A4B2A');
+    for (const [x, y] of [[-0.14, 0.3], [-0.05, 0.36], [0.05, 0.36], [0.14, 0.3]]) b.esfera(S(0.055), S(x), y0 + S(y), 0, '#7A4B2A');
   }
-  b.caixa(0.7, INSEGNA.h + 0.02, 0.025, 0, INSEGNA.y - 0.01, 0.2, escuro);
-  // vasos na calçada
-  for (const x of [-0.3, 0.33]) { b.caixa(0.06, 0.06, 0.06, x, 0, 0.32, '#B0623A'); b.esfera(0.05, x, 0.1, 0.32, T.foglia); }
-  return b.geometria();
 }
+
+export function costruisciNegozio(cor, stileIn = {}) {
+  const st = { ...STILE_BASE, coloreTenda: cor, ...stileIn };
+  const b = new Construtor(), facce = [];
+  const W = 0.72, D = 0.4, F = 0.2, hP = 0.62, H = st.piani === 2 ? 1.0 : hP;
+  b.caixa(W, H, D, 0, 0, 0, st.facciata).caixa(W + 0.04, 0.04, D + 0.04, 0, H, 0, st.bordo);
+  // vitrine e porta
+  if (st.vetrina === 'larga') b.caixa(0.5, 0.26, 0.02, -0.08, 0.05, F, T.vetro);
+  else if (st.vetrina === 'finestre') for (const x of [-0.25, -0.05]) b.caixa(0.13, 0.15, 0.02, x, 0.14, F, T.vetro).caixa(0.15, 0.02, 0.025, x, 0.13, F, T.bianco);
+  else b.caixa(0.36, 0.24, 0.02, -0.12, 0.06, F, T.vetro);
+  b.caixa(0.13, 0.26, 0.02, 0.22, 0, F, st.porta);
+  if (st.serranda) {
+    const larg = st.vetrina === 'larga' ? 0.5 : 0.36, x = st.vetrina === 'larga' ? -0.08 : -0.12;
+    for (let k = 0; k < 4; k++) b.caixa(larg + 0.02, 0.022, 0.026, x, 0.31 - k * 0.026, F, k % 2 ? '#B8BEC6' : '#9AA3AE');
+  }
+  if (st.piani === 2) for (const x of [-0.22, 0, 0.22]) b.caixa(0.12, 0.14, 0.02, x, 0.74, F, T.vetro).caixa(0.14, 0.02, 0.03, x, 0.73, F, st.bordo);
+  // toldo
+  if (st.tenda === 'righe') for (let k = 0; k < 6; k++) { const g = new THREE.BoxGeometry(0.13, 0.015, 0.16); g.rotateX(0.45); b.add(g, k % 2 ? st.coloreRighe : st.coloreTenda, -0.325 + k * 0.13, 0.36, 0.27); }
+  else if (st.tenda === 'liscia') { const g = new THREE.BoxGeometry(0.78, 0.015, 0.16); g.rotateX(0.45); b.add(g, st.coloreTenda, 0, 0.36, 0.27); }
+  // letreiros (faces com o nome)
+  if (st.insegna === 'cassonetto') {
+    b.caixa(0.62, 0.17, 0.06, 0, H + 0.04, F - 0.04, scuro(cor)).cilindro(0.01, 0.04, -0.2, H + 0.02, F - 0.04, T.scuro, 4).cilindro(0.01, 0.04, 0.2, H + 0.02, F - 0.04, T.scuro, 4);
+    facce.push({ tipo: 'insegna', p: { x: 0, y: H + 0.045, z: F - 0.04 + 0.031, w: 0.58, h: 0.15 } });
+  } else if (st.insegna === 'bandiera') {
+    b.caixa(0.03, 0.03, 0.18, 0.33, 0.5, F + 0.07, T.scuro).caixa(0.025, 0.2, 0.16, 0.33, 0.29, F + 0.1, T.scuro);
+    facce.push({ tipo: 'bandiera', p: { x: 0, y: 0.3, z: 0, w: 0.15, h: 0.18 }, ry: Math.PI / 2, dx: 0.344, dz: F + 0.1 });
+    facce.push({ tipo: 'bandiera', p: { x: 0, y: 0.3, z: 0, w: 0.15, h: 0.18 }, ry: -Math.PI / 2, dx: 0.316, dz: F + 0.1 });
+  } else {
+    const y = st.tenda === 'nessuna' ? 0.38 : 0.47;
+    b.caixa(0.7, 0.17, 0.025, 0, y - 0.01, F, st.insegna === 'neon' ? '#14161F' : scuro(cor));
+    facce.push({ tipo: st.insegna === 'neon' ? 'neon' : 'insegna', p: { x: 0, y, z: F + 0.014, w: 0.66, h: 0.15 } });
+  }
+  const conOggetto = st.oggetto && st.oggetto !== 'nessuno', zTetto = conOggetto ? -0.17 : -0.12;
+  if (st.tetto) {
+    for (const x of [-0.24, 0.24]) b.caixa(0.03, 0.12, 0.03, x, H + 0.04, zTetto, T.scuro);
+    b.caixa(0.66, 0.3, 0.03, 0, H + 0.14, zTetto, T.scuro);
+    facce.push({ tipo: 'tetto', p: { x: 0, y: H + 0.155, z: zTetto + 0.016, w: 0.62, h: 0.27 } });
+  }
+  // objeto gigante no telhado (à frente da insegna do telhado, quando as duas existem)
+  if (conOggetto) {
+    const ob = new Construtor();
+    oggettoGigante(ob, st.oggetto, H + 0.04 + (st.insegna === 'cassonetto' ? 0.14 : 0), Math.max(0.5, Math.min(1.5, +st.scala || 1)));
+    for (const p of ob.partes) { if (st.tetto) p.translate(0, 0, 0.07); b.partes.push(p); }
+  }
+  // enfeites
+  const orn = new Set(st.ornamenti ?? []);
+  if (orn.has('vasi')) for (const x of [-0.3, 0.33]) { b.caixa(0.06, 0.06, 0.06, x, 0, 0.32, '#B0623A'); b.esfera(0.05, x, 0.1, 0.32, '#E0473C'); b.esfera(0.04, x + 0.02, 0.12, 0.31, T.foglia); }
+  if (orn.has('dehors')) for (const x of [-0.18, 0.12]) {
+    b.cilindro(0.05, 0.004, x, 0.07, 0.41, T.bianco, 10).cilindro(0.006, 0.07, x, 0, 0.41, T.scuro, 4);
+    b.cilindro(0.006, 0.22, x, 0, 0.41, T.grigio, 4).cone(0.11, 0.06, x, 0.2, 0.41, x < 0 ? st.coloreTenda : T.bianco, 8);
+  }
+  if (orn.has('luci')) for (let k = 0; k <= 10; k++) { const t = k / 10; b.esfera(0.014, -0.36 + t * 0.72, H - 0.04 - Math.sin(t * Math.PI) * 0.05, F + 0.03, ['#FFE7A0', '#FFD23F', '#FF6B5A'][k % 3]); }
+  if (orn.has('bandierine')) for (let k = 0; k < 9; k++) {
+    const t = (k + 0.5) / 9, g = new THREE.BufferGeometry();
+    // ordem anti-horária vista da rua (+z), senão o triângulo fica de costas e some
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-0.025, 0, 0, 0, -0.05, 0, 0.025, 0, 0]), 3));
+    b.add(g, ['#2E9B55', '#FFFFFF', '#E0473C'][k % 3], -0.36 + t * 0.72, H + 0.02 - Math.sin(t * Math.PI) * 0.04, F + 0.04);
+  }
+  return { geo: b.geometria(), facce, stile: st };
+}
+// compatibilidade: loja padrão (sem personalização) e posição do letreiro padrão
+export const INSEGNA = { x: 0, y: 0.47, z: 0.215, w: 0.66, h: 0.15 };
+export const geometriaNegozio = cor => costruisciNegozio(cor).geo;

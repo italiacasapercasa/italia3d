@@ -60,8 +60,26 @@ if (!empty($d['logo'])) {
     file_put_contents("$pasta/$logo", $bin, LOCK_EX);
 }
 
+// loja "su misura": só valores das listas do editor (cores #RRGGBB, opções conhecidas)
+$stile = null;
+$suMisura = $prodotto === 'negozio' && !empty($d['su_misura']) && is_array($d['stile'] ?? null);
+if ($suMisura) {
+    $s = $d['stile'];
+    $cor = fn($k, $pad) => preg_match('/^#[0-9A-Fa-f]{6}$/', (string)($s[$k] ?? '')) ? strtoupper($s[$k]) : $pad;
+    $um = fn($k, array $ok, $pad) => in_array($s[$k] ?? null, $ok, true) ? $s[$k] : $pad;
+    $oggetti = ['pizza', 'gelato', 'caffe', 'cornetto', 'pane', 'torta', 'ciambella', 'maglietta', 'scarpa', 'barbiere', 'fiore', 'manubrio', 'smartphone', 'chiave', 'libro', 'zampa', 'nessuno'];
+    $stile = [
+        'tenda' => $um('tenda', ['righe', 'liscia', 'nessuna'], 'righe'), 'coloreTenda' => $cor('coloreTenda', $colore), 'coloreRighe' => $cor('coloreRighe', '#FFFFFF'),
+        'facciata' => $cor('facciata', '#F3E2C2'), 'porta' => $cor('porta', '#7A4B2A'), 'bordo' => $cor('bordo', '#F6F3EC'),
+        'piani' => $um('piani', [1, 2], 1), 'vetrina' => $um('vetrina', ['normale', 'larga', 'finestre'], 'normale'), 'serranda' => !empty($s['serranda']),
+        'insegna' => $um('insegna', ['facciata', 'cassonetto', 'neon', 'bandiera'], 'facciata'), 'tetto' => !empty($s['tetto']),
+        'oggetto' => $um('oggetto', $oggetti, 'nessuno'), 'scala' => max(0.5, min(1.5, round((float)($s['scala'] ?? 1), 2))),
+        'ornamenti' => array_values(array_intersect(['vasi', 'dehors', 'luci', 'bandierine'], (array)($s['ornamenti'] ?? []))),
+    ];
+}
+
 $pedido = [
-    'id' => $id, 'stato' => 'nuovo', 'creato' => gmdate('c'), 'prodotto' => $prodotto,
+    'id' => $id, 'stato' => 'nuovo', 'creato' => gmdate('c'), 'prodotto' => $prodotto, 'su_misura' => $suMisura, 'stile' => $stile,
     'nome' => $nome, 'instagram' => $instagram, 'tipo' => $tipo, 'istat' => $istat, 'colore' => $colore,
     'descrizione' => $descrizione, 'testo' => $testo, 'whatsapp' => $whatsapp, 'email' => $email, 'logo' => $logo,
     'piano' => preg_match('/^[a-z]{2,20}$/', (string)($d['piano'] ?? '')) ? $d['piano'] : '',

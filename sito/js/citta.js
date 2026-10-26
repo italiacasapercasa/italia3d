@@ -1,9 +1,10 @@
 // Cidades 3D: quadras em espiral ao redor da piazza, casas por nível e prédios especiais.
 // Só as cidades perto da câmera entram nos InstancedMesh (atualizado quando a câmera anda).
 import * as THREE from 'three';
-import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, INSEGNA, geometriaFaccia, geometriaLuminaria, geometriaNegozio } from './modelli.js';
+import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria } from './modelli.js';
 import { REGOLE, nataleAttivo } from './regole.js';
-import { texturaVendita, texturaLavori, texturaPubblicita, texturaInsegna, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
+import { texturaVendita, texturaLavori, texturaPubblicita, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
+import { creaNegozio3D } from './negozio3d.js';
 
 export const LOTE = 0.05, RUA = 0.035;                 // km
 export const QW = 4 * LOTE + RUA, QH = 2 * LOTE + RUA; // quadra: 4 x 2 lotes + meia rua de cada lado
@@ -256,18 +257,14 @@ export class Citta {
     for (const a of c.alvos) {
       if (a.tipo !== 'commercio') continue;
       const cm = a.commercio, m = new THREE.Matrix4().fromArray(matriz(a.x, y, a.z, a.rot, LOTE));
-      const face = new THREE.Mesh(geometriaFaccia(cm.prodotto === 'cartellone' ? CARTELLONE : INSEGNA, cm.prodotto === 'cartellone' ? 0.02 : 0.014), new THREE.MeshBasicMaterial());
-      const pintar = logo => {
-        face.material.map?.dispose();
-        face.material.map = cm.prodotto === 'cartellone' ? texturaCartellone(cm.nome, cm.testo, cm.colore, logo) : texturaInsegna(cm.nome, cm.colore, logo);
-        face.material.needsUpdate = true;
-        this.mappa.sujo = true;
-      };
-      pintar(null);
-      Promise.all([carregarImagem(cm.logo), fontePronta]).then(([logo]) => pintar(logo));
-      const partes = [face];
-      if (cm.prodotto !== 'cartellone') partes.push(new THREE.Mesh(geometriaNegozio(cm.colore), this.mat));
-      for (const p of partes) { p.matrixAutoUpdate = false; p.matrix.copy(m); g.add(p); }
+      let peca;
+      if (cm.prodotto === 'cartellone') {
+        peca = new THREE.Mesh(geometriaFaccia(CARTELLONE, 0.02), new THREE.MeshBasicMaterial());
+        const pintar = logo => { peca.material.map?.dispose(); peca.material.map = texturaCartellone(cm.nome, cm.testo, cm.colore, logo); peca.material.needsUpdate = true; this.mappa.sujo = true; };
+        pintar(null);
+        Promise.all([carregarImagem(cm.logo), fontePronta]).then(([logo]) => pintar(logo));
+      } else peca = creaNegozio3D(cm, { aoMudar: () => { this.mappa.sujo = true; }, material: this.mat });
+      peca.matrixAutoUpdate = false; peca.matrix.copy(m); g.add(peca);
     }
     return g;
   }

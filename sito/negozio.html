@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#8EBFD2">
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
-<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
 <style>
   :root { --ink: #152033; --giallo: #FFC93C; --crema: #FFF6E5; --grigio: #5B6475; --rosso: #E0473C; }
   body { margin: 0; background: #8EBFD2; font-family: 'Nunito', system-ui, sans-serif; color: var(--ink); }
@@ -57,6 +57,24 @@
   details { font-size: 13px; font-weight: 700; color: var(--grigio); } details summary { cursor: pointer; font-weight: 900; color: var(--ink); }
   a { color: var(--ink); }
   [hidden] { display: none !important; }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chips button { background: #fff; border: 3px solid var(--ink); border-radius: 99px; padding: 6px 12px; font: 800 13.5px 'Nunito', sans-serif; }
+  .chips button.on { background: var(--giallo); }
+  .misura { border: 3px solid var(--ink); border-radius: 18px; padding: 12px; background: var(--crema); }
+  .misura.on { background: #FFF1C2; }
+  .misura > label { cursor: pointer; }
+  #editor { display: grid; gap: 12px; margin-top: 10px; }
+  .anteprima3d { position: relative; border: 3px solid var(--ink); border-radius: 16px; overflow: hidden; background: linear-gradient(#BFE3F5, #EAF6FB); touch-action: none; cursor: grab; }
+  .anteprima3d canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; }
+  .anteprima3d small { position: absolute; left: 10px; bottom: 8px; font-size: 11.5px; font-weight: 800; color: var(--grigio); }
+  .gruppo b { display: block; font-size: 13.5px; margin-bottom: 5px; }
+  .gruppo.spento { opacity: .4; pointer-events: none; }
+  .tinte { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tinte button { width: 32px; height: 32px; border-radius: 50%; border: 3px solid var(--ink); padding: 0; }
+  .tinte button.on { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--ink); }
+  .gruppo input[type=range] { width: 100%; border: 0; padding: 0; accent-color: var(--ink); }
+  .idea { justify-self: end; padding: 7px 14px; font-size: 14px; }
+  #anteprima img { display: block; width: 100%; border-radius: 12px; }
 </style>
 </head>
 <body>
@@ -73,7 +91,7 @@
     </div>
     <label>Nome dell’attività<input name="nome" maxlength="40" autocomplete="organization" placeholder="es. Pizzeria Da Mario"><span class="errore" data-e="nome"></span></label>
     <label>Instagram dell’attività (facoltativo)<input name="instagram" maxlength="31" placeholder="@la_tua_attivita"><span class="errore" data-e="instagram"></span></label>
-    <label>Che tipo di attività è?<select name="tipo"></select></label>
+    <div><b style="font-size:14px">Che tipo di attività è?</b><div class="chips" id="tipi" style="margin-top:6px"></div><input type="hidden" name="tipo" value="pizzeria"></div>
     <div class="cerca-citta">
       <label>Città<input id="citta-q" autocomplete="off" placeholder="scrivi la tua città"><span class="aiuto">Solo città che hanno già case sulla mappa.</span><span class="errore" data-e="citta"></span></label>
       <div id="citta-lista" hidden></div>
@@ -86,6 +104,16 @@
     <label id="l-testo" hidden>Messaggio sul cartellone<input name="testo" maxlength="60" placeholder="es. La pizza più buona di Napoli"><span class="aiuto">Fino a 60 caratteri.</span><span class="errore" data-e="testo"></span></label>
     <label>WhatsApp dell’attività<input name="whatsapp" type="tel" inputmode="tel" placeholder="es. 333 123 4567"><span class="aiuto">Appare sulla mappa: i clienti ti scrivono qui. Numero italiano o con prefisso internazionale.</span><span class="errore" data-e="whatsapp"></span></label>
     <label>La tua email<input name="email" type="email" autocomplete="email" placeholder="nome@esempio.it"><span class="aiuto">Qui ricevi la ricevuta e le nostre risposte. Non viene pubblicata.</span><span class="errore" data-e="email"></span></label>
+    <div class="misura" id="box-misura" hidden>
+      <label class="spunta"><input type="checkbox" id="su-misura"><span><b>La vuoi su misura?</b> <span id="prezzo-misura"></span><br><span class="aiuto">Componi il tuo negozio: colori, tenda, insegna, un oggetto gigante sul tetto e decorazioni.</span></span></label>
+      <div id="editor" hidden>
+        <div class="anteprima3d" id="anteprima3d"><canvas id="tela3d" width="960" height="720"></canvas><small>Trascina per girarlo. Così apparirà sulla mappa.</small></div>
+        <button type="button" class="sec idea" id="idea">💡 Un’altra idea</button>
+        <div id="opzioni" style="display:grid;gap:12px"></div>
+      </div>
+    </div>
+    <label class="spunta"><input type="checkbox" name="regole"><span>La mia attività non riguarda scommesse, pirateria, contenuti per adulti, politica, armi, farmaci con ricetta, cripto/investimenti o prestiti. So che possono rifiutarla e restituirmi il pagamento.</span></label>
+    <span class="errore" data-e="regole"></span>
     <label class="spunta"><input type="checkbox" name="consenso"><span>Accetto le <a href="#condizioni">condizioni</a> e la <a href="privacy.html" target="_blank" rel="noopener">privacy</a>.</span></label>
     <span class="errore" data-e="consenso"></span>
     <button type="submit">Continua</button>
@@ -108,8 +136,11 @@
 </main>
 
 <script type="module">
+import * as THREE from 'three';
 import { TIPI, PRODOTTI, pianoDi, euro } from './js/commerci.js';
 import { texturaInsegna, texturaCartellone, carregarImagem, fontePronta } from './js/insegne.js';
+import { STILE_BASE, OPZIONI_STILE } from './js/modelli.js';
+import { creaNegozio3D } from './js/negozio3d.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -120,7 +151,15 @@ const NOTA_IVA = '<div class="aiuto" style="margin-top:6px">IVA 22% calcolata al
 const COLORI = ['#E0473C', '#F28C28', '#FFC93C', '#3E8E4E', '#1F9E89', '#2F7DD1', '#6C4FD3', '#D94F8A', '#7A4B2A', '#152033'];
 let cfg, citta = [], scelta = null, logoDato = '', logoImg = null, idPedido = null;
 
-$('select[name=tipo]').innerHTML = TIPI.map(([k, e, n]) => `<option value="${k}">${e} ${n}</option>`).join('');
+// tipo de negócio em botões
+$('#tipi').innerHTML = TIPI.map(([k, e, n]) => `<button type="button" data-tipo="${k}" class="${k === 'pizzeria' ? 'on' : ''}">${e} ${n}</button>`).join('');
+$('#tipi').addEventListener('click', e => {
+  const b = e.target.closest('[data-tipo]');
+  if (!b) return;
+  $('#tipi').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  f.tipo.value = b.dataset.tipo;
+  if (stileToccato === false) { stile = ideaPer(b.dataset.tipo, false); disegnaOpzioni(); render3d(); }
+});
 $('#colori').innerHTML = COLORI.map((c, i) => `<label style="background:${c}" title="${c}"><input type="radio" name="colore" value="${c}" ${i ? '' : 'checked'}></label>`).join('') + '<input type="color" id="colore-libero" value="#E0473C" title="un altro colore">';
 $('#colore-libero').addEventListener('input', e => { f.querySelectorAll('input[name=colore]').forEach(r => { r.checked = false; }); e.target.dataset.on = '1'; });
 f.querySelectorAll('input[name=colore]').forEach(r => r.addEventListener('change', () => { delete $('#colore-libero').dataset.on; }));
@@ -131,8 +170,100 @@ if (qs.get('prodotto') === 'cartellone') f.querySelector('input[value=cartellone
 const aggiornaProdotto = () => {
   const c = prodotto() === 'cartellone';
   $('#l-testo').hidden = !c;
+  $('#box-misura').hidden = c || !misuraAttiva();
   mostraPiano();
 };
+
+// ---------- editor "su misura" ----------
+const misuraAttiva = () => !!(cfg?.su_misura?.attivo || qs.has('su_misura'));
+let stile = { ...STILE_BASE }, stileToccato = false, r3d = null;
+// sugestão por tipo de negócio (objeto no telhado combinando) + sorteio de cores e formas
+const OGGETTO_TIPO = { pizzeria: 'pizza', ristorante: 'torta', bar: 'caffe', gelateria: 'gelato', alimentari: 'pane', abbigliamento: 'maglietta', parrucchiere: 'barbiere', estetica: 'fiore', palestra: 'manubrio', fiori: 'fiore', servizi: 'chiave', altro: 'nessuno' };
+const sorteia = a => a[Math.floor(Math.random() * a.length)];
+const valoreDi = o => (Array.isArray(o) ? o[0] : o);
+function ideaPer(tipo, casuale = true) {
+  const O = OPZIONI_STILE, base = { ...STILE_BASE, coloreTenda: colore(), oggetto: OGGETTO_TIPO[tipo] ?? 'nessuno' };
+  if (!casuale) return base;
+  return {
+    ...base,
+    tenda: valoreDi(sorteia(O.tenda)), coloreRighe: sorteia(O.coloreRighe), facciata: sorteia(O.facciata), porta: sorteia(O.porta), bordo: sorteia(O.bordo),
+    piani: sorteia([1, 1, 2]), vetrina: valoreDi(sorteia(O.vetrina)), serranda: Math.random() < 0.3, insegna: valoreDi(sorteia(O.insegna)), tetto: Math.random() < 0.25,
+    oggetto: Math.random() < 0.75 ? base.oggetto : valoreDi(sorteia(O.oggetto)), scala: sorteia([0.8, 1, 1.2]),
+    ornamenti: O.ornamenti.map(valoreDi).filter(() => Math.random() < 0.45),
+  };
+}
+const ETICHETTE = { tenda: 'Tenda', coloreTenda: 'Colore della tenda', coloreRighe: 'Colore delle righe', facciata: 'Colore della facciata', porta: 'Colore della porta', bordo: 'Colore del bordo del tetto', piani: 'Piani', vetrina: 'Vetrina', serranda: 'Serranda', insegna: 'Insegna con il tuo nome', tetto: 'Insegna sul tetto', oggetto: 'Oggetto gigante sul tetto', ornamenti: 'Decorazioni' };
+function disegnaOpzioni() {
+  const O = OPZIONI_STILE, out = [];
+  for (const [k, lista] of Object.entries(O)) {
+    const spento = (k === 'coloreTenda' && stile.tenda === 'nessuna') || (k === 'coloreRighe' && stile.tenda !== 'righe');
+    let corpo;
+    if (typeof lista[0] === 'string') corpo = `<div class="tinte">${lista.map(c => `<button type="button" data-k="${k}" data-v="${c}" style="background:${c}" class="${stile[k] === c ? 'on' : ''}" title="${c}"></button>`).join('')}</div>`;
+    else if (k === 'ornamenti') corpo = `<div class="chips">${lista.map(([v, n]) => `<button type="button" data-k="${k}" data-v="${v}" class="${stile.ornamenti.includes(v) ? 'on' : ''}">${n}</button>`).join('')}</div>`;
+    else corpo = `<div class="chips">${lista.map(([v, n]) => `<button type="button" data-k="${k}" data-v='${JSON.stringify(v)}' class="${stile[k] === v ? 'on' : ''}">${n}</button>`).join('')}</div>`;
+    out.push(`<div class="gruppo${spento ? ' spento' : ''}"><b>${ETICHETTE[k]}</b>${corpo}</div>`);
+    if (k === 'oggetto') out.push(`<div class="gruppo${stile.oggetto === 'nessuno' ? ' spento' : ''}"><b>Grandezza dell’oggetto</b><input type="range" id="scala" min="0.6" max="1.4" step="0.05" value="${stile.scala}"></div>`);
+  }
+  $('#opzioni').innerHTML = out.join('');
+  $('#scala').oninput = e => { stile.scala = +e.target.value; stileToccato = true; render3d(); };
+}
+$('#opzioni').addEventListener('click', e => {
+  const b = e.target.closest('[data-k]');
+  if (!b) return;
+  const k = b.dataset.k, tinta = typeof OPZIONI_STILE[k][0] === 'string';
+  if (k === 'ornamenti') stile.ornamenti = stile.ornamenti.includes(b.dataset.v) ? stile.ornamenti.filter(x => x !== b.dataset.v) : [...stile.ornamenti, b.dataset.v];
+  else stile[k] = tinta ? b.dataset.v : JSON.parse(b.dataset.v);
+  stileToccato = true;
+  disegnaOpzioni(); render3d();
+});
+$('#idea').onclick = () => { stile = ideaPer(f.tipo.value); stileToccato = true; disegnaOpzioni(); render3d(); };
+$('#su-misura').addEventListener('change', e => {
+  $('#editor').hidden = !e.target.checked;
+  $('#box-misura').classList.toggle('on', e.target.checked);
+  if (e.target.checked) { if (!stileToccato) stile = ideaPer(f.tipo.value, false); disegnaOpzioni(); iniciar3d(); render3d(); }
+  mostraPiano();
+});
+function iniciar3d() {
+  if (r3d) return;
+  const tela = $('#tela3d'), renderer = new THREE.WebGLRenderer({ canvas: tela, antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(1);
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 4 / 3, 0.05, 50);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c7a8, 2.3));
+  const sol = new THREE.DirectionalLight(0xfff1dc, 2.4); sol.position.set(-0.55, 1, 0.4); scene.add(sol);
+  const chao = new THREE.Mesh(new THREE.CircleGeometry(1.6, 48), new THREE.MeshLambertMaterial({ color: '#A9D58A' }));
+  chao.rotation.x = -Math.PI / 2; scene.add(chao);
+  const marciapiede = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshLambertMaterial({ color: '#E4E1DA' }));
+  marciapiede.rotation.x = -Math.PI / 2; marciapiede.position.y = 0.002; scene.add(marciapiede);
+  const perno = new THREE.Group(); scene.add(perno);
+  r3d = { renderer, scene, cam, perno, ang: -0.6, obj: null };
+  let x0 = null, a0 = 0;
+  const box = $('#anteprima3d');
+  box.addEventListener('pointerdown', e => { x0 = e.clientX; a0 = r3d.ang; box.setPointerCapture(e.pointerId); });
+  box.addEventListener('pointermove', e => { if (x0 === null) return; r3d.ang = a0 + (e.clientX - x0) * 0.012; disegna(); });
+  box.addEventListener('pointerup', () => { x0 = null; });
+}
+function disegna() {
+  if (!r3d) return;
+  const { renderer, scene, cam, perno } = r3d;
+  perno.rotation.y = r3d.ang;
+  // enquadra a loja inteira (com o objeto do telhado), com folga
+  const caixa = new THREE.Box3().setFromObject(perno), alto = Math.max(0.7, caixa.max.y), centro = alto / 2;
+  const d = (alto * 0.62) / Math.tan(cam.fov * Math.PI / 360) + 0.5;
+  cam.position.set(0, centro + d * 0.38, d); cam.lookAt(0, centro, 0);
+  renderer.render(scene, cam);
+}
+function render3d() {
+  if (!r3d) return;
+  if (r3d.obj) { r3d.perno.remove(r3d.obj); r3d.obj.userData.descartar(); }
+  const nome = f.nome.value.trim() || 'Il tuo negozio';
+  r3d.obj = creaNegozio3D({ nome, colore: colore(), logo: logoDato, stile: { ...stile, coloreTenda: stile.coloreTenda || colore() } }, { aoMudar: disegna });
+  r3d.perno.add(r3d.obj);
+  disegna();
+}
+f.nome.addEventListener('change', () => render3d());
+$('#colori').addEventListener('change', () => { if (!stileToccato) stile.coloreTenda = colore(); render3d(); });
+const suMisura = () => prodotto() === 'negozio' && misuraAttiva() && $('#su-misura').checked;
+const restantiMisura = () => scelta ? (cfg.su_misura?.posti_per_citta ?? 3) - scelta.usatiMisura : 0;
 f.querySelectorAll('input[name=prodotto]').forEach(r => r.addEventListener('change', aggiornaProdotto));
 f.descrizione.addEventListener('input', () => { $('#n-descr').textContent = f.descrizione.value.length; });
 
@@ -144,12 +275,14 @@ async function carregarDati() {
     fetch(`data/snapshot.json?t=${Date.now()}`).then(r => r.json()),
   ]);
   cfg = c;
-  const usati = new Map();
-  for (const cm of snap.commerci ?? []) { const k = `${cm.li}:${cm.prodotto}`; usati.set(k, (usati.get(k) ?? 0) + 1); }
-  const regioni = new Map();
+  const usati = new Map(), misura = new Map();
+  for (const cm of snap.commerci ?? []) {
+    const k = `${cm.li}:${cm.prodotto}`; usati.set(k, (usati.get(k) ?? 0) + 1);
+    if (cm.stile) misura.set(cm.li, (misura.get(cm.li) ?? 0) + 1);
+  }
   citta = snap.luoghi.map(([ci, n], li) => {
     const [istat, nome, sigla, , , , pop] = comuni.dados[ci];
-    return { li, istat, nome, sigla, pop, case: n, chiave: norm(nome), usati: p => usati.get(`${li}:${p}`) ?? 0 };
+    return { li, istat, nome, sigla, pop, case: n, chiave: norm(nome), usati: p => usati.get(`${li}:${p}`) ?? 0, usatiMisura: misura.get(li) ?? 0 };
   }).sort((a, b) => b.case - a.case);
   if (!cfg.aperto) { f.innerHTML = '<p><b>Le iscrizioni sono chiuse in questo momento.</b> Torna presto!</p>'; return; }
   const pre = qs.get('citta') && citta.find(x => x.istat === qs.get('citta'));
@@ -183,7 +316,9 @@ function mostraPiano() {
   el.className = `piano${r <= 0 ? ' pieno' : ''}`;
   el.innerHTML = r <= 0
     ? `Non ci sono più posti a ${esc(scelta.nome)} per ora. Scegli una città vicina.`
-    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> + IVA per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}${NOTA_IVA}`;
+    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> + IVA per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}${suMisura() ? ` · <b>+ su misura ${euro(cfg.su_misura.prezzo)}</b>` : ''}${NOTA_IVA}`;
+  const rm = restantiMisura();
+  $('#prezzo-misura').textContent = cfg?.su_misura ? `(+${euro(cfg.su_misura.prezzo)} + IVA${scelta ? `, ${rm <= 0 ? 'esauriti' : rm === 1 ? 'ne resta 1' : `ne restano ${rm}`} a ${scelta.nome}` : ''})` : '';
 }
 
 $('#logo').addEventListener('change', async e => {
@@ -200,7 +335,8 @@ function dati() {
   return {
     prodotto: prodotto(), nome: d.nome.trim(), instagram: d.instagram.trim().replace(/^@/, ''), tipo: d.tipo, istat: d.istat,
     colore: colore(), descrizione: d.descrizione.trim(), testo: prodotto() === 'cartellone' ? d.testo.trim() : '',
-    whatsapp: d.whatsapp.trim(), email: d.email.trim(), consenso: !!d.consenso, logo: logoDato, piano: piano()?.id ?? '',
+    whatsapp: d.whatsapp.trim(), email: d.email.trim(), consenso: !!d.consenso, regole: !!d.regole, logo: logoDato, piano: piano()?.id ?? '',
+    su_misura: suMisura(), stile: suMisura() ? { ...stile, coloreTenda: stile.coloreTenda || colore() } : null,
   };
 }
 function valida(d) {
@@ -213,6 +349,8 @@ function valida(d) {
   if (cifre.length < 8 || cifre.length > 15) e.whatsapp = 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) e.email = 'Controlla la tua email.';
   if (d.prodotto === 'cartellone' && !d.testo) e.testo = 'Scrivi il messaggio del cartellone.';
+  if (d.su_misura && restantiMisura() <= 0) e.citta = 'In questa città i negozi su misura sono esauriti: togli «su misura» o scegli un’altra città.';
+  if (!d.regole) e.regole = 'Conferma che la tua attività rispetta le regole.';
   if (!d.consenso) e.consenso = 'Per continuare, accetta le condizioni.';
   return e;
 }
@@ -228,8 +366,15 @@ f.addEventListener('submit', async e => {
   f.querySelectorAll('[data-e]').forEach(s => { s.textContent = err[s.dataset.e] ?? ''; });
   if (Object.keys(err).length) { f.querySelector(`[data-e=${Object.keys(err)[0]}]`).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
   await fontePronta;
-  const tex = d.prodotto === 'cartellone' ? texturaCartellone(d.nome, d.testo, d.colore, logoImg) : texturaInsegna(d.nome, d.colore, logoImg);
-  $('#anteprima').replaceChildren(tex.image);
+  if (d.su_misura) {
+    // prévia do negócio montado no editor (com o nome já escrito)
+    render3d(); await new Promise(ok => setTimeout(ok, 300)); disegna();
+    const img = new Image(); img.src = $('#tela3d').toDataURL('image/png'); img.alt = 'Il tuo negozio su misura';
+    $('#anteprima').replaceChildren(img);
+  } else {
+    const tex = d.prodotto === 'cartellone' ? texturaCartellone(d.nome, d.testo, d.colore, logoImg) : texturaInsegna(d.nome, d.colore, logoImg);
+    $('#anteprima').replaceChildren(tex.image);
+  }
   const p = piano(), pr = p.prezzo[d.prodotto];
   $('#riepilogo').innerHTML = [
     ['Cosa', `${PRODOTTI[d.prodotto].emoji} ${PRODOTTI[d.prodotto].nome}`],
@@ -239,6 +384,7 @@ f.addEventListener('submit', async e => {
     ...(d.instagram ? [['Instagram', `@${esc(d.instagram)}`]] : []),
     ['Durata', `${cfg.durata_giorni} giorni dall’approvazione`],
     ['Prezzo', `${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}${euro(pr.lancio)} + IVA`],
+    ...(d.su_misura ? [['Su misura', `+${euro(cfg.su_misura.prezzo)} + IVA`]] : []),
   ].map(([a, b]) => `<div class="linha"><span>${a}</span><span>${b}</span></div>`).join('') + NOTA_IVA + (d.descrizione ? `<p class="sub">«${esc(d.descrizione)}»</p>` : '');
   passo(2);
 });
@@ -254,14 +400,17 @@ $('#vai-pagare').onclick = async () => {
       if (!j.ok) throw new Error(j.erro || 'Non siamo riusciti a inviare la richiesta. Riprova.');
       idPedido = j.id;
     }
-    const p = piano(), link = cfg.checkout?.[p.id]?.[d.prodotto];
-    if (link) {
-      const u = new URL(link);
-      u.searchParams.set('sck', idPedido); u.searchParams.set('email', d.email); u.searchParams.set('name', d.nome);
+    const p = piano(), link = cfg.checkout?.[p.id]?.[d.prodotto], linkMisura = d.su_misura ? cfg.su_misura?.checkout : '';
+    const conCodice = l => { const u = new URL(l); u.searchParams.set('sck', idPedido); u.searchParams.set('email', d.email); u.searchParams.set('name', d.nome); return u.href; };
+    if (link && (!d.su_misura || linkMisura)) {
       $('#p3').innerHTML = `
         <h2>Ultimo passo: il pagamento</h2>
         <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: carta, PayPal e altri metodi. I tuoi dati di pagamento non passano da noi.</p>
-        <a class="botao" href="${esc(u.href)}">💳 Vai al pagamento</a>
+        ${d.su_misura
+          ? `<p><b>Sono due pagamenti:</b> il negozio e l’aggiunta «su misura».</p>
+             <a class="botao" href="${esc(conCodice(link))}" target="_blank" rel="noopener">💳 1 · Paga il negozio</a>
+             <a class="botao sec" href="${esc(conCodice(linkMisura))}" target="_blank" rel="noopener">🎨 2 · Paga «su misura»</a>`
+          : `<a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>`}
         <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
     } else {
       $('#p3').innerHTML = `

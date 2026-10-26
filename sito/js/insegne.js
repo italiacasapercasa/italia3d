@@ -84,6 +84,31 @@ export const texturaCartellone = (titolo, sotto, cor, logo) => textura(1024, 492
   if (sotto) linha(g, sotto, cx, h * 0.68, larg, 54, 800);
 });
 
+// letreiro neon: fundo escuro e o nome brilhando na cor da marca
+export const texturaNeon = (nome, cor) => textura(1024, 232, (g, w, h) => {
+  g.fillStyle = '#14161F'; g.beginPath(); g.roundRect(0, 0, w, h, 16); g.fill();
+  const c = new THREE.Color(cor), viva = `#${c.clone().lerp(new THREE.Color('#ffffff'), 0.35).getHexString()}`;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  for (const [blur, cor2] of [[38, cor], [16, cor], [0, viva]]) { g.shadowColor = cor; g.shadowBlur = blur; g.fillStyle = cor2; linha(g, nome, w / 2, h / 2 + 4, w - 80, 128); }
+  g.shadowBlur = 0; g.strokeStyle = cor; g.lineWidth = 6; g.beginPath(); g.roundRect(12, 12, w - 24, h - 24, 12); g.stroke();
+});
+
+// placa "a bandiera" (perpendicular à fachada): logo ou a inicial
+export const texturaBandiera = (nome, cor, logo) => textura(256, 308, (g, w, h) => {
+  moldura(g, w, h, cor, INK, 14);
+  if (logo) { desenharLogo(g, logo, 28, 54, w - 56); return; }
+  g.fillStyle = contraste(cor); g.textAlign = 'center'; g.textBaseline = 'middle';
+  linha(g, (nome.trim()[0] ?? '?').toUpperCase(), w / 2, h / 2 + 6, w - 40, 190);
+});
+
+// textura de cada face do letreiro de um comércio
+export function texturaFaccia(tipo, cm, logo) {
+  if (tipo === 'neon') return texturaNeon(cm.nome, cm.colore);
+  if (tipo === 'bandiera') return texturaBandiera(cm.nome, cm.colore, logo);
+  if (tipo === 'tetto') return texturaCartellone(cm.nome, '', cm.colore, logo);
+  return texturaInsegna(cm.nome, cm.colore, logo);
+}
+
 // carrega uma imagem (logo); devolve null se falhar
 export const carregarImagem = src => new Promise(ok => {
   if (!src) return ok(null);

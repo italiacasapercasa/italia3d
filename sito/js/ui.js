@@ -90,7 +90,7 @@ export class UI {
   }
 
   rota(r) {
-    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), derby: () => this.derby(), meta: () => this.meta() };
+    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), derby: () => this.derby(), meta: () => this.meta() };
     if (mapa[r]) mapa[r]();
   }
 
@@ -101,6 +101,9 @@ export class UI {
       if (a === 'mappa') this.fechar();
       else this.rota(a);
     }));
+    // no celular as abas rolam de lado: o degradê na direita some quando chega ao fim
+    const sc = $('#schede'), fim = () => sc.classList.toggle('fine', sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 4);
+    sc.addEventListener('scroll', fim, { passive: true }); addEventListener('resize', fim); fim();
     $('#aiuto').onclick = () => this.comeFunziona();
     $('#fai-video').onclick = () => this.video();
   }
@@ -360,6 +363,37 @@ export class UI {
         ${ig ? `<a class="botao sec" href="${esc(ig)}" target="_blank" rel="noopener">📸 @${esc(cm.instagram)}</a>` : ''}
       </div>
       <p class="nota">Attività sulla mappa di ${esc(l.nome)}. <a href="negozio.html?citta=${l.comune.istat}">Vuoi anche tu la tua?</a></p>`);
+  }
+
+  // aba Negozi: todos os comércios do mapa, com busca e "vicino a me" (pela casa marcada como minha)
+  negozi(filtro = 'tutti', busca = '') {
+    const D = this.D, minha = this.minha && D.porConta.get(this.minha), base = minha && D.luoghi[minha.luogo];
+    let lista = [...D.commerci];
+    if (filtro === 'vicino' && base) lista.sort((a, b) => Math.hypot(a.luogo.x - base.x, a.luogo.z - base.z) - Math.hypot(b.luogo.x - base.x, b.luogo.z - base.z));
+    const n = norm(busca);
+    if (n) lista = lista.filter(cm => norm(`${cm.nome} ${cm.luogo.nome} ${tipoDi(cm.tipo)[2]}`).includes(n));
+    const riga = (cm, i) => {
+      const [, e, t] = tipoDi(cm.tipo);
+      const km = filtro === 'vicino' && base ? ` · ${num(Math.round(Math.hypot(cm.luogo.x - base.x, cm.luogo.z - base.z)))} km` : '';
+      return `<li data-commercio="${esc(cm.id)}"><span class="pos">${i + 1}</span><span class="quem"><b>${e} ${esc(cm.nome)}</b><small>${esc(t)} · ${esc(cm.luogo.nome)}${km}</small></span><span class="visita">visita</span></li>`;
+    };
+    this.abrir(`
+      <h2>🏪 Visita i negozi della mappa</h2>
+      <div class="sub">${num(D.commerci.length)} ${D.commerci.length === 1 ? 'attività sulla mappa' : 'attività sulla mappa'}</div>
+      <div class="filtri"><button data-filtro="tutti" class="${filtro === 'tutti' ? 'on' : ''}">tutti</button><button data-filtro="vicino" class="${filtro === 'vicino' ? 'on' : ''}">vicino a me</button></div>
+      ${filtro === 'vicino' && !base ? '<p class="nota">Per vedere i negozi vicini, cerca la tua casa e tocca «è la mia casa».</p>' : ''}
+      <input class="cerca-negozi" type="search" placeholder="cerca negozio, città o tipo" value="${esc(busca)}">
+      ${lista.length ? `<ol class="ranking negozi">${lista.map(riga).join('')}</ol>` : `<p class="nota">${D.commerci.length ? 'Nessun negozio con questo nome.' : 'Ancora nessun negozio: il primo si vede di più!'}</p>`}
+      <a class="botao tratteggiato" href="negozio.html">＋ metti il tuo negozio sulla mappa</a>
+      <p class="nota">Pubblicità. I negozi sulla mappa sono simbolici: non indicano l’indirizzo reale di ogni attività.</p>`, 'negozi');
+    this.conteudo.querySelectorAll('[data-filtro]').forEach(b => { b.onclick = () => this.negozi(b.dataset.filtro, this.conteudo.querySelector('.cerca-negozi').value); });
+    const inp = this.conteudo.querySelector('.cerca-negozi');
+    inp.oninput = () => {
+      const v = inp.value, pos = inp.selectionStart;
+      this.negozi(filtro, v);
+      const novo = this.conteudo.querySelector('.cerca-negozi');
+      novo.focus(); novo.setSelectionRange(pos, pos);
+    };
   }
 
   // ---------- região ----------
