@@ -26,6 +26,9 @@
       try { navigator.sendBeacon('api/errore.php', JSON.stringify({ msg: String(msg).slice(0, 300), ua: navigator.userAgent, url: location.href })); } catch (e) {}
     }
     window.__relata = relata;
+    // contador anônimo (sem cookies): uma visita por carregamento; main.js manda 'ok' quando a mapa abre
+    window.__conta = function (t) { try { navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: t, p: 'mappa', ref: document.referrer })); } catch (e) {} };
+    window.__conta('v');
     window.addEventListener('error', function (e) {
       // ruído do navegador do app do Instagram (scripts dele, iabjs://) e erros opacos: não são nossos
       if (/^iabjs:/.test(e.filename || '') || e.message === 'Script error.') return;

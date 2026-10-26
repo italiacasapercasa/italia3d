@@ -35,6 +35,7 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   commerci                               comércios aprovados e até quando ficam
 
   lista                                  inscritos na lista de espera do "Crea video così"
+  visite [dias]                          visitas do site por dia (contador anônimo; padrão: 7 dias)
 `;
 
 function comune(arg) {
@@ -191,6 +192,23 @@ try {
       const l = fs.readFileSync(local, 'utf8').split('\n').filter(Boolean).map(x => JSON.parse(x));
       console.log(`${l.length} inscritos:`);
       for (const x of l) console.log(`  ${x.em.slice(0, 16).replace('T', ' ')}  ${x.email}${x.conta ? `  @${x.conta}` : ''}`);
+      break;
+    }
+    case 'visite': {
+      // um arquivo por dia no servidor (privato/dati/visite/AAAA-MM-DD.json), só totais
+      const { conectar } = await import('./pubblica.mjs');
+      const ftp = conectar(() => {}), local = path.join(RAIZ, 'dati-grezzi', 'visite');
+      const dias = ftp.listar(`${ftp.priv}dati/visite/`).filter(n => /^\d{4}-\d{2}-\d{2}\.json$/.test(n)).sort().slice(-(+(args[0] ?? 7)));
+      if (!dias.length) { console.log('Nenhuma visita registrada ainda.'); break; }
+      const top = o => Object.entries(o ?? {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(' · ');
+      for (const n of dias) {
+        ftp.baixar(`${ftp.priv}dati/visite/${n}`, path.join(local, n));
+        const s = ler(path.join(local, n), {});
+        const pct = s.visite ? Math.round(100 * s.caricate / (s.pagine?.mappa || s.visite)) : 0;
+        const pico = Object.entries(s.ore ?? {}).sort((a, b) => b[1] - a[1])[0];
+        console.log(`${n.slice(0, 10)}  ${String(s.visite).padStart(6)} visitas · ${String(s.unici).padStart(6)} únicos · mapa abriu em ${pct}% · pico ${pico ? `${pico[0]}h (${pico[1]})` : '—'}`);
+        console.log(`            páginas: ${top(s.pagine)}\n            origem: ${top(s.fonti)}\n            aparelho: ${top(s.dispositivi)}`);
+      }
       break;
     }
     case 'commerci': {

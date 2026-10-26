@@ -73,6 +73,7 @@ async function iniciar() {
     setInterval(() => { const i = mappa.renderer.info.render; v.textContent = `dist ${mappa.dist.toFixed(2)} · ${i.calls} draw · ${(i.triangles / 1000).toFixed(0)}k tri · ${citta.perto.length} città`; }, 500);
   }
   window.__fase = 'pronto';
+  window.__conta?.('ok');
   if (window.__lento) window.__relata?.(`caricata dopo ${Math.round((Date.now() - window.__t0) / 1000)} s`);
   document.getElementById('caricamento').classList.add('fora');
   setTimeout(() => document.getElementById('caricamento').remove(), 600);
