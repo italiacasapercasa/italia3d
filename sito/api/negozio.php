@@ -67,8 +67,8 @@ if (preg_match('/^(test|prova|esempio|example|asd|aaa+|xxx+)@|@(example|test)\./
 if (preg_match('/@(gmail|hotmail|libero|yahoo|outlook|icloud|live|alice|virgilio)\.(con|cm|om|co|comm)$|@(gmial|gmai|gamil|hotmial|hotmal)\./i', $email)) erro('email', 'Controlla la tua email: sembra esserci un errore di battitura.');
 if (empty($d['consenso'])) erro('consenso', 'Per continuare, accetta le condizioni.');
 // parolacce nel nome, nella descrizione o nel messaggio
-$VIETATE = '/\b(cazz\w*|figa|fica|tette|troi[ae]|puttan\w*|merd[ae]|stronz\w*|coglion\w*|porco ?dio|dio ?(cane|porco)|vaffanculo|culo|negr[oi])\b/iu';
-foreach (['nome' => $nome, 'descrizione' => $descrizione, 'testo' => $testo] as $campo => $v) if (preg_match($VIETATE, $v)) erro($campo, 'Questo testo non è adatto alla mappa: riscrivilo, per favore.');
+$VIETATE = '/\b(cazz\w*|figa|fica|tette|troi[ae]|puttan\w*|merd[ae]|stronz\w*|coglion\w*|porco ?d+io|dio ?(cane|porco)|vaffanculo|culo|negr[oi])\b/iu';
+foreach (['nome' => $nome, 'descrizione' => $descrizione, 'testo' => $testo, 'email' => str_replace(['@', '.'], ' ', $email)] as $campo => $v) if (preg_match($VIETATE, $v)) erro($campo, 'Questo testo non è adatto alla mappa: riscrivilo, per favore.');
 
 // mesmo e-mail + mesmo nome, ainda sem pagamento, nas últimas 48 h: atualiza esse pedido em vez de criar outro
 $id = '';
