@@ -182,15 +182,35 @@ let stile = { ...STILE_BASE }, stileToccato = false, r3d = null;
 const OGGETTO_TIPO = { pizzeria: 'pizza', ristorante: 'torta', bar: 'caffe', gelateria: 'gelato', alimentari: 'pane', abbigliamento: 'maglietta', parrucchiere: 'barbiere', estetica: 'fiore', palestra: 'manubrio', fiori: 'fiore', servizi: 'chiave', altro: 'nessuno' };
 const sorteia = a => a[Math.floor(Math.random() * a.length)];
 const valoreDi = o => (Array.isArray(o) ? o[0] : o);
+// "saco" por opção: embaralha a lista e tira um por vez; só repete depois de usar todos (e nunca o mesmo duas vezes seguidas)
+const sacchi = {};
+function pesca(k, lista) {
+  let s = sacchi[k];
+  if (!s || !s.fila.length) {
+    const fila = [...lista].sort(() => Math.random() - 0.5);
+    if (s && fila.length > 1 && fila[fila.length - 1] === s.ultimo) fila.unshift(fila.pop());
+    s = sacchi[k] = { fila, ultimo: s?.ultimo };
+  }
+  return (s.ultimo = s.fila.pop());
+}
+const diversa = (k, lista, ...evita) => { for (let i = 0; i < 4; i++) { const c = pesca(k, lista); if (!evita.includes(c)) return c; } return pesca(k, lista); };
 function ideaPer(tipo, casuale = true) {
   const O = OPZIONI_STILE, base = { ...STILE_BASE, coloreTenda: colore(), oggetto: OGGETTO_TIPO[tipo] ?? 'nessuno' };
   if (!casuale) return base;
+  const tenda = pesca('tenda', O.tenda.map(valoreDi));
+  const coloreTenda = pesca('coloreTenda', [...O.coloreTenda, base.coloreTenda]);
+  const facciata = diversa('facciata', O.facciata, coloreTenda);
+  const oggetti = O.oggetto.map(valoreDi).filter(o => o !== 'nessuno');
   return {
     ...base,
-    tenda: valoreDi(sorteia(O.tenda)), coloreRighe: sorteia(O.coloreRighe), facciata: sorteia(O.facciata), porta: sorteia(O.porta), bordo: sorteia(O.bordo),
-    piani: sorteia([1, 1, 2]), vetrina: valoreDi(sorteia(O.vetrina)), serranda: Math.random() < 0.3, insegna: valoreDi(sorteia(O.insegna)), tetto: Math.random() < 0.25,
-    oggetto: Math.random() < 0.75 ? base.oggetto : valoreDi(sorteia(O.oggetto)), scala: sorteia([0.8, 1, 1.2]),
-    ornamenti: O.ornamenti.map(valoreDi).filter(() => Math.random() < 0.45),
+    tenda, coloreTenda, facciata,
+    coloreRighe: diversa('coloreRighe', O.coloreRighe, coloreTenda),
+    porta: diversa('porta', O.porta, facciata), bordo: diversa('bordo', O.bordo, facciata),
+    piani: pesca('piani', [1, 2]), vetrina: pesca('vetrina', O.vetrina.map(valoreDi)), serranda: pesca('serranda', [false, true]),
+    insegna: pesca('insegna', O.insegna.map(valoreDi)), tetto: pesca('tetto', [false, true]),
+    oggetto: pesca('oggetto', [...oggetti, 'nessuno']), scala: pesca('scala', [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3]),
+    ornamenti: [...pesca('ornamenti', [[], ['vasi'], ['dehors'], ['luci'], ['bandierine'], ['vasi', 'luci'], ['dehors', 'bandierine'], ['vasi', 'dehors'],
+      ['luci', 'bandierine'], ['vasi', 'bandierine'], ['dehors', 'luci'], ['vasi', 'dehors', 'luci'], ['vasi', 'luci', 'bandierine'], ['vasi', 'dehors', 'luci', 'bandierine']])],
   };
 }
 const ETICHETTE = { tenda: 'Tenda', coloreTenda: 'Colore della tenda', coloreRighe: 'Colore delle righe', facciata: 'Colore della facciata', porta: 'Colore della porta', bordo: 'Colore del bordo del tetto', piani: 'Piani', vetrina: 'Vetrina', serranda: 'Serranda', insegna: 'Insegna con il tuo nome', tetto: 'Insegna sul tetto', oggetto: 'Oggetto gigante sul tetto', ornamenti: 'Decorazioni' };
