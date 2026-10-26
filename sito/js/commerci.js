@@ -29,7 +29,7 @@ export const euro = c => (c / 100).toLocaleString('it-IT', { style: 'currency', 
 // WhatsApp: só dígitos; número italiano sem código ganha +39
 export function linkWhatsapp(n, testo) {
   let d = String(n ?? '').replace(/\D/g, '');
-  if (!d) return null;
+  if (!/[1-9]/.test(d) || /^(\d)\1+$/.test(d)) return null;   // vazio ou falso (00000000000): sem botão
   if (d.startsWith('00')) d = d.slice(2);
   else if (d.length <= 10) d = `39${d}`;   // 11+ dígitos: já vem com o código do país
   return `https://wa.me/${d}${testo ? `?text=${encodeURIComponent(testo)}` : ''}`;

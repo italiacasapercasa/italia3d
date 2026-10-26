@@ -369,6 +369,7 @@ function valida(d) {
   else if (restanti() <= 0) e.citta = 'Non ci sono più posti in questa città.';
   const cifre = d.whatsapp.replace(/\D/g, '');
   if (cifre.length < 8 || cifre.length > 15) e.whatsapp = 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).';
+  else if (/^(\d)\1+$/.test(cifre) || /^(\d)\1*$/.test(cifre.replace(/^0+/, '') || '0')) e.whatsapp = 'Scrivi il tuo numero WhatsApp vero: i clienti ti scrivono lì.';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) e.email = 'Controlla la tua email.';
   else if (/^(test|prova|esempio|example|asd|aaa+|xxx+)@|@(example|test)\./i.test(d.email)) e.email = 'Scrivi la tua email vera: ti mandiamo lì la conferma.';
   else if (/@(gmail|hotmail|libero|yahoo|outlook|icloud|live|alice|virgilio)\.(con|cm|om|co|comm)$|@(gmial|gmai|gamil|hotmial|hotmal)\./i.test(d.email)) e.email = 'Controlla la tua email: sembra esserci un errore di battitura.';
