@@ -103,7 +103,11 @@ export function livelloDi(punti) {
 }
 
 // formatação italiana, fuso de Roma
-export const num = n => Number(n).toLocaleString('it-IT');
+// separador de milhar sempre ("6.966"): o it-IT do navegador não separa números de 4 dígitos
+export const num = n => {
+  const [int, dec] = Number(n).toLocaleString('it-IT', { maximumFractionDigits: 2, useGrouping: false }).split(',');
+  return int.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (dec ? `,${dec}` : '');
+};
 export const punti = n => `${num(n)} ${n === 1 ? 'punto' : 'punti'}`;
 const FUSO = { timeZone: 'Europe/Rome' };
 export const dataBreve = ts => new Date(ts).toLocaleDateString('it-IT', { ...FUSO, day: 'numeric', month: 'long' });
