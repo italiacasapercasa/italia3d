@@ -5,6 +5,7 @@ import { Citta } from './citta.js';
 import { criarPunti, criarPuntiCase } from './punti.js';
 import { Etichette } from './etichette.js';
 import { UI } from './ui.js';
+import { Festa } from './festa.js';
 
 const VERSAO = document.querySelector('meta[name="versione"]')?.content ?? 'dev';
 const DEMO = new URLSearchParams(location.search).has('demo');   // ?demo=1: mapa de demonstração
@@ -32,7 +33,8 @@ async function iniciar() {
     else if (k === 'pres') ui.palazzo();
   };
   const et = new Etichette(document.getElementById('etichette'), mappa, citta, D, abrirRotulo);
-  ui = new UI(D, mappa, citta, et);
+  const festa = new Festa(mappa, D);
+  ui = new UI(D, mappa, citta, et, festa);
   mappa.aoClique = (x, y) => {
     const rotulo = et.emPonto(x, y);   // toque em cima de um rótulo (@, cidade, região, presidente)
     if (rotulo) return abrirRotulo(rotulo);
@@ -61,7 +63,7 @@ async function iniciar() {
   if (qs.get('casa')) ui.casa(D.porConta.get(qs.get('casa')));
   if (qs.get('luogo')) { const c = D.comuni.find(c => c.nome === qs.get('luogo')); if (c) ui.comuneVuoto(c); }
   if (qs.get('storia')) ui.storiaCasa(D.porConta.get(qs.get('storia')));
-  window.__italia = { D, mappa, citta, ui };
+  window.__italia = { D, mappa, citta, ui, festa };
   if (qs.has('debug')) {
     const v = document.getElementById('versione');
     setInterval(() => { const i = mappa.renderer.info.render; v.textContent = `dist ${mappa.dist.toFixed(2)} · ${i.calls} draw · ${(i.triangles / 1000).toFixed(0)}k tri · ${citta.perto.length} città`; }, 500);

@@ -12,8 +12,8 @@ const ler = k => { try { return localStorage.getItem(k); } catch { return null; 
 const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem storage */ } };
 
 export class UI {
-  constructor(D, mappa, citta, etichette) {
-    this.D = D; this.mappa = mappa; this.citta = citta; this.et = etichette;
+  constructor(D, mappa, citta, etichette, festa = null) {
+    this.D = D; this.mappa = mappa; this.citta = citta; this.et = etichette; this.festa = festa;
     this.painel = $('#pannello');
     this.conteudo = $('#pannello-contenuto');
     this.minha = ler('minha_casa');
@@ -55,6 +55,7 @@ export class UI {
   }
   fechar() {
     this.painel.hidden = true;
+    this.citta.evidenzia(null);
     document.querySelectorAll('#schede button').forEach(b => b.classList.toggle('attiva', b.dataset.aba === 'mappa'));
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   }
@@ -117,6 +118,13 @@ export class UI {
       b.innerHTML = html; b.onclick = fn; b.hidden = true;
       lista.push(b);
     };
+    // festas do dia (padroeiro, eleição, Ferragosto...) vêm primeiro
+    for (const [i, txt] of (this.festa?.avvisi ?? []).entries()) add(`chip-festa-${i}`, esc(txt), () => {
+      const f = this.festa, pres = D.snap.cariche.presidente;
+      if (txt.startsWith('🏛') && pres) return this.casa(D.porConta.get(pres.conta));
+      if (f.patronoOggi && txt.includes(f.patronoOggi.nome)) return f.patronoOggi.luogo ? this.luogo(f.patronoOggi.luogo) : this.comuneVuoto(f.patronoOggi);
+      this.mappa.verPais();
+    });
     this.doppio = (D.snap.doppi ?? []).find(d => agora >= Date.parse(d.da) && agora < Date.parse(d.a)) ?? null;
     if (this.doppio) add('chip-doppi', `⚡ <b>Punti doppi</b> ${this.doppio.tipi.includes('storia') ? 'nelle storie ' : ''}fino alle ${ora(Date.parse(this.doppio.a))}`, () => this.comeFunziona());
     if (this.emFiamme.length) add('chip-fiamme', `🔥 <b>${num(this.emFiamme.length)}</b> ${this.emFiamme.length === 1 ? 'casa in fiamme' : 'case in fiamme'} ora`, () => this.fiamme());
@@ -124,8 +132,13 @@ export class UI {
     if (dz) add('chip-derby', `⚔️ ${esc(D.comunePorIstat.get(dz.a).nome)} <b>${num(dz.pts_a)}</b> – <b>${num(dz.pts_b)}</b> ${esc(D.comunePorIstat.get(dz.b).nome)}`, () => this.derby());
     const meta = this.metaCase();
     add('chip-meta', `🎯 <b>${num(D.casas.length)}</b> / ${num(meta)} case`, () => this.meta());
+    // celular: um chip por vez, em rodízio; tela larga: até 3 juntos (rodando os seguintes)
     let i = 0;
-    const girar = () => { lista.forEach((b, k) => { b.hidden = k !== i; }); i = (i + 1) % lista.length; };
+    const girar = () => {
+      const juntos = innerWidth >= 900 ? Math.min(3, lista.length) : 1;
+      lista.forEach((b, k) => { b.hidden = !Array.from({ length: juntos }, (_, j) => (i + j) % lista.length).includes(k); });
+      i = (i + juntos) % lista.length;
+    };
     girar();
     clearInterval(this._chips);
     if (lista.length > 1) this._chips = setInterval(girar, 4500);
@@ -198,8 +211,10 @@ export class UI {
     return `${NOMI_CARICHE[k.tipo]} di ${this.D.comunePorIstat.get(k.comune).nome}`;
   }
   linhaRank(c, i, extra = '') {
-    const l = this.D.luoghi[c.luogo];
-    return `<li data-casa="${esc(c.conta)}"><span class="pos">${i + 1}</span><span class="quem"><b>@${esc(c.conta)}</b><small>${esc(l.nome)}${c.carica ? ` · ${esc(this.cargoTexto(c))}` : ''}${extra}</small></span><span class="pts">${num(c.sett)}</span></li>`;
+    const l = this.D.luoghi[c.luogo], fogo = c.fiamme > Date.now() / 1000;
+    const TAG = { presidente: 'PRESIDENTE', senatore: 'SENATORE', presidente_regione: 'PRES. REGIONE', deputato: 'DEPUTATO', sindaco: 'SINDACO', consigliere: 'CONSIGLIERE' };
+    const tag = c.carica ? `<span class="tag-carica c-${c.carica.tipo}">${TAG[c.carica.tipo] ?? ''}</span> · ` : '';
+    return `<li data-casa="${esc(c.conta)}"${c.conta === this.minha ? ' class="mia"' : ''}><span class="pos">${i + 1}</span><span class="ico-liv">${iconaLivello(c.livello)}</span><span class="quem"><b>${fogo ? '🔥 ' : ''}@${esc(c.conta)}</b><small>${tag}${esc(l.nome)}${extra}</small></span><span class="pts">${num(c.sett)}</span></li>`;
   }
   contagem() {
     let s = Math.max(0, Math.floor((this.mandatoFim - Date.now()) / 1000));
@@ -216,6 +231,7 @@ export class UI {
     const D = this.D, l = D.luoghi[c.luogo], r = l.regione, niv = REGOLE.livelli;
     if (voar) { const p = this.citta.posCasa(c); this.focar(p.x, p.z, 0.6, 0.62); }
     this.et.destaque = c.conta;
+    this.citta.evidenzia(c);
     const agora = Date.now() / 1000, fogo = c.fiamme > agora;
     const prox = niv[c.livello + 1];
     const pct = prox ? Math.round(100 * (c.tot - niv[c.livello].min) / (prox.min - niv[c.livello].min)) : 100;
@@ -432,25 +448,70 @@ export class UI {
       <p class="nota">Gioco apartitico: le cariche sono di gioco.</p>`, 'palazzo');
   }
 
-  classifica() {
-    const D = this.D;
+  // classificação com abas: cidade, região ou Itália inteira
+  classifica(ambito = 'italia', id = null) {
+    const D = this.D, mia = this.minha && D.porConta.get(this.minha);
+    const top = [...D.luoghi].sort((a, b) => b.case - a.case);
+    let lista = D.ranking, titolo = 'Italia', n = D.casas.length;
+    if (ambito === 'citta') {
+      const l = D.luoghi[id ?? (mia ? mia.luogo : top[0].id)];
+      id = l.id; titolo = l.nome; n = l.case;
+      lista = l.casas.map(i => D.casas[i]).sort((a, b) => b.sett - a.sett || a.ts - b.ts);
+    } else if (ambito === 'regione') {
+      const r = D.regPorCod.get(id ?? (mia ? D.luoghi[mia.luogo].regione.cod : D.regioni[0].cod));
+      id = r.cod; titolo = r.nome; n = r.case;
+      lista = D.ranking.filter(c => D.luoghi[c.luogo].regione === r);
+    }
+    const agora = Date.now() / 1000, fuoco = lista.filter(c => c.fiamme > agora).length;
+    const scelta = ambito === 'citta'
+      ? `<select class="scegli" data-ambito="citta">${(mia ? [D.luoghi[mia.luogo]] : []).concat(top.slice(0, 300)).filter((l, i, a) => a.indexOf(l) === i).map(l => `<option value="${l.id}"${l.id === id ? ' selected' : ''}>${esc(l.nome)} (${num(l.case)})</option>`).join('')}</select>`
+      : ambito === 'regione' ? `<select class="scegli" data-ambito="regione">${D.regioni.map(r => `<option value="${r.cod}"${r.cod === id ? ' selected' : ''}>${esc(r.nome)}</option>`).join('')}</select>` : '';
+    const posMia = mia ? lista.indexOf(mia) : -1;
     this.abrir(`
       <h2>🏆 Classifica</h2>
       <div class="sub">Mandato ${D.snap.mandato.n} · chiude ${this.fimMandato()} (ora di Roma)</div>
-      ${this.emFiamme.length ? `<div class="rk-fuoco" data-ir="fiamme">🔥 <b>${num(this.emFiamme.length)} in fiamme</b> ora</div>` : ''}
-      <ol class="ranking">${D.ranking.slice(0, 100).map((c, i) => this.linhaRank(c, i)).join('')}</ol>
-      <p class="nota">Punti del mandato ${D.snap.mandato.n} (da domenica alle 21 a domenica alle 21, ora di Roma). Parità: vince la casa più antica.</p>`, 'classifica');
+      <div class="ambiti">${[['citta', 'Città', 'scegli'], ['regione', 'Regione', 'scegli'], ['italia', 'Italia', 'tutto il paese']].map(([k, t, s]) => `<button data-ambito-tab="${k}" class="${k === ambito ? 'on' : ''}"><b>${t}</b><small>${s}</small></button>`).join('')}</div>
+      ${scelta}
+      <div class="rk-testa"><b>${esc(titolo)}</b> <small>${num(n)} case</small>${fuoco ? `<span class="rk-fuoco" data-ir="fiamme">🔥 ${num(fuoco)} in fiamme ora</span>` : ''}</div>
+      <div class="rk-col"><span>posizione · @ · carica</span><span>punti del mandato</span></div>
+      <ol class="ranking">${lista.slice(0, 100).map((c, i) => this.linhaRank(c, i)).join('') || '<p class="nota">Ancora nessuno ha punti qui.</p>'}</ol>
+      <p class="nota">Punti del mandato ${D.snap.mandato.n} (da domenica alle 21 a domenica alle 21, ora di Roma). Parità: vince la casa più antica.</p>
+      <div class="rk-piede">${mia ? (posMia >= 0 ? `<span data-casa="${esc(mia.conta)}">Tu: <b>n. ${num(posMia + 1)}</b> qui · ${punti(mia.sett)}</span>` : `<span data-casa="${esc(mia.conta)}">La tua casa non è in questa classifica</span>`) : 'E tu? <a data-ir="cerca">Cerca la tua casa</a> e tocca «è la mia casa» per vederti qui'}</div>`, 'classifica');
+    this.conteudo.querySelectorAll('[data-ambito-tab]').forEach(b => { b.onclick = () => this.classifica(b.dataset.ambitoTab); });
+    const sel = this.conteudo.querySelector('.scegli');
+    if (sel) sel.onchange = () => this.classifica(sel.dataset.ambito, sel.dataset.ambito === 'citta' ? +sel.value : sel.value);
+    const cerca = this.conteudo.querySelector('[data-ir="cerca"]');
+    if (cerca) cerca.onclick = e => { e.stopPropagation(); this.fechar(); $('#q').focus(); };
   }
 
   tabellone() {
-    const D = this.D, top = [...D.luoghi].sort((a, b) => b.case - a.case).slice(0, 50);
+    const D = this.D, k = D.snap.contatori, top = [...D.luoghi].sort((a, b) => b.case - a.case).slice(0, 50);
+    const popTot = D.comuni.reduce((s, c) => s + c.pop, 0), popCasa = D.luoghi.reduce((s, l) => s + l.comune.pop, 0);
+    const regioniCasa = D.regioni.filter(r => r.case > 0).length, agora = Date.now() / 1000;
+    const pct = v => `${(100 * v).toLocaleString('it-IT', { maximumFractionDigits: 1 })}%`;
+    const conSindaco = Object.keys(D.snap.cariche.sindaci ?? {}).length;
     this.abrir(`
       <h2>📊 Tabellone</h2>
-      <div class="sub">Le città con più case di Italia Casa per Casa · ${num(D.snap.contatori.case)} case in ${num(D.luoghi.length)} città</div>
-      <ol class="ranking citta">${top.map((l, i) => `<li data-luogo="${l.id}"><span class="pos">${i + 1}</span><span class="quem"><b>${esc(l.nome)}</b><small>${esc(l.regione.nome)}</small></span><span class="pts">${num(l.case)}</span></li>`).join('')}</ol>
+      <div class="sub">La mappa adesso · ${esc(D.snap.versao)}</div>
+      <div class="segna"><b>${num(k.case)}</b><small>case sulla mappa</small></div>
+      <div class="tessere">
+        <div><b>${num(D.luoghi.length)}</b><small>città</small></div>
+        <div><b>${regioniCasa}/${D.regioni.length}</b><small>regioni</small></div>
+        <div><b>${pct(D.luoghi.length / D.comuni.length)}</b><small>dei comuni</small></div>
+        <div><b>${pct(popCasa / popTot)}</b><small>della gente*</small></div>
+      </div>
       <div class="bottoni"><button data-condividi="tabellone">📤 Condividi il tabellone</button></div>
+      <div class="linha"><span>Commenti letti</span><span>${num(k.commenti)}</span></div>
+      <div class="linha"><span>Account che hanno commentato</span><span>${num(k.contas)}</span></div>
+      <div class="linha"><span>Fondatori e fondatrici</span><span>${num(D.luoghi.length)}</span></div>
+      <div class="linha"><span>Follower</span><span>${num(k.follower)}</span></div>
+      <div class="linha"><span>Case in fiamme ora 🔥</span><span>${num(D.casas.filter(c => c.fiamme > agora).length)}</span></div>
+      <div class="linha"><span>Comuni con sindaco/a</span><span>${num(conSindaco)} di ${num(D.comuni.length)}</span></div>
+      <h3>🏙 Le città con più case</h3>
+      <ol class="ranking citta">${top.map((l, i) => `<li data-luogo="${l.id}"><span class="pos">${i + 1}</span><span class="quem"><b>${esc(l.nome)}</b><small>${esc(l.regione.nome)}</small></span><span class="pts">${num(l.case)}</span></li>`).join('')}</ol>
       <h3>📰 Ultime dalla mappa</h3>
-      <div class="notizie">${this.notizie()}</div>`, 'tabellone');
+      <div class="notizie">${this.notizie()}</div>
+      <p class="nota">* vive in un comune che ha già almeno una casa (popolazione ISTAT). Una casa per account: ripetere il commento non conta.</p>`, 'tabellone');
   }
 
   notizie() {

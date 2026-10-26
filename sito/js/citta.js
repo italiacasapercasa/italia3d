@@ -41,6 +41,20 @@ export function posLote(n) {
 const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
 const variante = s => hash(s) % 3;
 
+// vegetação em volta das cidades: mistura de espécies por região (códigos ISTAT das regiões)
+const ALBERI = ['pino', 'cipresso', 'ulivo', 'abete', 'quercia', 'palma'];
+const MIX = {
+  alpi: { abete: 0.7, quercia: 0.3 },
+  nord: { quercia: 0.6, abete: 0.15, cipresso: 0.15, pino: 0.1 },
+  liguria: { ulivo: 0.4, pino: 0.3, quercia: 0.3 },
+  centro: { cipresso: 0.3, ulivo: 0.35, pino: 0.2, quercia: 0.15 },
+  sud: { ulivo: 0.5, pino: 0.25, quercia: 0.15, cipresso: 0.1 },
+  isole: { ulivo: 0.4, pino: 0.25, palma: 0.2, quercia: 0.15 },
+};
+const zonaDi = cod => (['02', '04'].includes(cod) ? 'alpi' : ['01', '03', '05', '06', '08'].includes(cod) ? 'nord' : cod === '07' ? 'liguria'
+  : ['09', '10', '11', '12'].includes(cod) ? 'centro' : ['19', '20'].includes(cod) ? 'isole' : 'sud');
+const casuale = seme => () => { seme |= 0; seme = (seme + 0x6D2B79F5) | 0; let t = Math.imul(seme ^ (seme >>> 15), 1 | seme); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+
 // lotes desenhados depois da última casa: livres (convite) e, nas cidades maiores, o outdoor
 export const liberiDi = l => REGOLE.lotti_liberi;
 export const temCartellone = l => l.case >= REGOLE.cartellone_da;
@@ -146,6 +160,11 @@ export class Citta {
         lumLuci: add('lumLuci', lum.luci, brilho),
       });
     }
+    for (const t of ALBERI) this.camadas[`alb_${t}`] = add(`alb_${t}`, geometriaEspecial(t));
+    // anel de destaque da casa selecionada
+    this.anello = new THREE.Mesh(geometriaEspecial('anello'), brilho);
+    this.anello.visible = false;
+    this.grupo.add(this.anello);
     // lojas e outdoors comprados: malhas próprias (poucas), por cidade
     this.extras = new THREE.Group();
     this.grupo.add(this.extras);
@@ -245,8 +264,40 @@ export class Citta {
       c.alvos.push({ tipo: 'commercio', x, z, y: hc, h: cm.prodotto === 'cartellone' ? 0.95 : 0.66, r: 0.5, commercio: cm, rot: q.rot });
     }
     for (const k of Object.keys(c.partes)) c.partes[k] = new Float32Array(c.partes[k]);
+    c.alberi = this.alberiCidade(l, usados);
     this.cache.set(l.id, c);
     return c;
+  }
+
+  // bosque em volta da cidade: começa colado nas quadras (inclusive nos cantos entre elas) e rareia para fora;
+  // fora do mar e sempre igual para a mesma cidade
+  alberiCidade(l, usados) {
+    const mp = this.mappa, rnd = casuale(hash(l.comune.istat)), mix = MIX[zonaDi(l.regione.cod)];
+    let rCity = 0;
+    for (const k of usados) { const [i, j] = k.split(',').map(Number); rCity = Math.max(rCity, Math.hypot((Math.abs(i) + 0.5) * QW, (Math.abs(j) + 0.5) * QH)); }
+    const tipos = Object.entries(mix), rOut = rCity + 0.3 + rCity * 0.25, out = {};
+    const N = Math.round(Math.min(3200, Math.PI * rOut * rOut * 650));   // tentativas (~650 por km², antes de rarear)
+    for (let k = 0; k < N; k++) {
+      const a = rnd() * Math.PI * 2, r = rOut * Math.sqrt(rnd());
+      const x = l.x + Math.cos(a) * r, z = l.z + Math.sin(a) * r;
+      if (usados.has(`${Math.round((x - l.x) / QW)},${Math.round((z - l.z) / QH)}`)) continue;   // dentro da cidade
+      if (rnd() > Math.exp(-Math.max(0, r - rCity * 0.8) / 0.22)) continue;                       // rareia longe das casas
+      const h = mp.altura(x, z);
+      if (h < 0.002) continue;                       // mar
+      let u = rnd(), tipo = tipos[0][0];
+      for (const [t, p] of tipos) { if (u < p) { tipo = t; break; } u -= p; }
+      (out[tipo] ??= []).push(...matriz(x, h, z, rnd() * 6.28, LOTE * (0.85 + rnd() * 0.6)));
+    }
+    for (const t of Object.keys(out)) out[t] = new Float32Array(out[t]);
+    return out;
+  }
+
+  // anel vermelho embaixo da casa selecionada (null apaga)
+  evidenzia(casa) {
+    this.casaEvid = casa ?? null;
+    if (casa) { this.posCasa(casa); this.anello.position.set(casa.x, casa.y + 0.0012, casa.z); this.anello.scale.setScalar(LOTE * 1.15); }
+    this.anello.visible = !!casa;
+    this.mappa.sujo = true;
   }
 
   // malhas próprias dos comércios de uma cidade (letreiro com nome, cor e logo)
@@ -294,6 +345,9 @@ export class Citta {
       const c = this.dadosCidade(l);
       this.perto.push(l);
       for (const [k, arr] of Object.entries(c.partes)) if (arr.length) this.camadas[k].push(arr);
+      // árvores só de perto (são muitas): cidades a poucos km do centro da tela
+      if (this.mappa.dist < 9 && Math.hypot(l.x - cx, l.z - cz) - c.raio < Math.max(2.5, this.mappa.dist * 1.6))
+        for (const [t, arr] of Object.entries(c.alberi)) this.camadas[`alb_${t}`].push(arr);
       for (const ci of c.casas) { const casa = this.D.casas[ci]; if (casa.fiamme > agora) this.chamas.push(casa); }
       const ex = this.extrasCidade(l);
       if (ex) this.extras.add(ex);

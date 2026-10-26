@@ -29,10 +29,12 @@ export class Mappa {
     this.scene.fog = new THREE.Fog(COR_MAR, 1e5, 2e5);
     this.camera = new THREE.PerspectiveCamera(35, 1, 0.1, 5000);
 
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c7a8, 2.3));
-    const sol = new THREE.DirectionalLight(0xfff1dc, 2.4);
+    this.ceu = new THREE.HemisphereLight(0xffffff, 0xb9c7a8, 2.3);
+    this.scene.add(this.ceu);
+    const sol = this.sol = new THREE.DirectionalLight(0xfff1dc, 2.4);
     sol.position.set(-0.55, 1, 0.4);
     this.scene.add(sol);
+    this.animatori = new Set();   // quem precisa de render contínuo (fogos etc.), além de "animando"
 
     this.criarTerreno(imagemTerreno);
 
@@ -66,7 +68,7 @@ export class Mappa {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
     tex.needsUpdate = true;
-    const mat = new THREE.MeshBasicMaterial({ map: tex });
+    const mat = this.matTerreno = new THREE.MeshBasicMaterial({ map: tex });
     // blocos de 32x32 quadrados: a câmera de perto só desenha os blocos visíveis
     const posA = new THREE.BufferAttribute(pos, 3), uvA = new THREE.BufferAttribute(uv, 2), B = 32;
     this.terreno = new THREE.Group();
@@ -90,10 +92,26 @@ export class Mappa {
     }
     this.scene.add(this.terreno);
 
-    const mar = new THREE.Mesh(new THREE.PlaneGeometry(40000, 40000), new THREE.MeshBasicMaterial({ color: COR_MAR }));
+    const mar = this.mar = new THREE.Mesh(new THREE.PlaneGeometry(40000, 40000), new THREE.MeshBasicMaterial({ color: COR_MAR }));
     mar.rotation.x = -Math.PI / 2;
     mar.position.y = -0.05;
     this.scene.add(mar);
+  }
+
+  // noite: mar e céu escuros, terreno azulado, luz de lua (as cores do dia voltam com notte=false)
+  definirNotte(notte) {
+    this.notte = notte;
+    const corMar = new THREE.Color(notte ? '#1E3560' : COR_MAR);
+    this.scene.background.copy(corMar);
+    this.scene.fog.color.copy(corMar);
+    this.mar.material.color.copy(corMar);
+    this.matTerreno.color.set(notte ? '#7C8BB0' : '#ffffff');
+    this.ceu.intensity = notte ? 1.15 : 2.3;
+    this.ceu.color.set(notte ? '#B9C6FF' : '#ffffff');
+    this.sol.intensity = notte ? 0.75 : 2.4;
+    this.sol.color.set(notte ? '#A9BBFF' : '#fff1dc');
+    document.documentElement.classList.toggle('notte', notte);
+    this.sujo = true;
   }
 
   // altura do terreno (unidades do mundo) em x,z — mesma interpolação da malha
@@ -292,7 +310,9 @@ export class Mappa {
     if (this.gravacao) return;
     requestAnimationFrame(t => this.loop(t));
     if (this.voo) this.passoVoo(agora);
-    if (!this.sujo && !this.animando) return;
+    if (!this.sujo && !this.animando && !this.animatori.size) return;
+    // só animações de fundo (fogos): 30 quadros por segundo bastam e poupam bateria
+    if (!this.sujo && !this.animando && (this._pulo = !this._pulo)) return;
     for (const f of this.aoFrame) f(agora);
     this.renderer.render(this.scene, this.camera);
     this.sujo = false;

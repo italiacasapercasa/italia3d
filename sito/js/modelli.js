@@ -227,6 +227,23 @@ export function geometriaEspecial(tipo) {
       b.esfera(0.028, Math.cos(a) * r, y, Math.sin(a) * r, pallina[k % 4]);
     }
     b.cilindro(0.17, 0.05, 0, 0, 0, '#B23A30', 10);
+  } else if (tipo === 'pino') {          // pino domestico (a "umbrella" mediterrânea)
+    b.cilindro(0.035, 0.55, 0, 0, 0, T.tronco, 5);
+    const g = new THREE.IcosahedronGeometry(0.26, 0); g.scale(1.25, 0.45, 1.25); b.add(g, '#3F7A3A', 0, 0.62, 0);
+  } else if (tipo === 'cipresso') {
+    b.cilindro(0.025, 0.06, 0, 0, 0, T.tronco, 5).cone(0.085, 0.62, 0, 0.04, 0, T.cipresso, 6);
+  } else if (tipo === 'ulivo') {
+    b.cilindro(0.03, 0.18, 0, 0, 0, '#6E5B45', 5);
+    const g = new THREE.IcosahedronGeometry(0.17, 0); g.scale(1.2, 0.8, 1.2); b.add(g, T.ulivo, 0, 0.3, 0);
+  } else if (tipo === 'abete') {          // abete alpino
+    b.cilindro(0.03, 0.1, 0, 0, 0, T.tronco, 5).cone(0.2, 0.36, 0, 0.08, 0, '#2C5E3A', 7).cone(0.15, 0.3, 0, 0.3, 0, '#2C5E3A', 7).cone(0.09, 0.22, 0, 0.5, 0, '#2C5E3A', 7);
+  } else if (tipo === 'quercia') {        // latifoglia
+    b.cilindro(0.03, 0.2, 0, 0, 0, T.tronco, 5).esfera(0.2, 0, 0.36, 0, '#4E9A43');
+  } else if (tipo === 'palma') {
+    b.cilindro(0.025, 0.6, 0, 0, 0, '#8A6A45', 5, 0.018);
+    for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2, g = new THREE.BoxGeometry(0.3, 0.012, 0.06); g.translate(0.15, 0, 0); g.rotateZ(-0.35); g.rotateY(a); b.add(g, '#3E8E4E', 0, 0.6, 0); }
+  } else if (tipo === 'anello') {         // anel de destaque da casa selecionada
+    const g = new THREE.RingGeometry(0.5, 0.62, 32); g.rotateX(-Math.PI / 2); b.add(g, '#E0473C', 0, 0.01, 0);
   } else if (tipo === 'stellaNatale') {
     b.esfera(0.075, 0, 1.02, 0, T.oro);
   }
