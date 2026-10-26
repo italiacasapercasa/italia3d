@@ -1,7 +1,7 @@
 // Cidades 3D: quadras em espiral ao redor da piazza, casas por nível e prédios especiais.
 // Só as cidades perto da câmera entram nos InstancedMesh (atualizado quando a câmera anda).
 import * as THREE from 'three';
-import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria, stileRegione } from './modelli.js';
+import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria, stileRegione, geometriaFinestre, geometriaLampione, geometriaLuceLampione } from './modelli.js';
 import { REGOLE, nataleAttivo } from './regole.js';
 import { texturaVendita, texturaLavori, texturaPubblicita, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
 import { creaNegozio3D } from './negozio3d.js';
@@ -141,8 +141,24 @@ export class Citta {
       fiamma: add('fiamma', geometriaEspecial('fiamma'), brilho),
     };
     for (const t of ['piazza', 'bandiera', 'chiesa', 'palazzina', 'ospedale', 'stadio', 'parco', 'liberoV', 'liberoL', 'cartellone']) this.camadas[t] = add(t, geometriaEspecial(t));
-    // casas: camada por nível, variante de cor e estilo regional, criada só quando aparece uma ("c<nível>_<var>_<estilo>")
-    this.novaCamada = k => { const [, n, v, s] = k.match(/^c(\d+)_(\d)_(\w+)$/); return (this.camadas[k] = add(k, geometriaCasa(+n, +v, s))); };
+    // noite: janelas acesas, lâmpadas dos postes (grupo à parte, visível só à noite; luz "aditiva" que brilha)
+    this.grupoNotte = new THREE.Group();
+    this.grupoNotte.visible = false;
+    this.grupo.add(this.grupoNotte);
+    const matNotte = new THREE.MeshBasicMaterial({ vertexColors: true });
+    const matAlone = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const addNotte = (nome, geo, m = matNotte) => new Camada(this.grupoNotte, geo, m, nome);
+    this.camadas.lampione = add('lampione', geometriaLampione());
+    this.camadas.lampLuce = addNotte('lampLuce', geometriaLuceLampione(), matAlone);
+    // casas: camada por nível, variante de cor e estilo regional, criada só quando aparece uma ("c<nível>_<var>_<estilo>");
+    // janelas acesas: "f<nível>_<estilo>" (camada vazia quando a casa não tem janelas)
+    const VAZIA = new THREE.BufferGeometry();
+    this.novaCamada = k => {
+      const f = k.match(/^f(\d+)_(\w+)$/);
+      if (f) return (this.camadas[k] = addNotte(k, geometriaFinestre(+f[1], f[2]) ?? VAZIA));
+      const [, n, v, s] = k.match(/^c(\d+)_(\d)_(\w+)$/);
+      return (this.camadas[k] = add(k, geometriaCasa(+n, +v, s)));
+    };
     // faces com texto (redesenhadas quando a fonte do site carrega)
     const faces = { facciaV: [PLACCA, texturaVendita, 0.011], facciaL: [PLACCA, texturaLavori, 0.011], facciaP: [CARTELLONE, texturaPubblicita, 0.02] };
     for (const [k, [p, tex, dz]] of Object.entries(faces)) this.camadas[k] = add(k, geometriaFaccia(p, dz), new THREE.MeshBasicMaterial({ map: tex() }));
@@ -217,6 +233,11 @@ export class Citta {
     for (let r = 0; r <= ultimo; r++) {
       const [i, j] = ORDEM[r], cx = l.x + i * QW, cz = l.z + j * QH, p = papel(r);
       push(p === 'piazza' ? 'celaP' : 'cela', matriz(cx, hc, cz, 0, 1));
+      // poste de luz em dois cantos da quadra, na calçada, com o braço virado para o cruzamento
+      for (const [sx, sz, a] of [[-1, -1, 3 * Math.PI / 4], [1, 1, -Math.PI / 4]]) {
+        const lm = matriz(cx + sx * ((QW - RUA) / 2 + CALCADA / 2), hc + 0.0005, cz + sz * ((QH - RUA) / 2 + CALCADA / 2), a, LOTE);
+        push('lampione', lm); push('lampLuce', lm);
+      }
       if (!usados.has(`${i},${j + 1}`)) push('borda', matriz(cx, hc, cz + QH / 2, 0, QW, prof, 1));
       if (!usados.has(`${i},${j - 1}`)) push('borda', matriz(cx, hc, cz - QH / 2, Math.PI, QW, prof, 1));
       if (!usados.has(`${i + 1},${j}`)) push('borda', matriz(cx + QW / 2, hc, cz, Math.PI / 2, QH, prof, 1));
@@ -241,7 +262,9 @@ export class Citta {
       const casa = this.D.casas[ci], q = posLote(casa.lote);
       const x = l.x + q.x, z = l.z + q.z;
       casa.x = x; casa.z = z; casa.y = hc;
-      push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, matriz(x, hc + 0.0009, z, q.rot, LOTE));
+      const m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
+      push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, m);
+      push(`f${casa.livello}_${stile}`, m);
       c.casas.push(ci);
     }
     // lotes livres depois da última casa (só desenho) e o outdoor à venda
@@ -358,6 +381,7 @@ export class Citta {
   }
 
   animar(t) {
+    if (this.grupoNotte.visible !== !!this.mappa.notte) this.grupoNotte.visible = !!this.mappa.notte;
     if (!this.chamas.length) return;
     const cam = this.camadas.fiamma;
     cam.iniciar();

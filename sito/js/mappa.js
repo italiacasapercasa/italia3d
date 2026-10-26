@@ -69,8 +69,26 @@ export class Mappa {
     tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
     tex.needsUpdate = true;
     const mat = this.matTerreno = new THREE.MeshBasicMaterial({ map: tex });
+    // relevo facetado (low-poly) no zoom médio: cada triângulo da malha ganha sombra própria pela inclinação
+    // (normal calculada no fragmento) e um leve tom aleatório; some de perto e na vista do país inteiro
+    this.facce = { value: 0 };
+    mat.onBeforeCompile = sh => {
+      sh.uniforms.facce = this.facce;
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nattribute float faccia; flat varying float vFaccia; varying vec3 vMondo;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvFaccia = faccia; vMondo = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', '#include <common>\nuniform float facce; flat varying float vFaccia; varying vec3 vMondo;')
+        .replace('#include <map_fragment>', `#include <map_fragment>
+          vec3 nf = normalize(cross(dFdx(vMondo), dFdy(vMondo))); if (nf.y < 0.0) nf = -nf;
+          nf = normalize(vec3(nf.x * 4.0, nf.y, nf.z * 4.0));   // realça a inclinação (o relevo da malha é suave)
+          float luce = 0.7 + 0.42 * clamp(dot(nf, normalize(vec3(-0.55, 1.0, 0.4))), 0.0, 1.0) + (vFaccia - 0.5) * 0.2;
+          diffuseColor.rgb *= mix(1.0, luce, facce);`);
+    };
     // blocos de 32x32 quadrados: a câmera de perto só desenha os blocos visíveis
-    const posA = new THREE.BufferAttribute(pos, 3), uvA = new THREE.BufferAttribute(uv, 2), B = 32;
+    const fac = new Float32Array(GW * GH);
+    for (let k = 0; k < fac.length; k++) { const s = Math.sin(k * 12.9898) * 43758.5453; fac[k] = s - Math.floor(s); }
+    const posA = new THREE.BufferAttribute(pos, 3), uvA = new THREE.BufferAttribute(uv, 2), facA = new THREE.BufferAttribute(fac, 1), B = 32;
     this.terreno = new THREE.Group();
     for (let j0 = 0; j0 < GH - 1; j0 += B) for (let i0 = 0; i0 < GW - 1; i0 += B) {
       const j1 = Math.min(GH - 1, j0 + B), i1 = Math.min(GW - 1, i0 + B), idx = [];
@@ -81,6 +99,7 @@ export class Mappa {
       const g = new THREE.BufferGeometry();
       g.setAttribute('position', posA);
       g.setAttribute('uv', uvA);
+      g.setAttribute('faccia', facA);
       g.setIndex(new THREE.BufferAttribute(new Uint32Array(idx), 1));
       // esfera de recorte só do bloco (a geometria compartilha os vértices da grade inteira)
       const cx = b.x0 + (i0 + i1) / 2 / (GW - 1) * (b.x1 - b.x0), cz = b.z0 + (j0 + j1) / 2 / (GH - 1) * (b.z1 - b.z0);
@@ -155,6 +174,9 @@ export class Mappa {
     c.updateMatrixWorld(true);   // raios (zoom no ponto, arrastar, clique) usam a câmera já movida, não a do último quadro
     if (d < 60) { this.scene.fog.near = d * 2.2; this.scene.fog.far = d * 7; }
     else { this.scene.fog.near = 1e5; this.scene.fog.far = 2e5; }
+    // facetas: cheias entre ~6 e ~500 km de distância, somem de perto (cidade) e na vista do país
+    const lg = Math.log(d);
+    this.facce.value = Math.min(1, Math.max(0, (lg - Math.log(3)) / (Math.log(8) - Math.log(3)))) * Math.min(1, Math.max(0, (Math.log(1100) - lg) / (Math.log(1100) - Math.log(450))));
     this.sujo = true;
     for (const f of this.aoMover) f();
   }

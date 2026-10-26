@@ -79,7 +79,16 @@ export const stileRegione = cod => (cod === '16' ? 'trullo' : ['17', '18', '19',
   : ['09', '10'].includes(cod) ? 'toscano' : ['02', '04'].includes(cod) ? 'alpino' : 'base');
 
 // ---------- peças ----------
+// FINESTRE != null: em vez de montar a casa, só coleta as janelas (acesas à noite), na mesma posição das persianas
+let FINESTRE = null;
+const LUCI = ['#FFD36B', '#FFC24A', '#FFE29A'];
 function persiana(b, x, y, z, lado = 'frente') {
+  if (FINESTRE) {
+    const g = lado === 'frente' ? new THREE.BoxGeometry(0.085, 0.11, 0.024) : new THREE.BoxGeometry(0.024, 0.11, 0.085);
+    g.translate(x, y + 0.065, z);
+    FINESTRE.push(pintar(g, LUCI[FINESTRE.length % 3]));
+    return;
+  }
   if (lado === 'frente') b.caixa(0.1, 0.13, 0.02, x, y, z, C.persiana);
   else b.caixa(0.02, 0.13, 0.1, x, y, z, C.persiana);
 }
@@ -180,6 +189,38 @@ const NIVEIS = [
 
 // altura aproximada (lotes) de cada nível — usada para clique e posição de rótulos/chamas
 export const ALTURA_NIVEL = [0.55, 0.62, 0.6, 0.95, 0.95, 1.05, 0.95, 1.02, 1.0, 1.25, 2.0, 3.75, 0.8, 1.4, 3.75];
+
+// janelas acesas de uma casa (mesmo nível e estilo), para a camada da noite; null se a casa não tem janelas
+export function geometriaFinestre(nivel, stile = 'base') {
+  if (stile === 'trullo' && nivel < 3) return null;
+  FINESTRE = [];
+  C = TEMI[stile] ?? TEMI.base;
+  try { NIVEIS[nivel](new Construtor(), C.muri[0]); } finally { C = TEMI.base; }
+  const partes = FINESTRE; FINESTRE = null;
+  if (!partes.length) return null;
+  const g = mergeGeometries(partes); g.computeBoundingSphere();
+  return g;
+}
+
+// poste de luz (de dia: só o poste; a lâmpada acesa é uma camada à parte, visível à noite)
+export function geometriaLampione() {
+  const b = new Construtor();
+  b.cilindro(0.018, 0.62, 0, 0, 0, T.scuro, 6).caixa(0.12, 0.018, 0.018, 0.05, 0.6, 0, T.scuro).caixa(0.06, 0.03, 0.05, 0.1, 0.57, 0, T.scuro);
+  return b.geometria();
+}
+export function geometriaLuceLampione() {
+  const b = new Construtor();
+  b.caixa(0.05, 0.012, 0.04, 0.1, 0.56, 0, '#FFF1C2');
+  // poça de luz no chão: degradê do centro (quente) para a borda (preto = some, a mistura é aditiva)
+  const alone = new THREE.CircleGeometry(0.17, 20).toNonIndexed();
+  alone.rotateX(-Math.PI / 2); alone.translate(0.1, 0.004, 0);
+  const p = alone.attributes.position, cor = new Float32Array(p.count * 3), quente = new THREE.Color('#8A6526');
+  for (let i = 0; i < p.count; i++) { const k = Math.max(0, 1 - Math.hypot(p.getX(i) - 0.1, p.getZ(i)) / 0.17); quente.clone().multiplyScalar(k).toArray(cor, i * 3); }
+  alone.deleteAttribute('normal'); alone.deleteAttribute('uv');
+  alone.setAttribute('color', new THREE.BufferAttribute(cor, 3));
+  b.partes.push(alone);
+  return b.geometria();
+}
 
 // trulli de Alberobello (Puglia) para os três primeiros níveis
 function trullo(b, r, x, z, cor = '#F7F4EC') {

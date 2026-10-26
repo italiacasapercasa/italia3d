@@ -60,6 +60,7 @@ export class Festa {
     this.notte = null;
     this.criarLuci();
     this.criarFuochi();
+    this.criarFrecce();
     this.aggiorna();
     setInterval(() => this.aggiorna(), 60e3);
     mappa.aoFrame.push(t => this.passo(t));
@@ -79,6 +80,11 @@ export class Festa {
     if (capodanno || forca === 'capodanno') { top.slice(0, 45).forEach(l => citta(l, 0.45)); avvisi.push('🎆 Buon anno da Italia Casa per Casa!'); }
     if (ferragosto || forca === 'ferragosto') { top.slice(0, 40).forEach(l => citta(l, 0.35)); avvisi.push('🎆 Buon Ferragosto!'); }
     if (repubblica || forca === 'repubblica') { top.slice(0, 30).forEach(l => citta(l, 0.3, TRICOLORE)); avvisi.push('🇮🇹 Festa della Repubblica'); }
+    // Frecce Tricolori: o dia todo em 2 de junho (de dia e de noite), fumaça verde-branca-vermelha sobre a Itália
+    const frecce = r.md === '06-02' || forca === 'repubblica' || forca === 'frecce';
+    if (frecce && !avvisi.includes('🇮🇹 Festa della Repubblica')) avvisi.push('🇮🇹 Festa della Repubblica: passano le Frecce Tricolori!');
+    this.frecce.visible = frecce;
+    if (frecce) this.mappa.animatori.add(this);
     // padroeiros (de dia aparece só o aviso; os fogos, à noite)
     const patroni = PATRONI.map(([n, s, md, festa]) => ({ c: this.comune(n, s), md, festa })).concat([{ c: this.comune('Venezia', 'VE'), md: redentore(r.ano), festa: 'Festa del Redentore' }]);
     for (const p of patroni) if (p.c && (p.md === r.md || (forca === 'patrono' && p.c.nome === 'Napoli'))) {
@@ -153,6 +159,49 @@ export class Festa {
     this.t0 = null;
   }
 
+  // ---------- Frecce Tricolori: 3 rastros de fumaça (verde, branco, vermelho) de Torino a Bari, passando por Roma ----------
+  criarFrecce() {
+    const P = this.D.geo.proj, xz = (lat, lon) => new THREE.Vector3((lon - P.LON0) * P.KX, 0, (P.LAT0 - lat) * P.KZ);
+    const rota = [xz(45.07, 7.68), xz(44.4, 9.6), xz(43.77, 11.25), xz(42.6, 12.2), xz(41.9, 12.5), xz(41.2, 13.9), xz(40.85, 14.9), xz(41.12, 16.87)];
+    this.rotaFrecce = new THREE.CatmullRomCurve3(rota, false, 'centripetal');
+    this.NF = 260;                                    // pontos por rastro
+    const n = this.NF * 3, g = new THREE.BufferGeometry();
+    this.fPos = new Float32Array(n * 3); this.fAlfa = new Float32Array(n);
+    const cor = new Float32Array(n * 3), cores = ['#2E9B55', '#FFFFFF', '#E0473C'].map(c => new THREE.Color(c));
+    for (let i = 0; i < n; i++) cores[Math.floor(i / this.NF)].toArray(cor, i * 3);
+    g.setAttribute('position', new THREE.BufferAttribute(this.fPos, 3).setUsage(THREE.DynamicDrawUsage));
+    g.setAttribute('alfa', new THREE.BufferAttribute(this.fAlfa, 1).setUsage(THREE.DynamicDrawUsage));
+    g.setAttribute('cor', new THREE.BufferAttribute(cor, 3));
+    this.matFrecce = new THREE.ShaderMaterial({
+      uniforms: { escala: { value: 1 }, tam: { value: 1 }, pr: { value: this.mappa.renderer.getPixelRatio() } },
+      vertexShader: `attribute vec3 cor; attribute float alfa; uniform float escala; uniform float tam; uniform float pr; varying vec3 vCor; varying float vA;
+        void main() { vCor = cor; vA = alfa; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = alfa <= 0.0 ? 0.0 : clamp(tam * escala / -mv.z, 3.0, 60.0) * pr; gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: `varying vec3 vCor; varying float vA;
+        void main() { float d = length(gl_PointCoord - 0.5) * 2.0; if (d > 1.0) discard; gl_FragColor = vec4(vCor, vA * (1.0 - d * d)); }`,
+      transparent: true, depthWrite: false,
+    });
+    this.frecce = new THREE.Points(g, this.matFrecce);
+    this.frecce.frustumCulled = false; this.frecce.renderOrder = 19; this.frecce.visible = false;
+    this.mappa.scene.add(this.frecce);
+  }
+  passoFrecce(t) {
+    const mp = this.mappa, giro = 26, testa = (t % giro) / giro * 1.45;   // a formação percorre a rota e sai; o rastro se dissipa
+    const scia = 0.55, quota = 9, larg = Math.max(0.6, mp.dist * 0.006), v = new THREE.Vector3(), tg = new THREE.Vector3();
+    this.matFrecce.uniforms.escala.value = innerHeight / (2 * Math.tan(mp.camera.fov * Math.PI / 360));
+    this.matFrecce.uniforms.tam.value = larg * 1.6;
+    for (let r = 0; r < 3; r++) for (let k = 0; k < this.NF; k++) {
+      const i = r * this.NF + k, u = testa - (k / (this.NF - 1)) * scia;
+      if (u < 0 || u > 1) { this.fAlfa[i] = 0; continue; }
+      this.rotaFrecce.getPointAt(u, v); this.rotaFrecce.getTangentAt(u, tg);
+      const off = (r - 1) * larg, ox = -tg.z, oz = tg.x, n = Math.hypot(ox, oz) || 1, idade = k / (this.NF - 1);
+      const allarga = 1 + idade * 1.4;               // a fumaça abre um pouco com o tempo
+      this.fPos.set([v.x + ox / n * off * allarga, mp.altura(v.x, v.z) * 0.2 + quota, v.z + oz / n * off * allarga], i * 3);
+      this.fAlfa[i] = (1 - idade) * 0.85;
+    }
+    const at = this.frecce.geometry.attributes;
+    at.position.needsUpdate = at.alfa.needsUpdate = true;
+  }
+
   lancia(fonte, agoraS) {
     const N = 80, l = fonte.l, cores = (fonte.palette ?? Object.keys(PAL)).map(k => PAL[k]), [c1, c2] = cores[Math.floor(Math.random() * cores.length)];
     const dirs = [];
@@ -169,7 +218,8 @@ export class Festa {
     const dt = Math.min(0.1, t - (this.ultimo ?? t)); this.ultimo = t;
     for (const f of this.fonti ?? []) if (Math.random() < f.rate * dt && this.scoppi.length < 45) this.lancia(f, t);
     this.scoppi = this.scoppi.filter(s => t - s.t < 2.6);
-    if (this.scoppi.length || this.fonti?.length) mp.animatori.add(this); else mp.animatori.delete(this);
+    if (this.scoppi.length || this.fonti?.length || this.frecce.visible) mp.animatori.add(this); else mp.animatori.delete(this);
+    if (this.frecce.visible) this.passoFrecce(t);
     this.matF.uniforms.escala.value = innerHeight / (2 * Math.tan(mp.camera.fov * Math.PI / 360));
     // o tamanho da explosão acompanha a distância da câmera: sempre visível, do país à praça
     const R = Math.max(0.05, Math.min(70, mp.dist * 0.045)), tamF = R * 0.2;
