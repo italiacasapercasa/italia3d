@@ -289,7 +289,7 @@ export class Citta {
       } else {
         const m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
         push('cartellone', m); push('facciaP', m);
-        c.alvos.push({ tipo: 'pubblicita', x, z, y: hc, h: 0.95, r: 0.5, luogo: l });
+        c.alvos.push({ tipo: 'pubblicita', x, z, y: hc, h: 0.95, r: 0.5, luogo: l, rot: q.rot });
       }
     }
     // comércios aprovados: cada um ocupa o lote que o motor reservou

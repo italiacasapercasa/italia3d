@@ -63,6 +63,30 @@ const SINT = {
     sino(t0 + 0.02, 1568, 0.9, 0.22 * vol, 0.28, [[1, 1], [2.01, 0.35], [3.02, 0.15]]);
   },
   ding: ({ tono = 1, vol = 1 }) => (t0) => sino(t0, 1318 * tono, 1.2, 0.3 * vol, 0.35, [[1, 1], [2.0, 0.4], [3.01, 0.18], [4.2, 0.08]]),
+  // toque de dedo na tela
+  tap: ({ vol = 1 }) => (t0) => { somar(t0, 0.012 * SR, t => ruido() * 0.5 * vol * Math.exp(-t / 0.003)); sino(t0, 1900, 0.04, 0.18 * vol, 0.01); },
+  // moeda (+pontos): duas notas rápidas
+  coin: ({ vol = 1 }) => (t0) => { sino(t0, 988, 0.08, 0.28 * vol, 0.05, [[1, 1], [3, 0.3]]); sino(t0 + 0.075, 1319, 0.5, 0.3 * vol, 0.16, [[1, 1], [3, 0.25]]); },
+  // estrondo grave (a noite cai)
+  boom: ({ vol = 1 }) => (t0) => {
+    let fase = 0;
+    somar(t0, 1.4 * SR, t => { const f = 38 + 30 * Math.exp(-t / 0.15); fase += 2 * Math.PI * f / SR; return Math.sin(fase) * 0.9 * vol * Math.min(1, t / 0.01) * Math.exp(-t / 0.45); });
+    const bp = passaBanda();
+    somar(t0, 0.6 * SR, t => bp(ruido(), 180, 1) * 0.5 * vol * Math.exp(-t / 0.2));
+  },
+  // vento que sobe e desce (Halloween)
+  vento: ({ dur = 3, vol = 1 }) => (t0) => {
+    const bp = passaBanda();
+    somar(t0, dur * SR, t => { const s = t / dur; return bp(ruido(), 420 + 260 * Math.sin(t * 2.3) + 180 * Math.sin(t * 5.1), 3) * Math.sin(Math.PI * s) ** 1.5 * 0.55 * vol; });
+  },
+  // rufar de tambor que acelera e cresce (suspense)
+  rullo: ({ dur = 3, vol = 1 }) => (t0) => {
+    for (let t = 0, k = 0; t < dur; k++) {
+      const s = t / dur, bp = passaBanda();
+      somar(t0 + t, 0.05 * SR, x => bp(ruido(), 1800, 1.2) * (0.25 + 0.6 * s) * vol * Math.exp(-x / 0.018));
+      t += 0.11 - 0.07 * s;
+    }
+  },
 };
 for (const e of efeitos) SINT[e.tipo](e)(e.t);
 

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel riassunto · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #25D366; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #icona { font-size: 62px; line-height: 1; -webkit-text-stroke-width: 12px; }
+  #righe { margin-top: 14px; transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 80px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 128px; -webkit-text-stroke-width: 22px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1310px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .bandierina { width: 44px; height: 70px; }
+  .bandierina i { position: absolute; left: 4px; bottom: 0; width: 6px; height: 70px; background: var(--ink); border-radius: 3px; }
+  .bandierina b { position: absolute; left: 10px; top: 2px; width: 34px; height: 24px; background: var(--giallo); border: 4px solid var(--ink); border-left: 0; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .bandierina.rossa b { background: var(--rosso); }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.bianco { background: #fff; }
+  .cartello .box b { display: block; font-size: 44px; font-weight: 900; color: var(--ink); line-height: 1.05; text-transform: uppercase; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); }
+  .cartello .box small { display: block; font-size: 24px; font-weight: 800; color: #4B3A10; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 70px; right: 70px; top: 520px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 28px 32px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  #scheda .luogo { display: inline-block; border: 4px solid var(--ink); border-radius: 99px; padding: 4px 16px; font-size: 26px; font-weight: 800; color: var(--ink); }
+  #scheda h2 { margin: 14px 0 0; font-size: 60px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  #scheda .sub { font-size: 28px; font-weight: 800; color: #5B6475; }
+  #scheda img { display: block; width: 150px; height: 150px; object-fit: contain; margin: 16px 0; border-radius: 22px; border: 4px solid var(--ink); background: #fff; }
+  #scheda p { font-size: 30px; font-weight: 700; color: var(--ink); margin: 0 0 18px; }
+  #scheda .wa { display: inline-block; background: var(--verde); color: #fff; border: 5px solid var(--ink); border-radius: 99px; padding: 14px 30px; font-size: 38px; font-weight: 900; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; }
+  #misura { top: 470px; left: 140px; right: 140px; padding: 18px; text-align: center; }
+  #misura canvas { display: block; width: 100%; height: auto; border-radius: 24px; background: linear-gradient(#CFE6F2, #EAF4E2); }
+  #misura b { display: block; font-size: 40px; font-weight: 900; color: var(--ink); margin-top: 10px; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #duello h2 { margin: 0 0 6px; font-size: 44px; font-weight: 900; color: var(--ink); text-align: center; }
+  #duello .quando { text-align: center; font-size: 30px; font-weight: 800; color: #5B6475; margin-bottom: 14px; }
+  #duello .riga { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-top: 3px dashed #D9DDE3; }
+  #duello .pos { width: 66px; height: 66px; border-radius: 50%; border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; background: var(--giallo); flex: none; }
+  #duello .quem { flex: 1; min-width: 0; }
+  #duello .quem b { display: block; font-size: 40px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #duello .quem small { display: block; font-size: 26px; font-weight: 800; color: #5B6475; }
+  #duello .barra { height: 18px; background: #EEF1F5; border-radius: 9px; margin-top: 8px; overflow: hidden; }
+  #duello .barra i { display: block; height: 100%; width: 0; background: #FFB437; border-radius: 9px; }
+  #duello .pts { font-size: 44px; font-weight: 900; color: var(--ink); }
+  #vs { position: absolute; left: 50%; top: 0; font-size: 90px; transform: translate(-50%, -50%) scale(0); }
+  #tocco { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 10px solid #fff; box-shadow: 0 0 0 6px var(--ink); opacity: 0; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 560px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a { font-size: 70px; -webkit-text-stroke-width: 14px; }
+  #cta .b { font-size: 52px; -webkit-text-stroke-width: 12px; margin-top: 14px; }
+  #cta .c { font-size: 56px; -webkit-text-stroke-width: 12px; margin-top: 26px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="etichette"></div>
+<div id="testa" class="forte"><div id="icona">👤 = 🏠</div><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="scheda" class="riquadro"></div>
+<div id="misura" class="riquadro"><canvas width="720" height="620"></canvas><b>IL TUO NEGOZIO SU MISURA</b></div>
+<div id="duello" class="riquadro"></div>
+<div id="chip-posti" class="chip forte" style="top:600px">🏪 POSTI LIMITATI</div>
+<div id="chip-punti" class="chip forte g" style="top:720px">🏅 +100 PUNTI</div>
+<div id="chip-prezzo" class="chip forte" style="top:850px;font-size:48px;-webkit-text-stroke-width:11px">DA 9,90 € + IVA</div>
+<div id="tocco"></div>
+<div id="cta" class="forte"><div class="a">📍 COMMENTA LA TUA CITTÀ</div><div class="b g">PRIMA CHE QUALCUNO ARRIVI PRIMA</div><div class="c">🏪 ITALIACASAPERCASA.COM</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/riassunto.js"></script>
+</body>
+</html>
