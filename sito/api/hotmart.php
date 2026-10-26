@@ -25,6 +25,28 @@ $registro = [
 ];
 file_put_contents("$pasta/pagamenti.jsonl", json_encode($registro, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
+// carrinho abandonado (o cliente abriu o pagamento e saiu): a Hotmart não manda o sck, então acha o pedido pelo e-mail
+if ($evento === 'PURCHASE_OUT_OF_SHOPPING_CART') {
+    $email = strtolower(trim((string)($d['data']['buyer']['email'] ?? '')));
+    $alvo = null;
+    if (preg_match('/^\d{6}-[0-9a-f]{8}$/', $sck) && is_file("$pasta/$sck.json")) $alvo = "$pasta/$sck.json";
+    elseif ($email !== '') {
+        $arqs = glob("$pasta/[0-9][0-9][0-9][0-9][0-9][0-9]-*.json") ?: [];
+        rsort($arqs);   // o mais recente primeiro (o id começa pela data)
+        foreach ($arqs as $a) {
+            $p = json_decode((string)file_get_contents($a), true) ?: [];
+            if (strtolower((string)($p['email'] ?? '')) === $email && ($p['pagamento'] ?? '') !== 'pagato') { $alvo = $a; break; }
+        }
+    }
+    if ($alvo) {
+        $p = json_decode((string)file_get_contents($alvo), true) ?: [];
+        $p['checkout'] = 'abbandonato';
+        $p['checkout_em'] = $registro['em'];
+        file_put_contents($alvo, json_encode($p, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
+    }
+    http_response_code(200); echo 'ok'; exit;
+}
+
 $novo = ['PURCHASE_APPROVED' => 'pagato', 'PURCHASE_COMPLETE' => 'pagato', 'PURCHASE_REFUNDED' => 'rimborsato', 'PURCHASE_CHARGEBACK' => 'rimborsato', 'PURCHASE_CANCELED' => 'annullato'][$evento] ?? null;
 if ($novo && preg_match('/^\d{6}-[0-9a-f]{8}$/', $sck) && is_file("$pasta/$sck.json")) {
     $p = json_decode((string)file_get_contents("$pasta/$sck.json"), true) ?: [];

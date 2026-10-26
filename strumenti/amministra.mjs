@@ -128,12 +128,17 @@ try {
       };
       const salvarPedido = p => { gravar(path.join(local, `${p.id}.json`), p); ftp.enviar([{ local: path.join(local, `${p.id}.json`), remoto: `${remoto}${p.id}.json` }]); };
       const r = new Risolutore(), nomeCom = ist => { const c = r.comuni.get(ist); return c ? `${c.nome} (${c.sigla})` : ist; };
-      const linhaPedido = p => `${p.id}  ${p.stato.padEnd(9)} ${(p.pagamento ?? 'non pagato').padEnd(10)} ${p.prodotto === 'cartellone' ? '📣' : '🏪'} ${p.nome} · ${nomeCom(p.istat)} · ${p.email}${p.su_misura ? ` · SU MISURA (${p.pagamento_su_misura ?? 'non pagato'})` : ''}`;
+      // até onde a pessoa chegou: pagou / abandonou dentro da Hotmart / clicou em pagar / só preencheu; sem pagar há 48 h = scaduto
+      const scaduto = p => p.pagamento !== 'pagato' && Date.now() - Date.parse(p.creato) > 48 * 3600e3;
+      const fase = p => p.pagamento ?? (p.checkout === 'abbandonato' ? '🛒 carrello' : p.clic_pagamento ? '💳 cliccato' : scaduto(p) ? '⌛ scaduto' : 'non pagato');
+      const linhaPedido = p => `${p.id}  ${p.stato.padEnd(9)} ${fase(p).padEnd(11)} ${p.prodotto === 'cartellone' ? '📣' : '🏪'} ${p.nome} · ${nomeCom(p.istat)} · ${p.email}${p.su_misura ? ` · SU MISURA (${p.pagamento_su_misura ?? 'non pagato'})` : ''}`;
       if (cmd === 'negozi') {
         const ids = ftp.listar(remoto).filter(n => /^\d{6}-[0-9a-f]{8}\.json$/.test(n)).map(n => n.slice(0, -5)).sort();
         const lista = ids.map(id => { ftp.baixar(`${remoto}${id}.json`, path.join(local, `${id}.json`)); return ler(path.join(local, `${id}.json`), null); }).filter(Boolean);
-        const mostrar = args[0] === 'tutti' ? lista : lista.filter(p => p.stato === 'nuovo');
+        const mostrar = args[0] === 'tutti' ? lista : lista.filter(p => p.stato === 'nuovo' && !scaduto(p));
         console.log(mostrar.length ? mostrar.map(linhaPedido).join('\n') : `Nenhum pedido ${args[0] === 'tutti' ? '' : 'novo '}(${lista.length} no total).`);
+        const n = lista.filter(p => p.stato === 'nuovo' && scaduto(p)).length;
+        if (args[0] !== 'tutti' && n) console.log(`(+${n} sem pagamento há mais de 48 h: "negozi tutti" mostra)`);
         break;
       }
       const p = baixarPedido(args[0]);

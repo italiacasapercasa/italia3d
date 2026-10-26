@@ -15,6 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') resposta(405, ['ok' => false]);
 $pasta = CARTELLA . '/negozi';
 if (!is_dir($pasta)) mkdir($pasta, 0750, true);
 
+// ?clic=<id>: a pessoa tocou em "Vai al pagamento" (sendBeacon) — só marca a hora, uma vez
+$clic = (string)($_GET['clic'] ?? '');
+if ($clic !== '') {
+    if (preg_match('/^\d{6}-[0-9a-f]{8}$/', $clic) && is_file("$pasta/$clic.json")) {
+        $p = json_decode((string)file_get_contents("$pasta/$clic.json"), true) ?: [];
+        if (empty($p['clic_pagamento'])) {
+            $p['clic_pagamento'] = gmdate('c');
+            file_put_contents("$pasta/$clic.json", json_encode($p, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
+        }
+    }
+    http_response_code(204); exit;
+}
+
 // limite simples: 8 pedidos por hora por IP
 $ip = hash('sha256', (string)($_SERVER['REMOTE_ADDR'] ?? '') . APP_SECRET);
 $arqIp = $pasta . '/.limite-' . substr($ip, 0, 16);
@@ -47,9 +60,23 @@ $giocatore = strtolower(ltrim(trim((string)($d['giocatore'] ?? '')), '@'));
 if ($giocatore !== '' && !preg_match('/^[a-z0-9._]{1,30}$/', $giocatore)) erro('giocatore', 'Solo lettere, numeri, punto e trattino basso.');
 $email = trim((string)($d['email'] ?? ''));
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 120) erro('email', 'Controlla la tua email.');
+// e-mails de teste e erros de digitação comuns (gmail.con, gmial.com...)
+if (preg_match('/^(test|prova|esempio|example|asd|aaa+|xxx+)@|@(example|test)\./i', $email)) erro('email', 'Scrivi la tua email vera: ti mandiamo lì la conferma.');
+if (preg_match('/@(gmail|hotmail|libero|yahoo|outlook|icloud|live|alice|virgilio)\.(con|cm|om|co|comm)$|@(gmial|gmai|gamil|hotmial|hotmal)\./i', $email)) erro('email', 'Controlla la tua email: sembra esserci un errore di battitura.');
 if (empty($d['consenso'])) erro('consenso', 'Per continuare, accetta le condizioni.');
+// parolacce nel nome, nella descrizione o nel messaggio
+$VIETATE = '/\b(cazz\w*|figa|fica|tette|troi[ae]|puttan\w*|merd[ae]|stronz\w*|coglion\w*|porco ?dio|dio ?(cane|porco)|vaffanculo|culo|negr[oi])\b/iu';
+foreach (['nome' => $nome, 'descrizione' => $descrizione, 'testo' => $testo] as $campo => $v) if (preg_match($VIETATE, $v)) erro($campo, 'Questo testo non è adatto alla mappa: riscrivilo, per favore.');
 
-$id = date('ymd') . '-' . bin2hex(random_bytes(4));
+// mesmo e-mail + mesmo nome, ainda sem pagamento, nas últimas 48 h: atualiza esse pedido em vez de criar outro
+$id = '';
+$chaveNome = strtolower(preg_replace('/\W+/u', '', $nome) ?? '');
+foreach (glob("$pasta/[0-9][0-9][0-9][0-9][0-9][0-9]-*.json") ?: [] as $a) {
+    $p = json_decode((string)file_get_contents($a), true) ?: [];
+    if (strtolower((string)($p['email'] ?? '')) === strtolower($email) && strtolower(preg_replace('/\W+/u', '', (string)($p['nome'] ?? '')) ?? '') === $chaveNome
+        && ($p['stato'] ?? '') === 'nuovo' && empty($p['pagamento']) && strtotime((string)($p['creato'] ?? '')) > $agora - 48 * 3600) { $id = $p['id']; break; }
+}
+$id = $id ?: date('ymd') . '-' . bin2hex(random_bytes(4));
 $logo = '';
 if (!empty($d['logo'])) {
     if (!preg_match('#^data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$#', (string)$d['logo'], $m)) erro('logo', 'Il logo deve essere PNG, JPG o WebP.');

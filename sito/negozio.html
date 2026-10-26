@@ -148,7 +148,8 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const f = $('#f1'), qs = new URLSearchParams(location.search);
 // a Hotmart soma o IVA no checkout (22% na Itália) e zera para quem informa Partita IVA da UE
-const NOTA_IVA = '<div class="aiuto" style="margin-top:6px">IVA 22% calcolata al pagamento. Con Partita IVA UE è azzerata.</div>';
+const NOTA_IVA = '<div class="aiuto" style="margin-top:6px">Il totale con IVA 22% è quello che paghi. Con Partita IVA UE l’IVA è azzerata.</div>';
+const conIva = c => euro(Math.round(c * 1.22));
 const COLORI = ['#E0473C', '#F28C28', '#FFC93C', '#3E8E4E', '#1F9E89', '#2F7DD1', '#6C4FD3', '#D94F8A', '#7A4B2A', '#152033'];
 let cfg, citta = [], scelta = null, logoDato = '', logoImg = null, idPedido = null;
 
@@ -337,7 +338,7 @@ function mostraPiano() {
   el.className = `piano${r <= 0 ? ' pieno' : ''}`;
   el.innerHTML = r <= 0
     ? `Non ci sono più posti a ${esc(scelta.nome)} per ora. Scegli una città vicina.`
-    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> + IVA per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}${suMisura() ? ` · <b>+ su misura ${euro(cfg.su_misura.prezzo)}</b>` : ''}${NOTA_IVA}`;
+    : `${PRODOTTI[prodotto()].emoji} Piano ${esc(p.nome)} · ${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}<span class="prezzo">${euro(pr.lancio)}</span> + IVA per ${cfg.durata_giorni} giorni${pr.pieno > pr.lancio ? ' · prezzo di lancio' : ''} · ${r === 1 ? 'resta 1 posto' : `restano ${r} posti`}${suMisura() ? ` · <b>+ su misura ${euro(cfg.su_misura.prezzo)}</b>` : ''}<br><b>Totale: ${conIva(pr.lancio + (suMisura() ? cfg.su_misura.prezzo : 0))} IVA inclusa</b>${NOTA_IVA}`;
   const rm = restantiMisura();
   $('#prezzo-misura').textContent = cfg?.su_misura ? `(+${euro(cfg.su_misura.prezzo)} + IVA${scelta ? `, ${rm <= 0 ? 'esauriti' : rm === 1 ? 'ne resta 1' : `ne restano ${rm}`} a ${scelta.nome}` : ''})` : '';
 }
@@ -369,6 +370,8 @@ function valida(d) {
   const cifre = d.whatsapp.replace(/\D/g, '');
   if (cifre.length < 8 || cifre.length > 15) e.whatsapp = 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) e.email = 'Controlla la tua email.';
+  else if (/^(test|prova|esempio|example|asd|aaa+|xxx+)@|@(example|test)\./i.test(d.email)) e.email = 'Scrivi la tua email vera: ti mandiamo lì la conferma.';
+  else if (/@(gmail|hotmail|libero|yahoo|outlook|icloud|live|alice|virgilio)\.(con|cm|om|co|comm)$|@(gmial|gmai|gamil|hotmial|hotmal)\./i.test(d.email)) e.email = 'Controlla la tua email: sembra esserci un errore di battitura.';
   if (d.giocatore && !/^[a-z0-9._]{1,30}$/.test(d.giocatore)) e.giocatore = 'Solo lettere, numeri, punto e trattino basso.';
   if (d.prodotto === 'cartellone' && !d.testo) e.testo = 'Scrivi il messaggio del cartellone.';
   if (d.su_misura && restantiMisura() <= 0) e.citta = 'In questa città i negozi su misura sono esauriti: togli «su misura» o scegli un’altra città.';
@@ -407,6 +410,7 @@ f.addEventListener('submit', async e => {
     ['Durata', `${cfg.durata_giorni} giorni dall’approvazione`],
     ['Prezzo', `${pr.pieno > pr.lancio ? `<s>${euro(pr.pieno)}</s> ` : ''}${euro(pr.lancio)} + IVA`],
     ...(d.su_misura ? [['Su misura', `+${euro(cfg.su_misura.prezzo)} + IVA`]] : []),
+    ['Totale', `<b>${conIva(pr.lancio + (d.su_misura ? cfg.su_misura.prezzo : 0))} IVA inclusa</b>`],
   ].map(([a, b]) => `<div class="linha"><span>${a}</span><span>${b}</span></div>`).join('') + NOTA_IVA + (d.descrizione ? `<p class="sub">«${esc(d.descrizione)}»</p>` : '');
   passo(2);
 });
@@ -434,6 +438,8 @@ $('#vai-pagare').onclick = async () => {
              <a class="botao sec" href="${esc(conCodice(linkMisura))}" target="_blank" rel="noopener">🎨 2 · Paga «su misura»</a>`
           : `<a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>`}
         <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
+      // avisa o servidor que a pessoa foi para o pagamento (para saber quem desiste antes ou dentro da Hotmart)
+      $('#p3').querySelectorAll('a.botao').forEach(a => a.addEventListener('click', () => navigator.sendBeacon?.(`api/negozio.php?clic=${idPedido}`), { once: true }));
     } else {
       $('#p3').innerHTML = `
         <div class="ok"><h2>Richiesta ricevuta! 🎉</h2>
