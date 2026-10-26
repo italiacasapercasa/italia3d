@@ -69,21 +69,28 @@ export class Mappa {
     tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
     tex.needsUpdate = true;
     const mat = this.matTerreno = new THREE.MeshBasicMaterial({ map: tex });
+    const mappaRef = this;
     // relevo facetado (low-poly) no zoom médio: cada triângulo da malha ganha sombra própria pela inclinação
     // (normal calculada no fragmento) e um leve tom aleatório; some de perto e na vista do país inteiro
     this.facce = { value: 0 };
+    // o mar pintado na textura (#8EBFD2) segue a cor do mar atual (de noite fica escuro como o resto do mar)
+    this.corMarTex = { value: new THREE.Color(COR_MAR) };
     mat.onBeforeCompile = sh => {
       sh.uniforms.facce = this.facce;
+      sh.uniforms.corMarTex = this.corMarTex;
+      sh.uniforms.corMar = { get value() { return mappaRef.mar.material.color; } };
       sh.vertexShader = sh.vertexShader
         .replace('#include <common>', '#include <common>\nattribute float faccia; flat varying float vFaccia; varying vec3 vMondo;')
         .replace('#include <begin_vertex>', '#include <begin_vertex>\nvFaccia = faccia; vMondo = (modelMatrix * vec4(transformed, 1.0)).xyz;');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform float facce; flat varying float vFaccia; varying vec3 vMondo;')
+        .replace('#include <common>', '#include <common>\nuniform float facce; uniform vec3 corMarTex; uniform vec3 corMar; flat varying float vFaccia; varying vec3 vMondo;')
         .replace('#include <map_fragment>', `#include <map_fragment>
+          float mare = smoothstep(0.06, 0.015, distance(sampledDiffuseColor.rgb, corMarTex));
           vec3 nf = normalize(cross(dFdx(vMondo), dFdy(vMondo))); if (nf.y < 0.0) nf = -nf;
           nf = normalize(vec3(nf.x * 4.0, nf.y, nf.z * 4.0));   // realça a inclinação (o relevo da malha é suave)
           float luce = 0.7 + 0.42 * clamp(dot(nf, normalize(vec3(-0.55, 1.0, 0.4))), 0.0, 1.0) + (vFaccia - 0.5) * 0.2;
-          diffuseColor.rgb *= mix(1.0, luce, facce);`);
+          diffuseColor.rgb *= mix(1.0, luce, facce * (1.0 - mare));
+          diffuseColor.rgb = mix(diffuseColor.rgb, corMar, mare);`);
     };
     // blocos de 32x32 quadrados: a câmera de perto só desenha os blocos visíveis
     const fac = new Float32Array(GW * GH);

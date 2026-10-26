@@ -1,0 +1,52 @@
+{
+ "nome": "notte",
+ "durata": 23,
+ "titolo": "DI NOTTE",
+ "sottotitolo": "L'ITALIA",
+ "citta_vicino": "Napoli",
+ "esempio": { "citta": "Napoli", "conta": "@il.tuo.nome", "luogo": "Napoli, NA" },
+ "commento": { "utente": "il.tuo.nome", "testo": "Napoli, Campania" },
+ "banner": "📍 COMMENTA LA TUA CITTÀ E REGIONE",
+ "frasi": [
+  { "linee": [[["QUANDO", 0], ["IN", 0], ["ITALIA", 0]], [["CALA", 0], ["LA", 0], ["NOTTE", 0, true]]] },
+  { "linee": [[["LA", 0], ["MAPPA", 0]], [["SI", 0, true], ["ACCENDE", 0, true]]] },
+  { "linee": [[["OGNI", 0], ["LUCE", 0, true]], [["È", 0], ["UNA", 0], ["CASA", 0, true]]] },
+  { "linee": [[["E", 0], ["OGNI", 0], ["CASA", 0]], [["È", 0], ["UNA", 0], ["PERSONA", 0, true]]] },
+  { "linee": [[["CHE", 0], ["HA", 0], ["SCRITTO", 0]], [["LA", 0], ["SUA", 0], ["CITTÀ", 0, true]]] },
+  { "linee": [[["PIÙ", 0], ["DI", 0]], [["7.000", 0, true], ["LUCI", 0, true]]] },
+  { "linee": [[["DA", 0], ["BOLZANO", 0, true]], [["A", 0], ["PALERMO", 0, true]]] },
+  { "linee": [[["MA", 0], ["CI", 0], ["SONO", 0], ["ANCORA", 0]], [["CITTÀ", 0], ["COMPLETAMENTE", 0]], [["AL", 0, true], ["BUIO", 0, true]]] },
+  { "linee": [[["ACCENDI", 0, true]], [["LA", 0], ["TUA", 0, true]]] },
+  { "linee": [[["SCRIVI", 0, true], ["LA", 0], ["TUA", 0], ["CITTÀ", 0, true]], [["E", 0], ["LA", 0], ["REGIONE", 0, true]], [["NEI", 0], ["COMMENTI", 0]]] },
+  { "linee": [[["QUALE", 0], ["REGIONE", 0]], [["BRILLERÀ", 0, true]], [["DI", 0, true], ["PIÙ?", 0, true]]] }
+ ],
+ "parlato": [
+  "Quando in Italia cala la notte,",
+  "la mappa si accende.",
+  "Ogni luce è una casa.",
+  "E ogni casa è una persona che ha scritto la sua città.",
+  "Più di settemila luci,",
+  "da Bolzano a Palermo.",
+  "Ma ci sono ancora città completamente al buio.",
+  "Accendi la tua:",
+  "scrivi la tua città e la regione nei commenti.",
+  "Quale regione brillerà di più?"
+ ],
+ "frasi_parlato": [0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9],
+ "eventi": {},
+ "sincro": {
+  "eventi.notte": [0, 4, 0],
+  "eventi.accende": [1, 2, -0.1],
+  "eventi.citta": [2, 0, -0.15],
+  "eventi.persona": [3, 5, 0],
+  "eventi.paese": [4, 0, -0.15],
+  "eventi.bolzano": [5, 1, -0.1],
+  "eventi.palermo": [5, 3, -0.1],
+  "eventi.buio": [6, 0, -0.15],
+  "eventi.accendi": [7, 0, -0.15],
+  "eventi.commento": [8, 0, -0.1],
+  "eventi.scrivi_a": [8, 4, 0],
+  "eventi.lucemia": [8, 8, 0],
+  "eventi.regioni": [9, 0, -0.15]
+ }
+}

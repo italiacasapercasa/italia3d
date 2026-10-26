@@ -1,0 +1,507 @@
+{
+ "nome": "notte",
+ "durata": 23.2,
+ "titolo": "DI NOTTE",
+ "sottotitolo": "L'ITALIA",
+ "citta_vicino": "Napoli",
+ "esempio": {
+  "citta": "Napoli",
+  "conta": "@il.tuo.nome",
+  "luogo": "Napoli, NA"
+ },
+ "commento": {
+  "utente": "il.tuo.nome",
+  "testo": "Napoli, Campania"
+ },
+ "banner": "📍 COMMENTA LA TUA CITTÀ E REGIONE",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "QUANDO",
+      0.03
+     ],
+     [
+      "IN",
+      0.346
+     ],
+     [
+      "ITALIA",
+      0.528
+     ]
+    ],
+    [
+     [
+      "CALA",
+      0.979
+     ],
+     [
+      "LA",
+      1.296
+     ],
+     [
+      "NOTTE",
+      1.477,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 2.033
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      2.063
+     ],
+     [
+      "MAPPA",
+      2.267
+     ]
+    ],
+    [
+     [
+      "SI",
+      2.62,
+      true
+     ],
+     [
+      "ACCENDE",
+      2.823,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.063,
+   "fim": 3.866
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      3.896
+     ],
+     [
+      "LUCE",
+      4.245,
+      true
+     ]
+    ],
+    [
+     [
+      "È",
+      4.594
+     ],
+     [
+      "UNA",
+      4.795
+     ],
+     [
+      "CASA",
+      5.144,
+      true
+     ]
+    ]
+   ],
+   "ini": 3.896,
+   "fim": 5.943
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      5.973
+     ],
+     [
+      "OGNI",
+      6.147
+     ],
+     [
+      "CASA",
+      6.45
+     ]
+    ],
+    [
+     [
+      "È",
+      6.753
+     ],
+     [
+      "UNA",
+      6.927
+     ],
+     [
+      "PERSONA",
+      7.23,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.973,
+   "fim": 7.631
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      7.661
+     ],
+     [
+      "HA",
+      7.835
+     ],
+     [
+      "SCRITTO",
+      8.009
+     ]
+    ],
+    [
+     [
+      "LA",
+      8.312
+     ],
+     [
+      "SUA",
+      8.486
+     ],
+     [
+      "CITTÀ",
+      8.66,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.661,
+   "fim": 9.443
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      9.473
+     ],
+     [
+      "DI",
+      9.674
+     ]
+    ],
+    [
+     [
+      "7.000",
+      9.874,
+      true
+     ],
+     [
+      "LUCI",
+      10.522,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.473,
+   "fim": 11.125
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      11.155
+     ],
+     [
+      "BOLZANO",
+      11.379,
+      true
+     ]
+    ],
+    [
+     [
+      "A",
+      11.934
+     ],
+     [
+      "PALERMO",
+      12.158,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.155,
+   "fim": 13.183
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      13.213
+     ],
+     [
+      "CI",
+      13.392
+     ],
+     [
+      "SONO",
+      13.571
+     ],
+     [
+      "ANCORA",
+      13.883
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      14.328
+     ],
+     [
+      "COMPLETAMENTE",
+      14.64
+     ]
+    ],
+    [
+     [
+      "AL",
+      15.351,
+      true
+     ],
+     [
+      "BUIO",
+      15.53,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.213,
+   "fim": 16.144
+  },
+  {
+   "linee": [
+    [
+     [
+      "ACCENDI",
+      16.174,
+      true
+     ]
+    ],
+    [
+     [
+      "LA",
+      16.655
+     ],
+     [
+      "TUA",
+      16.849,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.174,
+   "fim": 17.392
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      17.422,
+      true
+     ],
+     [
+      "LA",
+      17.736
+     ],
+     [
+      "TUA",
+      17.917
+     ],
+     [
+      "CITTÀ",
+      18.097,
+      true
+     ]
+    ],
+    [
+     [
+      "E",
+      18.411
+     ],
+     [
+      "LA",
+      18.592
+     ],
+     [
+      "REGIONE",
+      18.772,
+      true
+     ]
+    ],
+    [
+     [
+      "NEI",
+      19.22
+     ],
+     [
+      "COMMENTI",
+      19.401
+     ]
+    ]
+   ],
+   "ini": 17.422,
+   "fim": 20.239
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUALE",
+      20.269
+     ],
+     [
+      "REGIONE",
+      20.593
+     ]
+    ],
+    [
+     [
+      "BRILLERÀ",
+      21.055,
+      true
+     ]
+    ],
+    [
+     [
+      "DI",
+      21.516,
+      true
+     ],
+     [
+      "PIÙ?",
+      21.702,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.269,
+   "fim": 22.9
+  }
+ ],
+ "parlato": [
+  "Quando in Italia cala la notte,",
+  "la mappa si accende.",
+  "Ogni luce è una casa.",
+  "E ogni casa è una persona che ha scritto la sua città.",
+  "Più di settemila luci,",
+  "da Bolzano a Palermo.",
+  "Ma ci sono ancora città completamente al buio.",
+  "Accendi la tua:",
+  "scrivi la tua città e la regione nei commenti.",
+  "Quale regione brillerà di più?"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  3,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "eventi": {
+  "notte": 1.296,
+  "accende": 2.52,
+  "citta": 3.746,
+  "persona": 7.23,
+  "paese": 9.323,
+  "bolzano": 11.279,
+  "palermo": 12.058,
+  "buio": 13.063,
+  "accendi": 16.024,
+  "commento": 17.322,
+  "scrivi_a": 18.411,
+  "lucemia": 19.401,
+  "regioni": 20.119
+ },
+ "sincro": {
+  "eventi.notte": [
+   0,
+   4,
+   0
+  ],
+  "eventi.accende": [
+   1,
+   2,
+   -0.1
+  ],
+  "eventi.citta": [
+   2,
+   0,
+   -0.15
+  ],
+  "eventi.persona": [
+   3,
+   5,
+   0
+  ],
+  "eventi.paese": [
+   4,
+   0,
+   -0.15
+  ],
+  "eventi.bolzano": [
+   5,
+   1,
+   -0.1
+  ],
+  "eventi.palermo": [
+   5,
+   3,
+   -0.1
+  ],
+  "eventi.buio": [
+   6,
+   0,
+   -0.15
+  ],
+  "eventi.accendi": [
+   7,
+   0,
+   -0.15
+  ],
+  "eventi.commento": [
+   8,
+   0,
+   -0.1
+  ],
+  "eventi.scrivi_a": [
+   8,
+   4,
+   0
+  ],
+  "eventi.lucemia": [
+   8,
+   8,
+   0
+  ],
+  "eventi.regioni": [
+   9,
+   0,
+   -0.15
+  ]
+ },
+ "audio": {
+  "arquivo": "notte.mp3",
+  "durata": 22.12
+ }
+}
