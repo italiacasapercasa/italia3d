@@ -46,7 +46,16 @@ export const REGOLE = {
   cartellone_da: 15,           // cidades com pelo menos estas casas mostram um outdoor "LA TUA PUBBLICITÀ QUI"
   // Natal na piazza (mês-dia, hora de Roma): árvore e luminárias
   natale: { da: '11-28', a: '01-06' },
+  halloween: { da: '10-27', a: '10-31' },
 };
+
+// Halloween: abóboras nas casas e na piazza (?halloween=1 / ?halloween=0 forçam nos testes)
+export function halloweenAttivo(ts = Date.now()) {
+  const f = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('halloween') : null;
+  if (f !== null) return f !== '0';
+  const md = new Date(ts).toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' }).slice(5);
+  return md >= REGOLE.halloween.da && md <= REGOLE.halloween.a;
+}
 
 // o Natal está ativo nesta data? (?natale=1 / ?natale=0 forçam nos testes)
 export function nataleAttivo(ts = Date.now()) {

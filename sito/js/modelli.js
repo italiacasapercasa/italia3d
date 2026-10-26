@@ -222,6 +222,36 @@ export function geometriaLuceLampione() {
   return b.geometria();
 }
 
+// ---------- Halloween ----------
+// abóbora (em lotes, base no chão, cara virada para +z); x/z/s posicionam dentro do lote da casa
+function zuccaEm(b, x, z, s) {
+  for (let k = 0; k < 6; k++) {
+    const a = k / 6 * Math.PI * 2, g = new THREE.SphereGeometry(0.045 * s, 8, 6);
+    g.scale(0.75, 1, 0.75); b.add(g, k % 2 ? '#E8751A' : '#F28C28', x + Math.cos(a) * 0.022 * s, 0.045 * s, z + Math.sin(a) * 0.022 * s);
+  }
+  b.cilindro(0.008 * s, 0.025 * s, x, 0.085 * s, z, '#4E7A2A', 5);
+}
+// cara da abóbora: olhos e boca (escuros de dia, acesos à noite)
+function facciaZucca(b, x, z, s, cor) {
+  const zz = z + 0.06 * s;
+  for (const dx of [-0.022, 0.022]) b.caixa(0.016 * s, 0.016 * s, 0.006 * s, x + dx * s, 0.05 * s, zz, cor);
+  b.caixa(0.05 * s, 0.012 * s, 0.006 * s, x, 0.025 * s, zz, cor);
+}
+// posições: uma ao lado da porta da casa; na piazza, uma gigante
+const ZUCCA_CASA = [0.3, 0.4, 1.8], ZUCCA_PIAZZA = [-0.9, 0.25, 6];
+export function geometriaZucca(dove = 'casa') {
+  const [x, z, s] = dove === 'casa' ? ZUCCA_CASA : ZUCCA_PIAZZA, b = new Construtor();
+  zuccaEm(b, x, z, s); facciaZucca(b, x, z, s, '#3A2410');
+  if (dove === 'piazza') for (const [dx, dz, k] of [[0.35, 0.05, 0.7], [-0.32, 0.1, 0.55]]) { zuccaEm(b, x + dx, z + dz, k * s * 0.6); facciaZucca(b, x + dx, z + dz, k * s * 0.6, '#3A2410'); }
+  return b.geometria();
+}
+export function geometriaZuccaLuce(dove = 'casa') {
+  const [x, z, s] = dove === 'casa' ? ZUCCA_CASA : ZUCCA_PIAZZA, b = new Construtor();
+  facciaZucca(b, x, z + 0.002, s, '#FFB437');
+  if (dove === 'piazza') for (const [dx, dz, k] of [[0.35, 0.05, 0.7], [-0.32, 0.1, 0.55]]) facciaZucca(b, x + dx, z + dz + 0.002, k * s * 0.6, '#FFB437');
+  return b.geometria();
+}
+
 // trulli de Alberobello (Puglia) para os três primeiros níveis
 function trullo(b, r, x, z, cor = '#F7F4EC') {
   b.cilindro(r, r * 1.3, x, 0, z, cor, 12).cone(r * 1.15, r * 1.6, x, r * 1.3, z, '#8E8A80', 12).esfera(r * 0.18, x, r * 2.95, z, cor);

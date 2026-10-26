@@ -1,8 +1,8 @@
 // Cidades 3D: quadras em espiral ao redor da piazza, casas por nível e prédios especiais.
 // Só as cidades perto da câmera entram nos InstancedMesh (atualizado quando a câmera anda).
 import * as THREE from 'three';
-import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria, stileRegione, geometriaFinestre, geometriaLampione, geometriaLuceLampione } from './modelli.js';
-import { REGOLE, nataleAttivo } from './regole.js';
+import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria, stileRegione, geometriaFinestre, geometriaLampione, geometriaLuceLampione, geometriaZucca, geometriaZuccaLuce } from './modelli.js';
+import { REGOLE, nataleAttivo, halloweenAttivo } from './regole.js';
 import { texturaVendita, texturaLavori, texturaPubblicita, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
 import { creaNegozio3D } from './negozio3d.js';
 
@@ -148,6 +148,13 @@ export class Citta {
     const matNotte = new THREE.MeshBasicMaterial({ vertexColors: true });
     const matAlone = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
     const addNotte = (nome, geo, m = matNotte) => new Camada(this.grupoNotte, geo, m, nome);
+    this.halloween = halloweenAttivo();
+    if (this.halloween) {
+      this.camadas.zucca = add('zucca', geometriaZucca('casa'));
+      this.camadas.zuccaP = add('zuccaP', geometriaZucca('piazza'));
+      this.camadas.zuccaL = addNotte('zuccaL', geometriaZuccaLuce('casa'));
+      this.camadas.zuccaPL = addNotte('zuccaPL', geometriaZuccaLuce('piazza'));
+    }
     this.camadas.lampione = add('lampione', geometriaLampione());
     this.camadas.lampLuce = addNotte('lampLuce', geometriaLuceLampione(), matAlone);
     // casas: camada por nível, variante de cor e estilo regional, criada só quando aparece uma ("c<nível>_<var>_<estilo>");
@@ -243,7 +250,10 @@ export class Citta {
       if (!usados.has(`${i + 1},${j}`)) push('borda', matriz(cx + QW / 2, hc, cz, Math.PI / 2, QH, prof, 1));
       if (!usados.has(`${i - 1},${j}`)) push('borda', matriz(cx - QW / 2, hc, cz, -Math.PI / 2, QH, prof, 1));
       const esp = (t) => push(t, matriz(cx, hc + 0.001, cz, 0, LOTE));
-      if (p === 'piazza') { esp('piazza'); push('bandiera', matriz(cx + 1.45 * LOTE, hc + 0.001, cz + 0.55 * LOTE, 0, LOTE)); }
+      if (p === 'piazza') {
+        esp('piazza'); push('bandiera', matriz(cx + 1.45 * LOTE, hc + 0.001, cz + 0.55 * LOTE, 0, LOTE));
+        if (this.halloween) { const mz = matriz(cx, hc + 0.001, cz, 0, LOTE); push('zuccaP', mz); push('zuccaPL', mz); }
+      }
       else if (p === 'chiesa') esp(l.case >= M.chiesa ? 'chiesa' : 'parco');
       else if (p === 'palazzina') esp(l.case >= (palazzinaN(r) + 1) * M.palazzinaOgni ? 'palazzina' : 'parco');
       else if (p === 'ospedale') esp(l.case >= M.ospedale ? 'ospedale' : 'parco');
@@ -265,6 +275,7 @@ export class Citta {
       const m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
       push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, m);
       push(`f${casa.livello}_${stile}`, m);
+      if (this.halloween) { push('zucca', m); push('zuccaL', m); }
       c.casas.push(ci);
     }
     // lotes livres depois da última casa (só desenho) e o outdoor à venda

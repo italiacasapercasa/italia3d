@@ -2,6 +2,7 @@
 // Testes: ?notte=1 / ?notte=0 forçam a noite; ?fuochi=capodanno|ferragosto|repubblica|patrono|elezione forçam uma festa.
 import * as THREE from 'three';
 import { posLote, DIST_CIDADE } from './citta.js';
+import { halloweenAttivo } from './regole.js';
 
 const qs = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
 const RAD = Math.PI / 180;
@@ -80,6 +81,7 @@ export class Festa {
     if (capodanno || forca === 'capodanno') { top.slice(0, 45).forEach(l => citta(l, 0.45)); avvisi.push('🎆 Buon anno da Italia Casa per Casa!'); }
     if (ferragosto || forca === 'ferragosto') { top.slice(0, 40).forEach(l => citta(l, 0.35)); avvisi.push('🎆 Buon Ferragosto!'); }
     if (repubblica || forca === 'repubblica') { top.slice(0, 30).forEach(l => citta(l, 0.3, TRICOLORE)); avvisi.push('🇮🇹 Festa della Repubblica'); }
+    if (halloweenAttivo(agora)) avvisi.push('🎃 Buon Halloween! Quale città fa più paura?');
     // Frecce Tricolori: desligadas do calendário automático (o dono liga perto de 2 de junho); prévia com ?fuochi=frecce
     const frecce = forca === 'frecce';
     if (frecce && !avvisi.includes('🇮🇹 Festa della Repubblica')) avvisi.push('🇮🇹 Festa della Repubblica: passano le Frecce Tricolori!');
