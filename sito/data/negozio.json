@@ -1,7 +1,7 @@
 {
   "aperto": true,
   "durata_giorni": 30,
-  "su_misura": { "attivo": false, "prezzo": 990, "posti_per_citta": 3, "checkout": "" },
+  "su_misura": { "attivo": false, "prezzo": 990, "posti_per_citta": 3, "checkout": "https://pay.hotmart.com/R108193326G?off=crctj96h" },
   "piani": [
     { "id": "metropoli", "nome": "Metropoli", "da": 250000, "posti": { "negozio": 6, "cartellone": 2 }, "prezzo": { "negozio": { "pieno": 3990, "lancio": 1990 }, "cartellone": { "pieno": 5990, "lancio": 2990 } } },
     { "id": "citta", "nome": "Città", "da": 30000, "posti": { "negozio": 4, "cartellone": 2 }, "prezzo": { "negozio": { "pieno": 2990, "lancio": 1490 }, "cartellone": { "pieno": 3990, "lancio": 1990 } } },

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Immagine prodotto · Negozio su misura</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; }
+  html, body { margin: 0; width: 1024px; height: 1024px; overflow: hidden; font-family: 'Nunito', sans-serif; background: linear-gradient(#9FD3EC, #E6F5FB 70%); }
+  canvas { position: absolute; inset: 0; width: 1024px; height: 1024px; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 14px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; text-align: center; position: absolute; left: 0; right: 0; }
+  .g { color: var(--giallo); }
+  #sopra { top: 46px; font-size: 40px; -webkit-text-stroke-width: 10px; }
+  #titolo { top: 92px; font-size: 118px; line-height: 1; }
+  #sotto { bottom: 50px; font-size: 44px; -webkit-text-stroke-width: 11px; }
+  #logo { position: absolute; left: 36px; bottom: 36px; width: 96px; height: 96px; border-radius: 22px; border: 5px solid var(--ink); }
+  #sotto { left: 140px; right: 20px; }
+  #prezzo { position: absolute; right: 40px; top: 250px; background: var(--giallo); border: 6px solid var(--ink); border-radius: 22px; padding: 8px 18px; font-weight: 900; font-size: 34px; color: var(--ink); transform: rotate(6deg); box-shadow: 0 6px 0 rgba(21,32,51,.25); }
+</style>
+</head>
+<body>
+<canvas id="c" width="1024" height="1024"></canvas>
+<div id="sopra" class="forte">Italia Casa per Casa</div>
+<div id="titolo" class="forte">Su <span class="g">misura</span></div>
+<div id="sotto" class="forte">Il tuo negozio, <span class="g">come vuoi tu</span></div>
+<img id="logo" src="img/logo.png" alt="">
+<script type="module">
+import * as THREE from 'three';
+import { creaNegozio3D } from './js/negozio3d.js';
+import { fontePronta } from './js/insegne.js';
+await document.fonts.ready; await fontePronta;
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+r.setPixelRatio(1);
+const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 0.05, 50);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c7a8, 2.3));
+const sol = new THREE.DirectionalLight(0xfff1dc, 2.4); sol.position.set(-0.55, 1, 0.4); scene.add(sol);
+const chao = new THREE.Mesh(new THREE.CircleGeometry(3.2, 64), new THREE.MeshLambertMaterial({ color: '#A9D58A' }));
+chao.rotation.x = -Math.PI / 2; scene.add(chao);
+const strada = new THREE.Mesh(new THREE.PlaneGeometry(6, 0.7), new THREE.MeshLambertMaterial({ color: '#9AA3AE' }));
+strada.rotation.x = -Math.PI / 2; strada.position.set(0, 0.002, 0.95); scene.add(strada);
+const negozi = [
+  { nome: 'Pizzeria Bella Napoli', colore: '#3E8E4E', x: 0, z: 0, ry: -0.35, s: 1.25, stile: { tenda: 'righe', coloreTenda: '#3E8E4E', coloreRighe: '#FFFFFF', facciata: '#FFE08A', porta: '#152033', bordo: '#B0623A', piani: 2, vetrina: 'larga', insegna: 'neon', oggetto: 'pizza', scala: 1.15, ornamenti: ['dehors', 'luci', 'bandierine'] } },
+  { nome: 'Gelateria Dolce', colore: '#D94F8A', x: -1.25, z: -0.75, ry: 0.15, s: 1, stile: { tenda: 'righe', coloreTenda: '#D94F8A', coloreRighe: '#FFFFFF', facciata: '#F7D7DC', porta: '#FFFFFF', bordo: '#F6F3EC', piani: 1, insegna: 'cassonetto', oggetto: 'gelato', scala: 1.2, ornamenti: ['vasi'] } },
+  { nome: 'Bar Centrale', colore: '#2F7DD1', x: 1.3, z: -0.7, ry: -0.6, s: 1, stile: { tenda: 'liscia', coloreTenda: '#2F7DD1', facciata: '#DDE8F2', porta: '#7A4B2A', bordo: '#152033', piani: 1, insegna: 'bandiera', oggetto: 'caffe', scala: 1.2, ornamenti: ['dehors', 'vasi'] } },
+];
+let pronto = false;
+const render = () => { if (pronto) r.render(scene, cam); };
+for (const n of negozi) { const g = creaNegozio3D(n, { aoMudar: render }); g.position.set(n.x, 0, n.z); g.rotation.y = n.ry; g.scale.setScalar(n.s); scene.add(g); }
+cam.position.set(1.0, 2.6, 6.2); cam.lookAt(0, 0.95, -0.3);
+pronto = true;
+render();
+window.pronto = true;
+</script>
+</body>
+</html>
