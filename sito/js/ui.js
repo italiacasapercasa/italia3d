@@ -642,11 +642,22 @@ export class UI {
         <label>La tua email<input type="email" name="email" required placeholder="nome@esempio.it"></label>
         <label>Il tuo Instagram (facoltativo)<input name="conta" placeholder="@il_tuo_account"></label>
         <button type="submit">Avvisami per primo</button>
-      </form>`);
-    $('#lista-attesa').onsubmit = e => {
+      </form>
+      <p class="nota">Usiamo la tua email solo per avvisarti. <a href="privacy.html#lista" target="_blank" rel="noopener">Privacy</a></p>`);
+    $('#lista-attesa').onsubmit = async e => {
       e.preventDefault();
-      gravar('lista_attesa', new FormData(e.target).get('email'));
-      this.abrir('<h2>Fatto! Ti avvisiamo per primo. 🎉</h2><div class="sub">Intanto, cerca la tua casa sulla mappa.</div>');
+      const f = new FormData(e.target), b = e.target.querySelector('button');
+      b.disabled = true;
+      try {
+        const r = await fetch('api/lista.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: f.get('email'), conta: f.get('conta'), origem: 'video' }) });
+        const j = await r.json().catch(() => ({}));
+        if (!j.ok) throw new Error(j.erro || 'Non siamo riusciti a salvare. Riprova.');
+        gravar('lista_attesa', f.get('email'));
+        this.abrir('<h2>Fatto! Ti avvisiamo per primo. 🎉</h2><div class="sub">Intanto, cerca la tua casa sulla mappa.</div>');
+      } catch (err) {
+        b.disabled = false;
+        this.aviso(err.message);
+      }
     };
   }
 

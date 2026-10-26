@@ -33,6 +33,8 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   rinnova <id> [giorni]                  prolonga um comércio aprovado
   rimuovi <id>                           tira do mapa agora (o lote continua reservado: nenhuma casa muda de lugar)
   commerci                               comércios aprovados e até quando ficam
+
+  lista                                  inscritos na lista de espera do "Crea video così"
 `;
 
 function comune(arg) {
@@ -174,6 +176,15 @@ try {
       else x.fino = new Date(Math.max(Date.parse(x.fino), Date.now()) + +(args[1] ?? 30) * 86400e3).toISOString();
       gravar(path.join(CFG, 'commerci.json'), lista);
       console.log(`ok: ${x.nome} ${cmd === 'rimuovi' ? 'sai do mapa na próxima atualização' : `fica até ${new Date(x.fino).toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}`}`);
+      break;
+    }
+    case 'lista': {
+      const { conectar } = await import('./pubblica.mjs');
+      const ftp = conectar(() => {}), local = path.join(RAIZ, 'dati-grezzi', 'lista-attesa.jsonl');
+      if (!ftp.baixar(`${ftp.priv}dati/lista-attesa.jsonl`, local)) { console.log('Ninguém se inscreveu ainda.'); break; }
+      const l = fs.readFileSync(local, 'utf8').split('\n').filter(Boolean).map(x => JSON.parse(x));
+      console.log(`${l.length} inscritos:`);
+      for (const x of l) console.log(`  ${x.em.slice(0, 16).replace('T', ' ')}  ${x.email}${x.conta ? `  @${x.conta}` : ''}`);
       break;
     }
     case 'commerci': {
