@@ -18,9 +18,13 @@ async function checarVersao(atual) {
   } catch { /* offline */ }
 }
 
+window.__fase = 'modulo';   // o script rodou (import map ok); o index.html relata a fase se travar
+
 async function iniciar() {
   const D = await carregar(VERSAO, DEMO);
+  window.__fase = 'dati';
   const mappa = new Mappa(document.getElementById('mappa'), D.geo, D.rilievo, D.imagem);
+  window.__fase = 'mappa';
   const citta = new Citta(mappa, D);
   criarPuntiCase(mappa, D);
   mappa.punti = criarPunti(mappa, D);
@@ -68,6 +72,8 @@ async function iniciar() {
     const v = document.getElementById('versione');
     setInterval(() => { const i = mappa.renderer.info.render; v.textContent = `dist ${mappa.dist.toFixed(2)} · ${i.calls} draw · ${(i.triangles / 1000).toFixed(0)}k tri · ${citta.perto.length} città`; }, 500);
   }
+  window.__fase = 'pronto';
+  if (window.__lento) window.__relata?.(`caricata dopo ${Math.round((Date.now() - window.__t0) / 1000)} s`);
   document.getElementById('caricamento').classList.add('fora');
   setTimeout(() => document.getElementById('caricamento').remove(), 600);
   if (!DEMO) checarVersao(D.snap.versao);

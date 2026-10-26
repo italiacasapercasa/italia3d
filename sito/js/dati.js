@@ -1,15 +1,37 @@
 // Carrega geo + comuni + snapshot e monta o modelo usado pelo site.
 import { livelloDi } from './regole.js';
 
+// baixa com até 3 tentativas (rede de celular cai no meio) e marca em window.__fasi o que já chegou (diagnóstico do index.html)
+async function baixar(url, tipo, nome) {
+  for (let t = 1; ; t++) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const x = await r[tipo]();
+      (window.__fasi ??= {})[nome] = 1;
+      return x;
+    } catch (e) {
+      if (t >= 3) throw new Error(`${nome}: ${e.message}`);
+      await new Promise(ok => setTimeout(ok, 800 * t));
+    }
+  }
+}
+const imagem = (src, t = 1) => new Promise((ok, erro) => {
+  const i = new Image();
+  i.onload = () => { (window.__fasi ??= {}).terreno = 1; ok(i); };
+  i.onerror = () => (t >= 3 ? erro(new Error('terreno: load failed')) : setTimeout(() => imagem(src, t + 1).then(ok, erro), 800 * t));
+  i.src = src;
+});
+
 export async function carregar(versao, demo = false) {
   const v = `?v=${versao}`;
   const [geo, comuniJ, snap, ril, img] = await Promise.all([
-    fetch(`data/geo.json${v}`).then(r => r.json()),
-    fetch(`data/comuni.json${v}`).then(r => r.json()),
+    baixar(`data/geo.json${v}`, 'json', 'geo'),
+    baixar(`data/comuni.json${v}`, 'json', 'comuni'),
     // ?demo=1: dados fictícios (nomes com hífen, que não existem no Instagram)
-    fetch(`data/${demo ? 'demo/' : ''}snapshot.json?t=${Date.now()}`).then(r => r.json()),
-    fetch(`data/rilievo.bin${v}`).then(r => r.arrayBuffer()),
-    new Promise((ok, erro) => { const i = new Image(); i.onload = () => ok(i); i.onerror = erro; i.src = `data/terreno.png${v}`; }),
+    baixar(`data/${demo ? 'demo/' : ''}snapshot.json?t=${Date.now()}`, 'json', 'snapshot'),
+    baixar(`data/rilievo.bin${v}`, 'arrayBuffer', 'rilievo'),
+    imagem(`data/terreno.png${v}`),
   ]);
 
   const regioni = geo.regioni.map(r => ({ ...r, case: 0, luoghi: 0, carica: snap.cariche.regioni[r.cod] }));

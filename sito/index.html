@@ -19,20 +19,27 @@
 <script>
   // se a mapa não carrega: avisa a pessoa (em vez de girar para sempre) e manda o erro para api/errore.php
   (function () {
+    window.__t0 = Date.now(); window.__fase = 'html';
     var enviados = 0;
     function relata(msg) {
       if (enviados++ > 3 || !navigator.sendBeacon) return;
       try { navigator.sendBeacon('api/errore.php', JSON.stringify({ msg: String(msg).slice(0, 300), ua: navigator.userAgent, url: location.href })); } catch (e) {}
     }
     window.__relata = relata;
-    window.addEventListener('error', function (e) { relata((e.message || 'erro') + ' @ ' + (e.filename || '') + ':' + (e.lineno || '')); });
+    window.addEventListener('error', function (e) {
+      // ruído do navegador do app do Instagram (scripts dele, iabjs://) e erros opacos: não são nossos
+      if (/^iabjs:/.test(e.filename || '') || e.message === 'Script error.') return;
+      relata((e.message || 'erro') + ' @ ' + (e.filename || '') + ':' + (e.lineno || '')); });
     window.addEventListener('unhandledrejection', function (e) { relata('promise: ' + (e.reason && (e.reason.message || e.reason))); });
     setTimeout(function () {
       var c = document.getElementById('caricamento');
       if (!c || c.classList.contains('fora')) return;
-      relata('timeout: mappa non caricata in 25 s');
+      // fase em que parou + o que já baixou + tipo de rede: separa "lento" de "travado"
+      var net = navigator.connection ? ' rete=' + navigator.connection.effectiveType : '';
+      window.__lento = true;
+      relata('timeout 25 s · fase=' + window.__fase + ' · scaricati=' + Object.keys(window.__fasi || {}).join(',') + net);
       var p = c.querySelector('p');
-      if (p) p.innerHTML = 'La mappa non riesce a caricarsi su questo dispositivo 😕<br><small>Prova ad aggiornare la pagina, oppure apri il sito con Chrome o aggiorna iOS.</small>';
+      if (p) p.innerHTML = 'Ci sta mettendo più del solito… 🐢<br><small>Se sei dentro Instagram, tocca ⋯ in alto e scegli «Apri nel browser».</small>';
     }, 25000);
   })();
 </script>
