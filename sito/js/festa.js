@@ -80,8 +80,8 @@ export class Festa {
     if (capodanno || forca === 'capodanno') { top.slice(0, 45).forEach(l => citta(l, 0.45)); avvisi.push('🎆 Buon anno da Italia Casa per Casa!'); }
     if (ferragosto || forca === 'ferragosto') { top.slice(0, 40).forEach(l => citta(l, 0.35)); avvisi.push('🎆 Buon Ferragosto!'); }
     if (repubblica || forca === 'repubblica') { top.slice(0, 30).forEach(l => citta(l, 0.3, TRICOLORE)); avvisi.push('🇮🇹 Festa della Repubblica'); }
-    // Frecce Tricolori: o dia todo em 2 de junho (de dia e de noite), fumaça verde-branca-vermelha sobre a Itália
-    const frecce = r.md === '06-02' || forca === 'repubblica' || forca === 'frecce';
+    // Frecce Tricolori: desligadas do calendário automático (o dono liga perto de 2 de junho); prévia com ?fuochi=frecce
+    const frecce = forca === 'frecce';
     if (frecce && !avvisi.includes('🇮🇹 Festa della Repubblica')) avvisi.push('🇮🇹 Festa della Repubblica: passano le Frecce Tricolori!');
     this.frecce.visible = frecce;
     if (frecce) this.mappa.animatori.add(this);
