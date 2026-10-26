@@ -1,0 +1,1436 @@
+{
+ "nome": "zucche",
+ "durata": 54.23,
+ "citta": "Roma",
+ "vetrina": "261026-cc21e911",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "BUONGIORNO",
+      0.03,
+      true
+     ]
+    ],
+    [
+     [
+      "ITALIA",
+      0.636,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.47
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      1.5
+     ],
+     [
+      "STANOTTE",
+      1.7
+     ],
+     [
+      "È",
+      2.194
+     ]
+    ]
+   ],
+   "ini": 1.5,
+   "fim": 2.363
+  },
+  {
+   "linee": [
+    [
+     [
+      "INIZIATO",
+      2.393
+     ],
+     [
+      "HALLOWEEN",
+      3.036,
+      true
+     ]
+    ],
+    [
+     [
+      "SU",
+      3.53
+     ]
+    ]
+   ],
+   "ini": 2.393,
+   "fim": 3.699
+  },
+  {
+   "linee": [
+    [
+     [
+      "ITALIA",
+      3.729
+     ],
+     [
+      "CASA",
+      4.224
+     ]
+    ],
+    [
+     [
+      "PER",
+      4.571
+     ]
+    ]
+   ],
+   "ini": 3.729,
+   "fim": 4.74
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASA",
+      4.77
+     ]
+    ]
+   ],
+   "ini": 4.77,
+   "fim": 5.381
+  },
+  {
+   "linee": [
+    [
+     [
+      "FINO",
+      5.411
+     ],
+     [
+      "AL",
+      5.737
+     ],
+     [
+      "31",
+      5.924,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.411,
+   "fim": 6.358
+  },
+  {
+   "linee": [
+    [
+     [
+      "OTTOBRE",
+      6.388,
+      true
+     ],
+     [
+      "OGNI",
+      6.853
+     ]
+    ],
+    [
+     [
+      "CASA",
+      7.178
+     ]
+    ]
+   ],
+   "ini": 6.388,
+   "fim": 7.474
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      7.504
+     ],
+     [
+      "LA",
+      7.691
+     ],
+     [
+      "SUA",
+      7.878
+     ]
+    ]
+   ],
+   "ini": 7.504,
+   "fim": 8.035
+  },
+  {
+   "linee": [
+    [
+     [
+      "ZUCCA",
+      8.065,
+      true
+     ]
+    ]
+   ],
+   "ini": 8.065,
+   "fim": 8.543
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      8.573
+     ],
+     [
+      "STASERA",
+      8.761,
+      true
+     ]
+    ],
+    [
+     [
+      "QUANDO",
+      9.23
+     ]
+    ]
+   ],
+   "ini": 8.573,
+   "fim": 9.529
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      9.559
+     ],
+     [
+      "ROMA",
+      9.747
+     ]
+    ],
+    [
+     [
+      "TRAMONTA",
+      10.076
+     ]
+    ]
+   ],
+   "ini": 9.559,
+   "fim": 10.515
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      10.545
+     ],
+     [
+      "SOLE",
+      10.733
+     ],
+     [
+      "SI",
+      11.062
+     ]
+    ]
+   ],
+   "ini": 10.545,
+   "fim": 11.221
+  },
+  {
+   "linee": [
+    [
+     [
+      "ACCENDONO",
+      11.251,
+      true
+     ]
+    ],
+    [
+     [
+      "TUTTE",
+      11.859,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.251,
+   "fim": 12.717
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      12.747,
+      true
+     ],
+     [
+      "LA",
+      13.165
+     ]
+    ],
+    [
+     [
+      "TUA",
+      13.333
+     ]
+    ]
+   ],
+   "ini": 12.747,
+   "fim": 13.471
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      13.501,
+      true
+     ],
+     [
+      "E",
+      13.794
+     ],
+     [
+      "LA",
+      13.962
+     ]
+    ]
+   ],
+   "ini": 13.501,
+   "fim": 14.1
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      14.13
+     ],
+     [
+      "REGIONE",
+      14.298,
+      true
+     ],
+     [
+      "E",
+      14.716
+     ]
+    ]
+   ],
+   "ini": 14.13,
+   "fim": 14.854
+  },
+  {
+   "linee": [
+    [
+     [
+      "ANCHE",
+      14.884
+     ],
+     [
+      "LA",
+      15.177
+     ],
+     [
+      "TUA",
+      15.345
+     ]
+    ]
+   ],
+   "ini": 14.884,
+   "fim": 15.483
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASA",
+      15.513
+     ],
+     [
+      "AVRÀ",
+      15.806
+     ],
+     [
+      "LA",
+      16.099
+     ]
+    ]
+   ],
+   "ini": 15.513,
+   "fim": 16.237
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUA",
+      16.267
+     ],
+     [
+      "ZUCCA",
+      16.435,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.267,
+   "fim": 17.222
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      17.252
+     ],
+     [
+      "GUARDATE",
+      17.431
+     ]
+    ],
+    [
+     [
+      "QUANTO",
+      17.876
+     ]
+    ]
+   ],
+   "ini": 17.252,
+   "fim": 18.158
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      18.188
+     ],
+     [
+      "CRESCIUTA",
+      18.368
+     ]
+    ],
+    [
+     [
+      "L'ITALIA",
+      18.813,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.188,
+   "fim": 19.659
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      19.689
+     ],
+     [
+      "DI",
+      19.904
+     ],
+     [
+      "12.000",
+      20.119,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.689,
+   "fim": 20.941
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      20.971,
+      true
+     ],
+     [
+      "IN",
+      21.345
+     ],
+     [
+      "OLTRE",
+      21.56
+     ]
+    ]
+   ],
+   "ini": 20.971,
+   "fim": 21.904
+  },
+  {
+   "linee": [
+    [
+     [
+      "3.000",
+      21.934,
+      true
+     ],
+     [
+      "COMUNI",
+      22.467,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.934,
+   "fim": 23.283
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      23.313
+     ],
+     [
+      "CI",
+      23.522
+     ],
+     [
+      "SONO",
+      23.731
+     ]
+    ]
+   ],
+   "ini": 23.313,
+   "fim": 24.065
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIÀ",
+      24.095
+     ],
+     [
+      "9",
+      24.304,
+      true
+     ],
+     [
+      "ATTIVITÀ",
+      24.668,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.095,
+   "fim": 25.312
+  },
+  {
+   "linee": [
+    [
+     [
+      "VERE",
+      25.342,
+      true
+     ],
+     [
+      "SULLA",
+      25.706
+     ]
+    ],
+    [
+     [
+      "MAPPA",
+      26.07
+     ]
+    ]
+   ],
+   "ini": 25.342,
+   "fim": 26.404
+  },
+  {
+   "linee": [
+    [
+     [
+      "DALLA",
+      26.434
+     ],
+     [
+      "LOMBARDIA",
+      26.798
+     ]
+    ],
+    [
+     [
+      "AL",
+      27.317
+     ]
+    ]
+   ],
+   "ini": 26.434,
+   "fim": 27.496
+  },
+  {
+   "linee": [
+    [
+     [
+      "LAZIO",
+      27.526
+     ]
+    ]
+   ],
+   "ini": 27.526,
+   "fim": 28.092
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      28.122
+     ],
+     [
+      "IL",
+      28.272
+     ],
+     [
+      "LORO",
+      28.422
+     ]
+    ]
+   ],
+   "ini": 28.122,
+   "fim": 28.654
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEGOZIO",
+      28.684,
+      true
+     ],
+     [
+      "IN",
+      29.056
+     ],
+     [
+      "3D",
+      29.207,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.684,
+   "fim": 29.93
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      29.96
+     ],
+     [
+      "LA",
+      30.144
+     ],
+     [
+      "TUA",
+      30.328,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.96,
+   "fim": 30.898
+  },
+  {
+   "linee": [
+    [
+     [
+      "APRI",
+      30.928
+     ],
+     [
+      "IL",
+      31.285
+     ],
+     [
+      "SITO",
+      31.49
+     ]
+    ]
+   ],
+   "ini": 30.928,
+   "fim": 31.816
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      31.846
+     ],
+     [
+      "TOCCA",
+      32.051
+     ],
+     [
+      "NEGOZI",
+      32.408,
+      true
+     ]
+    ]
+   ],
+   "ini": 31.846,
+   "fim": 33.43
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      33.46
+     ],
+     [
+      "LA",
+      33.657
+     ],
+     [
+      "SFIDA",
+      33.855,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.46,
+   "fim": 34.169
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      34.199
+     ],
+     [
+      "GRANDE",
+      34.397,
+      true
+     ],
+     [
+      "È",
+      34.741
+     ]
+    ]
+   ],
+   "ini": 34.199,
+   "fim": 34.909
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN'ALTRA",
+      34.939
+     ]
+    ]
+   ],
+   "ini": 34.939,
+   "fim": 35.694
+  },
+  {
+   "linee": [
+    [
+     [
+      "MANCANO",
+      35.724
+     ],
+     [
+      "5",
+      36.355,
+      true
+     ]
+    ],
+    [
+     [
+      "GIORNI",
+      36.799,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.724,
+   "fim": 37.66
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      37.69,
+      true
+     ],
+     [
+      "PRIMO",
+      38.292
+     ]
+    ],
+    [
+     [
+      "NOVEMBRE",
+      38.616
+     ]
+    ]
+   ],
+   "ini": 37.69,
+   "fim": 39.049
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE",
+      39.079
+     ],
+     [
+      "NOVE",
+      39.404,
+      true
+     ],
+     [
+      "DI",
+      39.729
+     ]
+    ]
+   ],
+   "ini": 39.079,
+   "fim": 39.886
+  },
+  {
+   "linee": [
+    [
+     [
+      "SERA",
+      39.916,
+      true
+     ],
+     [
+      "ELEGGIAMO",
+      40.241
+     ]
+    ],
+    [
+     [
+      "IL",
+      40.842
+     ]
+    ]
+   ],
+   "ini": 39.916,
+   "fim": 40.999
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRIMO",
+      41.029
+     ],
+     [
+      "PRESIDENTE",
+      41.353,
+      true
+     ]
+    ],
+    [
+     [
+      "DEL",
+      41.955
+     ]
+    ]
+   ],
+   "ini": 41.029,
+   "fim": 42.111
+  },
+  {
+   "linee": [
+    [
+     [
+      "CONSIGLIO",
+      42.141,
+      true
+     ]
+    ]
+   ],
+   "ini": 42.141,
+   "fim": 43.021
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      43.051
+     ],
+     [
+      "CHI",
+      43.386
+     ],
+     [
+      "FA",
+      43.579
+     ]
+    ]
+   ],
+   "ini": 43.051,
+   "fim": 43.741
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      43.771
+     ],
+     [
+      "PUNTI",
+      43.964,
+      true
+     ]
+    ],
+    [
+     [
+      "QUESTA",
+      44.299
+     ]
+    ]
+   ],
+   "ini": 43.771,
+   "fim": 44.605
+  },
+  {
+   "linee": [
+    [
+     [
+      "SETTIMANA",
+      44.635,
+      true
+     ]
+    ]
+   ],
+   "ini": 44.635,
+   "fim": 45.664
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      45.694
+     ],
+     [
+      "COMMENTO",
+      46.063,
+      true
+     ]
+    ],
+    [
+     [
+      "CONTA",
+      46.588
+     ]
+    ]
+   ],
+   "ini": 45.694,
+   "fim": 47.252
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      47.282
+     ],
+     [
+      "QUI",
+      47.584
+     ]
+    ],
+    [
+     [
+      "SOTTO",
+      47.758
+     ]
+    ]
+   ],
+   "ini": 47.282,
+   "fim": 48.031
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      48.061
+     ],
+     [
+      "TUA",
+      48.235
+     ],
+     [
+      "CITTÀ",
+      48.408,
+      true
+     ]
+    ]
+   ],
+   "ini": 48.061,
+   "fim": 48.681
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      48.711
+     ],
+     [
+      "LA",
+      48.885
+     ],
+     [
+      "TUA",
+      49.059
+     ]
+    ]
+   ],
+   "ini": 48.711,
+   "fim": 49.202
+  },
+  {
+   "linee": [
+    [
+     [
+      "REGIONE",
+      49.232,
+      true
+     ],
+     [
+      "E",
+      49.664
+     ]
+    ],
+    [
+     [
+      "PORTA",
+      49.838
+     ]
+    ]
+   ],
+   "ini": 49.232,
+   "fim": 50.11
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      50.14
+     ],
+     [
+      "TUOI",
+      50.314
+     ],
+     [
+      "AMICI",
+      50.488,
+      true
+     ]
+    ]
+   ],
+   "ini": 50.14,
+   "fim": 50.889
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGANDOLI",
+      50.919
+     ]
+    ]
+   ],
+   "ini": 50.919,
+   "fim": 51.847
+  },
+  {
+   "linee": [
+    [
+     [
+      "CI",
+      51.877
+     ],
+     [
+      "VEDIAMO",
+      52.04
+     ]
+    ],
+    [
+     [
+      "SULLA",
+      52.443
+     ]
+    ]
+   ],
+   "ini": 51.877,
+   "fim": 52.697
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      52.727,
+      true
+     ]
+    ]
+   ],
+   "ini": 52.727,
+   "fim": 53.93
+  }
+ ],
+ "parlato": [
+  "Buongiorno Italia!",
+  "Da stanotte è iniziato Halloween su Italia Casa per Casa:",
+  "fino al trentuno ottobre ogni casa ha la sua zucca,",
+  "e stasera, quando a Roma tramonta il sole, si accendono tutte.",
+  "Commenta la tua città e la tua regione, e anche la tua casa avrà la sua zucca.",
+  "E guardate quanto è cresciuta l'Italia:",
+  "più di dodicimila case, in oltre tremila comuni!",
+  "E ci sono già nove attività vere sulla mappa, dalla Lombardia al Lazio,",
+  "con il loro negozio in treddi.",
+  "Vuoi la tua?",
+  "Apri il sito e tocca Negozi.",
+  "Ma la sfida più grande è un'altra:",
+  "mancano cinque giorni!",
+  "Domenica primo novembre, alle nove di sera, eleggiamo il primo Presidente del Consiglio.",
+  "Vince chi fa più punti questa settimana.",
+  "Ogni commento conta:",
+  "scrivi qui sotto la tua città e la tua regione, e porta i tuoi amici taggandoli.",
+  "Ci vediamo sulla mappa!"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  10,
+  10,
+  11,
+  11,
+  11,
+  12,
+  13,
+  13,
+  13,
+  13,
+  13,
+  14,
+  14,
+  14,
+  15,
+  16,
+  16,
+  16,
+  16,
+  16,
+  16,
+  17,
+  17
+ ],
+ "eventi": {
+  "buon": -0.02,
+  "stanotte": 1.2,
+  "hallo": 2.986,
+  "icpc": 3.729,
+  "fino": 5.311,
+  "ogni": 6.853,
+  "zucca": 8.065,
+  "stasera": 8.473,
+  "roma": 9.747,
+  "sole": 10.733,
+  "accendono": 11.251,
+  "commenta": 12.547,
+  "regione": 14.298,
+  "casa": 15.513,
+  "suazucca": 16.435,
+  "guardate": 17.002,
+  "case": 19.589,
+  "case_a": 21.071,
+  "comuni": 21.51,
+  "att": 23.113,
+  "nove": 24.254,
+  "lazio": 27.626,
+  "neg3d": 28.072,
+  "treddi": 29.207,
+  "vuoi": 29.91,
+  "apri": 30.828,
+  "tocca": 32.051,
+  "negozi": 32.408,
+  "sfida": 33.26,
+  "mancano": 35.674,
+  "cinque": 36.355,
+  "domenica": 37.59,
+  "ore": 39.404,
+  "pres": 41.353,
+  "vince": 42.951,
+  "punti": 43.964,
+  "ognic": 45.594,
+  "scrivi": 47.182,
+  "amici": 50.438,
+  "ci": 51.777
+ },
+ "sincro": {
+  "eventi.buon": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.stanotte": [
+   1,
+   0,
+   -0.3
+  ],
+  "eventi.hallo": [
+   1,
+   4,
+   -0.05
+  ],
+  "eventi.icpc": [
+   1,
+   6,
+   0
+  ],
+  "eventi.fino": [
+   2,
+   0,
+   -0.1
+  ],
+  "eventi.ogni": [
+   2,
+   4,
+   0
+  ],
+  "eventi.zucca": [
+   2,
+   9,
+   0
+  ],
+  "eventi.stasera": [
+   3,
+   0,
+   -0.1
+  ],
+  "eventi.roma": [
+   3,
+   4,
+   0
+  ],
+  "eventi.sole": [
+   3,
+   7,
+   0
+  ],
+  "eventi.accendono": [
+   3,
+   9,
+   0
+  ],
+  "eventi.commenta": [
+   4,
+   0,
+   -0.2
+  ],
+  "eventi.regione": [
+   4,
+   7,
+   0
+  ],
+  "eventi.casa": [
+   4,
+   12,
+   0
+  ],
+  "eventi.suazucca": [
+   4,
+   16,
+   0
+  ],
+  "eventi.guardate": [
+   5,
+   0,
+   -0.25
+  ],
+  "eventi.case": [
+   6,
+   0,
+   -0.1
+  ],
+  "eventi.case_a": [
+   6,
+   3,
+   0.1
+  ],
+  "eventi.comuni": [
+   6,
+   5,
+   -0.05
+  ],
+  "eventi.att": [
+   7,
+   0,
+   -0.2
+  ],
+  "eventi.nove": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.lazio": [
+   7,
+   12,
+   0.1
+  ],
+  "eventi.neg3d": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.treddi": [
+   8,
+   5,
+   0
+  ],
+  "eventi.vuoi": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.apri": [
+   10,
+   0,
+   -0.1
+  ],
+  "eventi.tocca": [
+   10,
+   4,
+   0
+  ],
+  "eventi.negozi": [
+   10,
+   5,
+   0
+  ],
+  "eventi.sfida": [
+   11,
+   0,
+   -0.2
+  ],
+  "eventi.mancano": [
+   12,
+   0,
+   -0.05
+  ],
+  "eventi.cinque": [
+   12,
+   1,
+   0
+  ],
+  "eventi.domenica": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.ore": [
+   13,
+   4,
+   0
+  ],
+  "eventi.pres": [
+   13,
+   10,
+   0
+  ],
+  "eventi.vince": [
+   14,
+   0,
+   -0.1
+  ],
+  "eventi.punti": [
+   14,
+   4,
+   0
+  ],
+  "eventi.ognic": [
+   15,
+   0,
+   -0.1
+  ],
+  "eventi.scrivi": [
+   16,
+   0,
+   -0.1
+  ],
+  "eventi.amici": [
+   16,
+   14,
+   -0.05
+  ],
+  "eventi.ci": [
+   17,
+   0,
+   -0.1
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 7.mp3",
+  "durata": 53.23
+ }
+}

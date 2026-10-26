@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel zucche · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #25D366; --zucca: #FF8A1E; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .z, .z { color: var(--zucca); }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #righe { transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 84px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 132px; -webkit-text-stroke-width: 22px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.zucca { background: var(--zucca); }
+  .cartello .box b { display: block; font-size: 44px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); }
+  .cartello .box small { display: block; font-size: 24px; font-weight: 800; color: #3B2A08; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; top: 470px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 26px 30px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 4px; font-size: 46px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  .riquadro .quando { text-align: center; font-size: 30px; font-weight: 800; color: #5B6475; margin-bottom: 10px; }
+  #lista { top: 380px; padding: 14px 28px; }
+  #lista .riga { display: flex; align-items: center; gap: 16px; padding: 6px 0; border-top: 3px dashed #D9DDE3; opacity: 0; }
+  #lista .riga:first-child { border-top: 0; }
+  #lista .em { width: 58px; height: 58px; border-radius: 14px; border: 4px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 32px; background: #FFF4D6; flex: none; }
+  #lista .quem { flex: 1; min-width: 0; }
+  #lista .quem b { display: block; font-size: 34px; line-height: 1.1; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #lista .quem small { display: block; font-size: 23px; font-weight: 800; color: #5B6475; }
+  #sito { top: 560px; padding: 0; overflow: hidden; }
+  #sito .barra { background: #EEF1F5; border-bottom: 5px solid var(--ink); padding: 18px 28px; font-size: 34px; font-weight: 800; color: var(--ink); }
+  #sito .schede { display: flex; gap: 12px; justify-content: center; padding: 34px 18px; flex-wrap: wrap; }
+  #sito .schede span { border: 5px solid var(--ink); border-radius: 99px; padding: 12px 22px; font-size: 34px; font-weight: 900; color: var(--ink); background: #fff; }
+  #sito .schede span.neg { background: var(--giallo); }
+  .lampo { box-shadow: 0 0 0 10px var(--zucca) !important; transform: scale(1.08); }
+  #pres .riga { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-top: 3px dashed #D9DDE3; position: relative; }
+  #pres .pos { width: 66px; height: 66px; border-radius: 50%; border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; background: var(--giallo); flex: none; }
+  #pres .riga:nth-of-type(n+2) .pos { background: #fff; }
+  #pres .quem { flex: 1; min-width: 0; }
+  #pres .quem b { display: block; font-size: 40px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #pres .quem small { display: block; font-size: 26px; font-weight: 800; color: #5B6475; }
+  #pres .barra { height: 18px; background: #EEF1F5; border-radius: 9px; margin-top: 8px; overflow: hidden; }
+  #pres .barra i { display: block; height: 100%; width: 0; background: #FFB437; border-radius: 9px; }
+  #pres .pts { font-size: 42px; font-weight: 900; color: var(--ink); }
+  #pres .ore { display: inline-block; border-radius: 12px; padding: 0 8px; }
+  #testa-a { position: absolute; right: 150px; top: 6px; font-size: 40px; -webkit-text-stroke-width: 10px; transform: rotate(8deg) scale(0); }
+  #conto { position: absolute; left: 0; right: 0; top: 520px; text-align: center; opacity: 0; }
+  #conto .a { font-size: 96px; -webkit-text-stroke-width: 18px; }
+  #conto .n { font-size: 460px; line-height: 0.95; -webkit-text-stroke-width: 44px; }
+  #conto .b { font-size: 120px; -webkit-text-stroke-width: 22px; margin-top: -10px; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #tocco { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 10px solid #fff; box-shadow: 0 0 0 6px var(--ink); opacity: 0; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 520px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a { font-size: 74px; -webkit-text-stroke-width: 14px; }
+  #cta .b { font-size: 58px; -webkit-text-stroke-width: 12px; margin-top: 14px; }
+  #cta .c { font-size: 62px; -webkit-text-stroke-width: 13px; margin-top: 34px; }
+  #cta .d { font-size: 54px; -webkit-text-stroke-width: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="testa" class="forte"><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="lista" class="riquadro"></div>
+<div id="sito" class="riquadro"><div class="barra">🔒 italiacasapercasa.com</div><div class="schede"><span>mappa</span><span>🏛 Palazzo</span><span>🏆 Classifica</span><span class="neg">🏪 Negozi</span></div></div>
+<div id="pres" class="riquadro"></div>
+<div id="conto" class="forte"><div class="a">MANCANO</div><div class="n g">5</div><div class="b">GIORNI</div></div>
+<div id="chip-fino" class="chip forte z" style="top:640px">🎃 FINO AL 31 OTTOBRE</div>
+<div id="chip-zucca" class="chip forte" style="top:770px;font-size:60px">+ LA TUA ZUCCA 🎃</div>
+<div id="chip-comm" class="chip forte g" style="top:620px">💬 = +5 PUNTI</div>
+<div id="tocco"></div>
+<div id="cta" class="forte"><div class="a">📍 COMMENTA QUI SOTTO</div><div class="b g">LA TUA CITTÀ E REGIONE</div><div class="c">👥 TAGGA I TUOI AMICI</div><div class="d g">@ITALIACASAPERCASA</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/zucche.js"></script>
+</body>
+</html>
