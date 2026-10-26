@@ -75,5 +75,6 @@ async function iniciar() {
 
 iniciar().catch(e => {
   console.error(e);
+  window.__relata?.(`iniciar: ${e?.message ?? e}`);
   document.querySelector('#caricamento p').textContent = 'Ops! Qualcosa è andato storto. Ricarica la pagina.';
 });

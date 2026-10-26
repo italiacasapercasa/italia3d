@@ -13,7 +13,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilo.css">
+<!-- import maps só existem no Safari 16.4+: em iPhone mais antigo o polyfill carrega os módulos (nos outros não faz nada) -->
+<script async src="vendor/es-module-shims.js"></script>
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<script>
+  // se a mapa não carrega: avisa a pessoa (em vez de girar para sempre) e manda o erro para api/errore.php
+  (function () {
+    var enviados = 0;
+    function relata(msg) {
+      if (enviados++ > 3 || !navigator.sendBeacon) return;
+      try { navigator.sendBeacon('api/errore.php', JSON.stringify({ msg: String(msg).slice(0, 300), ua: navigator.userAgent, url: location.href })); } catch (e) {}
+    }
+    window.__relata = relata;
+    window.addEventListener('error', function (e) { relata((e.message || 'erro') + ' @ ' + (e.filename || '') + ':' + (e.lineno || '')); });
+    window.addEventListener('unhandledrejection', function (e) { relata('promise: ' + (e.reason && (e.reason.message || e.reason))); });
+    setTimeout(function () {
+      var c = document.getElementById('caricamento');
+      if (!c || c.classList.contains('fora')) return;
+      relata('timeout: mappa non caricata in 25 s');
+      var p = c.querySelector('p');
+      if (p) p.innerHTML = 'La mappa non riesce a caricarsi su questo dispositivo 😕<br><small>Prova ad aggiornare la pagina, oppure apri il sito con Chrome o aggiorna iOS.</small>';
+    }, 25000);
+  })();
+</script>
 </head>
 <body>
 <canvas id="mappa"></canvas>
