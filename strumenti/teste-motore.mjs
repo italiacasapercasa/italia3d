@@ -93,5 +93,18 @@ const s3 = calcolare({
 const c3 = conta => s3.case.find(x => x[0] === conta);
 ok(c3('anna')[4] === 10 + 5 + 150 && c3('anna')[5] === 15 && c3('anna')[7][8] === 150, `anna mecenate: total 165, mandato 15 (deu ${c3('anna')[4]} / ${c3('anna')[5]})`);
 ok(c3('bruno')[7][7] === 40 && c3('bruno')[5] === 55, `bruno: 2 dias de post = +40 e contam no mandato (deu ${c3('bruno')[7][7]} / ${c3('bruno')[5]})`);
+
+// recruta além do 10º tag: os +3 param no limite, mas o amigo que entra depois ainda dá +25
+const muitos = Array.from({ length: 12 }, (_, i) => `amico${i}`);
+const s4 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' }), c('anna', qui + 2e3, { tags: muitos }), c('amico11', qui + 3e3, { luogo: '058091' })],
+    storie: [], bloccati: [], doppi: [], commerci: [], post: [],
+  },
+  comuni, regioni, agora: qui + 10 * H,
+});
+const a4 = s4.case.find(x => x[0] === 'anna');
+ok(a4[7][3] === 30 && a4[7][4] === 25, `anna: tag limitado a 10 (+30) e recruta do 12º amigo (+25) (deu tag ${a4[7][3]}, recluta ${a4[7][4]})`);
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);

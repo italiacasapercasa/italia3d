@@ -146,13 +146,29 @@ export class Mappa {
     const fx = clamp((x - b.x0) / (b.x1 - b.x0) * (GW - 1), 0, GW - 1.001);
     const fz = clamp((z - b.z0) / (b.z1 - b.z0) * (GH - 1), 0, GH - 1.001);
     const i = Math.floor(fx), j = Math.floor(fz), ax = fx - i, az = fz - j, k = j * GW + i, r = this.ril;
-    return ((r[k] * (1 - ax) + r[k + 1] * ax) * (1 - az) + (r[k + GW] * (1 - ax) + r[k + GW + 1] * ax) * az) * ESAG;
+    // os mesmos 2 triângulos de cada quadrado da malha (a,c,b) e (b,c,d): em encosta íngreme a interpolação
+    // bilinear dava outra altura e a cidade ficava enterrada no triângulo do terreno (Courmayeur)
+    const v0 = r[k], v1 = r[k + 1], v2 = r[k + GW], v3 = r[k + GW + 1];
+    return (ax + az <= 1 ? v0 + (v1 - v0) * ax + (v2 - v0) * az : v3 + (v2 - v3) * (1 - ax) + (v1 - v3) * (1 - az)) * ESAG;
   }
 
   // ângulo de elevação da câmera: quase de cima no país, inclinada na cidade
   elevacao(d) {
     const t = clamp((Math.log(d) - Math.log(2)) / (Math.log(900) - Math.log(2)), 0, 1);
     return (40 + 32 * suave(t)) * Math.PI / 180;
+  }
+
+  // de perto, em vale (ex.: Courmayeur), a montanha entre a câmera e o alvo tampava a cidade:
+  // sobe o ângulo da câmera até a linha de visão passar por cima do relevo
+  semMontanha(el, d) {
+    if (d > 40) return el;
+    const sx = Math.sin(this.az), sz = Math.cos(this.az), alcance = Math.cos(el) * d;
+    let precisa = 0;
+    for (let k = 1; k <= 16; k++) {
+      const s = alcance * k / 16, h = this.altura(this.alvo.x + sx * s, this.alvo.z + sz * s);
+      precisa = Math.max(precisa, Math.atan2(h + 0.015 - this.alvo.y, s));
+    }
+    return Math.min(Math.max(el, precisa + 5 * Math.PI / 180), 82 * Math.PI / 180);
   }
 
   distPais() {
@@ -168,7 +184,7 @@ export class Mappa {
     this.alvo.z = clamp(this.alvo.z, b.z0, b.z1);
     this.dist = clamp(this.dist, DIST_MIN, DIST_MAX);
     this.alvo.y = this.alturaAlvo ? this.alturaAlvo(this.alvo.x, this.alvo.z, this.dist) : this.altura(this.alvo.x, this.alvo.z);
-    const el = this.elevacao(this.dist), d = this.dist, c = this.camera;
+    const d = this.dist, c = this.camera, el = this.semMontanha(this.elevacao(d), d);
     c.position.set(
       this.alvo.x + Math.sin(this.az) * Math.cos(el) * d,
       this.alvo.y + Math.sin(el) * d,

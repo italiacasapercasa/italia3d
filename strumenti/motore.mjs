@@ -104,11 +104,13 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
       else if (R.extra_attivo && s.n - 1 <= R.limiti.extra) add(a, F.extra, P.extra, c.ts);
       for (const t0 of c.tags ?? []) {
         const t = t0.toLowerCase();
-        if (t === a.conta || s.tags.has(t) || s.tags.size >= R.limiti.tag) continue;
-        s.tags.add(t);
-        add(a, F.tag, P.tag, c.ts);
+        if (t === a.conta) continue;
+        // o limite vale só para os +3 do tag: o amigo que entra depois conta como recruta mesmo além do 10º tag
         const alvo = conta(t);
         if (!alvo.casa && !alvo.taggatoDa) alvo.taggatoDa = a.conta;
+        if (s.tags.has(t) || s.tags.size >= R.limiti.tag) continue;
+        s.tags.add(t);
+        add(a, F.tag, P.tag, c.ts);
       }
       if (c.voto) {
         const v = c.voto.toLowerCase(), alvo = contas.get(v);

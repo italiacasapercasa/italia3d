@@ -88,7 +88,7 @@ try {
       const c = comune(alvo), corr = ler(path.join(CFG, 'correzioni.json'), { testi: {}, conte: {} });
       corr.conte[conta.replace(/^@/, '').toLowerCase()] = c.istat;
       gravar(path.join(CFG, 'correzioni.json'), corr);
-      console.log(`ok: @${conta.replace(/^@/, '')} → ${c.nome} (${c.sigla}) (vale se a conta ainda não tem casa)`);
+      console.log(`ok: @${conta.replace(/^@/, '')} → ${c.nome} (${c.sigla}) (se já tem casa, ela muda para essa cidade na próxima atualização)`);
       break;
     }
     case 'blocca': case 'sblocca': {
