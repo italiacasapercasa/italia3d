@@ -1,0 +1,541 @@
+{
+ "nome": "negozi",
+ "durata": 25.94,
+ "titolo": "NEGOZI",
+ "sottotitolo": "SULLA MAPPA",
+ "citta_esempi": "Napoli",
+ "commento": {
+  "utente": "il.tuo.nome",
+  "testo": "@pizzeria-da-mario la migliore! 🍕"
+ },
+ "banner": "🏪 TAGGA IL TUO NEGOZIO PREFERITO",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SULLA",
+      0.03
+     ],
+     [
+      "MAPPA",
+      0.34
+     ],
+     [
+      "DELL'ITALIA",
+      0.65
+     ]
+    ],
+    [
+     [
+      "ADESSO",
+      1.225
+     ],
+     [
+      "CI",
+      1.667
+     ],
+     [
+      "SONO",
+      1.845
+     ],
+     [
+      "ANCHE",
+      2.155
+     ]
+    ],
+    [
+     [
+      "I",
+      2.465,
+      true
+     ],
+     [
+      "NEGOZI",
+      2.644,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 3.488
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIZZERIE,",
+      3.518,
+      true
+     ],
+     [
+      "BAR,",
+      4.202,
+      true
+     ],
+     [
+      "BARBIERI",
+      4.478,
+      true
+     ]
+    ],
+    [
+     [
+      "OGNUNO",
+      5.162
+     ],
+     [
+      "NELLA",
+      5.847
+     ],
+     [
+      "SUA",
+      6.327
+     ],
+     [
+      "CITTÀ",
+      6.603
+     ]
+    ]
+   ],
+   "ini": 3.518,
+   "fim": 7.536
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUAL",
+      7.566
+     ],
+     [
+      "È",
+      7.721
+     ],
+     [
+      "IL",
+      7.877
+     ],
+     [
+      "TUO",
+      8.032
+     ]
+    ],
+    [
+     [
+      "PREFERITO?",
+      8.188,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.566,
+   "fim": 9.128
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGALO",
+      9.158,
+      true
+     ]
+    ],
+    [
+     [
+      "NEI",
+      9.594
+     ],
+     [
+      "COMMENTI",
+      9.769
+     ]
+    ]
+   ],
+   "ini": 9.158,
+   "fim": 10.507
+  },
+  {
+   "linee": [
+    [
+     [
+      "+3",
+      10.537,
+      true
+     ],
+     [
+      "PUNTI",
+      10.763,
+      true
+     ]
+    ],
+    [
+     [
+      "PER",
+      11.157
+     ],
+     [
+      "OGNI",
+      11.383
+     ],
+     [
+      "TAG",
+      11.777
+     ]
+    ]
+   ],
+   "ini": 10.537,
+   "fim": 12.5
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      12.53
+     ],
+     [
+      "SE",
+      12.728
+     ],
+     [
+      "HAI",
+      12.926
+     ]
+    ],
+    [
+     [
+      "UN'ATTIVITÀ",
+      13.125,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.53,
+   "fim": 13.881
+  },
+  {
+   "linee": [
+    [
+     [
+      "COSTRUISCI",
+      13.911
+     ],
+     [
+      "IL",
+      14.403
+     ],
+     [
+      "TUO",
+      14.602
+     ]
+    ],
+    [
+     [
+      "NEGOZIO",
+      14.8
+     ],
+     [
+      "IN",
+      15.292
+     ],
+     [
+      "3D",
+      15.491,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.911,
+   "fim": 16.094
+  },
+  {
+   "linee": [
+    [
+     [
+      "COLORI,",
+      16.124,
+      true
+     ],
+     [
+      "INSEGNA",
+      16.656,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.124,
+   "fim": 17.158
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      17.188
+     ],
+     [
+      "PERFINO",
+      17.403
+     ]
+    ],
+    [
+     [
+      "UNA",
+      17.935
+     ],
+     [
+      "PIZZA",
+      18.308,
+      true
+     ],
+     [
+      "GIGANTE",
+      18.681,
+      true
+     ]
+    ],
+    [
+     [
+      "SUL",
+      19.213
+     ],
+     [
+      "TETTO",
+      19.427
+     ]
+    ]
+   ],
+   "ini": 17.188,
+   "fim": 20.134
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      20.164
+     ],
+     [
+      "UN",
+      20.389
+     ],
+     [
+      "TOCCO",
+      20.614,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.164,
+   "fim": 20.975
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      21.005
+     ],
+     [
+      "CLIENTI",
+      21.23
+     ],
+     [
+      "TI",
+      21.622
+     ],
+     [
+      "SCRIVONO",
+      21.847
+     ]
+    ],
+    [
+     [
+      "SU",
+      22.405
+     ],
+     [
+      "WHATSAPP",
+      22.629,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.005,
+   "fim": 23.433
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      23.463,
+      true
+     ],
+     [
+      "IL",
+      23.736
+     ],
+     [
+      "TUO",
+      23.893
+     ]
+    ],
+    [
+     [
+      "NEGOZIO",
+      24.049
+     ],
+     [
+      "PREFERITO",
+      24.439,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.463,
+   "fim": 25.64
+  }
+ ],
+ "parlato": [
+  "Sulla mappa dell'Italia adesso ci sono anche i negozi.",
+  "Pizzerie, bar, barbieri, ognuno nella sua città.",
+  "Qual è il tuo preferito?",
+  "Taggalo nei commenti:",
+  "tre punti per ogni tag.",
+  "E se hai un'attività, costruisci il tuo negozio in 3D:",
+  "colori, insegna e perfino una pizza gigante sul tetto.",
+  "Con un tocco, i clienti ti scrivono su WhatsApp.",
+  "Tagga il tuo negozio preferito."
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  5,
+  6,
+  6,
+  7,
+  7,
+  8
+ ],
+ "eventi": {
+  "shelby": 2.155,
+  "esempi": 3.318,
+  "bar": 4.452,
+  "barbiere": 5.362,
+  "commento": 7.416,
+  "scrivi_a": 9.769,
+  "piu3": 10.537,
+  "editor": 12.38,
+  "colori": 16.124,
+  "insegna": 16.656,
+  "pizza": 18.308,
+  "ornamenti": 19.427,
+  "tocco": 20.164,
+  "carta": 21.005,
+  "banner": 23.313
+ },
+ "sincro": {
+  "eventi.shelby": [
+   0,
+   6,
+   0
+  ],
+  "eventi.esempi": [
+   1,
+   0,
+   -0.2
+  ],
+  "eventi.bar": [
+   1,
+   1,
+   0.25
+  ],
+  "eventi.barbiere": [
+   1,
+   3,
+   0.2
+  ],
+  "eventi.commento": [
+   2,
+   0,
+   -0.15
+  ],
+  "eventi.scrivi_a": [
+   3,
+   2,
+   0
+  ],
+  "eventi.piu3": [
+   4,
+   0,
+   0
+  ],
+  "eventi.editor": [
+   5,
+   0,
+   -0.15
+  ],
+  "eventi.colori": [
+   6,
+   0,
+   0
+  ],
+  "eventi.insegna": [
+   6,
+   1,
+   0
+  ],
+  "eventi.pizza": [
+   6,
+   5,
+   0
+  ],
+  "eventi.ornamenti": [
+   6,
+   8,
+   0
+  ],
+  "eventi.tocco": [
+   7,
+   0,
+   0
+  ],
+  "eventi.carta": [
+   7,
+   3,
+   0
+  ],
+  "eventi.banner": [
+   8,
+   0,
+   -0.15
+  ]
+ },
+ "audio": {
+  "arquivo": "negozi.mp3",
+  "durata": 25.15
+ },
+ "copertina": {
+  "t": 19.9,
+  "testa_top": 110,
+  "titolo_top": 1400,
+  "linee": [
+   [
+    "IL TUO NEGOZIO",
+    false,
+    92
+   ],
+   [
+    "SULLA MAPPA 3D",
+    true,
+    104
+   ]
+  ]
+ }
+}

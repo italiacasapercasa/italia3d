@@ -1,0 +1,53 @@
+{
+ "nome": "negozi",
+ "durata": 26,
+ "titolo": "NEGOZI",
+ "sottotitolo": "SULLA MAPPA",
+ "citta_esempi": "Napoli",
+ "commento": { "utente": "il.tuo.nome", "testo": "@pizzeria-da-mario la migliore! 🍕" },
+ "banner": "🏪 TAGGA IL TUO NEGOZIO PREFERITO",
+ "frasi": [
+  { "linee": [[["SULLA", 0], ["MAPPA", 0], ["DELL'ITALIA", 0]], [["ADESSO", 0], ["CI", 0], ["SONO", 0], ["ANCHE", 0]], [["I", 0, true], ["NEGOZI", 0, true]]] },
+  { "linee": [[["PIZZERIE,", 0, true], ["BAR,", 0, true], ["BARBIERI", 0, true]], [["OGNUNO", 0], ["NELLA", 0], ["SUA", 0], ["CITTÀ", 0]]] },
+  { "linee": [[["QUAL", 0], ["È", 0], ["IL", 0], ["TUO", 0]], [["PREFERITO?", 0, true]]] },
+  { "linee": [[["TAGGALO", 0, true]], [["NEI", 0], ["COMMENTI", 0]]] },
+  { "linee": [[["+3", 0, true], ["PUNTI", 0, true]], [["PER", 0], ["OGNI", 0], ["TAG", 0]]] },
+  { "linee": [[["E", 0], ["SE", 0], ["HAI", 0]], [["UN'ATTIVITÀ", 0, true]]] },
+  { "linee": [[["COSTRUISCI", 0], ["IL", 0], ["TUO", 0]], [["NEGOZIO", 0], ["IN", 0], ["3D", 0, true]]] },
+  { "linee": [[["COLORI,", 0, true], ["INSEGNA", 0, true]]] },
+  { "linee": [[["E", 0], ["PERFINO", 0]], [["UNA", 0], ["PIZZA", 0, true], ["GIGANTE", 0, true]], [["SUL", 0], ["TETTO", 0]]] },
+  { "linee": [[["CON", 0], ["UN", 0], ["TOCCO", 0, true]]] },
+  { "linee": [[["I", 0], ["CLIENTI", 0], ["TI", 0], ["SCRIVONO", 0]], [["SU", 0], ["WHATSAPP", 0, true]]] },
+  { "linee": [[["TAGGA", 0, true], ["IL", 0], ["TUO", 0]], [["NEGOZIO", 0], ["PREFERITO", 0, true]]] }
+ ],
+ "parlato": [
+  "Sulla mappa dell'Italia adesso ci sono anche i negozi.",
+  "Pizzerie, bar, barbieri, ognuno nella sua città.",
+  "Qual è il tuo preferito?",
+  "Taggalo nei commenti:",
+  "tre punti per ogni tag.",
+  "E se hai un'attività, costruisci il tuo negozio in 3D:",
+  "colori, insegna e perfino una pizza gigante sul tetto.",
+  "Con un tocco, i clienti ti scrivono su WhatsApp.",
+  "Tagga il tuo negozio preferito."
+ ],
+ "frasi_parlato": [0, 1, 2, 3, 4, 5, 5, 6, 6, 7, 7, 8],
+ "eventi": {},
+ "sincro": {
+  "eventi.shelby": [0, 6, 0],
+  "eventi.esempi": [1, 0, -0.2],
+  "eventi.bar": [1, 1, 0.25],
+  "eventi.barbiere": [1, 3, 0.2],
+  "eventi.commento": [2, 0, -0.15],
+  "eventi.scrivi_a": [3, 2, 0],
+  "eventi.piu3": [4, 0, 0],
+  "eventi.editor": [5, 0, -0.15],
+  "eventi.colori": [6, 0, 0],
+  "eventi.insegna": [6, 1, 0],
+  "eventi.pizza": [6, 5, 0],
+  "eventi.ornamenti": [6, 8, 0],
+  "eventi.tocco": [7, 0, 0],
+  "eventi.carta": [7, 3, 0],
+  "eventi.banner": [8, 0, -0.15]
+ }
+}
