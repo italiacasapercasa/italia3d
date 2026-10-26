@@ -45,7 +45,13 @@ a { color: inherit; }
 .marchio { color: #fff; font-weight: 900; font-size: 15px; text-shadow: var(--contorno); }
 .marchio b, .titolo b { color: var(--giallo); }
 .titolo { margin: 0 0 8px; color: #fff; font-weight: 900; font-size: 25px; line-height: 1.1; text-shadow: var(--contorno); }
-#aiuto { position: absolute; right: 0; top: 0; width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--inchiostro); background: #fff; font-weight: 900; font-size: 20px; box-shadow: 0 0 0 3px var(--rosso); }
+#aiuto { position: absolute; right: 0; top: 0; width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--inchiostro); background: #fff; font-weight: 900; font-size: 20px; box-shadow: 0 0 0 3px #B3261E; animation: ao-vivo 2.6s ease-in-out infinite; }
+/* anel vermelho escuro piscando devagar, como um "ao vivo" */
+@keyframes ao-vivo {
+  0%, 100% { box-shadow: 0 0 0 3px #B3261E, 0 0 0 3px rgba(179, 38, 30, .55); }
+  50% { box-shadow: 0 0 0 3px rgba(179, 38, 30, .35), 0 0 0 11px rgba(179, 38, 30, 0); }
+}
+@media (prefers-reduced-motion: reduce) { #aiuto { animation: none; } }
 #cerca { display: flex; align-items: center; background: #fff; border: 4px solid var(--inchiostro); border-radius: 99px; padding: 5px 5px 5px 14px; box-shadow: 0 4px 0 rgba(21,32,51,.25); }
 .chiocciola { font-weight: 900; color: var(--grigio); font-size: 18px; margin-right: 4px; }
 #q { flex: 1; min-width: 0; border: 0; outline: 0; font: 800 17px 'Nunito', sans-serif; color: var(--inchiostro); background: transparent; }
