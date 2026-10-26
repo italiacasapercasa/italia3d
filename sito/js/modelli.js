@@ -63,15 +63,36 @@ export class Construtor {
   }
 }
 
+// ---------- estilos regionais das casas ----------
+// C = tema em uso enquanto uma casa é montada (geometriaCasa troca e depois volta ao padrão)
+const TEMI = {
+  base: { ...T, persiana: T.verde },
+  ligure: { ...T, muri: ['#F4A79D', '#F7C66E', '#F08A5D'], persiana: '#3E8E4E', tetto: '#C9643E' },                 // casas pastel da Liguria
+  toscano: { ...T, muri: ['#D9C9A9', '#CDB894', '#E2D4B8'], persiana: '#3E6E4E', tetto: '#C25A35', pietra: '#C9B48F' }, // pedra e terracota
+  mediterraneo: { ...T, muri: ['#F7F4EC', '#F1E9DA', '#EDE2CC'], persiana: '#2F7DD1', pietra: '#EFE6D2', piatto: true }, // brancas, teto plano
+  alpino: { ...T, muri: ['#8B5A3C', '#7A4E2D', '#9C6B45'], persiana: '#B23A30', tetto: '#6B5A4E', tettoScuro: '#5A4A40', ripido: true, legno: true },
+};
+TEMI.trullo = { ...TEMI.mediterraneo };
+let C = TEMI.base;
+// região (código ISTAT) -> estilo
+export const stileRegione = cod => (cod === '16' ? 'trullo' : ['17', '18', '19', '20'].includes(cod) ? 'mediterraneo' : cod === '07' ? 'ligure'
+  : ['09', '10'].includes(cod) ? 'toscano' : ['02', '04'].includes(cod) ? 'alpino' : 'base');
+
 // ---------- peças ----------
 function persiana(b, x, y, z, lado = 'frente') {
-  if (lado === 'frente') b.caixa(0.1, 0.13, 0.02, x, y, z, T.verde);
-  else b.caixa(0.02, 0.13, 0.1, x, y, z, T.verde);
+  if (lado === 'frente') b.caixa(0.1, 0.13, 0.02, x, y, z, C.persiana);
+  else b.caixa(0.02, 0.13, 0.1, x, y, z, C.persiana);
 }
 function casaBase(b, w, h, d, x, z, muro, { piani = 1, tetto = true, porta = true, cor = muro } = {}) {
-  b.caixa(w, h, d, x, 0, z, cor);
-  if (tetto) b.telhado(w + 0.08, d + 0.08, Math.min(w, d) * 0.42, x, h, z, T.tetto);
-  if (porta) b.caixa(0.1, 0.19, 0.02, x, 0, z + d / 2 + 0.01, T.porta);
+  if (C.legno && cor === muro) {
+    // chalé alpino: térreo de alvenaria branca, andar de cima em madeira, sacada com flores
+    b.caixa(w, h * 0.45, d, x, 0, z, '#F2EDE4').caixa(w, h * 0.55, d, x, h * 0.45, z, cor);
+    b.caixa(w * 0.9, 0.03, 0.07, x, h * 0.5, z + d / 2 + 0.035, '#5A3A22');
+    for (let k = -2; k <= 2; k++) b.esfera(0.025, x + k * w * 0.16, h * 0.5 + 0.04, z + d / 2 + 0.05, '#E0473C');
+  } else b.caixa(w, h, d, x, 0, z, cor);
+  if (tetto && C.piatto) b.caixa(w + 0.03, 0.05, d + 0.03, x, h, z, T.bianco).caixa(w - 0.06, 0.02, d - 0.06, x, h + 0.05, z, '#D9CFBF');
+  else if (tetto) b.telhado(w + (C.ripido ? 0.12 : 0.08), d + (C.ripido ? 0.12 : 0.08), Math.min(w, d) * (C.ripido ? 0.58 : 0.42), x, h, z, C.tetto);
+  if (porta) b.caixa(0.1, 0.19, 0.02, x, 0, z + d / 2 + 0.01, C.porta);
   const ph = h / piani;
   for (let p = 0; p < piani; p++) {
     const y = p * ph + ph * 0.42;
@@ -95,18 +116,18 @@ const NIVEIS = [
   (b, m) => casaBase(b, 0.56, 0.72, 0.5, 0, 0, m, { piani: 2 }),
   (b, m) => {
     casaBase(b, 0.5, 0.72, 0.5, -0.17, 0, m, { piani: 2 });
-    b.caixa(0.3, 0.3, 0.46, 0.27, 0, 0.02, m).caixa(0.33, 0.03, 0.49, 0.27, 0.3, 0.02, T.tettoScuro).caixa(0.22, 0.22, 0.02, 0.27, 0, 0.26, T.grigio);
+    b.caixa(0.3, 0.3, 0.46, 0.27, 0, 0.02, m).caixa(0.33, 0.03, 0.49, 0.27, 0.3, 0.02, C.tettoScuro).caixa(0.22, 0.22, 0.02, 0.27, 0, 0.26, T.grigio);
   },
   (b, m) => {
-    casaBase(b, 0.74, 0.5, 0.5, 0.08, 0.06, m, { cor: T.pietra });
-    b.caixa(0.24, 0.85, 0.24, -0.32, 0, -0.12, T.pietra).piramide(0.3, 0.3, 0.18, -0.32, 0.85, -0.12, T.tetto);
+    casaBase(b, 0.74, 0.5, 0.5, 0.08, 0.06, m, { cor: C.pietra });
+    b.caixa(0.24, 0.85, 0.24, -0.32, 0, -0.12, C.pietra).piramide(0.3, 0.3, 0.18, -0.32, 0.85, -0.12, C.tetto);
     persiana(b, -0.32, 0.6, 0.0);
     cipresso(b, -0.36, 0.3);
   },
   (b, m) => { casaBase(b, 0.56, 0.72, 0.42, 0, -0.2, m, { piani: 2 }); piscina(b, 0.62, 0.3, 0, 0.27); },
   (b, m) => {
-    b.caixa(0.84, 0.8, 0.62, 0, 0, -0.04, m).piramide(0.94, 0.72, 0.22, 0, 0.8, -0.04, T.tetto).caixa(0.88, 0.03, 0.66, 0, 0.4, -0.04, T.bianco);
-    b.caixa(0.12, 0.22, 0.02, 0, 0, 0.28, T.porta);
+    b.caixa(0.84, 0.8, 0.62, 0, 0, -0.04, m).piramide(0.94, 0.72, 0.22, 0, 0.8, -0.04, C.tetto).caixa(0.88, 0.03, 0.66, 0, 0.4, -0.04, T.bianco);
+    b.caixa(0.12, 0.22, 0.02, 0, 0, 0.28, C.porta);
     for (const y of [0.2, 0.58]) for (const x of [-0.28, 0.28, ...(y > 0.4 ? [0] : [])]) persiana(b, x, y, 0.28);
     for (const y of [0.2, 0.58]) persiana(b, 0.43, y, -0.04, 'lado');
     albero(b, 0.38, 0.38, 0.09);
@@ -125,8 +146,8 @@ const NIVEIS = [
   },
   (b, m) => {
     casaBase(b, 0.38, 0.36, 0.36, 0.2, 0.22, m);
-    b.caixa(0.3, 1.9, 0.3, -0.16, 0, -0.14, T.pietra);
-    for (const [x, z] of [[-0.27, -0.25], [-0.05, -0.25], [-0.27, -0.03], [-0.05, -0.03]]) b.caixa(0.08, 0.09, 0.08, x, 1.9, z, T.pietra);
+    b.caixa(0.3, 1.9, 0.3, -0.16, 0, -0.14, C.pietra);
+    for (const [x, z] of [[-0.27, -0.25], [-0.05, -0.25], [-0.27, -0.03], [-0.05, -0.03]]) b.caixa(0.08, 0.09, 0.08, x, 1.9, z, C.pietra);
     for (const y of [0.55, 1.05, 1.5]) b.caixa(0.05, 0.13, 0.02, -0.16, y, 0.02, T.scuro);
   },
   (b) => {
@@ -136,7 +157,7 @@ const NIVEIS = [
   (b) => {
     b.caixa(0.9, 0.22, 0.05, 0, 0, 0.43, T.bianco).caixa(0.9, 0.22, 0.05, 0, 0, -0.43, T.bianco)
       .caixa(0.05, 0.22, 0.9, -0.43, 0, 0, T.bianco).caixa(0.05, 0.22, 0.9, 0.43, 0, 0, T.bianco)
-      .caixa(0.17, 0.18, 0.07, 0, 0, 0.43, T.porta);
+      .caixa(0.17, 0.18, 0.07, 0, 0, 0.43, C.porta);
     b.caixa(0.55, 0.5, 0.42, -0.1, 0, -0.16, T.bianco).caixa(0.58, 0.03, 0.45, -0.1, 0.5, -0.16, '#E4DED2');
     b.caixa(0.2, 0.78, 0.2, 0.25, 0, -0.24, T.bianco).cupola(0.09, 0.25, 0.78, -0.24, T.bianco);
     for (const x of [-0.26, 0.06]) persiana(b, x, 0.25, 0.06);
@@ -147,7 +168,7 @@ const NIVEIS = [
     for (const y of [0.25, 0.6]) for (const x of [-0.33, -0.11, 0.11, 0.33]) persiana(b, x, y, 0.32);
     for (const x of [-0.24, -0.08, 0.08, 0.24]) b.cilindro(0.03, 0.42, x, 0, 0.38, T.bianco, 6);
     b.caixa(0.6, 0.05, 0.12, 0, 0.42, 0.38, T.bianco).telhado(0.6, 0.14, 0.1, 0, 0.47, 0.38, T.bianco);
-    b.cilindro(0.2, 0.16, 0, 0.95, -0.06, m, 10).cupola(0.2, 0, 1.11, -0.06, T.tetto).cilindro(0.04, 0.12, 0, 1.3, -0.06, T.bianco, 6);
+    b.cilindro(0.2, 0.16, 0, 0.95, -0.06, m, 10).cupola(0.2, 0, 1.11, -0.06, C.tetto).cilindro(0.04, 0.12, 0, 1.3, -0.06, T.bianco, 6);
   },
   (b) => {
     for (let k = 0; k < 9; k++) b.caixa(0.5, 0.26, 0.5, 0, k * 0.38, 0, T.oro).caixa(0.52, 0.12, 0.52, 0, k * 0.38 + 0.26, 0, '#C99A1E');
@@ -160,9 +181,27 @@ const NIVEIS = [
 // altura aproximada (lotes) de cada nível — usada para clique e posição de rótulos/chamas
 export const ALTURA_NIVEL = [0.55, 0.62, 0.6, 0.95, 0.95, 1.05, 0.95, 1.02, 1.0, 1.25, 2.0, 3.75, 0.8, 1.4, 3.75];
 
-export function geometriaCasa(nivel, variante) {
+// trulli de Alberobello (Puglia) para os três primeiros níveis
+function trullo(b, r, x, z, cor = '#F7F4EC') {
+  b.cilindro(r, r * 1.3, x, 0, z, cor, 12).cone(r * 1.15, r * 1.6, x, r * 1.3, z, '#8E8A80', 12).esfera(r * 0.18, x, r * 2.95, z, cor);
+}
+const TRULLI = [
+  b => { trullo(b, 0.2, 0, 0); b.caixa(0.09, 0.16, 0.02, 0, 0, 0.2, C.porta); },
+  b => { trullo(b, 0.24, -0.05, 0); trullo(b, 0.15, 0.28, -0.08); b.caixa(0.1, 0.19, 0.02, -0.05, 0, 0.24, C.porta); },
+  b => {
+    trullo(b, 0.22, -0.12, -0.14); trullo(b, 0.15, 0.22, -0.18); b.caixa(0.1, 0.18, 0.02, -0.12, 0, 0.08, C.porta);
+    b.caixa(0.9, 0.08, 0.05, 0, 0, 0.42, '#E8E0CE').caixa(0.05, 0.08, 0.42, -0.43, 0, 0.2, '#E8E0CE').caixa(0.05, 0.08, 0.42, 0.43, 0, 0.2, '#E8E0CE');
+    albero(b, 0.28, 0.2, 0.12, T.ulivo);
+  },
+];
+
+export function geometriaCasa(nivel, variante, stile = 'base') {
   const b = new Construtor();
-  NIVEIS[nivel](b, T.muri[variante]);
+  C = TEMI[stile] ?? TEMI.base;
+  try {
+    if (stile === 'trullo' && nivel < TRULLI.length) TRULLI[nivel](b);
+    else NIVEIS[nivel](b, C.muri[variante]);
+  } finally { C = TEMI.base; }
   return b.geometria();
 }
 

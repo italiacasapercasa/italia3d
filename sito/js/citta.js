@@ -1,7 +1,7 @@
 // Cidades 3D: quadras em espiral ao redor da piazza, casas por nível e prédios especiais.
 // Só as cidades perto da câmera entram nos InstancedMesh (atualizado quando a câmera anda).
 import * as THREE from 'three';
-import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria } from './modelli.js';
+import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CARTELLONE, geometriaFaccia, geometriaLuminaria, stileRegione } from './modelli.js';
 import { REGOLE, nataleAttivo } from './regole.js';
 import { texturaVendita, texturaLavori, texturaPubblicita, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
 import { creaNegozio3D } from './negozio3d.js';
@@ -141,7 +141,8 @@ export class Citta {
       fiamma: add('fiamma', geometriaEspecial('fiamma'), brilho),
     };
     for (const t of ['piazza', 'bandiera', 'chiesa', 'palazzina', 'ospedale', 'stadio', 'parco', 'liberoV', 'liberoL', 'cartellone']) this.camadas[t] = add(t, geometriaEspecial(t));
-    for (let n = 0; n < REGOLE.livelli.length; n++) for (let v = 0; v < 3; v++) this.camadas[`c${n}_${v}`] = add(`c${n}_${v}`, geometriaCasa(n, v));
+    // casas: camada por nível, variante de cor e estilo regional, criada só quando aparece uma ("c<nível>_<var>_<estilo>")
+    this.novaCamada = k => { const [, n, v, s] = k.match(/^c(\d+)_(\d)_(\w+)$/); return (this.camadas[k] = add(k, geometriaCasa(+n, +v, s))); };
     // faces com texto (redesenhadas quando a fonte do site carrega)
     const faces = { facciaV: [PLACCA, texturaVendita, 0.011], facciaL: [PLACCA, texturaLavori, 0.011], facciaP: [CARTELLONE, texturaPubblicita, 0.02] };
     for (const [k, [p, tex, dz]] of Object.entries(faces)) this.camadas[k] = add(k, geometriaFaccia(p, dz), new THREE.MeshBasicMaterial({ map: tex() }));
@@ -235,11 +236,12 @@ export class Citta {
         }
       }
     }
+    const stile = stileRegione(l.regione.cod);
     for (const ci of l.casas) {
       const casa = this.D.casas[ci], q = posLote(casa.lote);
       const x = l.x + q.x, z = l.z + q.z;
       casa.x = x; casa.z = z; casa.y = hc;
-      push(`c${casa.livello}_${variante(casa.conta)}`, matriz(x, hc + 0.0009, z, q.rot, LOTE));
+      push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, matriz(x, hc + 0.0009, z, q.rot, LOTE));
       c.casas.push(ci);
     }
     // lotes livres depois da última casa (só desenho) e o outdoor à venda
@@ -344,7 +346,7 @@ export class Citta {
       if (Math.hypot(l.x - cx, l.z - cz) - this.raioCidade(l) > R) continue;
       const c = this.dadosCidade(l);
       this.perto.push(l);
-      for (const [k, arr] of Object.entries(c.partes)) if (arr.length) this.camadas[k].push(arr);
+      for (const [k, arr] of Object.entries(c.partes)) if (arr.length) (this.camadas[k] ?? this.novaCamada(k)).push(arr);
       // árvores só de perto (são muitas): cidades a poucos km do centro da tela
       if (this.mappa.dist < 9 && Math.hypot(l.x - cx, l.z - cz) - c.raio < Math.max(2.5, this.mappa.dist * 1.6))
         for (const [t, arr] of Object.entries(c.alberi)) this.camadas[`alb_${t}`].push(arr);
