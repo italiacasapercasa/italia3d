@@ -13,5 +13,20 @@
     "descrizione": "SHELBY propone abbigliamento sportivo e scarpe premium. Stile, comfort e dettagli ricercati. Orari: 9:30–21:30.",
     "testo": "",
     "logo": "data/loghi/261025-411c4974.png"
+  },
+  {
+    "id": "261026-7fdd6f75",
+    "istat": "108024",
+    "approvato": "2026-10-26T07:41:53.382Z",
+    "fino": "2026-11-25T07:41:53.382Z",
+    "prodotto": "negozio",
+    "nome": "Cochita",
+    "tipo": "bar",
+    "colore": "#1F9E89",
+    "whatsapp": "3930667726",
+    "instagram": "",
+    "descrizione": "Bar, ottimi aperitivi con degustazione di primo. Orari flessibili, dal lunedì al venerdì dalle 15.30 alle 22.00",
+    "testo": "",
+    "logo": ""
   }
 ]
