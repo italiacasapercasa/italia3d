@@ -84,6 +84,16 @@ export class Instagram {
 
   usuario(igsid) { return this.get(igsid, { fields: 'username' }); }
 
+  // posts no feed em que o perfil foi marcado na foto (os mais novos primeiro)
+  async marcacoes(desde) {
+    const out = [];
+    for await (const pag of this.paginas('me/tags', { fields: 'id,username,timestamp', limit: 50 })) {
+      for (const m of pag) if (tsIG(m.timestamp) >= desde && m.username) out.push({ id: m.id, conta: m.username.toLowerCase(), ts: tsIG(m.timestamp) });
+      if (pag.length && tsIG(pag[pag.length - 1].timestamp) < desde) break;
+    }
+    return out;
+  }
+
   // token de longa duração vale 60 dias: renova quando passar de 30
   async renovarToken() {
     const r = await this.get(`${this.cfg.api}/refresh_access_token`, { grant_type: 'ig_refresh_token' });
@@ -172,6 +182,14 @@ export async function raccogliere({ completo = false, log = console.log } = {}) 
     } else log(`webhook de stories: HTTP ${r.status}`);
   }
 
+  // posts no feed que marcam o perfil (falha aqui não para a coleta)
+  let tags = ler(path.join(PASTA_IG, 'tags.json'), []);
+  try {
+    const novos = await ig.marcacoes(desde), ids = new Set(tags.map(x => x.id));
+    for (const m of novos) if (!ids.has(m.id)) tags.push(m);
+    log(`${tags.length} posts no feed com o nosso @`);
+  } catch (e) { log(`aviso: marcações não lidas (${e.message})`); }
+
   // renova o token quando passar de 30 dias
   const idade = Date.now() - (estado.token_em ?? 0);
   if (idade > 30 * 86400e3) {
@@ -184,7 +202,8 @@ export async function raccogliere({ completo = false, log = console.log } = {}) 
   gravar(path.join(PASTA_IG, 'posts.json'), posts);
   gravar(path.join(PASTA_IG, 'commenti.json'), comentarios);
   gravar(path.join(PASTA_IG, 'storie.json'), storie);
+  gravar(path.join(PASTA_IG, 'tags.json'), tags);
   gravar(path.join(PASTA_IG, 'stato.json'), { ...estado, ultima: Date.now(), username: perfil.username, follower: perfil.followers_count });
   log(`coleta: ${ig.chamadas} chamadas à API em ${((Date.now() - t0) / 1000).toFixed(1)} s`);
-  return { posts, comentarios, storie, perfil };
+  return { posts, comentarios, storie, tags, perfil };
 }

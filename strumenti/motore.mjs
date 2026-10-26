@@ -15,7 +15,7 @@
 import { REGOLE, livelloDi } from '../sito/js/regole.js';
 import { giornoRoma, limitiMandati, mandatoDi } from '../sito/js/tempo.js';
 
-const F = { casa: 0, commento: 1, extra: 2, tag: 3, recluta: 4, voto: 5, storia: 6 };
+const F = { casa: 0, commento: 1, extra: 2, tag: 3, recluta: 4, voto: 5, storia: 6, post: 7, mecenate: 8 };
 const NOMES_F = Object.keys(F);
 const dia = 86400e3;
 const ontem = d => new Date(Date.parse(`${d}T12:00:00Z`) - dia).toISOString().slice(0, 10);
@@ -34,17 +34,18 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const conta = nome => {
     const k = nome.toLowerCase();
     let a = contas.get(k);
-    if (!a) contas.set(k, a = { conta: k, casa: null, tot: 0, fonti: [0, 0, 0, 0, 0, 0, 0], perM: [], giorni: new Set(), giorniStoria: new Set(), fiamme: 0, taggatoDa: null, recrutado: false, bloc: bloccati.has(k) });
+    if (!a) contas.set(k, a = { conta: k, casa: null, tot: 0, fonti: NOMES_F.map(() => 0), perM: [], giorni: new Set(), giorniStoria: new Set(), giorniPost: new Set(), fiamme: 0, taggatoDa: null, recrutado: false, bloc: bloccati.has(k) });
     return a;
   };
-  const add = (a, f, pts, ts) => {
+  // mandato=false: os pontos fazem a casa crescer mas não contam na semana (eleições), ex.: compra de negócio
+  const add = (a, f, pts, ts, mandato = true) => {
     if (a.bloc) return;
     pts *= fator(f, ts);
     const antes = livelloDi(a.tot);
     a.tot += pts;
     a.fonti[f] += pts;
     const k = mandatoDi(lim, ts);
-    a.perM[k] = (a.perM[k] ?? 0) + pts;
+    if (mandato) a.perM[k] = (a.perM[k] ?? 0) + pts;
     const depois = livelloDi(a.tot);
     if (depois > antes && depois >= 10) eventos.push({ tipo: 'livello', conta: a.conta, livello: depois, ts });
   };
@@ -71,6 +72,7 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     ...eventi.commenti.map(c => ({ t: 'c', ts: c.ts, c })),
     ...eventi.storie.map(s => ({ t: 's', ts: s.ts, s })),
     ...(eventi.commerci ?? []).map(n => ({ t: 'n', ts: n.ts, n })),
+    ...(eventi.post ?? []).map(p => ({ t: 'p', ts: p.ts, p })),
   ].filter(e => e.ts <= agora).sort((a, b) => a.ts - b.ts);
   const commerci = [];
 
@@ -78,6 +80,13 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     if (e.t === 'n') {
       const ci = comIdx.get(e.n.istat), l = ci == null ? null : luoghi.get(ci);
       if (l) commerci.push({ ...e.n, ci, lote: l.lotti++ });   // só cidades que já têm casas
+    } else if (e.t === 'p') {
+      // post no feed que marca o perfil: +post, 1 por dia (como a story, mas sem chamas)
+      const a = contas.get(e.p.conta.toLowerCase());
+      if (!a?.casa || a.bloc) continue;
+      const d = giornoRoma(e.ts);
+      if (!a.giorniPost.has(d)) { a.giorniPost.add(d); add(a, F.post, P.post, e.ts); }
+      a.giorni.add(d);
     } else if (e.t === 'c') {
       const c = e.c;
       cont.commenti++;
@@ -115,6 +124,13 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
       a.fiamme = Math.max(a.fiamme, e.ts + R.fiamme_h * 3600e3);
       a.giorni.add(d);
     }
+  }
+
+  // ---------- mecenati: quem comprou um negócio ou outdoor (campo "giocatore" do pedido) ----------
+  for (const n of eventi.commerci ?? []) {
+    const a = n.giocatore && contas.get(n.giocatore.toLowerCase());
+    if (!a?.casa || n.ts > agora) continue;
+    add(a, F.mecenate, P.mecenate + (n.stile ? P.misura : 0), Math.max(n.ts, a.casa.ts), false);
   }
 
   // ---------- casas visíveis ----------
@@ -208,6 +224,7 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     commerci: commerci.filter(n => liDe.has(n.ci) && !(n.fino && n.fino <= agora)).map(n => ({
       li: liDe.get(n.ci), lote: n.lote, id: n.id, prodotto: n.prodotto ?? 'negozio', nome: n.nome, tipo: n.tipo ?? 'altro', colore: n.colore ?? '#E0473C',
       whatsapp: n.whatsapp ?? '', instagram: n.instagram ?? '', descrizione: n.descrizione ?? '', testo: n.testo ?? '', logo: n.logo ?? '',
+      ...(n.giocatore ? { giocatore: n.giocatore.toLowerCase() } : {}),
       ...(n.stile ? { stile: n.stile } : {}),   // loja "su misura" (editor)
     })),
     cariche,

@@ -246,6 +246,7 @@ export class UI {
       <div class="sub">casa n. ${num(c.lote + 1)} di ${esc(l.nome)} · dal ${dataBreve(c.ts)}</div>
       <div class="badges">
         ${fondatore ? `<span class="badge fond">★ Fondatore/Fondatrice di ${esc(l.nome)}</span>` : ''}
+        ${c.fonti[8] > 0 ? '<span class="badge mec">🏅 Mecenate · ha un’attività sulla mappa</span>' : ''}
         ${c.carica ? `<span class="badge car c-${c.carica.tipo}">🏛 ${esc(this.cargoTexto(c))}</span>` : ''}
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
       </div>
@@ -378,6 +379,7 @@ export class UI {
         ${wa ? `<a class="botao" href="${esc(wa)}" target="_blank" rel="noopener">💬 Scrivi su WhatsApp</a>` : ''}
         ${ig ? `<a class="botao sec" href="${esc(ig)}" target="_blank" rel="noopener">📸 @${esc(cm.instagram)}</a>` : ''}
       </div>
+      ${cm.giocatore && this.D.porConta.get(cm.giocatore) ? `<div class="carta fond" data-casa="${esc(cm.giocatore)}">🏅 <b>Mecenate: @${esc(cm.giocatore)}</b><small>la casa di chi ha messo questa attività sulla mappa</small></div>` : ''}
       <p class="nota">Attività sulla mappa di ${esc(l.nome)}. <a href="negozio.html?citta=${l.comune.istat}">Vuoi anche tu la tua?</a></p>`);
   }
 
@@ -445,6 +447,7 @@ export class UI {
       <div class="guerra">${k.guerra.map((g, i) => `<div class="riga" data-regione="${g.cod}"><span>${i + 1}. ${esc(D.regPorCod.get(g.cod).nome)}</span><b>${num(g.pts)}</b><i style="width:${(100 * g.pts / max).toFixed(1)}%"></i></div>`).join('')}</div>
       <h3>Presidenti di Regione</h3>
       <ol class="ranking">${D.regioni.map((r, i) => r.carica?.presidente ? `<li data-casa="${esc(r.carica.presidente.conta)}"><span class="pos">🏛</span><span class="quem"><b>@${esc(r.carica.presidente.conta)}</b><small>${esc(r.nome)}</small></span><span class="pts">${num(r.carica.presidente.pts)}</span></li>` : '').join('')}</ol>
+      <a class="botao segui" href="https://www.instagram.com/italiacasapercasa/" target="_blank" rel="noopener">📲 Segui @${PERFIL} per sapere chi vince domenica</a>
       <p class="nota">Gioco apartitico: le cariche sono di gioco.</p>`, 'palazzo');
   }
 
@@ -629,7 +632,8 @@ export class UI {
       <h3>4. La storia</h3>
       <p class="intro">Carica la tua casa nella storia e tagga @${PERFIL}: +${P.storia} punti (1 volta al giorno) e la tua casa in fiamme per 24 ore. Sulla mappa cerca il tuo @ e tocca «Carica la tua casa nella storia»: ti diamo l’immagine pronta.</p>
       <div class="bottoni">${this.minha ? `<button data-casa="${esc(this.minha)}">vai alla mia casa</button>` : '<button data-ir="cerca">cerca la mia casa</button>'}</div>
-      <p class="nota">Il fondatore o la fondatrice di una città lo è per sempre; la carica si vince ogni settimana. Nessuno può comprare punti o cariche. Gioco apartitico: le cariche sono di gioco. <a href="privacy.html" target="_blank" rel="noopener">Regole e privacy</a>.</p>`);
+      <a class="botao segui" href="https://www.instagram.com/italiacasapercasa/" target="_blank" rel="noopener">📲 Segui @${PERFIL} per non perderti elezioni e novità</a>
+      <p class="nota">Il fondatore o la fondatrice di una città lo è per sempre; la carica si vince ogni settimana. Nessuno può comprare cariche: i punti di chi mette un’attività sulla mappa fanno crescere la casa, ma non contano per le elezioni. Gioco apartitico: le cariche sono di gioco. <a href="privacy.html" target="_blank" rel="noopener">Regole e privacy</a>.</p>`);
     const b = this.conteudo.querySelector('[data-ir="cerca"]');
     if (b) b.onclick = () => { this.fechar(); $('#q').focus(); };
   }

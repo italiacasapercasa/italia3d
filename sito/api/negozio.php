@@ -43,6 +43,8 @@ $testo = $txt('testo');
 if (tam($testo) > 60) erro('testo', 'Massimo 60 caratteri.');
 $whatsapp = preg_replace('/[^\d+]/', '', (string)($d['whatsapp'] ?? ''));
 if (strlen(preg_replace('/\D/', '', $whatsapp)) < 8 || strlen(preg_replace('/\D/', '', $whatsapp)) > 15) erro('whatsapp', 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).');
+$giocatore = strtolower(ltrim(trim((string)($d['giocatore'] ?? '')), '@'));
+if ($giocatore !== '' && !preg_match('/^[a-z0-9._]{1,30}$/', $giocatore)) erro('giocatore', 'Solo lettere, numeri, punto e trattino basso.');
 $email = trim((string)($d['email'] ?? ''));
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 120) erro('email', 'Controlla la tua email.');
 if (empty($d['consenso'])) erro('consenso', 'Per continuare, accetta le condizioni.');
@@ -81,7 +83,7 @@ if ($suMisura) {
 $pedido = [
     'id' => $id, 'stato' => 'nuovo', 'creato' => gmdate('c'), 'prodotto' => $prodotto, 'su_misura' => $suMisura, 'stile' => $stile,
     'nome' => $nome, 'instagram' => $instagram, 'tipo' => $tipo, 'istat' => $istat, 'colore' => $colore,
-    'descrizione' => $descrizione, 'testo' => $testo, 'whatsapp' => $whatsapp, 'email' => $email, 'logo' => $logo,
+    'descrizione' => $descrizione, 'testo' => $testo, 'whatsapp' => $whatsapp, 'email' => $email, 'giocatore' => $giocatore, 'logo' => $logo,
     'piano' => preg_match('/^[a-z]{2,20}$/', (string)($d['piano'] ?? '')) ? $d['piano'] : '',
 ];
 file_put_contents("$pasta/$id.json", json_encode($pedido, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);

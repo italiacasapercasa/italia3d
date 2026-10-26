@@ -161,6 +161,7 @@ try {
         prodotto: p.prodotto, nome: p.nome, tipo: p.tipo, colore: p.colore, whatsapp: p.whatsapp, instagram: p.instagram,
         descrizione: p.descrizione, testo: p.testo, logo,
         ...(p.su_misura && p.stile ? { stile: p.stile } : {}),
+        ...(p.giocatore ? { giocatore: p.giocatore } : {}),   // casa do comprador: +100 (+50 su misura) e badge Mecenate
       });
       gravar(path.join(CFG, 'commerci.json'), lista);
       p.stato = 'approvato'; p.approvato = agora.toISOString();

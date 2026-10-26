@@ -44,7 +44,7 @@ let falhas = 0;
 const ok = (cond, msg) => { console.log(`${cond ? '✔' : '✘'} ${msg}`); if (!cond) falhas++; };
 
 ok(casa('anna')[4] === 10 + 5 + 10 + 6 + 50 + 5, `anna: casa+commento+10 extras+2 tags+2 recrute+1 voto = 86 (deu ${casa('anna')[4]})`);
-ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
+ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0, 0, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
 ok(casa('bruno')[4] === 10 + 5 + 2 + 20 + 5, `bruno: casa+commento+2 extras (votos)+1 storia+commento no mandato 2 = 42 (deu ${casa('bruno')[4]})`);
 ok(casa('bruno')[5] === 5, `bruno: pontos do mandato 2 = 5 (deu ${casa('bruno')[5]})`);
 ok(casa('bruno')[6] === 0, 'bruno: chamas apagadas (story há mais de 24 h)');
@@ -78,5 +78,20 @@ const lote = conta => s2.case.find(x => x[0] === conta)[2];
 ok(lote('anna') === 0 && lote('bruno') === 2 && lote('carla') === 4, `casas pulam os lotes dos comércios (anna 0, bruno 2, carla 4; deu ${lote('anna')}, ${lote('bruno')}, ${lote('carla')})`);
 ok(s2.commerci.length === 1 && s2.commerci[0].id === 'n1' && s2.commerci[0].lote === 1 && s2.commerci[0].li === 0, `só o comércio ativo aparece, no lote 1 (${JSON.stringify(s2.commerci.map(n => [n.id, n.lote]))})`);
 ok(s2.luoghi[0][4] === 5, `Roma: 5 lotes ocupados (3 casas + 2 comércios; deu ${s2.luoghi[0][4]})`);
+
+// mecenate (+100, +50 su misura) não conta no mandato; post no feed +20 uma vez por dia
+const s3 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' })],
+    storie: [], bloccati: [], doppi: [],
+    commerci: [{ id: 'n1', istat: '058091', ts: qui + H, nome: 'Pizzeria', giocatore: 'Anna', stile: { oggetto: 'pizza' } }],
+    post: [{ conta: 'bruno', ts: qui + 2 * H }, { conta: 'bruno', ts: qui + 3 * H }, { conta: 'bruno', ts: qui + 30 * H }],
+  },
+  comuni, regioni, agora: qui + 40 * H,
+});
+const c3 = conta => s3.case.find(x => x[0] === conta);
+ok(c3('anna')[4] === 10 + 5 + 150 && c3('anna')[5] === 15 && c3('anna')[7][8] === 150, `anna mecenate: total 165, mandato 15 (deu ${c3('anna')[4]} / ${c3('anna')[5]})`);
+ok(c3('bruno')[7][7] === 40 && c3('bruno')[5] === 55, `bruno: 2 dias de post = +40 e contam no mandato (deu ${c3('bruno')[7][7]} / ${c3('bruno')[5]})`);
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);

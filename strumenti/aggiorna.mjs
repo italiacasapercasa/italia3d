@@ -20,7 +20,7 @@ export function contaProibida(conta, palavras) {
   return palavras.some(p => partes.includes(p) || (p.length >= 6 && junto.includes(p)));
 }
 
-export function montarEventi({ posts, comentarios, storie, cfg, log = console.log }) {
+export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log = console.log }) {
   const risolutore = new Risolutore();
   const mod = ler(path.join(CFG, 'moderazione.json'), { bloccati: [], parole_vietate: [] });
   const corr = ler(path.join(CFG, 'correzioni.json'), { testi: {}, conte: {} });
@@ -71,6 +71,7 @@ export function montarEventi({ posts, comentarios, storie, cfg, log = console.lo
     bloccati: [...bloccati],
     doppi,
     commerci,
+    post: tags.filter(t => t.ts >= inizio && t.conta !== proprio).map(t => ({ conta: t.conta, ts: t.ts })),
   };
 }
 
@@ -82,6 +83,7 @@ export async function aggiornare({ completo = false, senzaInstagram = false, log
       posts: ler(path.join(PASTA_IG, 'posts.json'), []),
       comentarios: ler(path.join(PASTA_IG, 'commenti.json'), {}),
       storie: ler(path.join(PASTA_IG, 'storie.json'), []),
+      tags: ler(path.join(PASTA_IG, 'tags.json'), []),
     };
   } else dados = await raccogliere({ completo, log });
   const estado = ler(path.join(PASTA_IG, 'stato.json'), {});

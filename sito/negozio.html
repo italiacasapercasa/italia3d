@@ -104,6 +104,7 @@
     <label id="l-testo" hidden>Messaggio sul cartellone<input name="testo" maxlength="60" placeholder="es. La pizza più buona di Napoli"><span class="aiuto">Fino a 60 caratteri.</span><span class="errore" data-e="testo"></span></label>
     <label>WhatsApp dell’attività<input name="whatsapp" type="tel" inputmode="tel" placeholder="es. 333 123 4567"><span class="aiuto">Appare sulla mappa: i clienti ti scrivono qui. Numero italiano o con prefisso internazionale.</span><span class="errore" data-e="whatsapp"></span></label>
     <label>La tua email<input name="email" type="email" autocomplete="email" placeholder="nome@esempio.it"><span class="aiuto">Qui ricevi la ricevuta e le nostre risposte. Non viene pubblicata.</span><span class="errore" data-e="email"></span></label>
+    <label>🏅 Hai una casa nel gioco? Il tuo @ (facoltativo)<input name="giocatore" maxlength="31" placeholder="@il_tuo_account" autocomplete="off"><span class="aiuto">La tua casa riceve <b>+100 punti</b> (+50 se su misura) e il badge <b>Mecenate</b>. Fanno crescere la casa, ma non contano per le elezioni.</span><span class="errore" data-e="giocatore"></span></label>
     <div class="misura" id="box-misura" hidden>
       <label class="spunta"><input type="checkbox" id="su-misura"><span><b>La vuoi su misura?</b> <span id="prezzo-misura"></span><br><span class="aiuto">Componi il tuo negozio: colori, tenda, insegna, un oggetto gigante sul tetto e decorazioni.</span></span></label>
       <div id="editor" hidden>
@@ -335,7 +336,7 @@ function dati() {
   return {
     prodotto: prodotto(), nome: d.nome.trim(), instagram: d.instagram.trim().replace(/^@/, ''), tipo: d.tipo, istat: d.istat,
     colore: colore(), descrizione: d.descrizione.trim(), testo: prodotto() === 'cartellone' ? d.testo.trim() : '',
-    whatsapp: d.whatsapp.trim(), email: d.email.trim(), consenso: !!d.consenso, regole: !!d.regole, logo: logoDato, piano: piano()?.id ?? '',
+    whatsapp: d.whatsapp.trim(), email: d.email.trim(), giocatore: (d.giocatore ?? '').trim().replace(/^@/, '').toLowerCase(), consenso: !!d.consenso, regole: !!d.regole, logo: logoDato, piano: piano()?.id ?? '',
     su_misura: suMisura(), stile: suMisura() ? { ...stile, coloreTenda: stile.coloreTenda || colore() } : null,
   };
 }
@@ -348,6 +349,7 @@ function valida(d) {
   const cifre = d.whatsapp.replace(/\D/g, '');
   if (cifre.length < 8 || cifre.length > 15) e.whatsapp = 'Scrivi il numero WhatsApp (con prefisso internazionale se non è italiano).';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) e.email = 'Controlla la tua email.';
+  if (d.giocatore && !/^[a-z0-9._]{1,30}$/.test(d.giocatore)) e.giocatore = 'Solo lettere, numeri, punto e trattino basso.';
   if (d.prodotto === 'cartellone' && !d.testo) e.testo = 'Scrivi il messaggio del cartellone.';
   if (d.su_misura && restantiMisura() <= 0) e.citta = 'In questa città i negozi su misura sono esauriti: togli «su misura» o scegli un’altra città.';
   if (!d.regole) e.regole = 'Conferma che la tua attività rispetta le regole.';

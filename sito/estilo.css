@@ -216,6 +216,8 @@ a.botao.sec { background: #fff; }
 .filtri button.on { background: var(--giallo); }
 .cerca-negozi { width: 100%; box-sizing: border-box; font: 700 15px 'Nunito', sans-serif; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 8px 14px; margin-bottom: 6px; }
 .ranking.negozi .visita { border: 3px solid var(--inchiostro); border-radius: 99px; padding: 3px 12px; font-weight: 900; font-size: 13px; background: #fff; }
+a.botao.segui { display: block; text-align: center; background: #fff; margin-top: 14px; }
+.badge.mec { background: #EDE7FF; }
 a.botao.tratteggiato { display: block; text-align: center; background: #fff; border-style: dashed; margin-top: 14px; }
 textarea.convite { width: 100%; box-sizing: border-box; font: 700 14px 'Nunito', sans-serif; border: 3px solid var(--inchiostro); border-radius: 12px; padding: 9px 12px; resize: none; background: var(--crema); }
 .logo-commercio { display: block; max-width: 120px; max-height: 120px; margin: 10px 0; border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; }
