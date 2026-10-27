@@ -1,0 +1,1564 @@
+{
+ "nome": "lancio",
+ "durata": 60.06,
+ "vetrina": "Roma",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0.03
+     ],
+     [
+      "2",
+      0.375,
+      true
+     ],
+     [
+      "PERSONE",
+      0.573
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.034
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      1.064
+     ],
+     [
+      "TUTTA",
+      1.262
+     ]
+    ],
+    [
+     [
+      "ITALIA",
+      1.607
+     ]
+    ]
+   ],
+   "ini": 1.064,
+   "fim": 2.068
+  },
+  {
+   "linee": [
+    [
+     [
+      "HANNO",
+      2.098
+     ],
+     [
+      "UN",
+      2.442
+     ]
+    ],
+    [
+     [
+      "GRATTACIELO",
+      2.64,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.098,
+   "fim": 3.781
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      3.811
+     ],
+     [
+      "PRIMO",
+      4.009
+     ],
+     [
+      "È",
+      4.354
+     ]
+    ]
+   ],
+   "ini": 3.811,
+   "fim": 4.522
+  },
+  {
+   "linee": [
+    [
+     [
+      "EDDY",
+      4.552,
+      true
+     ],
+     [
+      "NAPOLITANO",
+      4.897,
+      true
+     ]
+    ],
+    [
+     [
+      "A",
+      5.683
+     ]
+    ]
+   ],
+   "ini": 4.552,
+   "fim": 5.851
+  },
+  {
+   "linee": [
+    [
+     [
+      "NAPOLI",
+      5.881
+     ],
+     [
+      "È",
+      6.373
+     ],
+     [
+      "A",
+      6.571
+     ]
+    ]
+   ],
+   "ini": 5.881,
+   "fim": 6.739
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      6.769
+     ],
+     [
+      "PASSO",
+      6.967
+     ],
+     [
+      "DALLA",
+      7.312
+     ]
+    ]
+   ],
+   "ini": 6.769,
+   "fim": 7.627
+  },
+  {
+   "linee": [
+    [
+     [
+      "MASSERIA",
+      7.657,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.657,
+   "fim": 8.632
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      8.662
+     ],
+     [
+      "SECONDO",
+      8.858
+     ],
+     [
+      "È",
+      9.346
+     ]
+    ]
+   ],
+   "ini": 8.662,
+   "fim": 9.513
+  },
+  {
+   "linee": [
+    [
+     [
+      "MATTEO",
+      9.543,
+      true
+     ],
+     [
+      "GUERRA",
+      9.885,
+      true
+     ]
+    ],
+    [
+     [
+      "A",
+      10.228
+     ]
+    ]
+   ],
+   "ini": 9.543,
+   "fim": 10.394
+  },
+  {
+   "linee": [
+    [
+     [
+      "MELITO",
+      10.424
+     ],
+     [
+      "DI",
+      10.912
+     ]
+    ],
+    [
+     [
+      "NAPOLI",
+      11.109
+     ]
+    ]
+   ],
+   "ini": 10.424,
+   "fim": 12.068
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUBITO",
+      12.098
+     ],
+     [
+      "DIETRO",
+      12.638
+     ]
+    ],
+    [
+     [
+      "DUE",
+      13.017
+     ]
+    ]
+   ],
+   "ini": 12.098,
+   "fim": 13.205
+  },
+  {
+   "linee": [
+    [
+     [
+      "TORRI",
+      13.235,
+      true
+     ],
+     [
+      "JACOLAMA",
+      13.614,
+      true
+     ]
+    ],
+    [
+     [
+      "A",
+      14.316
+     ]
+    ]
+   ],
+   "ini": 13.235,
+   "fim": 14.504
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASARSA",
+      14.534
+     ],
+     [
+      "E",
+      15.074
+     ]
+    ],
+    [
+     [
+      "PIETRO",
+      15.292,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.534,
+   "fim": 15.641
+  },
+  {
+   "linee": [
+    [
+     [
+      "GAGLIARDINI",
+      15.671,
+      true
+     ],
+     [
+      "A",
+      16.373
+     ]
+    ],
+    [
+     [
+      "RIMINI",
+      16.591
+     ]
+    ]
+   ],
+   "ini": 15.671,
+   "fim": 17.101
+  },
+  {
+   "linee": [
+    [
+     [
+      "SEPARATI",
+      17.131
+     ],
+     [
+      "DA",
+      17.833
+     ]
+    ],
+    [
+     [
+      "POCHI",
+      18.051,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.131,
+   "fim": 18.4
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      18.43,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.43,
+   "fim": 19.364
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      19.394,
+      true
+     ],
+     [
+      "ALLE",
+      19.987
+     ]
+    ],
+    [
+     [
+      "9",
+      20.307,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.394,
+   "fim": 20.598
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      20.628
+     ],
+     [
+      "SERA",
+      20.812
+     ],
+     [
+      "IL",
+      21.132
+     ]
+    ]
+   ],
+   "ini": 20.628,
+   "fim": 21.286
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRIMO",
+      21.316
+     ],
+     [
+      "DELLA",
+      21.636
+     ]
+    ],
+    [
+     [
+      "CLASSIFICA",
+      21.957
+     ]
+    ]
+   ],
+   "ini": 21.316,
+   "fim": 22.519
+  },
+  {
+   "linee": [
+    [
+     [
+      "DIVENTA",
+      22.549
+     ],
+     [
+      "IL",
+      23.006
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      23.19
+     ]
+    ]
+   ],
+   "ini": 22.549,
+   "fim": 23.48
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      23.51,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.51,
+   "fim": 24.66
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      24.69
+     ],
+     [
+      "OGGI",
+      24.864
+     ],
+     [
+      "C'È",
+      25.167
+     ]
+    ]
+   ],
+   "ini": 24.69,
+   "fim": 25.311
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      25.341
+     ],
+     [
+      "NOVITÀ",
+      25.644,
+      true
+     ]
+    ]
+   ],
+   "ini": 25.341,
+   "fim": 26.485
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      26.515
+     ],
+     [
+      "ADESSO",
+      26.69
+     ],
+     [
+      "LA",
+      27.123
+     ]
+    ]
+   ],
+   "ini": 26.515,
+   "fim": 27.268
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      27.298
+     ],
+     [
+      "CASA",
+      27.473
+     ],
+     [
+      "PUÒ",
+      27.777
+     ]
+    ]
+   ],
+   "ini": 27.298,
+   "fim": 27.922
+  },
+  {
+   "linee": [
+    [
+     [
+      "AVERE",
+      27.952
+     ],
+     [
+      "I",
+      28.386
+     ],
+     [
+      "COLORI",
+      28.56,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.952,
+   "fim": 28.964
+  },
+  {
+   "linee": [
+    [
+     [
+      "DELLA",
+      28.994
+     ],
+     [
+      "TUA",
+      29.298
+     ]
+    ],
+    [
+     [
+      "SQUADRA",
+      29.473,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.994,
+   "fim": 30.254
+  },
+  {
+   "linee": [
+    [
+     [
+      "BIANCONERA",
+      30.284,
+      true
+     ],
+     [
+      "NERAZZURRA",
+      31.206,
+      true
+     ]
+    ],
+    [
+     [
+      "ROSSONERA",
+      32.128,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.284,
+   "fim": 33.021
+  },
+  {
+   "linee": [
+    [
+     [
+      "AZZURRA",
+      33.051,
+      true
+     ]
+    ],
+    [
+     [
+      "GIALLOROSSA",
+      33.761,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.051,
+   "fim": 35.103
+  },
+  {
+   "linee": [
+    [
+     [
+      "OPPURE",
+      35.133
+     ],
+     [
+      "TUTTA",
+      35.666
+     ]
+    ],
+    [
+     [
+      "D'ORO",
+      36.04,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.133,
+   "fim": 36.384
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      36.414
+     ],
+     [
+      "IL",
+      36.629
+     ],
+     [
+      "NEON",
+      36.844,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.414,
+   "fim": 37.029
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      37.059
+     ],
+     [
+      "CORONA",
+      37.274,
+      true
+     ],
+     [
+      "E",
+      37.807
+     ]
+    ]
+   ],
+   "ini": 37.059,
+   "fim": 37.992
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      38.022
+     ],
+     [
+      "FUOCHI",
+      38.237,
+      true
+     ]
+    ],
+    [
+     [
+      "D'ARTIFICIO",
+      38.611
+     ]
+    ]
+   ],
+   "ini": 38.022,
+   "fim": 39.802
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      39.832
+     ],
+     [
+      "PUOI",
+      40.007
+     ],
+     [
+      "FARE",
+      40.182
+     ]
+    ]
+   ],
+   "ini": 39.832,
+   "fim": 40.456
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      40.486
+     ],
+     [
+      "REGALO",
+      40.661,
+      true
+     ],
+     [
+      "A",
+      41.096
+     ]
+    ]
+   ],
+   "ini": 40.486,
+   "fim": 41.241
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      41.271
+     ],
+     [
+      "AMICO",
+      41.445,
+      true
+     ],
+     [
+      "SULLA",
+      41.88
+     ]
+    ]
+   ],
+   "ini": 41.271,
+   "fim": 42.154
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUA",
+      42.184
+     ],
+     [
+      "CASA",
+      42.359
+     ]
+    ],
+    [
+     [
+      "APPARE",
+      42.664
+     ]
+    ]
+   ],
+   "ini": 42.184,
+   "fim": 43.068
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      43.098
+     ],
+     [
+      "TUO",
+      43.273
+     ],
+     [
+      "NOME",
+      43.448,
+      true
+     ]
+    ]
+   ],
+   "ini": 43.098,
+   "fim": 44.258
+  },
+  {
+   "linee": [
+    [
+     [
+      "PROVALA",
+      44.288
+     ],
+     [
+      "GRATIS",
+      44.796,
+      true
+     ]
+    ],
+    [
+     [
+      "SULLA",
+      45.152
+     ]
+    ]
+   ],
+   "ini": 44.288,
+   "fim": 45.478
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      45.508
+     ],
+     [
+      "LA",
+      45.864
+     ],
+     [
+      "PAGHI",
+      46.068
+     ]
+    ]
+   ],
+   "ini": 45.508,
+   "fim": 46.394
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      46.424
+     ],
+     [
+      "SE",
+      46.78
+     ],
+     [
+      "TI",
+      46.985
+     ]
+    ]
+   ],
+   "ini": 46.424,
+   "fim": 47.16
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIACE",
+      47.19
+     ]
+    ]
+   ],
+   "ini": 47.19,
+   "fim": 47.938
+  },
+  {
+   "linee": [
+    [
+     [
+      "NON",
+      47.968,
+      true
+     ],
+     [
+      "DÀ",
+      48.204,
+      true
+     ],
+     [
+      "PUNTI",
+      48.44,
+      true
+     ]
+    ]
+   ],
+   "ini": 47.968,
+   "fim": 48.821
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      48.851
+     ],
+     [
+      "CLASSIFICA",
+      49.087
+     ]
+    ],
+    [
+     [
+      "VINCE",
+      49.847,
+      true
+     ]
+    ]
+   ],
+   "ini": 48.851,
+   "fim": 50.227
+  },
+  {
+   "linee": [
+    [
+     [
+      "SEMPRE",
+      50.257
+     ],
+     [
+      "CHI",
+      50.668
+     ]
+    ],
+    [
+     [
+      "GIOCA",
+      50.904,
+      true
+     ]
+    ]
+   ],
+   "ini": 50.257,
+   "fim": 51.796
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      51.826
+     ],
+     [
+      "QUI",
+      52.15
+     ]
+    ],
+    [
+     [
+      "SOTTO",
+      52.337
+     ]
+    ]
+   ],
+   "ini": 51.826,
+   "fim": 52.631
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      52.661
+     ],
+     [
+      "TUA",
+      52.847
+     ],
+     [
+      "CITTÀ",
+      53.034,
+      true
+     ]
+    ]
+   ],
+   "ini": 52.661,
+   "fim": 53.328
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      53.358
+     ],
+     [
+      "LA",
+      53.544
+     ],
+     [
+      "TUA",
+      53.73
+     ]
+    ]
+   ],
+   "ini": 53.358,
+   "fim": 53.887
+  },
+  {
+   "linee": [
+    [
+     [
+      "REGIONE",
+      53.917,
+      true
+     ],
+     [
+      "E",
+      54.379
+     ]
+    ],
+    [
+     [
+      "AGGIUNGI",
+      54.565
+     ]
+    ]
+   ],
+   "ini": 53.917,
+   "fim": 54.998
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      55.028
+     ],
+     [
+      "CUORI",
+      55.214,
+      true
+     ],
+     [
+      "DELLA",
+      55.538
+     ]
+    ]
+   ],
+   "ini": 55.028,
+   "fim": 55.832
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      55.862
+     ],
+     [
+      "SQUADRA",
+      56.049,
+      true
+     ]
+    ]
+   ],
+   "ini": 55.862,
+   "fim": 56.767
+  },
+  {
+   "linee": [
+    [
+     [
+      "VEDIAMO",
+      56.797
+     ],
+     [
+      "QUALE",
+      57.314
+     ]
+    ],
+    [
+     [
+      "SQUADRA",
+      57.677
+     ]
+    ]
+   ],
+   "ini": 56.797,
+   "fim": 58.01
+  },
+  {
+   "linee": [
+    [
+     [
+      "COLORA",
+      58.04,
+      true
+     ]
+    ],
+    [
+     [
+      "L'ITALIA",
+      58.557,
+      true
+     ]
+    ]
+   ],
+   "ini": 58.04,
+   "fim": 59.76
+  }
+ ],
+ "parlato": [
+  "Solo due persone in tutta Italia hanno un grattacielo.",
+  "Il primo è Eddy Napolitano, a Napoli: è a un passo dalla Masseria.",
+  "Il secondo è Matteo Guerra, a Melito di Napoli.",
+  "Subito dietro, due torri: Jacolama a Casarsa e Pietro Gagliardini a Rimini, separati da pochi punti.",
+  "Domenica alle nove di sera, il primo della classifica diventa il primo Presidente.",
+  "Ma oggi c'è una novità.",
+  "Da adesso, la tua casa può avere i colori della tua squadra.",
+  "Bianconera, nerazzurra, rossonera, azzurra, giallorossa…",
+  "Oppure tutta d'oro, con il neon, la corona e i fuochi d'artificio.",
+  "E puoi fare un regalo a un amico: sulla sua casa appare il tuo nome.",
+  "Provala gratis sulla mappa: la paghi solo se ti piace.",
+  "Non dà punti: in classifica vince sempre chi gioca.",
+  "Scrivi qui sotto la tua città e la tua regione, e aggiungi i cuori della tua squadra.",
+  "Vediamo quale squadra colora l'Italia!"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  6,
+  7,
+  7,
+  8,
+  8,
+  8,
+  8,
+  9,
+  9,
+  9,
+  9,
+  9,
+  10,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  13,
+  13
+ ],
+ "eventi": {
+  "solo": -0.02,
+  "due": 0.375,
+  "italia": 1.607,
+  "gratta": 2.59,
+  "primo": 3.711,
+  "eddy": 4.502,
+  "napoli": 5.881,
+  "passo": 6.967,
+  "masseria": 7.657,
+  "secondo": 8.562,
+  "matteo": 9.493,
+  "melito": 10.424,
+  "dietro": 11.998,
+  "torri": 13.235,
+  "jaco": 13.564,
+  "pietro": 15.242,
+  "separati": 17.081,
+  "pochi": 18.051,
+  "domenica": 19.294,
+  "nove": 20.307,
+  "classifica": 21.957,
+  "pres": 23.51,
+  "ma": 24.59,
+  "novita": 25.594,
+  "adesso": 26.415,
+  "colori": 28.56,
+  "squadra": 29.473,
+  "sq0": 30.234,
+  "sq1": 31.156,
+  "sq2": 32.078,
+  "sq3": 33.001,
+  "sq4": 33.711,
+  "oppure": 35.033,
+  "oro": 35.99,
+  "neon": 36.794,
+  "corona": 37.224,
+  "fuochi": 38.187,
+  "regalo": 40.611,
+  "amico": 41.445,
+  "appare": 42.664,
+  "nome": 43.448,
+  "provala": 44.188,
+  "gratis": 44.796,
+  "paghi": 46.068,
+  "piace": 47.19,
+  "nonda": 47.868,
+  "vince": 49.847,
+  "gioca": 50.904,
+  "scrivi": 51.726,
+  "regione": 53.917,
+  "cuori": 55.164,
+  "vediamo": 56.697,
+  "colora": 58.04,
+  "litalia": 58.557
+ },
+ "sincro": {
+  "eventi.solo": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.due": [
+   0,
+   1,
+   0
+  ],
+  "eventi.italia": [
+   0,
+   5,
+   0
+  ],
+  "eventi.gratta": [
+   0,
+   8,
+   -0.05
+  ],
+  "eventi.primo": [
+   1,
+   0,
+   -0.1
+  ],
+  "eventi.eddy": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.napoli": [
+   1,
+   6,
+   0
+  ],
+  "eventi.passo": [
+   1,
+   10,
+   0
+  ],
+  "eventi.masseria": [
+   1,
+   12,
+   0
+  ],
+  "eventi.secondo": [
+   2,
+   0,
+   -0.1
+  ],
+  "eventi.matteo": [
+   2,
+   3,
+   -0.05
+  ],
+  "eventi.melito": [
+   2,
+   6,
+   0
+  ],
+  "eventi.dietro": [
+   3,
+   0,
+   -0.1
+  ],
+  "eventi.torri": [
+   3,
+   3,
+   0
+  ],
+  "eventi.jaco": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.pietro": [
+   3,
+   8,
+   -0.05
+  ],
+  "eventi.separati": [
+   3,
+   12,
+   -0.05
+  ],
+  "eventi.pochi": [
+   3,
+   14,
+   0
+  ],
+  "eventi.domenica": [
+   4,
+   0,
+   -0.1
+  ],
+  "eventi.nove": [
+   4,
+   2,
+   0
+  ],
+  "eventi.classifica": [
+   4,
+   8,
+   0
+  ],
+  "eventi.pres": [
+   4,
+   12,
+   0
+  ],
+  "eventi.ma": [
+   5,
+   0,
+   -0.1
+  ],
+  "eventi.novita": [
+   5,
+   4,
+   -0.05
+  ],
+  "eventi.adesso": [
+   6,
+   0,
+   -0.1
+  ],
+  "eventi.colori": [
+   6,
+   8,
+   0
+  ],
+  "eventi.squadra": [
+   6,
+   11,
+   0
+  ],
+  "eventi.sq0": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.sq1": [
+   7,
+   1,
+   -0.05
+  ],
+  "eventi.sq2": [
+   7,
+   2,
+   -0.05
+  ],
+  "eventi.sq3": [
+   7,
+   3,
+   -0.05
+  ],
+  "eventi.sq4": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.oppure": [
+   8,
+   0,
+   -0.1
+  ],
+  "eventi.oro": [
+   8,
+   2,
+   -0.05
+  ],
+  "eventi.neon": [
+   8,
+   5,
+   -0.05
+  ],
+  "eventi.corona": [
+   8,
+   7,
+   -0.05
+  ],
+  "eventi.fuochi": [
+   8,
+   10,
+   -0.05
+  ],
+  "eventi.regalo": [
+   9,
+   4,
+   -0.05
+  ],
+  "eventi.amico": [
+   9,
+   7,
+   0
+  ],
+  "eventi.appare": [
+   9,
+   11,
+   0
+  ],
+  "eventi.nome": [
+   9,
+   14,
+   0
+  ],
+  "eventi.provala": [
+   10,
+   0,
+   -0.1
+  ],
+  "eventi.gratis": [
+   10,
+   1,
+   0
+  ],
+  "eventi.paghi": [
+   10,
+   5,
+   0
+  ],
+  "eventi.piace": [
+   10,
+   9,
+   0
+  ],
+  "eventi.nonda": [
+   11,
+   0,
+   -0.1
+  ],
+  "eventi.vince": [
+   11,
+   5,
+   0
+  ],
+  "eventi.gioca": [
+   11,
+   8,
+   0
+  ],
+  "eventi.scrivi": [
+   12,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   12,
+   9,
+   0
+  ],
+  "eventi.cuori": [
+   12,
+   13,
+   -0.05
+  ],
+  "eventi.vediamo": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.colora": [
+   13,
+   3,
+   0
+  ],
+  "eventi.litalia": [
+   13,
+   4,
+   0
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 8.mp3",
+  "durata": 59.24
+ },
+ "copertina": {
+  "titolo_top": 130,
+  "senza_testa": true,
+  "linee": [
+   [
+    "⚽ NOVITÀ! ✨",
+    "r",
+    112
+   ],
+   [
+    "LA TUA CASA",
+    false,
+    104
+   ],
+   [
+    "COI COLORI DELLA",
+    false,
+    82
+   ],
+   [
+    "TUA SQUADRA",
+    true,
+    120
+   ]
+  ]
+ }
+}
