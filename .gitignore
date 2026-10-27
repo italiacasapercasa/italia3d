@@ -13,6 +13,8 @@ privato/config-gioco/
 # gerados a cada atualização
 sito/data/snapshot.json
 sito/data/versao.txt
+# escrito no servidor pelo webhook da Hotmart (casas decoradas)
+sito/data/decori.json
 
 # vídeos gerados e áudios de narração
 video/output/

@@ -128,6 +128,7 @@ export class Citta {
     this.grupo = new THREE.Group();
     mappa.scene.add(this.grupo);
     this.cache = new Map();
+    this.nascoste = new Set();   // contas cuja casa não entra no InstancedMesh (casas decoradas, ver decori.js)
     this.perto = [];
     this.ultimo = null;
     const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
@@ -273,7 +274,7 @@ export class Citta {
       const x = l.x + q.x, z = l.z + q.z;
       casa.x = x; casa.z = z; casa.y = hc;
       const m = matriz(x, hc + 0.0009, z, q.rot, LOTE);
-      push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, m);
+      if (!this.nascoste.has(casa.conta)) push(`c${casa.livello}_${variante(casa.conta)}_${stile}`, m);   // decorada: desenhada por decori.js
       push(`f${casa.livello}_${stile}`, m);
       if (this.halloween) { push('zucca', m); push('zuccaL', m); }
       c.casas.push(ci);

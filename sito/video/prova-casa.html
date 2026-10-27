@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="versione" content="dev-0001">
+<base href="../">
+<title>PROVA · Casa speciale · Italia Casa per Casa</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  /* protótipo "casa speciale": só nesta página de teste (pasta video/ não vai para o site no ar) */
+  body.p-edit #testa { display: none; }
+  body.p-edit #pannello { max-height: 50vh; }
+  body.p-edit #prova-tarja { top: calc(var(--sat) + 6px); bottom: auto; left: auto; right: 8px; z-index: 60; }
+  #prova-tarja { position: fixed; bottom: calc(var(--sab) + 128px); left: 10px; z-index: 14; background: #7B2CBF; color: #fff; font-weight: 900; font-size: 10px; padding: 2px 7px; border-radius: 6px; border: 2px solid var(--inchiostro); letter-spacing: .4px; }
+  #fai-video.speciale { position: relative; background: linear-gradient(90deg, #FFE08A, #FFB3D1, #B9E4FF, #FFE08A) !important; background-size: 300% 100% !important; animation: arcobaleno 6s linear infinite; min-width: 168px; }
+  #fai-video.speciale .novita { position: absolute; top: -11px; right: -8px; background: var(--rosso); color: #fff; font-size: 9px; font-weight: 900; padding: 1px 6px; border-radius: 99px; border: 2px solid var(--inchiostro); animation: pulsa 1.4s ease-in-out infinite; }
+  #fai-video.speciale .testo { display: inline-block; transition: opacity .25s, transform .25s; }
+  #fai-video.speciale .testo.via { opacity: 0; transform: translateY(5px); }
+  @keyframes arcobaleno { to { background-position: 300% 0; } }
+  @keyframes pulsa { 50% { transform: scale(1.15); } }
+  .scelta2 { display: grid; gap: 10px; margin: 14px 0 6px; }
+  .scelta2 button { display: flex; align-items: center; gap: 12px; text-align: left; border: 3px solid var(--inchiostro); border-radius: 18px; background: var(--crema); padding: 12px 14px; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
+  .scelta2 button:last-child { background: #FFE3EE; }
+  .scelta2 .em { font-size: 34px; line-height: 1; }
+  .scelta2 b { display: block; font-size: 18px; font-weight: 900; }
+  .scelta2 small { display: block; font-size: 13px; font-weight: 700; color: var(--grigio); }
+  .regola { background: #E8F6EC; border: 2px solid #2E9B55; border-radius: 12px; padding: 7px 10px; font-size: 12.5px; font-weight: 800; margin-top: 10px; }
+  .cerca-p { display: flex; align-items: center; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 4px 4px 4px 12px; margin-top: 12px; }
+  .cerca-p span { font-weight: 900; color: var(--grigio); }
+  .cerca-p input { flex: 1; min-width: 0; border: 0; outline: 0; font: 800 16px 'Nunito', sans-serif; background: transparent; }
+  .sugg button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1.5px dashed var(--linea); background: none; padding: 8px 4px; font-size: 15px; font-weight: 900; }
+  .sugg small { color: var(--grigio); font-weight: 700; font-size: 12px; margin-left: 6px; }
+  .gruppo { margin: 14px 0 4px; font-size: 13px; font-weight: 900; color: var(--grigio); text-transform: uppercase; letter-spacing: .5px; }
+  .griglia { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .griglia button { border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 7px 3px 6px; line-height: 1.1; position: relative; }
+  .griglia button .em { display: block; font-size: 24px; }
+  .griglia button .sw { display: block; height: 22px; width: 38px; margin: 2px auto 3px; border-radius: 6px; border: 2px solid var(--inchiostro); }
+  .griglia button b { display: block; font-size: 12px; font-weight: 900; }
+  .griglia button small { font-size: 10.5px; font-weight: 800; color: var(--grigio); }
+  .griglia button.on { background: var(--giallo); box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--inchiostro); }
+  .griglia button.on::after { content: '✓'; position: absolute; top: -9px; right: -7px; background: var(--verde); color: #fff; border: 2px solid var(--inchiostro); border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 900; line-height: 18px; }
+  .riga-vista { display: flex; gap: 8px; margin-top: 10px; }
+  .riga-vista button { flex: 1; border: 3px solid var(--inchiostro); border-radius: 99px; background: #fff; padding: 6px; font-weight: 900; font-size: 13px; }
+  .conto-p { position: sticky; bottom: -18px; background: #fff; border-top: 2px solid var(--linea); padding: 10px 0 2px; margin-top: 12px; }
+  .conto-p .pacchetto { background: #FFF1C2; border: 2px dashed var(--inchiostro); border-radius: 12px; padding: 6px 10px; font-size: 13px; font-weight: 800; margin-bottom: 8px; cursor: pointer; }
+  .conto-p .pacchetto.on { background: var(--giallo); border-style: solid; }
+  button.paga { display: block; width: 100%; background: var(--verde); color: #fff; border: 3px solid var(--inchiostro); border-radius: 18px; padding: 12px; font-weight: 900; font-size: 18px; box-shadow: 0 3px 0 rgba(21,32,51,.3); }
+  button.paga:disabled { background: #B9C0CB; }
+  button.paga small { display: block; font-size: 12px; font-weight: 700; }
+  .finto { border: 3px dashed #7B2CBF; background: #F4ECFF; border-radius: 16px; padding: 12px; margin-top: 12px; font-weight: 800; font-size: 14px; }
+  .et-casa.vip { background: linear-gradient(90deg, #FFE08A, #FFC93C, #FFE08A); border: 2.5px solid var(--inchiostro); box-shadow: 0 0 0 2px #fff, 0 0 10px 3px rgba(255, 201, 60, .9); font-size: 13px; padding: 2px 10px; color: var(--inchiostro); text-align: center; }
+  .et-casa.vip small { display: block; font-size: 9.5px; font-weight: 900; color: #7A2E00; }
+  .et-casa.regalo { background: #FFE3EE; text-align: center; font-size: 12px; padding: 2px 9px; }
+  .et-casa.regalo small { display: block; font-size: 9.5px; font-weight: 900; color: #B0125B; }
+  .coriandoli { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; }
+  .coriandoli i { position: absolute; top: -20px; width: 9px; height: 14px; border-radius: 2px; animation: cade 2.4s ease-in forwards; }
+  @keyframes cade { to { transform: translateY(110vh) rotate(720deg); } }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="etichette"></div>
+<div id="prova-tarja">PROVA · NON È IL SITO UFFICIALE</div>
+
+<div id="avviso-demo" hidden>DEMO · dati fittizi di prova</div>
+
+<header id="testa">
+  <div class="marchio">Italia <b>Casa per Casa</b></div>
+  <h1 class="titolo">Trova <b>la tua casa</b></h1>
+  <button id="aiuto" type="button" aria-label="Come funziona?">?</button>
+  <form id="cerca" autocomplete="off">
+    <span class="chiocciola" aria-hidden="true">@</span>
+    <input id="q" type="search" placeholder="il_tuo_account, città o regione" aria-label="Cerca" enterkeyhint="search">
+    <button type="submit">cerca</button>
+  </form>
+  <div id="risultati" hidden></div>
+  <div id="chips"><button id="chip-fiamme" type="button" class="chip" hidden></button></div>
+</header>
+
+<div id="controlli">
+  <button id="zoom-piu" type="button" aria-label="Avvicina">+</button>
+  <button id="zoom-meno" type="button" aria-label="Allontana">−</button>
+  <button id="vedi-paese" type="button" aria-label="Vedi tutta l'Italia">⤢</button>
+  <button id="vai-casa" type="button" aria-label="Vai alla mia casa" hidden>🏠</button>
+</div>
+
+<section id="pannello" hidden>
+  <button class="maniglia" type="button" aria-label="Riduci"></button>
+  <button class="chiudi" type="button" aria-label="Chiudi">×</button>
+  <div id="pannello-contenuto"></div>
+</section>
+
+<div id="pillole">
+  <button id="fai-video" class="speciale" type="button"><span class="novita">NOVITÀ</span><span class="testo">✨ Decora la tua casa</span></button>
+  <a id="tuo-negozio" href="negozio.html">＋ il tuo negozio sulla mappa</a>
+</div>
+
+<nav id="schede">
+  <button data-aba="mappa" class="attiva" type="button">mappa</button>
+  <button data-aba="palazzo" type="button"><i>🏛 </i>Palazzo</button>
+  <button data-aba="classifica" type="button"><i>🏆 </i>Classifica</button>
+  <button data-aba="negozi" type="button"><i>🏪 </i>Negozi</button>
+  <button data-aba="tabellone" type="button"><i>📊 </i>Tabellone</button>
+  <button data-aba="senzapadrone" type="button">senza padrone</button>
+</nav>
+
+<footer id="piede"><span id="versione">caricamento…</span> · <a href="privacy.html">privacy</a></footer>
+
+<div id="caricamento"><div class="palla"></div><p>Costruendo l'Italia…</p></div>
+<script type="module" src="js/main.js"></script>
+<script type="module" src="video/prova-casa.js"></script>
+</body>
+</html>

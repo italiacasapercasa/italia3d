@@ -34,6 +34,13 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   rimuovi <id>                           tira do mapa agora (o lote continua reservado: nenhuma casa muda de lugar)
   commerci                               comércios aprovados e até quando ficam
 
+  Casas decoradas (decori.js; pagas pela Hotmart, ligam sozinhas):
+  decori [tutti]                         decorações ativas; "tutti" mostra também não pagas, vencidas e removidas
+  decori rimuovi <id>                    desliga agora (ex.: quem ganhou o presente pediu para tirar)
+  decori omaggio <conta> <efeitos> [da]  decoração grátis (testes, vídeos, compensação); efeitos separados por vírgula,
+                                         ex.: nerazzurro,corona,neon  (time: bianconero nerazzurro rossonero azzurro giallorosso
+                                         biancoceleste viola granata rossoblu; efeitos: oro neon corona fuochi campione palloncini tricolore cornice)
+
   lista                                  inscritos na lista de espera do "Crea video così"
   visite [dias]                          visitas do site por dia (contador anônimo; padrão: 7 dias)
 `;
@@ -183,6 +190,64 @@ try {
       else x.fino = new Date(Math.max(Date.parse(x.fino), Date.now()) + +(args[1] ?? 30) * 86400e3).toISOString();
       gravar(path.join(CFG, 'commerci.json'), lista);
       console.log(`ok: ${x.nome} ${cmd === 'rimuovi' ? 'sai do mapa na próxima atualização' : `fica até ${new Date(x.fino).toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}`}`);
+      break;
+    }
+    case 'decori': {
+      const { conectar } = await import('./pubblica.mjs');
+      const ftp = conectar(() => {}), remoto = `${ftp.priv}dati/decori/`, local = path.join(RAIZ, 'dati-grezzi', 'decori');
+      fs.mkdirSync(local, { recursive: true });
+      const ids = () => ftp.listar(remoto).filter(n => /^\d{6}-[0-9a-f]{8}\.json$/.test(n)).map(n => n.slice(0, -5)).sort();
+      const baixar = id => (ftp.baixar(`${remoto}${id}.json`, path.join(local, `${id}.json`)) ? ler(path.join(local, `${id}.json`), null) : null);
+      const salvar = p => { gravar(path.join(local, `${p.id}.json`), p); ftp.enviar([{ local: path.join(local, `${p.id}.json`), remoto: `${remoto}${p.id}.json` }]); };
+      const ativa = p => ['pagato', 'omaggio'].includes(p.pagamento) && p.stato !== 'rimosso' && Date.parse(p.scade) > Date.now();
+      // mesma regra do rigeneraDecori de api/hotmart.php: a compra ativa mais recente de cada conta vale
+      const rigenera = lista => {
+        const por = new Map();
+        for (const p of lista.filter(ativa)) if (!por.has(p.conta) || p.attivo_da > por.get(p.conta).attivo_da) por.set(p.conta, p);
+        const pub = { agg: new Date().toISOString(), decori: [...por.values()].map(p => ({ id: p.id, conta: p.conta, da: p.da ?? '', squadra: p.squadra ?? '', extra: p.extra ?? [], scade: p.scade })) };
+        const arq = path.join(local, 'decori-pubblico.json');
+        fs.writeFileSync(arq, JSON.stringify(pub));
+        ftp.enviar([{ local: arq, remoto: `${ftp.web}data/decori.json` }]);
+        console.log(`lista pública atualizada: ${pub.decori.length} casa(s) decorada(s) no mapa`);
+      };
+      const quando = s => new Date(s).toLocaleString('it-IT', { timeZone: 'Europe/Rome', dateStyle: 'short', timeStyle: 'short' });
+      const linha = p => `${p.id}  ${(ativa(p) ? `✨ até ${quando(p.scade)}` : p.stato === 'rimosso' ? '✖ removida' : p.scade ? '⌛ vencida' : `${p.pagamento ?? 'não pagou'}`).padEnd(24)} @${p.conta}${p.da ? ` 🎁 da @${p.da}` : ''} · ${[p.squadra, ...(p.extra ?? [])].filter(Boolean).join(', ')}`;
+      if (args[0] === 'rimuovi') {
+        const p = baixar(args[1] ?? '');
+        if (!p) throw new Error(`decoração ${args[1]} não encontrada no servidor`);
+        p.stato = 'rimosso'; p.rimosso = new Date().toISOString();
+        salvar(p);
+        rigenera(ids().map(baixar).filter(Boolean));
+        console.log(`ok: @${p.conta} sem decoração${p.pagamento === 'pagato' ? ' (se for reembolsar, faça na Hotmart)' : ''}`);
+        break;
+      }
+      if (args[0] === 'omaggio') {
+        const conta = (args[1] ?? '').replace(/^@/, '').toLowerCase(), sel = (args[2] ?? '').split(',').filter(Boolean), da = (args[3] ?? '').replace(/^@/, '').toLowerCase();
+        const SQ = ['bianconero', 'nerazzurro', 'rossonero', 'azzurro', 'giallorosso', 'biancoceleste', 'viola', 'granata', 'rossoblu'];
+        const EF = ['oro', 'neon', 'corona', 'fuochi', 'campione', 'palloncini', 'tricolore', 'cornice'];
+        const snap = ler(path.join(RAIZ, 'sito', 'data', 'snapshot.json'), { case: [] }), conte = new Set(snap.case.map(c => c[0]));
+        if (!conte.has(conta)) throw new Error(`@${conta} não tem casa no mapa`);
+        if (da && !conte.has(da)) throw new Error(`@${da} não tem casa no mapa`);
+        const ruins = sel.filter(x => !SQ.includes(x) && !EF.includes(x));
+        if (!sel.length || ruins.length) throw new Error(`efeitos inválidos: ${ruins.join(', ') || '(nenhum)'}`);
+        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 10, agora = new Date();
+        const p = {
+          id: `${agora.toISOString().slice(2, 10).replace(/-/g, '')}-${Math.random().toString(16).slice(2, 10).padEnd(8, '0')}`, creato: agora.toISOString(), stato: 'nuovo',
+          modo: da ? 'regalo' : 'mia', conta, da, squadra: sel.find(x => SQ.includes(x)) ?? '', extra: sel.filter(x => EF.includes(x)),
+          pagamento: 'omaggio', attivo_da: agora.toISOString(), scade: new Date(agora.getTime() + giorni * 86400e3).toISOString(),
+        };
+        salvar(p);
+        rigenera(ids().map(baixar).filter(Boolean));
+        console.log(`ok: ${linha(p)}`);
+        break;
+      }
+      const lista = ids().map(baixar).filter(Boolean);
+      const mostrar = args[0] === 'tutti' ? lista : lista.filter(ativa);
+      console.log(mostrar.length ? mostrar.map(linha).join('\n') : `Nenhuma decoração ${args[0] === 'tutti' ? '' : 'ativa '}(${lista.length} pedido(s) no total).`);
+      if (args[0] !== 'tutti') {
+        const pagas = lista.filter(p => p.pagamento === 'pagato').length, abertas = lista.filter(p => !p.pagamento).length;
+        console.log(`(${pagas} paga(s) no total · ${abertas} pedido(s) que não chegaram a pagar)`);
+      }
       break;
     }
     case 'lista': {

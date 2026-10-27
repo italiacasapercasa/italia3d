@@ -35,10 +35,12 @@ export class Etichette {
       this.el.appendChild(div);
       it = { div, w: div.offsetWidth, h: div.offsetHeight, html };
       this.pool.set(chave, it);
-    } else if (it.html !== html) {
+    } else if (it.html !== html || it.classe !== classe) {
       it.div.hidden = false;
+      it.div.className = `et ${classe}`;
       it.div.innerHTML = html; it.html = html; it.w = it.div.offsetWidth; it.h = it.div.offsetHeight;
     }
+    it.classe = classe;
     return it;
   }
 
@@ -76,9 +78,14 @@ export class Etichette {
         const cls = c.carica ? `et-casa carica c-${c.carica.tipo}` : 'et-casa';
         add(`c:${c.conta}`, cls, `${fogo ? '🔥 ' : ''}@${esc(c.conta)}`, c.x, c.y + ALTURA_NIVEL[c.livello] * LOTE + LOTE * 0.25, c.z, 10 + i);
       }
+      // casas decoradas (decori.js): rótulo próprio, acima da coroa/troféu, com prioridade sobre as outras casas
+      for (const c of this.decori?.vicine(this.citta.perto) ?? []) {
+        const e = this.decori.etichetta(c);
+        if (e) add(`c:${c.conta}`, e.cls, e.html, c.x, e.y, c.z, 5);
+      }
       if (this.destaque) {
-        const c = D.porConta.get(this.destaque);
-        if (c && c.x !== undefined) add(`c:${c.conta}`, 'et-casa minha', `🏠 @${esc(c.conta)}`, c.x, c.y + ALTURA_NIVEL[c.livello] * LOTE + LOTE * 0.25, c.z, -1, true);
+        const c = D.porConta.get(this.destaque), e = c && this.decori?.etichetta(c);
+        if (c && c.x !== undefined) add(`c:${c.conta}`, e ? e.cls : 'et-casa minha', e ? e.html : `🏠 @${esc(c.conta)}`, c.x, e ? e.y : c.y + ALTURA_NIVEL[c.livello] * LOTE + LOTE * 0.25, c.z, -1, true);
       }
     }
     // projeção + colisão gulosa

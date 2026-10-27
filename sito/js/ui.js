@@ -12,8 +12,8 @@ const ler = k => { try { return localStorage.getItem(k); } catch { return null; 
 const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem storage */ } };
 
 export class UI {
-  constructor(D, mappa, citta, etichette, festa = null) {
-    this.D = D; this.mappa = mappa; this.citta = citta; this.et = etichette; this.festa = festa;
+  constructor(D, mappa, citta, etichette, festa = null, decori = null) {
+    this.D = D; this.mappa = mappa; this.citta = citta; this.et = etichette; this.festa = festa; this.decori = decori;
     this.painel = $('#pannello');
     this.conteudo = $('#pannello-contenuto');
     this.minha = ler('minha_casa');
@@ -54,6 +54,7 @@ export class UI {
     document.querySelectorAll('#schede button').forEach(b => b.classList.toggle('attiva', b.dataset.aba === (aba ?? '')));
   }
   fechar() {
+    this.decori?.chiudi();
     this.painel.hidden = true;
     this.citta.evidenzia(null);
     document.querySelectorAll('#schede button').forEach(b => b.classList.toggle('attiva', b.dataset.aba === 'mappa'));
@@ -77,6 +78,8 @@ export class UI {
       else if (d.atto) this.attoFondazione(this.D.luoghi[+d.atto]);
       else if ('condividi' in d) this.condividir(d.condividi);
       else if ('copia' in d) this.copiarConvite(t);
+      else if (d.dp) this.decori?.azione(t);
+      else if (d.decora) this.decori?.apri(d.decora, d.modo);
       else if (d.ir) this.rota(d.ir);
     });
   }
@@ -91,7 +94,7 @@ export class UI {
   }
 
   rota(r) {
-    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), derby: () => this.derby(), meta: () => this.meta() };
+    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), decora: () => this.decori?.aperto && this.decori.home(), derby: () => this.derby(), meta: () => this.meta() };
     if (mapa[r]) mapa[r]();
   }
 
@@ -228,6 +231,7 @@ export class UI {
   // ---------- casa ----------
   casa(c, voar = true) {
     if (!c) return;
+    if (this.decori?.ed) this.decori.chiudi();   // tocou outra casa no meio da prévia: desfaz
     const D = this.D, l = D.luoghi[c.luogo], r = l.regione, niv = REGOLE.livelli;
     if (voar) { const p = this.citta.posCasa(c); this.focar(p.x, p.z, 0.6, 0.62); }
     this.et.destaque = c.conta;
@@ -249,6 +253,7 @@ export class UI {
         ${c.fonti[8] > 0 ? '<span class="badge mec">🏅 Mecenate · ha un’attività sulla mappa</span>' : ''}
         ${c.carica ? `<span class="badge car c-${c.carica.tipo}">🏛 ${esc(this.cargoTexto(c))}</span>` : ''}
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
+        ${this.decori?.badge(c) ?? ''}
       </div>
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>
@@ -268,7 +273,8 @@ export class UI {
       <div class="bottoni">
         <button class="sec" data-luogo="${l.id}">vedi ${esc(l.nome)}</button>
         ${eMinha ? '<button class="sec" data-minha="">non è la mia casa</button>' : `<button data-minha="${esc(c.conta)}">è la mia casa 🏠</button>`}
-      </div>`);
+      </div>
+      ${this.decori?.bottone(c, eMinha) ?? ''}`);
   }
   definirMinha(conta) {
     this.minha = conta || null;
