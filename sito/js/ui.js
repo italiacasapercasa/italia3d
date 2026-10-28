@@ -4,6 +4,7 @@ import { iconaLivello } from './icone.js';
 import { Fotografo } from './foto.js';
 import { immagineCasa, immagineFondazione, immagineCitta, PERFIL } from './storie.js';
 import { tipoDi, linkWhatsapp } from './commerci.js';
+import { raggiunti, prossimo, inaugurazioni, sogliaDi } from './traguardi.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -133,6 +134,15 @@ export class UI {
     if (this.emFiamme.length) add('chip-fiamme', `🔥 <b>${num(this.emFiamme.length)}</b> ${this.emFiamme.length === 1 ? 'casa in fiamme' : 'case in fiamme'} ora`, () => this.fiamme());
     const dz = D.snap.derby;
     if (dz) add('chip-derby', `⚔️ ${esc(D.comunePorIstat.get(dz.a).nome)} <b>${num(dz.pts_a)}</b> – <b>${num(dz.pts_b)}</b> ${esc(D.comunePorIstat.get(dz.b).nome)}`, () => this.derby());
+    // traguardi: inaugurações das últimas 24 h (as maiores primeiro) e a corrida pelo primeiro grande prédio d'Italia
+    const desde = Date.parse(D.snap.dati_fino) - 24 * 3600e3;
+    inaugurazioni(D).lista.filter(f => f.ts >= desde).sort((a, b) => b.t.casas - a.t.casas).slice(0, 2)
+      .forEach((f, k) => add(`chip-inaug-${k}`, `🎉 <b>${esc(f.l.nome)}</b> ha inaugurato ${esc(f.t.art)}!`, () => this.luogo(f.l)));
+    const corsa = ['ospedale', 'stadio'].find(id => !D.luoghi.some(l => l.case >= sogliaDi(id)));
+    if (corsa) {
+      const [a, b] = [...D.luoghi].sort((x, y) => y.case - x.case), s = sogliaDi(corsa), t = REGOLE.traguardi.find(x => x[0] === corsa);
+      add('chip-corsa', `${t[2]} Primo ${esc(t[3].toLowerCase())} d’Italia: <b>${esc(a.nome)}</b> ${num(a.case)} · <b>${esc(b.nome)}</b> ${num(b.case)} / ${num(s)}`, () => this.luogo(a));
+    }
     const meta = this.metaCase();
     add('chip-meta', `🎯 <b>${num(D.casas.length)}</b> / ${num(meta)} case`, () => this.meta());
     // celular: um chip por vez, em rodízio; tela larga: até 3 juntos (rodando os seguintes)
@@ -251,6 +261,7 @@ export class UI {
       <div class="badges">
         ${fondatore ? `<span class="badge fond">★ Fondatore/Fondatrice di ${esc(l.nome)}</span>` : ''}
         ${c.fonti[8] > 0 ? '<span class="badge mec">🏅 Mecenate · ha un’attività sulla mappa</span>' : ''}
+        ${(inaugurazioni(this.D).porEroe.get(c.conta) ?? []).map(f => `<span class="badge eroe">🏗️ Ha costruito ${esc(f.t.art)} di ${esc(f.l.nome)}</span>`).join('')}
         ${c.carica ? `<span class="badge car c-${c.carica.tipo}">🏛 ${esc(this.cargoTexto(c))}</span>` : ''}
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
         ${this.decori?.badge(c) ?? ''}
@@ -286,14 +297,14 @@ export class UI {
   }
 
   // ---------- cidade ----------
-  proximoEdificio(n) {
-    const M = REGOLE.marchi;
-    if (n < M.chiesa) return ['⛪ Chiesa', M.chiesa];
-    const pal = (Math.floor(n / M.palazzinaOgni) + 1) * M.palazzinaOgni;
-    const opz = [['🏢 Palazzine', pal]];
-    if (n < M.ospedale) opz.push(['🏥 Ospedale', M.ospedale]);
-    if (n < M.stadio) opz.push(['🏟 Stadio', M.stadio]);
-    return opz.sort((a, b) => a[1] - b[1])[0];
+  // traguardi: próxima meta (barra) + prédios já inaugurados, com quem trouxe a casa que completou cada um
+  traguardiCitta(l) {
+    const p = prossimo(l), fatti = raggiunti(this.D, l);
+    const pct = p ? Math.min(100, Math.round(100 * l.case / p.casas)) : 100;
+    return `
+      <h3>🏗️ Traguardi di ${esc(l.nome)}</h3>
+      ${p ? `<div class="carta traguardo"><b>${p.emoji} ${esc(p.nome)}</b> a ${num(p.casas)} case · mancano <b>${num(p.casas - l.case)}</b><div class="progresso"><i style="width:${pct}%"></i></div><small>Chi porta la ${num(p.casas)}ª casa costruisce ${esc(p.art)} di ${esc(l.nome)}: il suo nome resta per sempre.</small></div>` : ''}
+      ${fatti.length ? `<ol class="ranking traguardi">${[...fatti].reverse().map(f => `<li${f.eroe ? ` data-casa="${esc(f.eroe)}"` : ''}><span class="em">${f.t.emoji}</span><span class="quem"><b>${esc(f.t.nome)}</b><small>inaugurato il ${dataBreve(f.ts)}${f.eroe ? ` · 🏗️ @${esc(f.eroe)}, la ${num(f.t.casas)}ª casa` : ''}</small></span></li>`).join('')}</ol>` : ''}`;
   }
   luogo(l, voar = true) {
     if (!l) return;
@@ -301,8 +312,6 @@ export class UI {
     if (voar) this.focar(l.x, l.z, Math.min(5, 0.9 + Math.sqrt(l.case) * 0.075), 0.55);
     const sindaco = k.sindaci[l.comune.istat], cons = k.consiglieri[l.comune.istat] ?? [];
     const casas = l.casas.map(i => D.casas[i]).sort((a, b) => b.sett - a.sett || a.ts - b.ts);
-    const [ed, alvo] = this.proximoEdificio(l.case);
-    const pct = Math.min(100, Math.round(100 * l.case / alvo));
     this.abrir(`
       <h2>⚑ ${esc(l.nome)}</h2>
       <div class="sub"><span data-regione="${l.regione.cod}" class="link">${esc(l.regione.nome)}</span> · ${num(l.case)} ${l.case === 1 ? 'casa' : 'case'} · ${num(l.comune.pop)} abitanti</div>
@@ -311,8 +320,7 @@ export class UI {
       <div class="linha"><span>Sindaco/a</span><span>${sindaco ? `<a data-casa="${esc(sindaco.conta)}">@${esc(sindaco.conta)}</a> · eletto/a domenica · ${num(sindaco.pts)} pt` : 'si elegge domenica alle 21'}</span></div>
       <div class="linha"><span>🏁 Prossima elezione</span><span>${casas[0]?.sett ? `in testa <a data-casa="${esc(casas[0].conta)}">@${esc(casas[0].conta)}</a> · ${punti(casas[0].sett)}` : 'nessuno ha ancora punti questa settimana'}</span></div>
       <div class="linha col"><span>Consiglieri comunali (${cons.length}/${REGOLE.posti.consiglieri})</span><span class="chips-mini">${cons.map(x => `<a data-casa="${esc(x.conta)}">@${esc(x.conta)}</a>`).join('') || '—'}</span></div>
-      <h3>🏗️ Prossimo edificio</h3>
-      <div class="carta"><b>${ed}</b> a ${num(alvo)} case · mancano <b>${num(alvo - l.case)}</b><div class="progresso"><i style="width:${pct}%"></i></div></div>
+      ${this.traguardiCitta(l)}
       <h3>Classifica di ${esc(l.nome)} <small>(punti del mandato)</small></h3>
       <ol class="ranking">${casas.slice(0, 10).map((c, i) => this.linhaRank(c, i)).join('')}</ol>
       <div class="bottoni"><button data-condividi="luogo:${l.id}">📸 Condividi ${esc(l.nome)}</button><button class="sec" data-atto="${l.id}">📜 Atto di fondazione</button></div>

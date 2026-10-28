@@ -5,6 +5,7 @@ import { geometriaCasa, geometriaEspecial, ALTURA_NIVEL, Construtor, PLACCA, CAR
 import { REGOLE, nataleAttivo, halloweenAttivo } from './regole.js';
 import { texturaVendita, texturaLavori, texturaPubblicita, texturaCartellone, carregarImagem, fontePronta } from './insegne.js';
 import { creaNegozio3D } from './negozio3d.js';
+import { sogliaDi, slotDi } from './traguardi.js';
 
 export const LOTE = 0.05, RUA = 0.035;                 // km
 export const QW = 4 * LOTE + RUA, QH = 2 * LOTE + RUA; // quadra: 4 x 2 lotes + meia rua de cada lado
@@ -18,7 +19,6 @@ const ORDEM = (() => {
   a.sort((p, q) => p[2] - q[2] || p[3] - q[3]);
   return a.map(p => [p[0], p[1]]);
 })();
-const M = REGOLE.marchi;
 const RANK_OSPEDALE = 60, RANK_STADIO = 120;
 const papel = r => {
   const [i, j] = ORDEM[r];
@@ -31,6 +31,15 @@ const papel = r => {
 };
 const BLOCOS_CASAS = ORDEM.map((_, r) => r).filter(r => papel(r) === 'case');
 const palazzinaN = r => (r - 7) / 9;
+
+// centro da quadra de um prédio de traguardo numa cidade (câmera dos reels); 'fontana' fica na piazza
+export function posEdificio(l, tipo) {
+  for (let r = 0; r < 200; r++) {
+    const p = papel(r), t = p === 'palazzina' ? slotDi(palazzinaN(r))[0] : p === 'piazza' ? 'fontana' : p;
+    if (t === tipo) { const [i, j] = ORDEM[r]; return { x: l.x + i * QW, z: l.z + j * QH }; }
+  }
+  return null;
+}
 
 // posição local (em km, relativa à piazza) e rotação do lote n
 export function posLote(n) {
@@ -141,7 +150,7 @@ export class Citta {
       borda: add('borda', geometriaBorda()),
       fiamma: add('fiamma', geometriaEspecial('fiamma'), brilho),
     };
-    for (const t of ['piazza', 'bandiera', 'chiesa', 'palazzina', 'ospedale', 'stadio', 'parco', 'liberoV', 'liberoL', 'cartellone']) this.camadas[t] = add(t, geometriaEspecial(t));
+    for (const t of ['piazza', 'bandiera', 'fontana', 'chiesa', 'palazzina', 'scuola', 'stazione', 'campo', 'ospedale', 'stadio', 'parco', 'liberoV', 'liberoL', 'cartellone']) this.camadas[t] = add(t, geometriaEspecial(t));
     // noite: janelas acesas, lâmpadas dos postes (grupo à parte, visível só à noite; luz "aditiva" que brilha)
     this.grupoNotte = new THREE.Group();
     this.grupoNotte.visible = false;
@@ -252,13 +261,13 @@ export class Citta {
       if (!usados.has(`${i - 1},${j}`)) push('borda', matriz(cx - QW / 2, hc, cz, -Math.PI / 2, QH, prof, 1));
       const esp = (t) => push(t, matriz(cx, hc + 0.001, cz, 0, LOTE));
       if (p === 'piazza') {
-        esp('piazza'); push('bandiera', matriz(cx + 1.45 * LOTE, hc + 0.001, cz + 0.55 * LOTE, 0, LOTE));
+        esp(l.case >= sogliaDi('fontana') ? 'fontana' : 'piazza'); push('bandiera', matriz(cx + 1.45 * LOTE, hc + 0.001, cz + 0.55 * LOTE, 0, LOTE));
         if (this.halloween) { const mz = matriz(cx, hc + 0.001, cz, 0, LOTE); push('zuccaP', mz); push('zuccaPL', mz); }
       }
-      else if (p === 'chiesa') esp(l.case >= M.chiesa ? 'chiesa' : 'parco');
-      else if (p === 'palazzina') esp(l.case >= (palazzinaN(r) + 1) * M.palazzinaOgni ? 'palazzina' : 'parco');
-      else if (p === 'ospedale') esp(l.case >= M.ospedale ? 'ospedale' : 'parco');
-      else if (p === 'stadio') esp(l.case >= M.stadio ? 'stadio' : 'parco');
+      else if (p === 'chiesa') esp(l.case >= sogliaDi('chiesa') ? 'chiesa' : 'parco');
+      else if (p === 'palazzina') { const [t, s] = slotDi(palazzinaN(r)); esp(l.case >= s ? t : 'parco'); }
+      else if (p === 'ospedale') esp(l.case >= sogliaDi('ospedale') ? 'ospedale' : 'parco');
+      else if (p === 'stadio') esp(l.case >= sogliaDi('stadio') ? 'stadio' : 'parco');
       // Natal: árvore na piazza; luminárias nas ruas da piazza e das quadras em volta
       if (this.natale) {
         if (p === 'piazza') { push('albero', matriz(cx - LOTE, hc + 0.001, cz, 0, LOTE)); push('stella', matriz(cx - LOTE, hc + 0.001, cz, 0, LOTE)); }

@@ -284,6 +284,50 @@ export function geometriaEspecial(tipo) {
       .cilindro(0.06, 0.38, 0, 0, 0, T.bianco, 6).esfera(0.09, 0, 0.42, 0, T.bianco);
     for (const [x, z] of [[-1.6, -0.7], [1.6, -0.7], [-1.6, 0.7]]) albero(b, x, z, 0.16);
     for (const [x, z] of [[-0.8, 0.6], [0.8, 0.6], [-0.8, -0.6], [0.8, -0.6]]) b.caixa(0.3, 0.06, 0.08, x, 0, z, T.tronco);
+  } else if (tipo === 'fontana') {
+    // traguardo 50 case: a piazza ganha uma fontana monumentale (três bacias, estátua dourada, jatos d'água)
+    b.cilindro(0.62, 0.12, 0, 0, 0, T.pietra, 16).cilindro(0.56, 0.13, 0, 0, 0, T.acqua, 16);
+    b.cilindro(0.3, 0.32, 0, 0, 0, T.bianco, 12).cilindro(0.26, 0.33, 0, 0, 0, T.acqua, 12);
+    b.cilindro(0.08, 0.32, 0, 0.3, 0, T.bianco, 8).cilindro(0.16, 0.05, 0, 0.6, 0, T.bianco, 10);
+    b.cilindro(0.05, 0.18, 0, 0.65, 0, T.oro, 6).esfera(0.07, 0, 0.9, 0, T.oro);
+    for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2; b.cilindro(0.016, 0.24, Math.cos(a) * 0.43, 0.12, Math.sin(a) * 0.43, '#BFEFFF', 5); }
+    for (const [x, z] of [[-1.6, -0.7], [1.6, -0.7], [-1.6, 0.7]]) albero(b, x, z, 0.16);
+    for (const [x, z] of [[-0.95, 0.65], [0.95, 0.65], [-0.95, -0.65], [0.95, -0.65]]) b.caixa(0.3, 0.06, 0.08, x, 0, z, T.tronco);
+  } else if (tipo === 'scuola') {
+    // traguardo 150: scuola gialla a due piani, ingresso con timpano e orologio, cortile, tricolore
+    b.quad(3.7, 1.8, 0, 0.003, 0, '#D9C9A9');
+    b.caixa(2.8, 0.95, 0.95, 0, 0, -0.3, '#F2C14E').caixa(2.86, 0.06, 1.01, 0, 0.95, -0.3, T.bianco).telhado(2.9, 1.05, 0.28, 0, 1.01, -0.3, T.tetto);
+    b.caixa(0.7, 1.25, 0.1, 0, 0, 0.22, T.bianco).telhado(0.74, 0.12, 0.25, 0, 1.25, 0.22, T.bianco);
+    b.caixa(0.22, 0.22, 0.02, 0, 0.92, 0.28, T.scuro).caixa(0.18, 0.18, 0.02, 0, 0.94, 0.29, T.bianco);
+    b.caixa(0.28, 0.4, 0.02, 0, 0, 0.28, T.porta);
+    for (let p = 0; p < 2; p++) for (const dx of [-1.15, -0.8, -0.48, 0.48, 0.8, 1.15]) b.caixa(0.17, 0.22, 0.02, dx, 0.14 + p * 0.42, 0.18, T.vetro);
+    b.cilindro(0.02, 1.3, 1.55, 0, 0.55, T.grigio, 5);
+    for (const [dx, cor] of [[0.07, '#2E9B55'], [0.19, T.bianco], [0.31, '#E0473C']]) b.caixa(0.12, 0.24, 0.02, 1.55 + dx, 1.02, 0.55, cor);
+    albero(b, -1.55, 0.6, 0.15); albero(b, -1.1, 0.7, 0.13);
+  } else if (tipo === 'stazione') {
+    // traguardo 250: stazione con torre dell'orologio, pensilina sulla banchina, due binari e un treno rosso
+    b.caixa(3.0, 0.75, 0.75, 0, 0, -0.58, '#E9C9A0').telhado(3.1, 0.85, 0.22, 0, 0.75, -0.58, T.tetto);
+    b.caixa(0.5, 1.45, 0.5, 0, 0, -0.58, '#E3BD8F').piramide(0.6, 0.6, 0.32, 0, 1.45, -0.58, T.tettoScuro);
+    b.caixa(0.28, 0.28, 0.02, 0, 1.1, -0.32, T.scuro).caixa(0.24, 0.24, 0.02, 0, 1.12, -0.31, T.bianco);
+    for (const dx of [-1.2, -0.8, -0.4, 0.4, 0.8, 1.2]) b.caixa(0.18, 0.34, 0.02, dx, 0.1, -0.2, T.verde);
+    b.caixa(3.3, 0.06, 0.38, 0, 0, 0.0, T.pietra);
+    for (const x of [-1.3, -0.45, 0.45, 1.3]) b.caixa(0.04, 0.5, 0.04, x, 0.06, 0.05, T.scuro);
+    b.caixa(3.0, 0.04, 0.42, 0, 0.56, 0.02, '#B84E2C');
+    for (let k = -8; k <= 8; k++) for (const z of [0.5, 0.8]) b.caixa(0.05, 0.012, 0.22, k * 0.21, 0, z, '#7A5A3A');
+    for (const z of [0.43, 0.57, 0.73, 0.87]) b.caixa(3.6, 0.025, 0.022, 0, 0.012, z, T.grigio);
+    b.caixa(1.5, 0.26, 0.2, -0.45, 0.04, 0.5, '#C8102E').caixa(1.52, 0.07, 0.21, -0.45, 0.17, 0.5, T.scuro).caixa(1.5, 0.03, 0.2, -0.45, 0.3, 0.5, T.bianco);
+    b.caixa(0.22, 0.2, 0.18, 0.4, 0.04, 0.5, '#C8102E').caixa(0.06, 0.07, 0.19, 0.5, 0.15, 0.5, T.scuro);
+  } else if (tipo === 'campo') {
+    // traguardo 400: campo da calcio a strisce, linee, due porte e una tribunetta
+    for (let k = 0; k < 7; k++) b.caixa(0.5, 0.02, 1.7, -1.5 + k * 0.5, 0, 0.05, k % 2 ? '#43A047' : '#4CAF50');
+    for (const z of [-0.7, 0.8]) b.caixa(3.1, 0.026, 0.025, 0, 0, z, T.bianco);
+    for (const x of [-1.55, 0, 1.55]) b.caixa(0.025, 0.026, 1.5, x, 0, 0.05, T.bianco);
+    for (const s of [-1, 1]) {
+      b.caixa(0.025, 0.026, 0.7, s * 1.2, 0, 0.05, T.bianco).caixa(0.35, 0.026, 0.025, s * 1.375, 0, 0.4, T.bianco).caixa(0.35, 0.026, 0.025, s * 1.375, 0, -0.3, T.bianco);
+      b.caixa(0.03, 0.22, 0.03, s * 1.57, 0, 0.27, T.bianco).caixa(0.03, 0.22, 0.03, s * 1.57, 0, -0.17, T.bianco).caixa(0.03, 0.03, 0.47, s * 1.57, 0.22, 0.05, T.bianco);
+    }
+    const g = new THREE.RingGeometry(0.2, 0.225, 20); g.rotateX(-Math.PI / 2); b.add(g, T.bianco, 0, 0.027, 0.05);
+    b.caixa(2.4, 0.16, 0.16, 0, 0, -0.9, '#3B82C4').caixa(2.4, 0.12, 0.1, 0, 0.16, -0.95, '#2F6FB0').caixa(2.5, 0.03, 0.22, 0, 0.36, -0.92, T.grigio);
   } else if (tipo === 'bandiera') {
     b.cilindro(0.025, 1.0, 0, 0, 0, T.grigio, 5).caixa(0.46, 0.26, 0.025, 0.24, 0.72, 0, '#FFC93C');
   } else if (tipo === 'chiesa') {

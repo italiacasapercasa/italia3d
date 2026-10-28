@@ -41,7 +41,19 @@ export const REGOLE = {
   // ordem de distribuição: de cima para baixo, um cargo por pessoa
   cariche: ['presidente', 'senatore', 'presidente_regione', 'deputato', 'sindaco', 'consigliere'],
   posti: { presidente: 1, senatoriPerRegione: 3, deputati: 400, deputatiMinimo: 2, consiglieri: 10 },
-  marchi: { chiesa: 30, palazzinaOgni: 100, ospedale: 1000, stadio: 5000 },
+  // traguardi della città: [id, case, emoji, nome, com artigo]. Os prédios entram nas quadras especiais (antes parque):
+  // nenhuma casa muda de lugar. Quem traz a N-ésima casa "costruisce" o prédio (ver traguardi.js)
+  traguardi: [
+    ['chiesa', 30, '⛪', 'Chiesa', 'la chiesa'],
+    ['fontana', 50, '⛲', 'Fontana monumentale', 'la fontana monumentale'],
+    ['palazzina', 100, '🏢', 'Prima palazzina', 'la prima palazzina'],
+    ['scuola', 150, '🏫', 'Scuola', 'la scuola'],
+    ['stazione', 250, '🚉', 'Stazione', 'la stazione'],
+    ['campo', 400, '⚽', 'Campo da calcio', 'il campo da calcio'],
+    ['ospedale', 500, '🏥', 'Ospedale', 'l’ospedale'],
+    ['stadio', 1000, '🏟️', 'Stadio', 'lo stadio'],
+  ],
+  palazzinaOgni: 100,          // depois do ospedale: mais uma palazzina a cada 100 case (600, 700, ...)
   // lotes livres desenhados depois da última casa (só desenho: convite para marcar amigos)
   lotti_liberi: 3,
   cartellone_da: 15,           // cidades com pelo menos estas casas mostram um outdoor "LA TUA PUBBLICITÀ QUI"

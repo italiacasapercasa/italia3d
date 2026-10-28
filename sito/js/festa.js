@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { posLote, DIST_CIDADE } from './citta.js';
 import { halloweenAttivo } from './regole.js';
+import { inaugurazioni } from './traguardi.js';
 
 const qs = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
 const RAD = Math.PI / 180;
@@ -101,6 +102,9 @@ export class Festa {
       top.slice(0, 15).forEach(l => citta(l, 0.2));
       avvisi.push(`🏛 Eletto il nuovo Presidente: @${pc.conta}`);
     }
+    // traguardi: cidade que inaugurou um prédio nas últimas 24 h ganha fogos (maiores quanto maior o prédio)
+    const desde = Date.parse(D.snap.dati_fino) - 24 * 3600e3;
+    for (const f of inaugurazioni(D).lista) { if (f.ts < desde) break; if (f.t.casas >= 100) citta(f.l, Math.min(1.4, 0.3 + f.t.casas / 600), ['oro', 'rosso', 'bianco']); }
     // vizinhos novos: cidades com casas que chegaram nas últimas 2 horas (fogos pequenos)
     const recenti = new Map(), lim = Date.parse(D.snap.dati_fino) - 2 * 3600e3;
     for (const c of D.casas) if (c.ts >= lim) recenti.set(c.luogo, (recenti.get(c.luogo) ?? 0) + 1);
