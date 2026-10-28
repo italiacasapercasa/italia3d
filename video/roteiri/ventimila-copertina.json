@@ -1,0 +1,1621 @@
+{
+ "nome": "ventimila",
+ "durata": 66.75,
+ "citta": "Roma",
+ "rivale": "Napoli",
+ "eroe": "m.17.b.17",
+ "attivita": "261027-f23cb939",
+ "decorata": "_gianni26_",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "CE",
+      0.03
+     ],
+     [
+      "L'ABBIAMO",
+      0.254
+     ]
+    ],
+    [
+     [
+      "FATTA",
+      0.809
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.169
+  },
+  {
+   "linee": [
+    [
+     [
+      "SULLA",
+      1.199
+     ],
+     [
+      "MAPPA",
+      1.589
+     ],
+     [
+      "CI",
+      1.979
+     ]
+    ]
+   ],
+   "ini": 1.199,
+   "fim": 2.172
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      2.202
+     ],
+     [
+      "PIÙ",
+      2.592
+     ],
+     [
+      "DI",
+      2.816
+     ]
+    ]
+   ],
+   "ini": 2.202,
+   "fim": 3.01
+  },
+  {
+   "linee": [
+    [
+     [
+      "20.000",
+      3.04,
+      true
+     ],
+     [
+      "CASE",
+      3.761,
+      true
+     ]
+    ]
+   ],
+   "ini": 3.04,
+   "fim": 4.612
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      4.642
+     ],
+     [
+      "DA",
+      4.825
+     ],
+     [
+      "OGGI",
+      5.008
+     ]
+    ]
+   ],
+   "ini": 4.642,
+   "fim": 5.553
+  },
+  {
+   "linee": [
+    [
+     [
+      "LE",
+      5.583
+     ],
+     [
+      "CITTÀ",
+      5.806,
+      true
+     ]
+    ],
+    [
+     [
+      "CRESCONO",
+      6.194,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.583,
+   "fim": 6.718
+  },
+  {
+   "linee": [
+    [
+     [
+      "DAVVERO",
+      6.748,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.748,
+   "fim": 7.871
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      7.901
+     ],
+     [
+      "50",
+      8.09,
+      true
+     ],
+     [
+      "CASE",
+      8.558,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.901,
+   "fim": 8.856
+  },
+  {
+   "linee": [
+    [
+     [
+      "NELLA",
+      8.886
+     ],
+     [
+      "PIAZZA",
+      9.214
+     ]
+    ],
+    [
+     [
+      "ARRIVA",
+      9.542
+     ]
+    ]
+   ],
+   "ini": 8.886,
+   "fim": 9.98
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      10.01
+     ],
+     [
+      "FONTANA",
+      10.198,
+      true
+     ]
+    ],
+    [
+     [
+      "MONUMENTALE",
+      10.666,
+      true
+     ]
+    ]
+   ],
+   "ini": 10.01,
+   "fim": 11.82
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      11.85
+     ],
+     [
+      "150",
+      12.09,
+      true
+     ],
+     [
+      "LA",
+      13.04
+     ]
+    ]
+   ],
+   "ini": 11.85,
+   "fim": 13.249
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCUOLA",
+      13.279,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.279,
+   "fim": 14.12
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      14.15
+     ],
+     [
+      "250",
+      14.358,
+      true
+     ],
+     [
+      "LA",
+      15.339
+     ]
+    ]
+   ],
+   "ini": 14.15,
+   "fim": 15.517
+  },
+  {
+   "linee": [
+    [
+     [
+      "STAZIONE",
+      15.547,
+      true
+     ],
+     [
+      "CON",
+      16.065
+     ]
+    ],
+    [
+     [
+      "IL",
+      16.273
+     ]
+    ]
+   ],
+   "ini": 15.547,
+   "fim": 16.452
+  },
+  {
+   "linee": [
+    [
+     [
+      "TRENO",
+      16.482,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.482,
+   "fim": 17.227
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      17.257
+     ],
+     [
+      "400",
+      17.495,
+      true
+     ],
+     [
+      "IL",
+      18.261
+     ]
+    ]
+   ],
+   "ini": 17.257,
+   "fim": 18.469
+  },
+  {
+   "linee": [
+    [
+     [
+      "CAMPO",
+      18.499,
+      true
+     ],
+     [
+      "DA",
+      18.913,
+      true
+     ]
+    ],
+    [
+     [
+      "CALCIO",
+      19.151,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.499,
+   "fim": 19.535
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      19.565
+     ],
+     [
+      "A",
+      19.803
+     ],
+     [
+      "500",
+      20.041,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.565,
+   "fim": 21.119
+  },
+  {
+   "linee": [
+    [
+     [
+      "L'OSPEDALE",
+      21.149,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.149,
+   "fim": 22.43
+  },
+  {
+   "linee": [
+    [
+     [
+      "ROMA",
+      22.46,
+      true
+     ],
+     [
+      "E",
+      22.789
+     ],
+     [
+      "NAPOLI",
+      22.977,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.46,
+   "fim": 23.416
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      23.446
+     ],
+     [
+      "A",
+      23.775
+     ],
+     [
+      "MENO",
+      23.963
+     ]
+    ]
+   ],
+   "ini": 23.446,
+   "fim": 24.262
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      24.292
+     ],
+     [
+      "100",
+      24.481,
+      true
+     ],
+     [
+      "CASE",
+      24.81
+     ]
+    ]
+   ],
+   "ini": 24.292,
+   "fim": 25.108
+  },
+  {
+   "linee": [
+    [
+     [
+      "DAL",
+      25.138
+     ],
+     [
+      "PRIMO",
+      25.327
+     ]
+    ],
+    [
+     [
+      "OSPEDALE",
+      25.656,
+      true
+     ]
+    ]
+   ],
+   "ini": 25.138,
+   "fim": 26.234
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      26.264
+     ]
+    ]
+   ],
+   "ini": 26.264,
+   "fim": 27.21
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      27.24
+     ],
+     [
+      "ARRIVERÀ",
+      27.404,
+      true
+     ]
+    ],
+    [
+     [
+      "PRIMA",
+      27.932,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.24,
+   "fim": 28.681
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      28.711
+     ],
+     [
+      "CHI",
+      28.911
+     ],
+     [
+      "PORTA",
+      29.111
+     ]
+    ]
+   ],
+   "ini": 28.711,
+   "fim": 29.429
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      29.459
+     ],
+     [
+      "CASA",
+      29.658
+     ],
+     [
+      "NUMERO",
+      30.006,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.459,
+   "fim": 30.472
+  },
+  {
+   "linee": [
+    [
+     [
+      "500",
+      30.502,
+      true
+     ],
+     [
+      "COSTRUISCE",
+      31.145,
+      true
+     ]
+    ],
+    [
+     [
+      "L'OSPEDALE",
+      31.641,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.502,
+   "fim": 32.7
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      32.73
+     ],
+     [
+      "SUO",
+      32.942
+     ],
+     [
+      "NOME",
+      33.154,
+      true
+     ]
+    ]
+   ],
+   "ini": 32.73,
+   "fim": 33.493
+  },
+  {
+   "linee": [
+    [
+     [
+      "RESTA",
+      33.523
+     ],
+     [
+      "PER",
+      33.892
+     ]
+    ],
+    [
+     [
+      "SEMPRE",
+      34.104,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.523,
+   "fim": 34.442
+  },
+  {
+   "linee": [
+    [
+     [
+      "NELLA",
+      34.472
+     ],
+     [
+      "STORIA",
+      34.841
+     ]
+    ],
+    [
+     [
+      "DELLA",
+      35.21
+     ]
+    ]
+   ],
+   "ini": 34.472,
+   "fim": 35.549
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      35.579
+     ]
+    ]
+   ],
+   "ini": 35.579,
+   "fim": 36.499
+  },
+  {
+   "linee": [
+    [
+     [
+      "INTANTO",
+      36.529
+     ],
+     [
+      "SULLA",
+      37.036
+     ]
+    ],
+    [
+     [
+      "MAPPA",
+      37.392
+     ]
+    ]
+   ],
+   "ini": 36.529,
+   "fim": 37.718
+  },
+  {
+   "linee": [
+    [
+     [
+      "CI",
+      37.748
+     ],
+     [
+      "SONO",
+      37.952
+     ],
+     [
+      "GIÀ",
+      38.308
+     ]
+    ]
+   ],
+   "ini": 37.748,
+   "fim": 38.483
+  },
+  {
+   "linee": [
+    [
+     [
+      "14",
+      38.513,
+      true
+     ],
+     [
+      "ATTIVITÀ",
+      39.171,
+      true
+     ]
+    ],
+    [
+     [
+      "VERE",
+      39.83,
+      true
+     ]
+    ]
+   ],
+   "ini": 38.513,
+   "fim": 40.436
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      40.466
+     ],
+     [
+      "LE",
+      40.645
+     ],
+     [
+      "PRIME",
+      40.824
+     ]
+    ]
+   ],
+   "ini": 40.466,
+   "fim": 41.105
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      41.135,
+      true
+     ],
+     [
+      "SPECIALI",
+      41.446,
+      true
+     ]
+    ],
+    [
+     [
+      "CON",
+      41.889
+     ]
+    ]
+   ],
+   "ini": 41.135,
+   "fim": 42.038
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      42.068
+     ],
+     [
+      "COLORI",
+      42.246,
+      true
+     ],
+     [
+      "DELLA",
+      42.689
+     ]
+    ]
+   ],
+   "ini": 42.068,
+   "fim": 42.97
+  },
+  {
+   "linee": [
+    [
+     [
+      "SQUADRA",
+      43,
+      true
+     ]
+    ]
+   ],
+   "ini": 43,
+   "fim": 43.778
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      43.808,
+      true
+     ],
+     [
+      "ALLE",
+      44.393
+     ]
+    ],
+    [
+     [
+      "9",
+      44.709
+     ]
+    ]
+   ],
+   "ini": 43.808,
+   "fim": 44.996
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      45.026
+     ],
+     [
+      "SERA",
+      45.207
+     ]
+    ],
+    [
+     [
+      "L'ITALIA",
+      45.524
+     ]
+    ]
+   ],
+   "ini": 45.026,
+   "fim": 45.944
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      45.974
+     ],
+     [
+      "IL",
+      46.425
+     ],
+     [
+      "SUO",
+      46.607
+     ]
+    ]
+   ],
+   "ini": 45.974,
+   "fim": 46.759
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRIMO",
+      46.789
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      47.105,
+      true
+     ]
+    ]
+   ],
+   "ini": 46.789,
+   "fim": 48.161
+  },
+  {
+   "linee": [
+    [
+     [
+      "RIMINI",
+      48.191,
+      true
+     ],
+     [
+      "È",
+      48.671
+     ],
+     [
+      "IN",
+      48.864
+     ]
+    ]
+   ],
+   "ini": 48.191,
+   "fim": 49.028
+  },
+  {
+   "linee": [
+    [
+     [
+      "TESTA",
+      49.058
+     ],
+     [
+      "MA",
+      49.394
+     ],
+     [
+      "È",
+      49.588
+     ]
+    ]
+   ],
+   "ini": 49.058,
+   "fim": 49.751
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUTTO",
+      49.781
+     ],
+     [
+      "APERTO",
+      50.118,
+      true
+     ]
+    ]
+   ],
+   "ini": 49.781,
+   "fim": 50.96
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      50.99
+     ],
+     [
+      "NEL",
+      51.19
+     ],
+     [
+      "DERBY",
+      51.39
+     ]
+    ]
+   ],
+   "ini": 50.99,
+   "fim": 51.709
+  },
+  {
+   "linee": [
+    [
+     [
+      "DELLA",
+      51.739
+     ],
+     [
+      "SETTIMANA",
+      52.087
+     ]
+    ],
+    [
+     [
+      "ROMA",
+      52.733,
+      true
+     ]
+    ]
+   ],
+   "ini": 51.739,
+   "fim": 53.051
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      53.081
+     ],
+     [
+      "PIÙ",
+      53.281
+     ],
+     [
+      "DEL",
+      53.482
+     ]
+    ]
+   ],
+   "ini": 53.081,
+   "fim": 53.652
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOPPIO",
+      53.682,
+      true
+     ],
+     [
+      "DEI",
+      54.03
+     ]
+    ],
+    [
+     [
+      "PUNTI",
+      54.231
+     ]
+    ]
+   ],
+   "ini": 53.682,
+   "fim": 54.549
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      54.579
+     ],
+     [
+      "MILANO",
+      54.779,
+      true
+     ]
+    ]
+   ],
+   "ini": 54.579,
+   "fim": 55.784
+  },
+  {
+   "linee": [
+    [
+     [
+      "MILANO",
+      55.814,
+      true
+     ],
+     [
+      "CI",
+      56.379
+     ],
+     [
+      "SEI",
+      56.607,
+      true
+     ]
+    ]
+   ],
+   "ini": 55.814,
+   "fim": 57.247
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      57.277
+     ],
+     [
+      "NEI",
+      57.588
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      57.767
+     ]
+    ]
+   ],
+   "ini": 57.277,
+   "fim": 58.18
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      58.21
+     ],
+     [
+      "TUA",
+      58.389
+     ],
+     [
+      "CITTÀ",
+      58.567,
+      true
+     ]
+    ]
+   ],
+   "ini": 58.21,
+   "fim": 58.848
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      58.878
+     ],
+     [
+      "LA",
+      59.057
+     ],
+     [
+      "TUA",
+      59.235
+     ]
+    ]
+   ],
+   "ini": 58.878,
+   "fim": 59.384
+  },
+  {
+   "linee": [
+    [
+     [
+      "REGIONE",
+      59.414,
+      true
+     ]
+    ]
+   ],
+   "ini": 59.414,
+   "fim": 60.135
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      60.165
+     ],
+     [
+      "TUA",
+      60.365
+     ],
+     [
+      "CASA",
+      60.566,
+      true
+     ]
+    ]
+   ],
+   "ini": 60.165,
+   "fim": 60.884
+  },
+  {
+   "linee": [
+    [
+     [
+      "APPARIRÀ",
+      60.914,
+      true
+     ],
+     [
+      "SULLA",
+      61.56
+     ]
+    ],
+    [
+     [
+      "MAPPA",
+      61.909
+     ]
+    ]
+   ],
+   "ini": 60.914,
+   "fim": 62.228
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      62.258
+     ],
+     [
+      "AIUTERAI",
+      62.458
+     ],
+     [
+      "LA",
+      62.955
+     ]
+    ]
+   ],
+   "ini": 62.258,
+   "fim": 63.126
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      63.156
+     ],
+     [
+      "CITTÀ",
+      63.356
+     ],
+     [
+      "A",
+      63.705
+     ]
+    ]
+   ],
+   "ini": 63.156,
+   "fim": 63.875
+  },
+  {
+   "linee": [
+    [
+     [
+      "RAGGIUNGERE",
+      63.905
+     ],
+     [
+      "IL",
+      64.551
+     ]
+    ],
+    [
+     [
+      "PROSSIMO",
+      64.751
+     ]
+    ]
+   ],
+   "ini": 63.905,
+   "fim": 65.219
+  },
+  {
+   "linee": [
+    [
+     [
+      "TRAGUARDO",
+      65.249,
+      true
+     ]
+    ]
+   ],
+   "ini": 65.249,
+   "fim": 66.45
+  }
+ ],
+ "parlato": [
+  "Ce l'abbiamo fatta: sulla mappa ci sono più di ventimila case!",
+  "E da oggi,",
+  "le città crescono davvero.",
+  "A cinquanta case, nella piazza arriva la fontana monumentale.",
+  "A centocinquanta la scuola,",
+  "a duecentocinquanta la stazione, con il treno.",
+  "A quattrocento il campo da calcio, e a cinquecento…",
+  "l'ospedale!",
+  "Roma e Napoli sono a meno di cento case dal primo ospedale d'Italia.",
+  "Chi arriverà prima?",
+  "E chi porta la casa numero cinquecento costruisce l'ospedale:",
+  "il suo nome resta per sempre nella storia della città.",
+  "Intanto, sulla mappa ci sono già quattordici attività vere,",
+  "e le prime case speciali, con i colori della squadra.",
+  "Domenica alle nove di sera l'Italia elegge il suo primo Presidente:",
+  "Rimini è in testa, ma è tutto aperto.",
+  "E nel derby della settimana, Roma ha più del doppio dei punti di Milano.",
+  "Milano, ci sei?",
+  "Scrivi nei commenti la tua città e la tua regione:",
+  "la tua casa apparirà sulla mappa, e aiuterai la tua città a raggiungere il prossimo traguardo!"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  2,
+  2,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  8,
+  8,
+  8,
+  8,
+  8,
+  9,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  11,
+  12,
+  12,
+  12,
+  13,
+  13,
+  13,
+  13,
+  14,
+  14,
+  14,
+  14,
+  15,
+  15,
+  15,
+  16,
+  16,
+  16,
+  16,
+  16,
+  17,
+  18,
+  18,
+  18,
+  18,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19
+ ],
+ "eventi": {
+  "ce": -0.02,
+  "ventimila": 2.96,
+  "daoggi": 4.542,
+  "crescono": 6.194,
+  "cinquanta": 8.04,
+  "fontana": 10.148,
+  "centocinquanta": 12.04,
+  "scuola": 13.229,
+  "duecento": 14.308,
+  "stazione": 15.497,
+  "treno": 16.432,
+  "quattrocento": 17.445,
+  "campo": 18.449,
+  "cinquecento": 19.991,
+  "ospedale": 21.099,
+  "roma": 22.41,
+  "napoli": 22.927,
+  "cento": 24.431,
+  "chi": 27.14,
+  "eroe": 28.611,
+  "numero": 29.956,
+  "costruisce": 31.145,
+  "nome": 33.104,
+  "sempre": 34.104,
+  "intanto": 36.429,
+  "quattordici": 38.433,
+  "speciali": 41.085,
+  "colori": 42.246,
+  "domenica": 43.708,
+  "presidente": 47.055,
+  "rimini": 48.141,
+  "aperto": 50.068,
+  "derby": 50.89,
+  "roma2": 52.683,
+  "doppio": 53.632,
+  "milano": 54.729,
+  "cisei": 55.764,
+  "scrivi": 57.177,
+  "regione": 59.414,
+  "casa_f": 60.516,
+  "traguardo": 65.199
+ },
+ "sincro": {
+  "eventi.ce": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventimila": [
+   0,
+   9,
+   -0.08
+  ],
+  "eventi.daoggi": [
+   1,
+   0,
+   -0.1
+  ],
+  "eventi.crescono": [
+   2,
+   2,
+   0
+  ],
+  "eventi.cinquanta": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.fontana": [
+   3,
+   7,
+   -0.05
+  ],
+  "eventi.centocinquanta": [
+   4,
+   1,
+   -0.05
+  ],
+  "eventi.scuola": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.duecento": [
+   5,
+   1,
+   -0.05
+  ],
+  "eventi.stazione": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.treno": [
+   5,
+   6,
+   -0.05
+  ],
+  "eventi.quattrocento": [
+   6,
+   1,
+   -0.05
+  ],
+  "eventi.campo": [
+   6,
+   3,
+   -0.05
+  ],
+  "eventi.cinquecento": [
+   6,
+   8,
+   -0.05
+  ],
+  "eventi.ospedale": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.roma": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.napoli": [
+   8,
+   2,
+   -0.05
+  ],
+  "eventi.cento": [
+   8,
+   7,
+   -0.05
+  ],
+  "eventi.chi": [
+   9,
+   0,
+   -0.1
+  ],
+  "eventi.eroe": [
+   10,
+   0,
+   -0.1
+  ],
+  "eventi.numero": [
+   10,
+   5,
+   -0.05
+  ],
+  "eventi.costruisce": [
+   10,
+   7,
+   0
+  ],
+  "eventi.nome": [
+   11,
+   2,
+   -0.05
+  ],
+  "eventi.sempre": [
+   11,
+   5,
+   0
+  ],
+  "eventi.intanto": [
+   12,
+   0,
+   -0.1
+  ],
+  "eventi.quattordici": [
+   12,
+   6,
+   -0.08
+  ],
+  "eventi.speciali": [
+   13,
+   3,
+   -0.05
+  ],
+  "eventi.colori": [
+   13,
+   7,
+   0
+  ],
+  "eventi.domenica": [
+   14,
+   0,
+   -0.1
+  ],
+  "eventi.presidente": [
+   14,
+   10,
+   -0.05
+  ],
+  "eventi.rimini": [
+   15,
+   0,
+   -0.05
+  ],
+  "eventi.aperto": [
+   15,
+   7,
+   -0.05
+  ],
+  "eventi.derby": [
+   16,
+   0,
+   -0.1
+  ],
+  "eventi.roma2": [
+   16,
+   5,
+   -0.05
+  ],
+  "eventi.doppio": [
+   16,
+   9,
+   -0.05
+  ],
+  "eventi.milano": [
+   16,
+   13,
+   -0.05
+  ],
+  "eventi.cisei": [
+   17,
+   0,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   18,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   18,
+   9,
+   0
+  ],
+  "eventi.casa_f": [
+   19,
+   2,
+   -0.05
+  ],
+  "eventi.traguardo": [
+   19,
+   15,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 10.mp3",
+  "durata": 65.95
+ },
+ "copertina": {
+  "titolo_top": 150,
+  "senza_testa": true,
+  "linee": [
+   [
+    "🎉 20.000",
+    true,
+    200
+   ],
+   [
+    "CASE!",
+    false,
+    170
+   ],
+   [
+    "E LE CITTÀ CRESCONO",
+    "r",
+    78
+   ]
+  ]
+ }
+}
