@@ -389,26 +389,39 @@ export class UI {
       <p class="nota">Attività sulla mappa di ${esc(l.nome)}. <a href="negozio.html?citta=${l.comune.istat}">Vuoi anche tu la tua?</a></p>`);
   }
 
-  // aba Negozi: todos os comércios do mapa, com busca e "vicino a me" (pela casa marcada como minha)
+  // aba Vetrina: cartelloni em destaque no topo + todos os comércios, com filtros, busca e "vicino a me" (pela casa marcada como minha)
   negozi(filtro = 'tutti', busca = '') {
     const D = this.D, minha = this.minha && D.porConta.get(this.minha), base = minha && D.luoghi[minha.luogo];
-    let lista = [...D.commerci];
+    const cartellone = cm => cm.prodotto === 'cartellone';
+    // o plano acompanha o tamanho da cidade: metropoli antes de città antes de borgo
+    let lista = [...D.commerci].sort((a, b) => b.luogo.comune.pop - a.luogo.comune.pop);
+    if (filtro === 'cartelloni') lista = lista.filter(cartellone);
+    if (filtro === 'negozi') lista = lista.filter(cm => !cartellone(cm));
     if (filtro === 'vicino' && base) lista.sort((a, b) => Math.hypot(a.luogo.x - base.x, a.luogo.z - base.z) - Math.hypot(b.luogo.x - base.x, b.luogo.z - base.z));
     const n = norm(busca);
     if (n) lista = lista.filter(cm => norm(`${cm.nome} ${cm.luogo.nome} ${tipoDi(cm.tipo)[2]}`).includes(n));
-    const riga = (cm, i) => {
+    const evidenza = filtro === 'tutti' && !n ? lista.filter(cartellone) : [];
+    const resto = lista.filter(cm => !evidenza.includes(cm));
+    const mini = (cm, e) => `<span class="mini">${cm.logo ? `<img src="${esc(cm.logo)}" alt="" loading="lazy">` : e}</span>`;
+    const carta = cm => {
+      const [, e, t] = tipoDi(cm.tipo);
+      return `<div class="ev" data-commercio="${esc(cm.id)}">${mini(cm, e)}<span class="quem"><b>${esc(cm.nome)}</b>${cm.testo ? `<i>${esc(cm.testo)}</i>` : ''}<small>${esc(t)} · 📍 ${esc(cm.luogo.nome)}</small></span><span class="visita">vedi</span></div>`;
+    };
+    const riga = cm => {
       const [, e, t] = tipoDi(cm.tipo);
       const km = filtro === 'vicino' && base ? ` · ${num(Math.round(Math.hypot(cm.luogo.x - base.x, cm.luogo.z - base.z)))} km` : '';
-      return `<li data-commercio="${esc(cm.id)}"><span class="pos">${i + 1}</span><span class="quem"><b>${e} ${esc(cm.nome)}</b><small>${esc(t)} · ${esc(cm.luogo.nome)}${km}</small></span><span class="visita">visita</span></li>`;
+      return `<li data-commercio="${esc(cm.id)}">${mini(cm, e)}<span class="quem"><b>${esc(cm.nome)}</b><small>${cartellone(cm) ? '📣 cartellone · ' : ''}${esc(t)} · ${esc(cm.luogo.nome)}${km}</small></span><span class="visita">visita</span></li>`;
     };
+    const filtri = [['tutti', 'tutti'], ['cartelloni', '📣 cartelloni'], ['negozi', '🏪 negozi'], ['vicino', 'vicino a me']];
     this.abrir(`
-      <h2>🏪 Visita i negozi della mappa</h2>
-      <div class="sub">${num(D.commerci.length)} ${D.commerci.length === 1 ? 'attività sulla mappa' : 'attività sulla mappa'}</div>
-      <div class="filtri"><button data-filtro="tutti" class="${filtro === 'tutti' ? 'on' : ''}">tutti</button><button data-filtro="vicino" class="${filtro === 'vicino' ? 'on' : ''}">vicino a me</button></div>
+      <h2>🛍️ La vetrina della mappa</h2>
+      <div class="sub">${num(D.commerci.length)} ${D.commerci.length === 1 ? 'attività vera' : 'attività vere'} sulla mappa</div>
+      <div class="filtri">${filtri.map(([k, r]) => `<button data-filtro="${k}" class="${filtro === k ? 'on' : ''}">${r}</button>`).join('')}</div>
       ${filtro === 'vicino' && !base ? '<p class="nota">Per vedere i negozi vicini, cerca la tua casa e tocca «è la mia casa».</p>' : ''}
       <input class="cerca-negozi" type="search" placeholder="cerca negozio, città o tipo" value="${esc(busca)}">
-      ${lista.length ? `<ol class="ranking negozi">${lista.map(riga).join('')}</ol>` : `<p class="nota">${D.commerci.length ? 'Nessun negozio con questo nome.' : 'Ancora nessun negozio: il primo si vede di più!'}</p>`}
-      <a class="botao tratteggiato" href="negozio.html">＋ metti il tuo negozio sulla mappa</a>
+      ${evidenza.length ? `<h3 class="tit-evidenza">📣 In evidenza</h3><div class="evidenza">${evidenza.map(carta).join('')}<a class="botao tratteggiato" href="negozio.html?prodotto=cartellone">＋ il tuo cartellone qui</a></div>` : ''}
+      ${resto.length ? `${evidenza.length ? '<h3 class="tit-evidenza">🏪 Negozi</h3>' : ''}<ol class="ranking negozi">${resto.map(riga).join('')}</ol>` : evidenza.length ? '' : `<p class="nota">${D.commerci.length ? (filtro === 'cartelloni' && !n ? 'Ancora nessun cartellone: il primo si vede di più!' : 'Nessuna attività con questo nome.') : 'Ancora nessun negozio: il primo si vede di più!'}</p>`}
+      <a class="botao tratteggiato" href="negozio.html">＋ metti la tua attività sulla mappa</a>
       <p class="nota">Pubblicità. I negozi sulla mappa sono simbolici: non indicano l’indirizzo reale di ogni attività.</p>`, 'negozi');
     this.conteudo.querySelectorAll('[data-filtro]').forEach(b => { b.onclick = () => this.negozi(b.dataset.filtro, this.conteudo.querySelector('.cerca-negozi').value); });
     const inp = this.conteudo.querySelector('.cerca-negozi');
