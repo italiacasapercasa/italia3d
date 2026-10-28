@@ -37,6 +37,7 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   Casas decoradas (decori.js; pagas pela Hotmart, ligam sozinhas):
   decori [tutti]                         decorações ativas; "tutti" mostra também não pagas, vencidas e removidas
   decori rimuovi <id>                    desliga agora (ex.: quem ganhou o presente pediu para tirar)
+  decori pagato <id> [HP...]             pago na Hotmart mas o aviso não chegou: liga por 10 dias a partir de agora
   decori omaggio <conta> <efeitos> [da]  decoração grátis (testes, vídeos, compensação); efeitos separados por vírgula,
                                          ex.: nerazzurro,corona,neon  (time: bianconero nerazzurro rossonero azzurro giallorosso
                                          biancoceleste viola granata rossoblu; efeitos: oro neon corona fuochi campione palloncini tricolore cornice)
@@ -219,6 +220,19 @@ try {
         salvar(p);
         rigenera(ids().map(baixar).filter(Boolean));
         console.log(`ok: @${p.conta} sem decoração${p.pagamento === 'pagato' ? ' (se for reembolsar, faça na Hotmart)' : ''}`);
+        break;
+      }
+      // pago na Hotmart, mas o webhook não chegou: liga como o hotmart.php faria (10 dias a partir de agora)
+      if (args[0] === 'pagato') {
+        const p = baixar(args[1] ?? '');
+        if (!p) throw new Error(`decoração ${args[1]} não encontrada no servidor`);
+        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 10, agora = new Date();
+        if (!p.scade) { p.attivo_da = agora.toISOString(); p.scade = new Date(agora.getTime() + giorni * 86400e3).toISOString(); }
+        p.pagamento = 'pagato'; p.pagamento_em = agora.toISOString();
+        if (args[2]) p.transazione = args[2];
+        salvar(p);
+        rigenera(ids().map(baixar).filter(Boolean));
+        console.log(`ok: ${linha(p)}`);
         break;
       }
       if (args[0] === 'omaggio') {
