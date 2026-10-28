@@ -67,6 +67,8 @@ const SINT = {
   tap: ({ vol = 1 }) => (t0) => { somar(t0, 0.012 * SR, t => ruido() * 0.5 * vol * Math.exp(-t / 0.003)); sino(t0, 1900, 0.04, 0.18 * vol, 0.01); },
   // moeda (+pontos): duas notas rápidas
   coin: ({ vol = 1 }) => (t0) => { sino(t0, 988, 0.08, 0.28 * vol, 0.05, [[1, 1], [3, 0.3]]); sino(t0 + 0.075, 1319, 0.5, 0.3 * vol, 0.16, [[1, 1], [3, 0.25]]); },
+  // notificação de celular: duas notas limpas subindo
+  notifica: ({ tono = 1, vol = 1 }) => (t0) => { sino(t0, 1175 * tono, 0.25, 0.26 * vol, 0.07, [[1, 1], [2, 0.15]]); sino(t0 + 0.1, 1760 * tono, 0.6, 0.28 * vol, 0.16, [[1, 1], [2, 0.12]]); },
   // estrondo grave (a noite cai)
   boom: ({ vol = 1 }) => (t0) => {
     let fase = 0;

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel tre giorni · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --rosa: #FF7EB6; --azzurro: #3FA9F5; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .r, .r { color: var(--rosa); }
+  .forte .a, .a { color: #8FD3FF; }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #righe { transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 84px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 140px; -webkit-text-stroke-width: 24px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.bianco { background: #fff; }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; text-transform: uppercase; }
+  .cartello .box span { display: block; font-size: 32px; font-weight: 900; color: var(--ink); }
+  .cartello .box small { display: block; font-size: 25px; font-weight: 800; color: #3B2A08; }
+  .cartello .box img { display: block; width: 110px; height: 110px; object-fit: contain; margin: 4px auto 6px; border-radius: 16px; background: #fff; border: 4px solid var(--ink); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; top: 470px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 26px 30px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 6px; font-size: 46px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  .riquadro .quando { text-align: center; font-size: 30px; font-weight: 800; color: #5B6475; margin-bottom: 10px; }
+  .riga { display: flex; align-items: center; gap: 18px; padding: 14px 0; border-top: 3px dashed #D9DDE3; }
+  .riga .em { width: 86px; height: 86px; border-radius: 24px; border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 46px; flex: none; }
+  .riga .pos { width: 66px; height: 66px; border-radius: 50%; border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; background: #fff; flex: none; }
+  .riga .quem { flex: 1; min-width: 0; }
+  .riga .quem b { display: block; font-size: 40px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .riga .quem small { display: block; font-size: 26px; font-weight: 800; color: #5B6475; }
+  .riga .num { font-size: 64px; font-weight: 900; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .riga .pts { font-size: 42px; font-weight: 900; color: var(--ink); }
+  .barra { height: 18px; background: #EEF1F5; border-radius: 9px; margin-top: 8px; overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 0; background: #FFB437; border-radius: 9px; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; background: #FFF6D6 !important; border-radius: 22px; }
+  #social .riga { opacity: 0; }
+  #social .riga:nth-of-type(1) .em { background: #FFE3EE; }
+  #social .riga:nth-of-type(2) .em { background: #E3F2FF; }
+  #social .riga:nth-of-type(3) .em { background: #FFF1C9; }
+  #derby .barra { height: 26px; border-radius: 13px; }
+  #derby .riga:nth-of-type(1) .barra i { background: #E0473C; }
+  #derby .riga:nth-of-type(2) .barra i { background: #3FA9F5; }
+  #obiettivo { top: 560px; text-align: center; }
+  #obiettivo .meta { font-size: 110px; font-weight: 900; color: var(--ink); line-height: 1; margin: 6px 0 18px; }
+  #obiettivo .barra { height: 54px; border-radius: 27px; border: 5px solid var(--ink); background: #EEF1F5; position: relative; }
+  #obiettivo .barra i { background: linear-gradient(90deg, #2E9B55, #7ED957); border-radius: 22px; }
+  #obiettivo .ora { font-size: 40px; font-weight: 900; color: var(--ink); margin-top: 14px; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #novita { position: absolute; left: 0; right: 0; top: 640px; text-align: center; font-size: 190px; -webkit-text-stroke-width: 30px; opacity: 0; }
+  #bolle span { position: absolute; font-size: 74px; opacity: 0; -webkit-text-stroke: 0; }
+  #notifica { position: absolute; left: 70px; right: 70px; top: 300px; display: flex; align-items: center; gap: 18px; background: rgba(255,255,255,.96); border: 5px solid var(--ink); border-radius: 30px; padding: 16px 22px; box-shadow: 0 8px 0 rgba(21,32,51,.25); opacity: 0; }
+  #notifica .ic { width: 76px; height: 76px; border-radius: 20px; background: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7); display: flex; align-items: center; justify-content: center; font-size: 42px; flex: none; }
+  #notifica b { display: block; font-size: 32px; font-weight: 900; color: var(--ink); }
+  #notifica small { display: block; font-size: 26px; font-weight: 800; color: #5B6475; }
+  #tocco { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 10px solid #fff; box-shadow: 0 0 0 6px var(--ink); opacity: 0; }
+  #sito { position: absolute; left: 50%; top: 760px; transform: translateX(-50%) scale(0); background: #fff; border: 6px solid var(--ink); border-radius: 99px; padding: 18px 40px; font-size: 52px; font-weight: 900; color: var(--ink); white-space: nowrap; box-shadow: 0 8px 0 rgba(21,32,51,.25); }
+  #cta { position: absolute; left: 20px; right: 20px; top: 500px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 72px; -webkit-text-stroke-width: 14px; }
+  #cta .b { font-size: 60px; -webkit-text-stroke-width: 12px; margin-top: 16px; }
+  #cta .d { font-size: 54px; -webkit-text-stroke-width: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="bolle"></div>
+<div id="testa" class="forte"><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="notifica"><div class="ic">📸</div><div><b>italiacasapercasa</b><small></small></div></div>
+<div id="social" class="riquadro"></div>
+<div id="derby" class="riquadro"></div>
+<div id="pres" class="riquadro"></div>
+<div id="obiettivo" class="riquadro"></div>
+<div id="novita" class="forte g">NOVITÀ!</div>
+<div id="chip-meta" class="chip forte g" style="top:1120px;font-size:62px">📍 PIÙ DELLA METÀ DEI COMUNI</div>
+<div id="chip-regioni" class="chip forte" style="top:560px;font-size:96px;-webkit-text-stroke-width:18px">✅ <span class="g">20/20</span> REGIONI</div>
+<div id="chip-visite" class="chip forte" style="top:760px;font-size:70px"></div>
+<div id="chip-vs" class="chip forte r" style="top:1140px;font-size:100px;-webkit-text-stroke-width:20px">TESTA A TESTA!</div>
+<div id="chip-doppio" class="chip forte g" style="top:1150px;font-size:96px;-webkit-text-stroke-width:20px">💪 IL DOPPIO!</div>
+<div id="chip-aperto" class="chip forte r" style="top:1150px;font-size:80px">🔥 TUTTO APERTO!</div>
+<div id="chip-tua" class="chip forte" style="top:1080px;font-size:64px">🏪 LA TUA ATTIVITÀ<br><span class="g">NELLA TUA CITTÀ</span></div>
+<div id="sito">🌐 italiacasapercasa.com</div>
+<div id="tocco"></div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA TUA CITTÀ</div><div class="b g">E LA TUA REGIONE</div><div class="b">🏠 LA TUA CASA APPARE<br>SULLA MAPPA</div><div class="d g">@ITALIACASAPERCASA</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/tregiorni.js"></script>
+</body>
+</html>

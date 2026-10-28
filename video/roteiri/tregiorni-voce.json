@@ -1,0 +1,1827 @@
+{
+ "nome": "tregiorni",
+ "durata": 75.48,
+ "stats": {
+  "views": 832897,
+  "likes": 28957,
+  "comments": 48068,
+  "follower": 7086,
+  "visite": 25937,
+  "em": "2026-10-28T02:13:31.795Z"
+ },
+ "tour": [
+  "261027-f23cb939",
+  "261028-1ada0360",
+  "261027-5cf073d1"
+ ],
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "3",
+      0.03,
+      true
+     ],
+     [
+      "GIORNI",
+      0.23,
+      true
+     ],
+     [
+      "FA",
+      0.579
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 0.749
+  },
+  {
+   "linee": [
+    [
+     [
+      "HO",
+      0.779
+     ],
+     [
+      "INIZIATO",
+      0.98
+     ],
+     [
+      "A",
+      1.625
+     ]
+    ]
+   ],
+   "ini": 0.779,
+   "fim": 1.795
+  },
+  {
+   "linee": [
+    [
+     [
+      "COSTRUIRE",
+      1.825
+     ],
+     [
+      "L'ITALIA",
+      2.322,
+      true
+     ]
+    ],
+    [
+     [
+      "IN",
+      2.82
+     ]
+    ]
+   ],
+   "ini": 1.825,
+   "fim": 2.99
+  },
+  {
+   "linee": [
+    [
+     [
+      "3D",
+      3.02,
+      true
+     ]
+    ]
+   ],
+   "ini": 3.02,
+   "fim": 3.669
+  },
+  {
+   "linee": [
+    [
+     [
+      "GUARDATE",
+      3.699
+     ],
+     [
+      "DOVE",
+      4.116
+     ]
+    ],
+    [
+     [
+      "SIAMO",
+      4.409
+     ]
+    ]
+   ],
+   "ini": 3.699,
+   "fim": 4.673
+  },
+  {
+   "linee": [
+    [
+     [
+      "ARRIVATI",
+      4.703,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.703,
+   "fim": 5.664
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      5.694
+     ],
+     [
+      "DI",
+      5.901
+     ],
+     [
+      "800.000",
+      6.107,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.694,
+   "fim": 7.049
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISUALIZZAZIONI",
+      7.079,
+      true
+     ],
+     [
+      "48.000",
+      8.051,
+      true
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      9.023,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.079,
+   "fim": 9.506
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      9.536
+     ],
+     [
+      "7.000",
+      9.743,
+      true
+     ],
+     [
+      "DI",
+      10.409
+     ]
+    ]
+   ],
+   "ini": 9.536,
+   "fim": 10.585
+  },
+  {
+   "linee": [
+    [
+     [
+      "VOI",
+      10.615
+     ],
+     [
+      "CHE",
+      10.822
+     ]
+    ],
+    [
+     [
+      "SEGUONO",
+      11.029
+     ]
+    ]
+   ],
+   "ini": 10.615,
+   "fim": 11.512
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      11.542
+     ],
+     [
+      "PROFILO",
+      11.748
+     ]
+    ]
+   ],
+   "ini": 11.542,
+   "fim": 12.781
+  },
+  {
+   "linee": [
+    [
+     [
+      "SULLA",
+      12.811
+     ],
+     [
+      "MAPPA",
+      13.173
+     ],
+     [
+      "CI",
+      13.535
+     ]
+    ]
+   ],
+   "ini": 12.811,
+   "fim": 13.714
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      13.744
+     ],
+     [
+      "GIÀ",
+      14.106
+     ],
+     [
+      "PIÙ",
+      14.314
+     ]
+    ]
+   ],
+   "ini": 13.744,
+   "fim": 14.492
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      14.522
+     ],
+     [
+      "18.000",
+      14.73,
+      true
+     ],
+     [
+      "CASE",
+      15.555,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.522,
+   "fim": 15.888
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      15.918
+     ],
+     [
+      "PIÙ",
+      16.126
+     ],
+     [
+      "DI",
+      16.334
+     ]
+    ]
+   ],
+   "ini": 15.918,
+   "fim": 16.512
+  },
+  {
+   "linee": [
+    [
+     [
+      "4.000",
+      16.542,
+      true
+     ],
+     [
+      "CITTÀ",
+      17.213,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.542,
+   "fim": 18.07
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      18.1
+     ],
+     [
+      "DELLA",
+      18.269
+     ],
+     [
+      "METÀ",
+      18.563,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.1,
+   "fim": 18.828
+  },
+  {
+   "linee": [
+    [
+     [
+      "DEI",
+      18.858
+     ],
+     [
+      "COMUNI",
+      19.027
+     ]
+    ],
+    [
+     [
+      "D'ITALIA",
+      19.447
+     ]
+    ]
+   ],
+   "ini": 18.858,
+   "fim": 20.382
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUTTE",
+      20.412
+     ],
+     [
+      "E",
+      20.744
+     ],
+     [
+      "20",
+      20.935,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.412,
+   "fim": 21.237
+  },
+  {
+   "linee": [
+    [
+     [
+      "LE",
+      21.267
+     ],
+     [
+      "REGIONI",
+      21.458,
+      true
+     ]
+    ],
+    [
+     [
+      "SONO",
+      21.932
+     ]
+    ]
+   ],
+   "ini": 21.267,
+   "fim": 22.234
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      22.264
+     ],
+     [
+      "GIOCO",
+      22.455
+     ],
+     [
+      "E",
+      22.787
+     ]
+    ]
+   ],
+   "ini": 22.264,
+   "fim": 22.948
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      22.978
+     ],
+     [
+      "SITO",
+      23.169
+     ],
+     [
+      "HA",
+      23.501
+     ]
+    ]
+   ],
+   "ini": 22.978,
+   "fim": 23.662
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIÀ",
+      23.692
+     ],
+     [
+      "SUPERATO",
+      23.883
+     ]
+    ],
+    [
+     [
+      "25.000",
+      24.498,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.692,
+   "fim": 25.366
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISITE",
+      25.396,
+      true
+     ]
+    ]
+   ],
+   "ini": 25.396,
+   "fim": 26.378
+  },
+  {
+   "linee": [
+    [
+     [
+      "NAPOLI",
+      26.408,
+      true
+     ],
+     [
+      "E",
+      26.877
+     ],
+     [
+      "ROMA",
+      27.066,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.408,
+   "fim": 27.366
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      27.396
+     ],
+     [
+      "TESTA",
+      27.725,
+      true
+     ],
+     [
+      "A",
+      28.055,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.396,
+   "fim": 28.214
+  },
+  {
+   "linee": [
+    [
+     [
+      "TESTA",
+      28.244,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.244,
+   "fim": 28.935
+  },
+  {
+   "linee": [
+    [
+     [
+      "361",
+      28.965,
+      true
+     ],
+     [
+      "CASE",
+      30.169
+     ]
+    ],
+    [
+     [
+      "CONTRO",
+      30.555
+     ]
+    ]
+   ],
+   "ini": 28.965,
+   "fim": 30.91
+  },
+  {
+   "linee": [
+    [
+     [
+      "354",
+      30.94,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.94,
+   "fim": 32.79
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      32.82
+     ],
+     [
+      "QUESTA",
+      33.026
+     ]
+    ],
+    [
+     [
+      "SETTIMANA",
+      33.384
+     ]
+    ]
+   ],
+   "ini": 32.82,
+   "fim": 34.016
+  },
+  {
+   "linee": [
+    [
+     [
+      "ROMA",
+      34.046,
+      true
+     ],
+     [
+      "STA",
+      34.404
+     ]
+    ],
+    [
+     [
+      "SCHIACCIANDO",
+      34.609,
+      true
+     ]
+    ]
+   ],
+   "ini": 34.046,
+   "fim": 35.089
+  },
+  {
+   "linee": [
+    [
+     [
+      "MILANO",
+      35.119,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.119,
+   "fim": 35.947
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      35.977
+     ],
+     [
+      "DOPPIO",
+      36.195,
+      true
+     ],
+     [
+      "DEI",
+      36.575
+     ]
+    ]
+   ],
+   "ini": 35.977,
+   "fim": 36.763
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      36.793
+     ]
+    ]
+   ],
+   "ini": 36.793,
+   "fim": 37.644
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      37.674
+     ],
+     [
+      "LA",
+      37.85
+     ],
+     [
+      "CORSA",
+      38.027
+     ]
+    ]
+   ],
+   "ini": 37.674,
+   "fim": 38.304
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLA",
+      38.334
+     ],
+     [
+      "PRESIDENZA",
+      38.642,
+      true
+     ]
+    ],
+    [
+     [
+      "È",
+      39.211
+     ]
+    ]
+   ],
+   "ini": 38.334,
+   "fim": 39.358
+  },
+  {
+   "linee": [
+    [
+     [
+      "INFUOCATA",
+      39.388,
+      true
+     ]
+    ]
+   ],
+   "ini": 39.388,
+   "fim": 40.355
+  },
+  {
+   "linee": [
+    [
+     [
+      "RIMINI",
+      40.385,
+      true
+     ],
+     [
+      "IN",
+      40.883
+     ]
+    ],
+    [
+     [
+      "TESTA",
+      41.083
+     ]
+    ]
+   ],
+   "ini": 40.385,
+   "fim": 41.402
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      41.432
+     ],
+     [
+      "2.390",
+      41.633,
+      true
+     ]
+    ],
+    [
+     [
+      "PUNTI",
+      43.022
+     ]
+    ]
+   ],
+   "ini": 41.432,
+   "fim": 43.686
+  },
+  {
+   "linee": [
+    [
+     [
+      "POI",
+      43.716
+     ],
+     [
+      "CASARSA",
+      43.93,
+      true
+     ],
+     [
+      "E",
+      44.46
+     ]
+    ]
+   ],
+   "ini": 43.716,
+   "fim": 44.644
+  },
+  {
+   "linee": [
+    [
+     [
+      "MELITO",
+      44.674,
+      true
+     ],
+     [
+      "A",
+      45.205
+     ],
+     [
+      "POCHE",
+      45.419
+     ]
+    ]
+   ],
+   "ini": 44.674,
+   "fim": 45.762
+  },
+  {
+   "linee": [
+    [
+     [
+      "CENTINAIA",
+      45.792
+     ],
+     [
+      "DI",
+      46.323
+     ]
+    ],
+    [
+     [
+      "DISTANZA",
+      46.537
+     ]
+    ]
+   ],
+   "ini": 45.792,
+   "fim": 47.532
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      47.562,
+      true
+     ],
+     [
+      "SERA",
+      48.202,
+      true
+     ]
+    ],
+    [
+     [
+      "L'ITALIA",
+      48.547
+     ]
+    ]
+   ],
+   "ini": 47.562,
+   "fim": 49.01
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      49.04
+     ],
+     [
+      "IL",
+      49.533
+     ],
+     [
+      "SUO",
+      49.732
+     ]
+    ]
+   ],
+   "ini": 49.04,
+   "fim": 49.9
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRIMO",
+      49.93,
+      true
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      50.276,
+      true
+     ]
+    ]
+   ],
+   "ini": 49.93,
+   "fim": 51.345
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      51.375
+     ],
+     [
+      "TUTTO",
+      51.557
+     ],
+     [
+      "ANCORA",
+      51.873
+     ]
+    ]
+   ],
+   "ini": 51.375,
+   "fim": 52.294
+  },
+  {
+   "linee": [
+    [
+     [
+      "APERTO",
+      52.324,
+      true
+     ]
+    ]
+   ],
+   "ini": 52.324,
+   "fim": 53.266
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      53.296
+     ],
+     [
+      "C'È",
+      53.433
+     ],
+     [
+      "UNA",
+      53.57
+     ]
+    ]
+   ],
+   "ini": 53.296,
+   "fim": 53.778
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOVITÀ",
+      53.808,
+      true
+     ]
+    ]
+   ],
+   "ini": 53.808,
+   "fim": 54.593
+  },
+  {
+   "linee": [
+    [
+     [
+      "13",
+      54.623,
+      true
+     ],
+     [
+      "ATTIVITÀ",
+      55.105,
+      true
+     ]
+    ],
+    [
+     [
+      "VERE",
+      55.732,
+      true
+     ]
+    ]
+   ],
+   "ini": 54.623,
+   "fim": 56.04
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      56.07
+     ],
+     [
+      "GIÀ",
+      56.409
+     ],
+     [
+      "SULLA",
+      56.603
+     ]
+    ]
+   ],
+   "ini": 56.07,
+   "fim": 56.912
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      56.942
+     ]
+    ]
+   ],
+   "ini": 56.942,
+   "fim": 57.708
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      57.738
+     ],
+     [
+      "PSICOLOGA",
+      58.088,
+      true
+     ]
+    ],
+    [
+     [
+      "UN",
+      58.738
+     ]
+    ]
+   ],
+   "ini": 57.738,
+   "fim": 58.909
+  },
+  {
+   "linee": [
+    [
+     [
+      "RISTORANTE",
+      58.939,
+      true
+     ],
+     [
+      "UN",
+      59.588
+     ]
+    ],
+    [
+     [
+      "DISTRIBUTORE",
+      59.79,
+      true
+     ]
+    ]
+   ],
+   "ini": 58.939,
+   "fim": 60.558
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      60.588
+     ],
+     [
+      "BENZINA",
+      60.79,
+      true
+     ]
+    ]
+   ],
+   "ini": 60.588,
+   "fim": 61.685
+  },
+  {
+   "linee": [
+    [
+     [
+      "SE",
+      61.715
+     ],
+     [
+      "HAI",
+      61.89
+     ]
+    ],
+    [
+     [
+      "UN'ATTIVITÀ",
+      62.066,
+      true
+     ]
+    ]
+   ],
+   "ini": 61.715,
+   "fim": 62.733
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUOI",
+      62.763
+     ],
+     [
+      "METTERLA",
+      62.939
+     ]
+    ],
+    [
+     [
+      "ANCHE",
+      63.375
+     ]
+    ]
+   ],
+   "ini": 62.763,
+   "fim": 63.651
+  },
+  {
+   "linee": [
+    [
+     [
+      "TU",
+      63.681
+     ],
+     [
+      "NELLA",
+      63.857
+     ],
+     [
+      "TUA",
+      64.163
+     ]
+    ]
+   ],
+   "ini": 63.681,
+   "fim": 64.308
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      64.338,
+      true
+     ]
+    ]
+   ],
+   "ini": 64.338,
+   "fim": 65.02
+  },
+  {
+   "linee": [
+    [
+     [
+      "TROVI",
+      65.05
+     ],
+     [
+      "TUTTO",
+      65.384
+     ]
+    ],
+    [
+     [
+      "SUL",
+      65.719
+     ]
+    ]
+   ],
+   "ini": 65.05,
+   "fim": 65.881
+  },
+  {
+   "linee": [
+    [
+     [
+      "SITO",
+      65.911,
+      true
+     ]
+    ]
+   ],
+   "ini": 65.911,
+   "fim": 66.744
+  },
+  {
+   "linee": [
+    [
+     [
+      "PROSSIMO",
+      66.774
+     ],
+     [
+      "OBIETTIVO",
+      67.304,
+      true
+     ]
+    ],
+    [
+     [
+      "20.000",
+      67.993,
+      true
+     ]
+    ]
+   ],
+   "ini": 66.774,
+   "fim": 68.652
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      68.682,
+      true
+     ]
+    ]
+   ],
+   "ini": 68.682,
+   "fim": 69.489
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      69.519
+     ],
+     [
+      "NEI",
+      69.84
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      70.025
+     ]
+    ]
+   ],
+   "ini": 69.519,
+   "fim": 70.453
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      70.483
+     ],
+     [
+      "TUA",
+      70.668
+     ],
+     [
+      "CITTÀ",
+      70.853,
+      true
+     ]
+    ]
+   ],
+   "ini": 70.483,
+   "fim": 71.144
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      71.174
+     ],
+     [
+      "LA",
+      71.359
+     ],
+     [
+      "TUA",
+      71.544
+     ]
+    ]
+   ],
+   "ini": 71.174,
+   "fim": 71.699
+  },
+  {
+   "linee": [
+    [
+     [
+      "REGIONE",
+      71.729,
+      true
+     ],
+     [
+      "E",
+      72.187
+     ],
+     [
+      "LA",
+      72.372
+     ]
+    ]
+   ],
+   "ini": 71.729,
+   "fim": 72.526
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      72.556
+     ],
+     [
+      "CASA",
+      72.741,
+      true
+     ]
+    ],
+    [
+     [
+      "APPARIRÀ",
+      73.063
+     ]
+    ]
+   ],
+   "ini": 72.556,
+   "fim": 73.628
+  },
+  {
+   "linee": [
+    [
+     [
+      "SULLA",
+      73.658
+     ],
+     [
+      "MAPPA",
+      73.979,
+      true
+     ]
+    ]
+   ],
+   "ini": 73.658,
+   "fim": 75.18
+  }
+ ],
+ "parlato": [
+  "Tre giorni fa ho iniziato a costruire l'Italia in 3D.",
+  "Guardate dove siamo arrivati.",
+  "Più di ottocentomila visualizzazioni, quarantottomila commenti e settemila di voi che seguono il profilo.",
+  "Sulla mappa ci sono già più di diciottomila case, in più di quattromila città:",
+  "più della metà dei comuni d'Italia.",
+  "Tutte e venti le regioni sono in gioco, e il sito ha già superato venticinquemila visite.",
+  "Napoli e Roma sono testa a testa:",
+  "trecentosessantuno case contro trecentocinquantaquattro.",
+  "Ma questa settimana Roma sta schiacciando Milano:",
+  "il doppio dei punti.",
+  "E la corsa alla Presidenza è infuocata.",
+  "Rimini in testa con duemilatrecentonovanta punti,",
+  "poi Casarsa e Melito, a poche centinaia di distanza.",
+  "Domenica sera l'Italia elegge il suo primo Presidente.",
+  "È tutto ancora aperto.",
+  "E c'è una novità:",
+  "tredici attività vere sono già sulla mappa.",
+  "Una psicologa, un ristorante, un distributore di benzina…",
+  "Se hai un'attività, puoi metterla anche tu nella tua città.",
+  "Trovi tutto sul sito.",
+  "Prossimo obiettivo: ventimila case.",
+  "Scrivi nei commenti la tua città e la tua regione, e la tua casa apparirà sulla mappa."
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  8,
+  8,
+  8,
+  9,
+  9,
+  10,
+  10,
+  10,
+  11,
+  11,
+  12,
+  12,
+  12,
+  13,
+  13,
+  13,
+  14,
+  14,
+  15,
+  15,
+  16,
+  16,
+  16,
+  17,
+  17,
+  17,
+  18,
+  18,
+  18,
+  18,
+  19,
+  19,
+  20,
+  20,
+  21,
+  21,
+  21,
+  21,
+  21,
+  21
+ ],
+ "eventi": {
+  "tre": -0.02,
+  "costruire": 1.825,
+  "italia3d": 2.97,
+  "guardate": 3.599,
+  "arrivati": 4.703,
+  "views": 6.027,
+  "comm": 7.971,
+  "follow": 9.663,
+  "profilo": 11.748,
+  "mappa": 12.711,
+  "case": 14.65,
+  "citta": 16.462,
+  "meta": 18.513,
+  "comuni": 19.027,
+  "regioni": 20.855,
+  "sito": 23.119,
+  "visite": 24.418,
+  "napoli": 26.358,
+  "roma": 27.016,
+  "testa": 27.675,
+  "n361": 28.915,
+  "n354": 30.89,
+  "ma": 32.72,
+  "roma2": 33.996,
+  "schiaccia": 34.559,
+  "milano": 35.069,
+  "doppio": 36.145,
+  "corsa": 37.574,
+  "presidenza": 38.592,
+  "infuocata": 39.338,
+  "rimini": 40.335,
+  "pts1": 41.583,
+  "poi": 43.616,
+  "casarsa": 43.88,
+  "melito": 44.624,
+  "poche": 45.419,
+  "domenica": 47.462,
+  "elegge": 49.04,
+  "primo": 49.88,
+  "aperto": 51.325,
+  "cenovita": 53.196,
+  "novita": 53.728,
+  "tredici": 54.543,
+  "mappa13": 56.603,
+  "psicologa": 58.008,
+  "ristorante": 58.859,
+  "distributore": 59.71,
+  "sehai": 61.615,
+  "metterla": 62.939,
+  "tuacitta": 63.857,
+  "trovi": 64.95,
+  "sito2": 65.861,
+  "obiettivo": 66.674,
+  "ventimila": 67.913,
+  "scrivi": 69.419,
+  "regione": 71.729,
+  "casa": 72.691,
+  "mappa_f": 73.979
+ },
+ "sincro": {
+  "eventi.tre": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.costruire": [
+   0,
+   6,
+   0
+  ],
+  "eventi.italia3d": [
+   0,
+   9,
+   -0.05
+  ],
+  "eventi.guardate": [
+   1,
+   0,
+   -0.1
+  ],
+  "eventi.arrivati": [
+   1,
+   3,
+   0
+  ],
+  "eventi.views": [
+   2,
+   2,
+   -0.08
+  ],
+  "eventi.comm": [
+   2,
+   4,
+   -0.08
+  ],
+  "eventi.follow": [
+   2,
+   7,
+   -0.08
+  ],
+  "eventi.profilo": [
+   2,
+   13,
+   0
+  ],
+  "eventi.mappa": [
+   3,
+   0,
+   -0.1
+  ],
+  "eventi.case": [
+   3,
+   7,
+   -0.08
+  ],
+  "eventi.citta": [
+   3,
+   12,
+   -0.08
+  ],
+  "eventi.meta": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.comuni": [
+   4,
+   4,
+   0
+  ],
+  "eventi.regioni": [
+   5,
+   2,
+   -0.08
+  ],
+  "eventi.sito": [
+   5,
+   10,
+   -0.05
+  ],
+  "eventi.visite": [
+   5,
+   14,
+   -0.08
+  ],
+  "eventi.napoli": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.roma": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.testa": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.n361": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.n354": [
+   7,
+   3,
+   -0.05
+  ],
+  "eventi.ma": [
+   8,
+   0,
+   -0.1
+  ],
+  "eventi.roma2": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.schiaccia": [
+   8,
+   5,
+   -0.05
+  ],
+  "eventi.milano": [
+   8,
+   6,
+   -0.05
+  ],
+  "eventi.doppio": [
+   9,
+   1,
+   -0.05
+  ],
+  "eventi.corsa": [
+   10,
+   0,
+   -0.1
+  ],
+  "eventi.presidenza": [
+   10,
+   4,
+   -0.05
+  ],
+  "eventi.infuocata": [
+   10,
+   6,
+   -0.05
+  ],
+  "eventi.rimini": [
+   11,
+   0,
+   -0.05
+  ],
+  "eventi.pts1": [
+   11,
+   4,
+   -0.05
+  ],
+  "eventi.poi": [
+   12,
+   0,
+   -0.1
+  ],
+  "eventi.casarsa": [
+   12,
+   1,
+   -0.05
+  ],
+  "eventi.melito": [
+   12,
+   3,
+   -0.05
+  ],
+  "eventi.poche": [
+   12,
+   5,
+   0
+  ],
+  "eventi.domenica": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.elegge": [
+   13,
+   3,
+   0
+  ],
+  "eventi.primo": [
+   13,
+   6,
+   -0.05
+  ],
+  "eventi.aperto": [
+   14,
+   0,
+   -0.05
+  ],
+  "eventi.cenovita": [
+   15,
+   0,
+   -0.1
+  ],
+  "eventi.novita": [
+   15,
+   3,
+   -0.08
+  ],
+  "eventi.tredici": [
+   16,
+   0,
+   -0.08
+  ],
+  "eventi.mappa13": [
+   16,
+   5,
+   0
+  ],
+  "eventi.psicologa": [
+   17,
+   1,
+   -0.08
+  ],
+  "eventi.ristorante": [
+   17,
+   3,
+   -0.08
+  ],
+  "eventi.distributore": [
+   17,
+   5,
+   -0.08
+  ],
+  "eventi.sehai": [
+   18,
+   0,
+   -0.1
+  ],
+  "eventi.metterla": [
+   18,
+   4,
+   0
+  ],
+  "eventi.tuacitta": [
+   18,
+   7,
+   0
+  ],
+  "eventi.trovi": [
+   19,
+   0,
+   -0.1
+  ],
+  "eventi.sito2": [
+   19,
+   3,
+   -0.05
+  ],
+  "eventi.obiettivo": [
+   20,
+   0,
+   -0.1
+  ],
+  "eventi.ventimila": [
+   20,
+   2,
+   -0.08
+  ],
+  "eventi.scrivi": [
+   21,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   21,
+   9,
+   0
+  ],
+  "eventi.casa": [
+   21,
+   13,
+   -0.05
+  ],
+  "eventi.mappa_f": [
+   21,
+   16,
+   0
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 9.mp3",
+  "durata": 74.44
+ }
+}
