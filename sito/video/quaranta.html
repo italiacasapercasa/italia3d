@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel quaranta · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --rosa: #FF7EB6; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #buio { position: absolute; inset: 0; background: #0E1A33; opacity: 0; pointer-events: none; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .r, .r { color: var(--rosa); }
+  .forte .ro { color: #FF5A4E; }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #righe { transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 84px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 150px; -webkit-text-stroke-width: 26px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.bianco { background: #fff; }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; text-transform: uppercase; }
+  .cartello .box span { display: block; font-size: 32px; font-weight: 900; color: var(--ink); }
+  .cartello .box small { display: block; font-size: 25px; font-weight: 800; color: #3B2A08; }
+  .cartello .box .mini { height: 16px; background: #fff; border: 3px solid var(--ink); border-radius: 9px; margin-top: 8px; overflow: hidden; }
+  .cartello .box .mini i { display: block; height: 100%; background: var(--rosso); width: 0; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; top: 470px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 26px 30px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 6px; font-size: 46px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  .riga { display: flex; align-items: center; gap: 18px; padding: 12px 0; border-top: 3px dashed #D9DDE3; }
+  .riga .pos { width: 66px; height: 66px; border-radius: 50%; border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; background: #fff; flex: none; }
+  .riga .quem { flex: 1; min-width: 0; }
+  .riga .quem b { display: block; font-size: 38px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .riga .quem small { display: block; font-size: 25px; font-weight: 800; color: #5B6475; }
+  .riga .pts { font-size: 42px; font-weight: 900; color: var(--ink); }
+  .barra { height: 18px; background: #EEF1F5; border-radius: 9px; margin-top: 8px; overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 0; background: #FFB437; border-radius: 9px; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; background: #FFF6D6 !important; border-radius: 22px; }
+  #duello .riga:nth-of-type(1) .barra i { background: #2F7DD1; }
+  #duello .riga:nth-of-type(2) .barra i { background: #E0473C; }
+  #duello .riga { opacity: 0; }
+  #top5 { top: 440px; }
+  #top5 .riga { padding: 9px 0; }
+  #stamp40 { position: absolute; left: 0; right: 0; top: 1010px; text-align: center; font-size: 150px; -webkit-text-stroke-width: 26px; opacity: 0; line-height: 0.95; }
+  #stamp40 small { display: block; font-size: 110px; -webkit-text-stroke-width: 20px; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #commento { top: 560px; }
+  #commento .ig { display: flex; gap: 18px; align-items: flex-start; }
+  #commento .av { width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7); flex: none; border: 4px solid var(--ink); }
+  #commento .tx b { font-size: 34px; font-weight: 900; color: var(--ink); }
+  #commento .tx p { margin: 6px 0 0; font-size: 46px; font-weight: 800; color: var(--ink); min-height: 60px; }
+  #commento .tx p em { font-style: normal; color: #2F7DD1; }
+  #commento .cur { display: inline-block; width: 4px; height: 46px; background: var(--ink); vertical-align: -6px; margin-left: 3px; }
+  #commento .piu { position: absolute; right: 30px; bottom: -40px; font-size: 90px; -webkit-text-stroke-width: 18px; transform: scale(0); }
+  #ospcard { top: 430px; left: 140px; right: 140px; padding: 16px; text-align: center; background: linear-gradient(#E9F6FF, #FFFFFF); }
+  #ospcard canvas { display: block; width: 100%; height: auto; border-radius: 24px; background: linear-gradient(#CFE6F2, #EAF4E2); }
+  #ospcard b { display: block; font-size: 50px; font-weight: 900; color: var(--ink); margin-top: 10px; }
+  #ospcard small { display: block; font-size: 30px; font-weight: 800; color: var(--rosso); }
+  #follow { position: absolute; left: 0; right: 0; top: 620px; text-align: center; opacity: 0; }
+  #follow .n { font-size: 190px; -webkit-text-stroke-width: 32px; line-height: 1; }
+  #follow .l { font-size: 80px; -webkit-text-stroke-width: 16px; }
+  #bolle span { position: absolute; font-size: 84px; opacity: 0; }
+  #conto { top: 520px; text-align: center; }
+  #conto .quando { font-size: 40px; font-weight: 900; color: var(--ink); margin-top: 8px; }
+  #conto .cifre { display: flex; justify-content: center; gap: 18px; margin-top: 18px; }
+  #conto .cifre div { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; width: 190px; padding: 8px 0; }
+  #conto .cifre b { display: block; font-size: 84px; font-weight: 900; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  #conto .cifre small { font-size: 26px; font-weight: 900; color: #5B6475; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 500px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 72px; -webkit-text-stroke-width: 14px; }
+  #cta .b { font-size: 60px; -webkit-text-stroke-width: 12px; margin-top: 16px; }
+  #cta .d { font-size: 54px; -webkit-text-stroke-width: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="buio"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="bolle"></div>
+<div id="testa" class="forte"><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="duello" class="riquadro"></div>
+<div id="top5" class="riquadro"></div>
+<div id="commento" class="riquadro"><div class="ig"><div class="av"></div><div class="tx"><b>il_tuo_account</b><p></p></div></div><div class="piu forte g">+5 ⭐</div></div>
+<div id="ospcard" class="riquadro"><canvas width="720" height="520"></canvas><b>🏥 PRIMO OSPEDALE</b><small>A 500 CASE</small></div>
+<div id="conto" class="riquadro"><h2>🗳️ SI ELEGGE IL PRIMO PRESIDENTE</h2><div class="quando">domenica 1 novembre · ore 21:00</div><div class="cifre"></div></div>
+<div id="follow" class="forte"><div class="n g"></div><div class="l">FOLLOWER ❤️</div></div>
+<div id="stamp40" class="forte ro">SOLO 40<small class="g">PUNTI! 🔥</small></div>
+<div id="coriandoli"></div>
+<div id="chip-3g" class="chip forte" style="top:1130px;font-size:72px">⏳ <span class="g">3 GIORNI</span> AL VOTO</div>
+<div id="chip-mille" class="chip forte g" style="top:1120px;font-size:84px;-webkit-text-stroke-width:17px"></div>
+<div id="chip-cinque" class="chip forte" style="top:1170px;font-size:80px">🗳️ <span class="g">5</span> CANDIDATI</div>
+<div id="chip-tutto" class="chip forte r" style="top:1170px;font-size:72px">🔥 TUTTO PUÒ SUCCEDERE</div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA TUA CITTÀ</div><div class="b g">E LA TUA REGIONE</div><div class="b">🗳️ SCEGLI DA CHE<br>PARTE STARE</div><div class="d g">@ITALIACASAPERCASA</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/quaranta.js"></script>
+</body>
+</html>

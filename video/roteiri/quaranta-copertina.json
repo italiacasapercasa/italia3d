@@ -1,0 +1,1538 @@
+{
+ "nome": "quaranta",
+ "durata": 60.9,
+ "ieri": {
+  "simone_fantoni__": 1731
+ },
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      0.03,
+      true
+     ],
+     [
+      "25",
+      0.666,
+      true
+     ]
+    ],
+    [
+     [
+      "OTTOBRE",
+      1.302,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.762
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE",
+      1.792
+     ],
+     [
+      "3",
+      2.135
+     ],
+     [
+      "DI",
+      2.333
+     ]
+    ]
+   ],
+   "ini": 1.792,
+   "fim": 2.5
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOTTE",
+      2.53
+     ]
+    ]
+   ],
+   "ini": 2.53,
+   "fim": 3.209
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUESTA",
+      3.239
+     ],
+     [
+      "MAPPA",
+      3.591
+     ]
+    ],
+    [
+     [
+      "ERA",
+      3.944
+     ]
+    ]
+   ],
+   "ini": 3.239,
+   "fim": 4.266
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMPLETAMENTE",
+      4.296
+     ]
+    ],
+    [
+     [
+      "VUOTA",
+      5.099,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.296,
+   "fim": 6.027
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      6.057
+     ],
+     [
+      "CI",
+      6.433
+     ],
+     [
+      "SONO",
+      6.649
+     ]
+    ]
+   ],
+   "ini": 6.057,
+   "fim": 6.996
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      7.026
+     ],
+     [
+      "DI",
+      7.242
+     ],
+     [
+      "21.000",
+      7.458,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.026,
+   "fim": 8.284
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      8.314,
+      true
+     ],
+     [
+      "IN",
+      8.691
+     ],
+     [
+      "PIÙ",
+      8.907
+     ]
+    ]
+   ],
+   "ini": 8.314,
+   "fim": 9.093
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      9.123
+     ],
+     [
+      "4.500",
+      9.339,
+      true
+     ],
+     [
+      "CITTÀ",
+      10.676,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.123,
+   "fim": 11.449
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      11.479
+     ],
+     [
+      "A",
+      11.668
+     ],
+     [
+      "3",
+      11.856,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.479,
+   "fim": 12.015
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIORNI",
+      12.045,
+      true
+     ],
+     [
+      "DALL'ELEZIONE",
+      12.373
+     ]
+    ],
+    [
+     [
+      "TRA",
+      13.12
+     ]
+    ]
+   ],
+   "ini": 12.045,
+   "fim": 13.279
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      13.309
+     ],
+     [
+      "PRIMO",
+      13.498
+     ],
+     [
+      "E",
+      13.826
+     ]
+    ]
+   ],
+   "ini": 13.309,
+   "fim": 13.984
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      14.014
+     ],
+     [
+      "SECONDO",
+      14.203
+     ]
+    ]
+   ],
+   "ini": 14.014,
+   "fim": 14.947
+  },
+  {
+   "linee": [
+    [
+     [
+      "CI",
+      14.977
+     ],
+     [
+      "SONO",
+      15.179
+     ],
+     [
+      "SOLO",
+      15.529,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.977,
+   "fim": 15.849
+  },
+  {
+   "linee": [
+    [
+     [
+      "40",
+      15.879,
+      true
+     ],
+     [
+      "PUNTI",
+      16.378,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.879,
+   "fim": 17.177
+  },
+  {
+   "linee": [
+    [
+     [
+      "RIMINI",
+      17.207,
+      true
+     ],
+     [
+      "È",
+      17.687
+     ],
+     [
+      "IN",
+      17.881
+     ]
+    ]
+   ],
+   "ini": 17.207,
+   "fim": 18.044
+  },
+  {
+   "linee": [
+    [
+     [
+      "TESTA",
+      18.074,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.074,
+   "fim": 18.69
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      18.72
+     ],
+     [
+      "BRESCIA",
+      18.939,
+      true
+     ]
+    ],
+    [
+     [
+      "IERI",
+      19.32
+     ]
+    ]
+   ],
+   "ini": 18.72,
+   "fim": 19.672
+  },
+  {
+   "linee": [
+    [
+     [
+      "ERA",
+      19.702
+     ],
+     [
+      "QUARTA",
+      20.084,
+      true
+     ],
+     [
+      "E",
+      20.465
+     ]
+    ]
+   ],
+   "ini": 19.702,
+   "fim": 20.654
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      20.684
+     ],
+     [
+      "UN",
+      20.903
+     ],
+     [
+      "GIORNO",
+      21.123
+     ]
+    ]
+   ],
+   "ini": 20.684,
+   "fim": 21.474
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      21.504
+     ],
+     [
+      "FATTO",
+      21.723
+     ],
+     [
+      "PIÙ",
+      22.105
+     ]
+    ]
+   ],
+   "ini": 21.504,
+   "fim": 22.294
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      22.324
+     ],
+     [
+      "1.000",
+      22.543,
+      true
+     ],
+     [
+      "PUNTI",
+      22.925,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.324,
+   "fim": 23.687
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      23.717
+     ],
+     [
+      "DIETRO",
+      23.934
+     ],
+     [
+      "NON",
+      24.312
+     ]
+    ]
+   ],
+   "ini": 23.717,
+   "fim": 24.499
+  },
+  {
+   "linee": [
+    [
+     [
+      "MOLLANO",
+      24.529,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.529,
+   "fim": 25.405
+  },
+  {
+   "linee": [
+    [
+     [
+      "MELITO",
+      25.435,
+      true
+     ],
+     [
+      "AZZANO",
+      25.995,
+      true
+     ]
+    ],
+    [
+     [
+      "MELLA",
+      26.554,
+      true
+     ]
+    ]
+   ],
+   "ini": 25.435,
+   "fim": 26.917
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      26.947
+     ],
+     [
+      "CASARSA",
+      27.172,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.947,
+   "fim": 28.171
+  },
+  {
+   "linee": [
+    [
+     [
+      "5",
+      28.201,
+      true
+     ],
+     [
+      "CANDIDATI",
+      28.554,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.201,
+   "fim": 29.52
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      29.55
+     ],
+     [
+      "TUTTO",
+      29.748
+     ],
+     [
+      "PUÒ",
+      30.094
+     ]
+    ]
+   ],
+   "ini": 29.55,
+   "fim": 30.262
+  },
+  {
+   "linee": [
+    [
+     [
+      "ANCORA",
+      30.292
+     ]
+    ],
+    [
+     [
+      "SUCCEDERE",
+      30.785,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.292,
+   "fim": 31.93
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      31.96
+     ],
+     [
+      "AIUTARE",
+      32.129
+     ]
+    ],
+    [
+     [
+      "IL",
+      32.549
+     ]
+    ]
+   ],
+   "ini": 31.96,
+   "fim": 32.688
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUO",
+      32.718
+     ],
+     [
+      "CANDIDATO",
+      32.888,
+      true
+     ]
+    ]
+   ],
+   "ini": 32.718,
+   "fim": 33.811
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      33.841
+     ],
+     [
+      "NEI",
+      34.191
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      34.392
+     ]
+    ]
+   ],
+   "ini": 33.841,
+   "fim": 34.86
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      34.89
+     ],
+     [
+      "PAROLA",
+      35.091
+     ],
+     [
+      "VOTO",
+      35.589,
+      true
+     ]
+    ]
+   ],
+   "ini": 34.89,
+   "fim": 35.908
+  },
+  {
+   "linee": [
+    [
+     [
+      "SEGUITA",
+      35.938
+     ],
+     [
+      "DAL",
+      36.436
+     ]
+    ],
+    [
+     [
+      "SUO",
+      36.637
+     ]
+    ]
+   ],
+   "ini": 35.938,
+   "fim": 36.808
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOME",
+      36.838,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.838,
+   "fim": 37.557
+  },
+  {
+   "linee": [
+    [
+     [
+      "GLI",
+      37.587
+     ],
+     [
+      "REGALI",
+      37.78
+     ],
+     [
+      "5",
+      38.258,
+      true
+     ]
+    ]
+   ],
+   "ini": 37.587,
+   "fim": 38.564
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      38.594,
+      true
+     ]
+    ]
+   ],
+   "ini": 38.594,
+   "fim": 39.499
+  },
+  {
+   "linee": [
+    [
+     [
+      "INTANTO",
+      39.529
+     ],
+     [
+      "ROMA",
+      39.991,
+      true
+     ],
+     [
+      "E",
+      40.315
+     ]
+    ]
+   ],
+   "ini": 39.529,
+   "fim": 40.471
+  },
+  {
+   "linee": [
+    [
+     [
+      "NAPOLI",
+      40.501,
+      true
+     ],
+     [
+      "CORRONO",
+      40.963
+     ]
+    ],
+    [
+     [
+      "VERSO",
+      41.426
+     ]
+    ]
+   ],
+   "ini": 40.501,
+   "fim": 41.72
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      41.75
+     ],
+     [
+      "PRIMO",
+      41.936
+     ]
+    ],
+    [
+     [
+      "OSPEDALE",
+      42.26,
+      true
+     ]
+    ]
+   ],
+   "ini": 41.75,
+   "fim": 42.83
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      42.86
+     ]
+    ]
+   ],
+   "ini": 42.86,
+   "fim": 43.663
+  },
+  {
+   "linee": [
+    [
+     [
+      "ROMA",
+      43.693
+     ],
+     [
+      "È",
+      44.037
+     ],
+     [
+      "A",
+      44.235
+     ]
+    ]
+   ],
+   "ini": 43.693,
+   "fim": 44.403
+  },
+  {
+   "linee": [
+    [
+     [
+      "MENO",
+      44.433
+     ],
+     [
+      "DI",
+      44.777
+     ],
+     [
+      "50",
+      44.974,
+      true
+     ]
+    ]
+   ],
+   "ini": 44.433,
+   "fim": 45.435
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      45.465,
+      true
+     ]
+    ]
+   ],
+   "ini": 45.465,
+   "fim": 46.077
+  },
+  {
+   "linee": [
+    [
+     [
+      "NAPOLI",
+      46.107
+     ],
+     [
+      "A",
+      46.61
+     ],
+     [
+      "MENO",
+      46.812
+     ]
+    ]
+   ],
+   "ini": 46.107,
+   "fim": 47.135
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      47.165
+     ],
+     [
+      "70",
+      47.368,
+      true
+     ]
+    ]
+   ],
+   "ini": 47.165,
+   "fim": 48.264
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      48.294
+     ],
+     [
+      "NOI",
+      48.511
+     ],
+     [
+      "SIAMO",
+      48.728
+     ]
+    ]
+   ],
+   "ini": 48.294,
+   "fim": 49.077
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUASI",
+      49.107
+     ],
+     [
+      "A",
+      49.485
+     ],
+     [
+      "10.000",
+      49.702,
+      true
+     ]
+    ]
+   ],
+   "ini": 49.107,
+   "fim": 50.372
+  },
+  {
+   "linee": [
+    [
+     [
+      "FOLLOWER",
+      50.402,
+      true
+     ]
+    ],
+    [
+     [
+      "GRAZIE",
+      50.941,
+      true
+     ]
+    ]
+   ],
+   "ini": 50.402,
+   "fim": 51.771
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      51.801,
+      true
+     ],
+     [
+      "ALLE",
+      52.335
+     ]
+    ],
+    [
+     [
+      "9",
+      52.623
+     ]
+    ]
+   ],
+   "ini": 51.801,
+   "fim": 52.882
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      52.912
+     ],
+     [
+      "SERA",
+      53.077
+     ],
+     [
+      "SI",
+      53.366
+     ]
+    ]
+   ],
+   "ini": 52.912,
+   "fim": 53.501
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      53.531
+     ],
+     [
+      "IL",
+      53.942
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      54.108
+     ]
+    ]
+   ],
+   "ini": 53.531,
+   "fim": 54.366
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      54.396,
+      true
+     ]
+    ]
+   ],
+   "ini": 54.396,
+   "fim": 55.281
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      55.311
+     ],
+     [
+      "NEI",
+      55.651
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      55.846
+     ]
+    ]
+   ],
+   "ini": 55.311,
+   "fim": 56.3
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      56.33
+     ],
+     [
+      "TUA",
+      56.525
+     ],
+     [
+      "CITTÀ",
+      56.72,
+      true
+     ]
+    ]
+   ],
+   "ini": 56.33,
+   "fim": 57.03
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      57.06
+     ],
+     [
+      "LA",
+      57.255
+     ],
+     [
+      "TUA",
+      57.45
+     ]
+    ]
+   ],
+   "ini": 57.06,
+   "fim": 57.615
+  },
+  {
+   "linee": [
+    [
+     [
+      "REGIONE",
+      57.645,
+      true
+     ],
+     [
+      "E",
+      58.13
+     ]
+    ],
+    [
+     [
+      "SCEGLI",
+      58.325
+     ]
+    ]
+   ],
+   "ini": 57.645,
+   "fim": 58.635
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      58.665
+     ],
+     [
+      "CHE",
+      58.86
+     ],
+     [
+      "PARTE",
+      59.055,
+      true
+     ]
+    ]
+   ],
+   "ini": 58.665,
+   "fim": 59.365
+  },
+  {
+   "linee": [
+    [
+     [
+      "STARE",
+      59.395,
+      true
+     ]
+    ]
+   ],
+   "ini": 59.395,
+   "fim": 60.6
+  }
+ ],
+ "parlato": [
+  "Domenica venticinque ottobre, alle tre di notte,",
+  "questa mappa era completamente vuota.",
+  "Oggi ci sono più di ventunomila case, in più di quattromilacinquecento città.",
+  "E a tre giorni dall'elezione, tra il primo e il secondo",
+  "ci sono solo quaranta punti.",
+  "Rimini è in testa,",
+  "ma Brescia ieri era quarta, e in un giorno ha fatto più di mille punti.",
+  "E dietro non mollano:",
+  "Melito, Azzano Mella e Casarsa.",
+  "Cinque candidati,",
+  "e tutto può ancora succedere.",
+  "Vuoi aiutare il tuo candidato?",
+  "Scrivi nei commenti la parola voto, seguita dal suo nome:",
+  "gli regali cinque punti.",
+  "Intanto Roma e Napoli corrono verso il primo ospedale d'Italia:",
+  "Roma è a meno di cinquanta case,",
+  "Napoli a meno di settanta.",
+  "E noi siamo quasi a diecimila follower: grazie!",
+  "Domenica alle nove di sera si elegge il primo Presidente.",
+  "Scrivi nei commenti la tua città e la tua regione, e scegli da che parte stare!"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  6,
+  6,
+  7,
+  7,
+  8,
+  8,
+  9,
+  10,
+  10,
+  11,
+  11,
+  12,
+  12,
+  12,
+  12,
+  13,
+  13,
+  14,
+  14,
+  14,
+  14,
+  15,
+  15,
+  15,
+  16,
+  16,
+  17,
+  17,
+  17,
+  18,
+  18,
+  18,
+  18,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19
+ ],
+ "eventi": {
+  "dom": -0.02,
+  "notte": 2.53,
+  "vuota": 5.049,
+  "oggi": 6.007,
+  "ventuno": 7.378,
+  "citta": 9.259,
+  "tregiorni": 11.429,
+  "primo": 13.448,
+  "secondo": 14.153,
+  "quaranta": 15.799,
+  "rimini": 17.157,
+  "brescia": 18.889,
+  "quarta": 20.034,
+  "mille": 22.463,
+  "dietro": 23.617,
+  "melito": 25.385,
+  "azzano": 25.945,
+  "casarsa": 27.122,
+  "cinque": 28.151,
+  "tutto": 29.698,
+  "vuoi": 31.86,
+  "scrivi": 33.791,
+  "voto": 35.539,
+  "nome": 36.788,
+  "regali": 37.73,
+  "cinquepunti": 38.208,
+  "intanto": 39.429,
+  "romaN": 39.941,
+  "napoliN": 40.451,
+  "ospedale": 42.21,
+  "roma50": 43.643,
+  "cinquanta": 44.924,
+  "napoli70": 46.057,
+  "settanta": 47.318,
+  "noi": 48.194,
+  "diecimila": 49.622,
+  "grazie": 50.891,
+  "domenica2": 51.701,
+  "nove": 52.573,
+  "presidente": 54.346,
+  "scrivi2": 55.211,
+  "regione": 57.645,
+  "scegli": 58.275,
+  "stare": 59.395
+ },
+ "sincro": {
+  "eventi.dom": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.notte": [
+   0,
+   6,
+   0
+  ],
+  "eventi.vuota": [
+   1,
+   4,
+   -0.05
+  ],
+  "eventi.oggi": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   2,
+   5,
+   -0.08
+  ],
+  "eventi.citta": [
+   2,
+   10,
+   -0.08
+  ],
+  "eventi.tregiorni": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.primo": [
+   3,
+   7,
+   -0.05
+  ],
+  "eventi.secondo": [
+   3,
+   10,
+   -0.05
+  ],
+  "eventi.quaranta": [
+   4,
+   3,
+   -0.08
+  ],
+  "eventi.rimini": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.brescia": [
+   6,
+   1,
+   -0.05
+  ],
+  "eventi.quarta": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.mille": [
+   6,
+   13,
+   -0.08
+  ],
+  "eventi.dietro": [
+   7,
+   0,
+   -0.1
+  ],
+  "eventi.melito": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.azzano": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.casarsa": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.cinque": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.tutto": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.vuoi": [
+   11,
+   0,
+   -0.1
+  ],
+  "eventi.scrivi": [
+   12,
+   0,
+   -0.05
+  ],
+  "eventi.voto": [
+   12,
+   5,
+   -0.05
+  ],
+  "eventi.nome": [
+   12,
+   9,
+   -0.05
+  ],
+  "eventi.regali": [
+   13,
+   1,
+   -0.05
+  ],
+  "eventi.cinquepunti": [
+   13,
+   2,
+   -0.05
+  ],
+  "eventi.intanto": [
+   14,
+   0,
+   -0.1
+  ],
+  "eventi.romaN": [
+   14,
+   1,
+   -0.05
+  ],
+  "eventi.napoliN": [
+   14,
+   3,
+   -0.05
+  ],
+  "eventi.ospedale": [
+   14,
+   8,
+   -0.05
+  ],
+  "eventi.roma50": [
+   15,
+   0,
+   -0.05
+  ],
+  "eventi.cinquanta": [
+   15,
+   5,
+   -0.05
+  ],
+  "eventi.napoli70": [
+   16,
+   0,
+   -0.05
+  ],
+  "eventi.settanta": [
+   16,
+   4,
+   -0.05
+  ],
+  "eventi.noi": [
+   17,
+   0,
+   -0.1
+  ],
+  "eventi.diecimila": [
+   17,
+   5,
+   -0.08
+  ],
+  "eventi.grazie": [
+   17,
+   7,
+   -0.05
+  ],
+  "eventi.domenica2": [
+   18,
+   0,
+   -0.1
+  ],
+  "eventi.nove": [
+   18,
+   2,
+   -0.05
+  ],
+  "eventi.presidente": [
+   18,
+   9,
+   -0.05
+  ],
+  "eventi.scrivi2": [
+   19,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   19,
+   9,
+   0
+  ],
+  "eventi.scegli": [
+   19,
+   11,
+   -0.05
+  ],
+  "eventi.stare": [
+   19,
+   15,
+   0
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 11.mp3",
+  "durata": 59.87
+ },
+ "copertina": {
+  "titolo_top": 170,
+  "senza_testa": true,
+  "linee": [
+   [
+    "SOLO 40",
+    "ro",
+    200
+   ],
+   [
+    "PUNTI! 🔥",
+    true,
+    160
+   ],
+   [
+    "RIMINI VS BRESCIA",
+    false,
+    82
+   ]
+  ]
+ }
+}

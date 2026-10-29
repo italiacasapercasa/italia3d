@@ -75,6 +75,18 @@ const SINT = {
     somar(t0, dur * SR, t => { const v = 1 + 0.006 * Math.sin(t * 38), env = Math.min(1, t / 0.05) * Math.min(1, (dur - t) / 0.15);
       f1 += 2 * Math.PI * 740 * v / SR; f2 += 2 * Math.PI * 932 * v / SR; return (Math.sin(f1) + Math.sin(f2) + 0.3 * Math.sin(2 * f1)) * 0.13 * vol * env; });
   },
+  // subida de tensão: ruído que sobe de tom e volume até o impacto (termina em t0 + dur)
+  riser: ({ dur = 1.2, vol = 1 }) => (t0) => {
+    const bp = passaBanda();
+    let fase = 0;
+    somar(t0, dur * SR, t => { const s = t / dur; fase += 2 * Math.PI * (180 + 900 * s * s) / SR; return (bp(ruido(), 400 + 5000 * s * s, 2) * 0.6 + Math.sin(fase) * 0.12) * s * s * 0.6 * vol; });
+  },
+  // tecla de celular (digitar um comentário)
+  tasto: ({ tono = 1, vol = 1 }) => (t0) => { somar(t0, 0.006 * SR, t => ruido() * 0.25 * vol * Math.exp(-t / 0.002)); sino(t0, 3200 * tono, 0.025, 0.08 * vol, 0.006); },
+  // bolha suave (corações e balões subindo)
+  bolla: ({ tono = 1, vol = 1 }) => (t0) => { let fase = 0; somar(t0, 0.12 * SR, t => { fase += 2 * Math.PI * (500 + 900 * t / 0.12) * tono / SR; return Math.sin(fase) * 0.3 * vol * Math.sin(Math.PI * t / 0.12); }); },
+  // "silenzio": não soa nada; só abaixa a música (ver musica())
+  silenzio: () => () => {},
   // estrondo grave (a noite cai)
   boom: ({ vol = 1 }) => (t0) => {
     let fase = 0;
@@ -96,6 +108,15 @@ const SINT = {
     }
   },
 };
+// variação automática: o mesmo som repetido em menos de 2 s muda um pouco de tom e volume (nunca soa idêntico)
+const ultimo = {};
+for (const e of efeitos) {
+  const k = ultimo[e.tipo];
+  if (k && e.t - k.t < 2 && e.tono == null && !['whoosh', 'riser', 'rullo', 'vento', 'silenzio', 'fischio'].includes(e.tipo)) {
+    k.n++; e.tono = 1 + ((k.n * 37) % 9 - 4) * 0.025; e.vol = (e.vol ?? 1) * (0.92 + ((k.n * 53) % 7) * 0.02);
+  } else ultimo[e.tipo] = { t: e.t, n: 0 };
+  if (ultimo[e.tipo]) ultimo[e.tipo].t = e.t;
+}
 for (const e of efeitos) SINT[e.tipo](e)(e.t);
 
 // --musica [bpm]: trilha pop sintetizada (Am–F–C–G): pad, arpejo, baixo e bateria leve; entra baixa e abaixa sob a voz
@@ -125,8 +146,11 @@ function musica(bpm) {
       ruidoM(tb + batida / 2, 0.04, 0.08, 7000);                                                        // chimbal
     }
   }
+  // silêncios estratégicos: a música some (com fade curto) nos trechos marcados como "silenzio"
+  const pause = efeitos.filter(e => e.tipo === 'silenzio').map(e => [e.t, e.t + (e.dur ?? 0.6)]);
+  const gPausa = t => pause.reduce((g, [a, b]) => Math.min(g, t < a - 0.12 || t > b + 0.25 ? 1 : t < a ? (a - t) / 0.12 : t > b ? (t - b) / 0.25 : 0), 1);
   const pico = m.reduce((a, v) => Math.max(a, Math.abs(v)), 0) || 1, fim = durata;
-  for (let i = 0; i < m.length; i++) { const t = i / SR; m[i] = m[i] / pico * Math.min(1, t / 1.2) * Math.min(1, (fim - t) / 1.8); }
+  for (let i = 0; i < m.length; i++) { const t = i / SR; m[i] = m[i] / pico * Math.min(1, t / 1.2) * Math.min(1, (fim - t) / 1.8) * gPausa(t); }
   return m;
 }
 
@@ -145,7 +169,7 @@ const tmpM = bpm ? raw(musica(bpm), +opt('--vol-musica', 0.16)) : null;
 const ent = ['-i', voz, '-f', 's16le', '-ar', String(SR), '-ac', '1', '-i', tmp, ...(tmpM ? ['-f', 's16le', '-ar', String(SR), '-ac', '1', '-i', tmpM] : [])];
 // tudo em mono e só no fim duplicado nos 2 canais (o upmix automático do ffmpeg baixa 3 dB); a música abaixa quando a voz fala
 const filtro = tmpM
-  ? '[0:a]aresample=48000,aformat=channel_layouts=mono,apad,asplit=2[v][vc];[1:a]aresample=48000[s];[2:a]aresample=48000[m];[m][vc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=350:makeup=1[md];[v][s][md]amix=inputs=3:normalize=0:duration=longest,alimiter=limit=0.95:level=false,pan=stereo|c0=c0|c1=c0'
+  ? '[0:a]aresample=48000,aformat=channel_layouts=mono,apad,asplit=3[v][vc][vc2];[1:a]aresample=48000[s0];[s0][vc2]sidechaincompress=threshold=0.05:ratio=2.2:attack=10:release=250:makeup=1[s];[2:a]aresample=48000[m];[m][vc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=350:makeup=1[md];[v][s][md]amix=inputs=3:normalize=0:duration=longest,alimiter=limit=0.95:level=false,pan=stereo|c0=c0|c1=c0'
   : '[0:a]aresample=48000,aformat=channel_layouts=mono,apad[v];[1:a]aresample=48000[s];[v][s]amix=inputs=2:normalize=0:duration=longest,alimiter=limit=0.95:level=false,pan=stereo|c0=c0|c1=c0';
 const r = spawnSync(FFMPEG, ['-y', '-loglevel', 'error', ...ent, '-filter_complex', filtro, '-t', durata.toFixed(3), '-ar', '48000', saida], { encoding: 'utf8' });
 for (const f of [tmp, tmpM]) if (f) fs.rmSync(f, { force: true });
