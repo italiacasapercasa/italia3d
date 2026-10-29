@@ -99,6 +99,19 @@ const SINT = {
     const bp = passaBanda();
     somar(t0, dur * SR, t => { const s = t / dur; return bp(ruido(), 420 + 260 * Math.sin(t * 2.3) + 180 * Math.sin(t * 5.1), 3) * Math.sin(Math.PI * s) ** 1.5 * 0.55 * vol; });
   },
+  // brilho: cascata de notas agudas curtas (decoração, ouro, coroa)
+  scintilla: ({ tono = 1, vol = 1 }) => (t0) => {
+    const notas = [2093, 2637, 3136, 3520, 4186, 3136, 4699];
+    notas.forEach((f, k) => sino(t0 + k * 0.045, f * tono, 0.35, 0.11 * vol * (1 - k * 0.08), 0.09, [[1, 1], [2.01, 0.3]]));
+  },
+  // fogo de artifício: assobio subindo, estouro grave e estalinhos espalhados
+  fuoco: ({ tono = 1, vol = 1 }) => (t0) => {
+    let fase = 0;
+    somar(t0, 0.32 * SR, t => { fase += 2 * Math.PI * (900 + 2200 * t / 0.32) * tono / SR; return Math.sin(fase) * 0.06 * vol * Math.min(1, t / 0.05) * (1 - t / 0.32); });
+    const t1 = t0 + 0.32, bp = passaBanda();
+    somar(t1, 0.5 * SR, t => (bp(ruido(), 250 * tono, 0.8) * 0.9 + ruido() * 0.15 * Math.exp(-t / 0.01)) * vol * Math.exp(-t / 0.09));
+    for (let k = 0; k < 14; k++) { const tk = t1 + 0.08 + ((k * 0.137) % 1) * 0.7; somar(tk, 0.006 * SR, t => ruido() * 0.28 * vol * (1 - k / 16) * Math.exp(-t / 0.0015)); }
+  },
   // rufar de tambor que acelera e cresce (suspense)
   rullo: ({ dur = 3, vol = 1 }) => (t0) => {
     for (let t = 0, k = 0; t < dur; k++) {

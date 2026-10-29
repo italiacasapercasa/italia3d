@@ -1,0 +1,1533 @@
+{
+ "nome": "crescita",
+ "durata": 65,
+ "ieri": 21000,
+ "visite": 52454,
+ "prezzo_decora": "4,99 €",
+ "decorate": [
+  {
+   "conta": "__moscoz__",
+   "squadra": "viola",
+   "extra": [
+    "neon",
+    "corona",
+    "tricolore",
+    "campione",
+    "fuochi",
+    "cornice"
+   ]
+  },
+  {
+   "conta": "_gianni26_",
+   "squadra": null,
+   "extra": [
+    "tricolore",
+    "cornice",
+    "fuochi",
+    "oro"
+   ]
+  },
+  {
+   "conta": "raideen_21",
+   "squadra": "granata",
+   "extra": [
+    "neon",
+    "fuochi"
+   ]
+  }
+ ],
+ "negozio": "Shelby Design Clothes",
+ "cartellone": "DOTT.SSA EMMA NOVIELLO",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "IERI",
+      0
+     ],
+     [
+      "ERANO",
+      0
+     ]
+    ],
+    [
+     [
+      "21.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      0
+     ],
+     [
+      "LE",
+      0
+     ],
+     [
+      "CASE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      0
+     ],
+     [
+      "QUASI",
+      0
+     ]
+    ],
+    [
+     [
+      "23.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "4.600",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "ALCUNE",
+      0
+     ],
+     [
+      "HANNO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "INIZIATO",
+      0
+     ],
+     [
+      "A",
+      0
+     ]
+    ],
+    [
+     [
+      "FARSI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOTARE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      0
+     ],
+     [
+      "LE",
+      0
+     ],
+     [
+      "PRIME",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      0
+     ],
+     [
+      "DECORATE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      0
+     ],
+     [
+      "È",
+      0
+     ],
+     [
+      "VIOLA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "COME",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "SUA",
+      0
+     ]
+    ],
+    [
+     [
+      "SQUADRA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      0
+     ],
+     [
+      "CORONA",
+      0,
+      true
+     ],
+     [
+      "E",
+      0
+     ]
+    ],
+    [
+     [
+      "NEON",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      0
+     ],
+     [
+      "È",
+      0
+     ],
+     [
+      "TUTTA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ORO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "NOTTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ESPLODONO",
+      0
+     ],
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "FUOCHI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ARTIFICIO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      0
+     ],
+     [
+      "ORA",
+      0
+     ],
+     [
+      "SONO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0
+     ],
+     [
+      "3",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "PUÒ",
+      0
+     ]
+    ],
+    [
+     [
+      "ESSERE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "QUARTA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "NON",
+      0
+     ],
+     [
+      "CI",
+      0
+     ],
+     [
+      "SONO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0
+     ],
+     [
+      "CASE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "17",
+      0,
+      true
+     ],
+     [
+      "ATTIVITÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "HANNO",
+      0
+     ],
+     [
+      "GIÀ",
+      0
+     ],
+     [
+      "IL",
+      0
+     ]
+    ],
+    [
+     [
+      "LORO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "POSTO",
+      0
+     ],
+     [
+      "SULLA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      0
+     ],
+     [
+      "TRA",
+      0
+     ]
+    ],
+    [
+     [
+      "NEGOZI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "CARTELLONI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIGANTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "4",
+      0
+     ],
+     [
+      "GIORNI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUESTO",
+      0
+     ],
+     [
+      "SITO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      0
+     ],
+     [
+      "AVUTO",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ]
+    ],
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "50.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISITE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "GENTE",
+      0
+     ],
+     [
+      "CHE",
+      0
+     ],
+     [
+      "NON",
+      0
+     ]
+    ],
+    [
+     [
+      "TI",
+      0
+     ],
+     [
+      "CONOSCE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      0
+     ],
+     [
+      "NON",
+      0
+     ],
+     [
+      "È",
+      0
+     ],
+     [
+      "MAI",
+      0
+     ]
+    ],
+    [
+     [
+      "PASSATA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DAVANTI",
+      0
+     ],
+     [
+      "AL",
+      0
+     ],
+     [
+      "TUO",
+      0
+     ]
+    ],
+    [
+     [
+      "NEGOZIO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TI",
+      0
+     ],
+     [
+      "SCOPRE",
+      0,
+      true
+     ],
+     [
+      "QUI",
+      0
+     ]
+    ],
+    [
+     [
+      "TOCCA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "INSEGNA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "TI",
+      0
+     ],
+     [
+      "SCRIVE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      0
+     ],
+     [
+      "WHATSAPP",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "IN",
+      0
+     ],
+     [
+      "OGNI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ],
+     [
+      "I",
+      0
+     ],
+     [
+      "POSTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      0
+     ],
+     [
+      "POCHI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "INTANTO",
+      0
+     ],
+     [
+      "IL",
+      0
+     ]
+    ],
+    [
+     [
+      "GIOCO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "NON",
+      0
+     ],
+     [
+      "SI",
+      0
+     ],
+     [
+      "FERMA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "30.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIOCATORI",
+      0,
+      true
+     ],
+     [
+      "PIÙ",
+      0
+     ]
+    ],
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "80.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTI",
+      0,
+      true
+     ],
+     [
+      "E",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ]
+    ],
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "10.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "FOLLOWER",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      0,
+      true
+     ],
+     [
+      "ALLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "9",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "SERA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SI",
+      0
+     ],
+     [
+      "ELEGGE",
+      0
+     ],
+     [
+      "IL",
+      0
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      0
+     ],
+     [
+      "NEI",
+      0
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "REGIONE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "FAI",
+      0
+     ],
+     [
+      "CRESCERE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Ieri erano ventunomila.",
+  "Oggi le case sono quasi ventitremila, in più di quattromilaseicento città.",
+  "E alcune hanno iniziato a farsi notare.",
+  "Sono le prime case decorate d'Italia:",
+  "una è viola come la sua squadra, con corona e neon,",
+  "una è tutta d'oro,",
+  "e di notte esplodono di fuochi d'artificio.",
+  "Per ora sono solo tre. La tua può essere la quarta.",
+  "E non ci sono solo case:",
+  "diciassette attività hanno già il loro posto sulla mappa, tra negozi e cartelloni giganti.",
+  "In quattro giorni, questo sito ha avuto più di cinquantamila visite.",
+  "Gente che non ti conosce, che non è mai passata davanti al tuo negozio,",
+  "ti scopre qui, tocca la tua insegna, e ti scrive su WhatsApp.",
+  "E in ogni città i posti sono pochi.",
+  "Intanto il gioco non si ferma:",
+  "più di trentamila giocatori, più di ottantamila commenti, e più di diecimila follower.",
+  "Domenica alle nove di sera si elegge il primo Presidente.",
+  "Scrivi nei commenti la tua città e la tua regione, e fai crescere la tua casa!"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  9,
+  9,
+  9,
+  9,
+  10,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  12,
+  12,
+  12,
+  12,
+  13,
+  13,
+  13,
+  14,
+  14,
+  15,
+  15,
+  15,
+  15,
+  16,
+  16,
+  16,
+  16,
+  17,
+  17,
+  17,
+  17,
+  17
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.ieri": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.oggi": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.ventitre": [
+   1,
+   5,
+   -0.08
+  ],
+  "eventi.citta": [
+   1,
+   9,
+   -0.08
+  ],
+  "eventi.alcune": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.notare": [
+   2,
+   6,
+   -0.05
+  ],
+  "eventi.prime": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.decorate": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.viola": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.squadra": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.corona": [
+   4,
+   8,
+   -0.05
+  ],
+  "eventi.neon": [
+   4,
+   10,
+   -0.05
+  ],
+  "eventi.una2": [
+   5,
+   0,
+   -0.1
+  ],
+  "eventi.oro": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.notte": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.esplodono": [
+   6,
+   3,
+   -0.05
+  ],
+  "eventi.fuochi": [
+   6,
+   5,
+   -0.05
+  ],
+  "eventi.per": [
+   7,
+   0,
+   -0.1
+  ],
+  "eventi.tre": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.tua": [
+   7,
+   6,
+   -0.05
+  ],
+  "eventi.quarta": [
+   7,
+   10,
+   -0.05
+  ],
+  "eventi.nonsolo": [
+   8,
+   0,
+   -0.1
+  ],
+  "eventi.case2": [
+   8,
+   5,
+   -0.05
+  ],
+  "eventi.diciassette": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.posto": [
+   9,
+   6,
+   -0.05
+  ],
+  "eventi.negozi": [
+   9,
+   10,
+   -0.05
+  ],
+  "eventi.cartelloni": [
+   9,
+   12,
+   -0.05
+  ],
+  "eventi.quattro": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.sito": [
+   10,
+   4,
+   -0.05
+  ],
+  "eventi.cinquanta": [
+   10,
+   9,
+   -0.08
+  ],
+  "eventi.visite": [
+   10,
+   10,
+   -0.05
+  ],
+  "eventi.gente": [
+   11,
+   0,
+   -0.1
+  ],
+  "eventi.conosce": [
+   11,
+   4,
+   -0.05
+  ],
+  "eventi.mai": [
+   11,
+   8,
+   -0.05
+  ],
+  "eventi.negozio2": [
+   11,
+   13,
+   -0.05
+  ],
+  "eventi.scopre": [
+   12,
+   1,
+   -0.05
+  ],
+  "eventi.tocca": [
+   12,
+   3,
+   -0.05
+  ],
+  "eventi.insegna": [
+   12,
+   6,
+   -0.05
+  ],
+  "eventi.scrive": [
+   12,
+   9,
+   -0.05
+  ],
+  "eventi.whatsapp": [
+   12,
+   11,
+   -0.05
+  ],
+  "eventi.ogni": [
+   13,
+   2,
+   -0.05
+  ],
+  "eventi.posti": [
+   13,
+   5,
+   -0.05
+  ],
+  "eventi.pochi": [
+   13,
+   7,
+   -0.05
+  ],
+  "eventi.intanto": [
+   14,
+   0,
+   -0.1
+  ],
+  "eventi.ferma": [
+   14,
+   5,
+   -0.05
+  ],
+  "eventi.trenta": [
+   15,
+   2,
+   -0.08
+  ],
+  "eventi.ottanta": [
+   15,
+   6,
+   -0.08
+  ],
+  "eventi.dieci": [
+   15,
+   11,
+   -0.08
+  ],
+  "eventi.domenica": [
+   16,
+   0,
+   -0.1
+  ],
+  "eventi.nove": [
+   16,
+   2,
+   -0.05
+  ],
+  "eventi.presidente": [
+   16,
+   9,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   17,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   17,
+   9,
+   0
+  ],
+  "eventi.crescere": [
+   17,
+   12,
+   -0.05
+  ],
+  "eventi.casa": [
+   17,
+   15,
+   0
+  ]
+ }
+}

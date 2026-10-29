@@ -1,0 +1,1714 @@
+{
+ "nome": "crescita",
+ "durata": 66,
+ "ieri": 21000,
+ "visite": 52454,
+ "prezzo_decora": "4,99 €",
+ "decorate": [
+  {
+   "conta": "__moscoz__",
+   "squadra": "viola",
+   "extra": [
+    "neon",
+    "corona",
+    "tricolore",
+    "campione",
+    "fuochi",
+    "cornice"
+   ]
+  },
+  {
+   "conta": "_gianni26_",
+   "squadra": null,
+   "extra": [
+    "tricolore",
+    "cornice",
+    "fuochi",
+    "oro"
+   ]
+  },
+  {
+   "conta": "raideen_21",
+   "squadra": "granata",
+   "extra": [
+    "neon",
+    "fuochi"
+   ]
+  }
+ ],
+ "negozio": "Shelby Design Clothes",
+ "cartellone": "DOTT.SSA EMMA NOVIELLO",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "IERI",
+      0.03
+     ],
+     [
+      "ERANO",
+      0.437
+     ]
+    ],
+    [
+     [
+      "21.000",
+      1.016,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 2.393
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      2.423
+     ],
+     [
+      "LE",
+      2.825
+     ],
+     [
+      "CASE",
+      3.057
+     ]
+    ]
+   ],
+   "ini": 2.423,
+   "fim": 3.429
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      3.459
+     ],
+     [
+      "QUASI",
+      3.862
+     ]
+    ],
+    [
+     [
+      "23.000",
+      4.265,
+      true
+     ]
+    ]
+   ],
+   "ini": 3.459,
+   "fim": 5.151
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      5.181
+     ],
+     [
+      "PIÙ",
+      5.413
+     ],
+     [
+      "DI",
+      5.644
+     ]
+    ],
+    [
+     [
+      "4.600",
+      5.875,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.181,
+   "fim": 7.105
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      7.135,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.135,
+   "fim": 7.991
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      8.021
+     ],
+     [
+      "ALCUNE",
+      8.177
+     ],
+     [
+      "HANNO",
+      8.564
+     ]
+    ]
+   ],
+   "ini": 8.021,
+   "fim": 8.805
+  },
+  {
+   "linee": [
+    [
+     [
+      "INIZIATO",
+      8.835
+     ],
+     [
+      "A",
+      9.338
+     ]
+    ],
+    [
+     [
+      "FARSI",
+      9.494
+     ]
+    ]
+   ],
+   "ini": 8.835,
+   "fim": 9.735
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOTARE",
+      9.765,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.765,
+   "fim": 10.615
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      10.645
+     ],
+     [
+      "LE",
+      10.975
+     ],
+     [
+      "PRIME",
+      11.165
+     ]
+    ]
+   ],
+   "ini": 10.645,
+   "fim": 11.466
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      11.496
+     ],
+     [
+      "DECORATE",
+      11.827,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.496,
+   "fim": 12.409
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      12.439,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.439,
+   "fim": 13.311
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      13.341
+     ],
+     [
+      "È",
+      13.73
+     ],
+     [
+      "VIOLA",
+      13.954,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.341,
+   "fim": 14.313
+  },
+  {
+   "linee": [
+    [
+     [
+      "COME",
+      14.343
+     ],
+     [
+      "LA",
+      14.732
+     ],
+     [
+      "SUA",
+      14.956
+     ]
+    ],
+    [
+     [
+      "SQUADRA",
+      15.179
+     ]
+    ]
+   ],
+   "ini": 14.343,
+   "fim": 15.538
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      15.568
+     ],
+     [
+      "CORONA",
+      15.792,
+      true
+     ],
+     [
+      "E",
+      16.347
+     ]
+    ],
+    [
+     [
+      "NEON",
+      16.57,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.568,
+   "fim": 16.955
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      16.985
+     ],
+     [
+      "È",
+      17.348
+     ],
+     [
+      "TUTTA",
+      17.556
+     ]
+    ]
+   ],
+   "ini": 16.985,
+   "fim": 17.889
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ORO",
+      17.919,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.919,
+   "fim": 18.515
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      18.545
+     ],
+     [
+      "DI",
+      18.751
+     ],
+     [
+      "NOTTE",
+      18.956,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.545,
+   "fim": 19.284
+  },
+  {
+   "linee": [
+    [
+     [
+      "ESPLODONO",
+      19.314
+     ],
+     [
+      "DI",
+      19.977
+     ]
+    ],
+    [
+     [
+      "FUOCHI",
+      20.182,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.314,
+   "fim": 20.51
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ARTIFICIO",
+      20.54,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.54,
+   "fim": 21.684
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      21.714
+     ],
+     [
+      "ORA",
+      21.926
+     ],
+     [
+      "SONO",
+      22.295
+     ]
+    ]
+   ],
+   "ini": 21.714,
+   "fim": 22.634
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      22.664
+     ],
+     [
+      "3",
+      23.034,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.664,
+   "fim": 23.216
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      23.246
+     ],
+     [
+      "TUA",
+      23.458
+     ],
+     [
+      "PUÒ",
+      23.67
+     ]
+    ],
+    [
+     [
+      "ESSERE",
+      23.882
+     ]
+    ]
+   ],
+   "ini": 23.246,
+   "fim": 24.379
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      24.409
+     ],
+     [
+      "QUARTA",
+      24.621,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.409,
+   "fim": 25.414
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      25.444
+     ],
+     [
+      "NON",
+      25.606
+     ],
+     [
+      "CI",
+      25.768
+     ],
+     [
+      "SONO",
+      25.929
+     ]
+    ]
+   ],
+   "ini": 25.444,
+   "fim": 26.18
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      26.21
+     ],
+     [
+      "CASE",
+      26.492
+     ]
+    ]
+   ],
+   "ini": 26.21,
+   "fim": 27.125
+  },
+  {
+   "linee": [
+    [
+     [
+      "17",
+      27.155,
+      true
+     ],
+     [
+      "ATTIVITÀ",
+      27.803,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.155,
+   "fim": 28.421
+  },
+  {
+   "linee": [
+    [
+     [
+      "HANNO",
+      28.451
+     ],
+     [
+      "GIÀ",
+      28.801
+     ],
+     [
+      "IL",
+      29.002
+     ]
+    ],
+    [
+     [
+      "LORO",
+      29.203
+     ]
+    ]
+   ],
+   "ini": 28.451,
+   "fim": 29.523
+  },
+  {
+   "linee": [
+    [
+     [
+      "POSTO",
+      29.553
+     ],
+     [
+      "SULLA",
+      29.903
+     ]
+    ]
+   ],
+   "ini": 29.553,
+   "fim": 30.223
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      30.253
+     ],
+     [
+      "TRA",
+      30.603
+     ]
+    ],
+    [
+     [
+      "NEGOZI",
+      30.804,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.253,
+   "fim": 31.273
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      31.303
+     ],
+     [
+      "CARTELLONI",
+      31.505,
+      true
+     ]
+    ]
+   ],
+   "ini": 31.303,
+   "fim": 32.123
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIGANTI",
+      32.153,
+      true
+     ]
+    ]
+   ],
+   "ini": 32.153,
+   "fim": 33.094
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      33.124
+     ],
+     [
+      "4",
+      33.329
+     ],
+     [
+      "GIORNI",
+      33.685
+     ]
+    ]
+   ],
+   "ini": 33.124,
+   "fim": 34.011
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUESTO",
+      34.041
+     ],
+     [
+      "SITO",
+      34.398
+     ]
+    ]
+   ],
+   "ini": 34.041,
+   "fim": 34.724
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      34.754
+     ],
+     [
+      "AVUTO",
+      34.959
+     ],
+     [
+      "PIÙ",
+      35.467
+     ]
+    ],
+    [
+     [
+      "DI",
+      35.672
+     ],
+     [
+      "50.000",
+      35.876,
+      true
+     ]
+    ]
+   ],
+   "ini": 34.754,
+   "fim": 36.658
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISITE",
+      36.688,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.688,
+   "fim": 37.607
+  },
+  {
+   "linee": [
+    [
+     [
+      "GENTE",
+      37.637
+     ],
+     [
+      "CHE",
+      38.048
+     ],
+     [
+      "NON",
+      38.283
+     ]
+    ],
+    [
+     [
+      "TI",
+      38.519
+     ],
+     [
+      "CONOSCE",
+      38.755,
+      true
+     ]
+    ]
+   ],
+   "ini": 37.637,
+   "fim": 39.309
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      39.339
+     ],
+     [
+      "NON",
+      39.575
+     ],
+     [
+      "È",
+      39.811
+     ],
+     [
+      "MAI",
+      40.046
+     ]
+    ],
+    [
+     [
+      "PASSATA",
+      40.282
+     ]
+    ]
+   ],
+   "ini": 39.339,
+   "fim": 40.837
+  },
+  {
+   "linee": [
+    [
+     [
+      "DAVANTI",
+      40.867
+     ],
+     [
+      "AL",
+      41.451
+     ],
+     [
+      "TUO",
+      41.687
+     ]
+    ],
+    [
+     [
+      "NEGOZIO",
+      41.923,
+      true
+     ]
+    ]
+   ],
+   "ini": 40.867,
+   "fim": 42.896
+  },
+  {
+   "linee": [
+    [
+     [
+      "TI",
+      42.926
+     ],
+     [
+      "SCOPRE",
+      43.077,
+      true
+     ],
+     [
+      "QUI",
+      43.339
+     ]
+    ],
+    [
+     [
+      "TOCCA",
+      43.49
+     ]
+    ]
+   ],
+   "ini": 42.926,
+   "fim": 43.723
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      43.753
+     ],
+     [
+      "TUA",
+      43.904
+     ],
+     [
+      "INSEGNA",
+      44.055
+     ]
+    ]
+   ],
+   "ini": 43.753,
+   "fim": 44.399
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      44.429
+     ],
+     [
+      "TI",
+      44.58
+     ],
+     [
+      "SCRIVE",
+      44.731
+     ]
+    ]
+   ],
+   "ini": 44.429,
+   "fim": 44.963
+  },
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      44.993
+     ],
+     [
+      "WHATSAPP",
+      45.144,
+      true
+     ]
+    ]
+   ],
+   "ini": 44.993,
+   "fim": 45.948
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      45.978
+     ],
+     [
+      "IN",
+      46.162
+     ],
+     [
+      "OGNI",
+      46.345
+     ]
+    ]
+   ],
+   "ini": 45.978,
+   "fim": 46.633
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      46.663,
+      true
+     ],
+     [
+      "I",
+      46.982
+     ],
+     [
+      "POSTI",
+      47.165
+     ]
+    ]
+   ],
+   "ini": 46.663,
+   "fim": 47.454
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      47.484
+     ],
+     [
+      "POCHI",
+      47.802,
+      true
+     ]
+    ]
+   ],
+   "ini": 47.484,
+   "fim": 48.624
+  },
+  {
+   "linee": [
+    [
+     [
+      "INTANTO",
+      48.654
+     ],
+     [
+      "IL",
+      49.153
+     ]
+    ],
+    [
+     [
+      "GIOCO",
+      49.354
+     ]
+    ]
+   ],
+   "ini": 48.654,
+   "fim": 49.674
+  },
+  {
+   "linee": [
+    [
+     [
+      "NON",
+      49.704
+     ],
+     [
+      "SI",
+      49.906
+     ],
+     [
+      "FERMA",
+      50.107,
+      true
+     ]
+    ]
+   ],
+   "ini": 49.704,
+   "fim": 50.83
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      50.86
+     ],
+     [
+      "DI",
+      51.077
+     ],
+     [
+      "30.000",
+      51.294,
+      true
+     ]
+    ]
+   ],
+   "ini": 50.86,
+   "fim": 51.963
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIOCATORI",
+      51.993,
+      true
+     ],
+     [
+      "PIÙ",
+      52.692
+     ]
+    ],
+    [
+     [
+      "DI",
+      52.908
+     ],
+     [
+      "80.000",
+      53.125,
+      true
+     ]
+    ]
+   ],
+   "ini": 51.993,
+   "fim": 53.955
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTI",
+      53.985,
+      true
+     ],
+     [
+      "E",
+      54.523
+     ],
+     [
+      "PIÙ",
+      54.74
+     ]
+    ],
+    [
+     [
+      "DI",
+      54.957
+     ],
+     [
+      "10.000",
+      55.174,
+      true
+     ]
+    ]
+   ],
+   "ini": 53.985,
+   "fim": 55.843
+  },
+  {
+   "linee": [
+    [
+     [
+      "FOLLOWER",
+      55.873,
+      true
+     ]
+    ]
+   ],
+   "ini": 55.873,
+   "fim": 56.854
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      56.884,
+      true
+     ],
+     [
+      "ALLE",
+      57.42
+     ]
+    ]
+   ],
+   "ini": 56.884,
+   "fim": 57.68
+  },
+  {
+   "linee": [
+    [
+     [
+      "9",
+      57.71
+     ],
+     [
+      "DI",
+      58
+     ],
+     [
+      "SERA",
+      58.166
+     ]
+    ]
+   ],
+   "ini": 57.71,
+   "fim": 58.426
+  },
+  {
+   "linee": [
+    [
+     [
+      "SI",
+      58.456
+     ],
+     [
+      "ELEGGE",
+      58.623
+     ],
+     [
+      "IL",
+      59.036
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      59.202
+     ]
+    ]
+   ],
+   "ini": 58.456,
+   "fim": 59.462
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      59.492,
+      true
+     ]
+    ]
+   ],
+   "ini": 59.492,
+   "fim": 60.372
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      60.402
+     ],
+     [
+      "NEI",
+      60.742
+     ]
+    ],
+    [
+     [
+      "COMMENTI",
+      60.938,
+      true
+     ]
+    ]
+   ],
+   "ini": 60.402,
+   "fim": 61.393
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      61.423
+     ],
+     [
+      "TUA",
+      61.619
+     ],
+     [
+      "CITTÀ",
+      61.814,
+      true
+     ]
+    ]
+   ],
+   "ini": 61.423,
+   "fim": 62.125
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      62.155
+     ],
+     [
+      "LA",
+      62.351
+     ],
+     [
+      "TUA",
+      62.546
+     ]
+    ],
+    [
+     [
+      "REGIONE",
+      62.742,
+      true
+     ]
+    ]
+   ],
+   "ini": 62.155,
+   "fim": 63.197
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      63.227
+     ],
+     [
+      "FAI",
+      63.423
+     ],
+     [
+      "CRESCERE",
+      63.618,
+      true
+     ]
+    ]
+   ],
+   "ini": 63.227,
+   "fim": 64.074
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      64.104
+     ],
+     [
+      "TUA",
+      64.3
+     ],
+     [
+      "CASA",
+      64.495,
+      true
+     ]
+    ]
+   ],
+   "ini": 64.104,
+   "fim": 65.7
+  }
+ ],
+ "parlato": [
+  "Ieri erano ventunomila.",
+  "Oggi le case sono quasi ventitremila, in più di quattromilaseicento città.",
+  "E alcune hanno iniziato a farsi notare.",
+  "Sono le prime case decorate d'Italia:",
+  "una è viola come la sua squadra, con corona e neon,",
+  "una è tutta d'oro,",
+  "e di notte esplodono di fuochi d'artificio.",
+  "Per ora sono solo tre. La tua può essere la quarta.",
+  "E non ci sono solo case:",
+  "diciassette attività hanno già il loro posto sulla mappa, tra negozi e cartelloni giganti.",
+  "In quattro giorni, questo sito ha avuto più di cinquantamila visite.",
+  "Gente che non ti conosce, che non è mai passata davanti al tuo negozio,",
+  "ti scopre qui, tocca la tua insegna, e ti scrive su WhatsApp.",
+  "E in ogni città i posti sono pochi.",
+  "Intanto il gioco non si ferma:",
+  "più di trentamila giocatori, più di ottantamila commenti, e più di diecimila follower.",
+  "Domenica alle nove di sera si elegge il primo Presidente.",
+  "Scrivi nei commenti la tua città e la tua regione, e fai crescere la tua casa!"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  9,
+  9,
+  9,
+  9,
+  10,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  12,
+  12,
+  12,
+  12,
+  13,
+  13,
+  13,
+  14,
+  14,
+  15,
+  15,
+  15,
+  15,
+  16,
+  16,
+  16,
+  16,
+  17,
+  17,
+  17,
+  17,
+  17
+ ],
+ "eventi": {
+  "ieri": -0.02,
+  "ventuno": 0.966,
+  "oggi": 2.373,
+  "ventitre": 4.185,
+  "citta": 5.795,
+  "alcune": 8.127,
+  "notare": 9.715,
+  "prime": 11.115,
+  "decorate": 11.777,
+  "viola": 13.904,
+  "squadra": 15.129,
+  "corona": 15.742,
+  "neon": 16.52,
+  "una2": 16.885,
+  "oro": 17.869,
+  "notte": 18.906,
+  "esplodono": 19.264,
+  "fuochi": 20.132,
+  "per": 21.614,
+  "tre": 22.984,
+  "tua": 23.408,
+  "quarta": 24.571,
+  "nonsolo": 25.344,
+  "case2": 26.442,
+  "diciassette": 27.105,
+  "posto": 29.503,
+  "negozi": 30.754,
+  "cartelloni": 31.455,
+  "quattro": 33.279,
+  "sito": 34.348,
+  "cinquanta": 35.796,
+  "visite": 36.638,
+  "gente": 37.537,
+  "conosce": 38.705,
+  "mai": 39.996,
+  "negozio2": 41.873,
+  "scopre": 43.027,
+  "tocca": 43.44,
+  "insegna": 44.005,
+  "scrive": 44.681,
+  "whatsapp": 45.094,
+  "ogni": 46.295,
+  "posti": 47.115,
+  "pochi": 47.752,
+  "intanto": 48.554,
+  "ferma": 50.057,
+  "trenta": 51.214,
+  "ottanta": 53.045,
+  "dieci": 55.094,
+  "domenica": 56.784,
+  "nove": 57.66,
+  "presidente": 59.442,
+  "scrivi": 60.302,
+  "regione": 62.742,
+  "crescere": 63.568,
+  "casa": 64.495
+ },
+ "sincro": {
+  "eventi.ieri": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.oggi": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.ventitre": [
+   1,
+   5,
+   -0.08
+  ],
+  "eventi.citta": [
+   1,
+   9,
+   -0.08
+  ],
+  "eventi.alcune": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.notare": [
+   2,
+   6,
+   -0.05
+  ],
+  "eventi.prime": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.decorate": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.viola": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.squadra": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.corona": [
+   4,
+   8,
+   -0.05
+  ],
+  "eventi.neon": [
+   4,
+   10,
+   -0.05
+  ],
+  "eventi.una2": [
+   5,
+   0,
+   -0.1
+  ],
+  "eventi.oro": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.notte": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.esplodono": [
+   6,
+   3,
+   -0.05
+  ],
+  "eventi.fuochi": [
+   6,
+   5,
+   -0.05
+  ],
+  "eventi.per": [
+   7,
+   0,
+   -0.1
+  ],
+  "eventi.tre": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.tua": [
+   7,
+   6,
+   -0.05
+  ],
+  "eventi.quarta": [
+   7,
+   10,
+   -0.05
+  ],
+  "eventi.nonsolo": [
+   8,
+   0,
+   -0.1
+  ],
+  "eventi.case2": [
+   8,
+   5,
+   -0.05
+  ],
+  "eventi.diciassette": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.posto": [
+   9,
+   6,
+   -0.05
+  ],
+  "eventi.negozi": [
+   9,
+   10,
+   -0.05
+  ],
+  "eventi.cartelloni": [
+   9,
+   12,
+   -0.05
+  ],
+  "eventi.quattro": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.sito": [
+   10,
+   4,
+   -0.05
+  ],
+  "eventi.cinquanta": [
+   10,
+   9,
+   -0.08
+  ],
+  "eventi.visite": [
+   10,
+   10,
+   -0.05
+  ],
+  "eventi.gente": [
+   11,
+   0,
+   -0.1
+  ],
+  "eventi.conosce": [
+   11,
+   4,
+   -0.05
+  ],
+  "eventi.mai": [
+   11,
+   8,
+   -0.05
+  ],
+  "eventi.negozio2": [
+   11,
+   13,
+   -0.05
+  ],
+  "eventi.scopre": [
+   12,
+   1,
+   -0.05
+  ],
+  "eventi.tocca": [
+   12,
+   3,
+   -0.05
+  ],
+  "eventi.insegna": [
+   12,
+   6,
+   -0.05
+  ],
+  "eventi.scrive": [
+   12,
+   9,
+   -0.05
+  ],
+  "eventi.whatsapp": [
+   12,
+   11,
+   -0.05
+  ],
+  "eventi.ogni": [
+   13,
+   2,
+   -0.05
+  ],
+  "eventi.posti": [
+   13,
+   5,
+   -0.05
+  ],
+  "eventi.pochi": [
+   13,
+   7,
+   -0.05
+  ],
+  "eventi.intanto": [
+   14,
+   0,
+   -0.1
+  ],
+  "eventi.ferma": [
+   14,
+   5,
+   -0.05
+  ],
+  "eventi.trenta": [
+   15,
+   2,
+   -0.08
+  ],
+  "eventi.ottanta": [
+   15,
+   6,
+   -0.08
+  ],
+  "eventi.dieci": [
+   15,
+   11,
+   -0.08
+  ],
+  "eventi.domenica": [
+   16,
+   0,
+   -0.1
+  ],
+  "eventi.nove": [
+   16,
+   2,
+   -0.05
+  ],
+  "eventi.presidente": [
+   16,
+   9,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   17,
+   0,
+   -0.1
+  ],
+  "eventi.regione": [
+   17,
+   9,
+   0
+  ],
+  "eventi.crescere": [
+   17,
+   12,
+   -0.05
+  ],
+  "eventi.casa": [
+   17,
+   15,
+   0
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 12.mp3",
+  "durata": 64.99
+ }
+}
