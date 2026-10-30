@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel raddoppio · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --rosa: #FF7EB6; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .r, .r { color: var(--rosa); }
+  .forte .ro { color: #FF5A4E; }
+  .forte .v { color: #7DFF8A; }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #righe { transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 84px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 150px; -webkit-text-stroke-width: 26px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.cornice { background: #fff; border-color: #C99A1E; box-shadow: 0 0 0 6px #F2C230, 0 8px 0 6px rgba(21,32,51,.25); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .box small { display: block; font-size: 26px; font-weight: 800; color: #3B2A08; text-transform: uppercase; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; top: 470px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 26px 30px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 6px; font-size: 46px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+  /* 1 milhão */
+  #views { position: absolute; left: 0; right: 0; top: 560px; text-align: center; opacity: 0; }
+  #views .n { font-size: 172px; -webkit-text-stroke-width: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #views .l { font-size: 76px; -webkit-text-stroke-width: 15px; margin-top: 8px; }
+  /* as 8 casas decoradas */
+  #otto { top: 360px; left: 40px; right: 40px; padding: 22px 20px 18px; }
+  #otto h2 { font-size: 52px; }
+  #otto h2 .da { display: inline-block; min-width: 70px; }
+  #otto .slot { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 8px; margin-top: 14px; }
+  #otto .s { text-align: center; opacity: 0; position: relative; }
+  #otto .ic { position: relative; height: 150px; display: flex; align-items: flex-end; justify-content: center; }
+  #otto .muro { width: 104px; height: 82px; border: 5px solid var(--ink); border-radius: 7px; position: relative; box-sizing: border-box; }
+  #otto .muro::after { content: ''; position: absolute; left: 36px; bottom: 0; width: 22px; height: 38px; background: var(--ink); border-radius: 4px 4px 0 0; }
+  #otto .tetto { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 66px solid transparent; border-right: 66px solid transparent; border-bottom: 50px solid; }
+  #otto .em { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); font-size: 44px; }
+  #otto .s b { display: block; font-size: 21px; font-weight: 900; color: var(--ink); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #otto .nuova { position: absolute; top: 0; right: 0; background: var(--rosso); color: #fff; font-size: 18px; font-weight: 900; border: 3px solid var(--ink); border-radius: 10px; padding: 1px 7px; transform: rotate(8deg); }
+  /* pedidos */
+  #richieste > div { position: absolute; max-width: 640px; background: #fff; border: 5px solid var(--ink); border-radius: 30px 30px 30px 8px; padding: 16px 24px; font-size: 40px; font-weight: 900; color: var(--ink); box-shadow: 0 8px 0 rgba(21,32,51,.25); opacity: 0; white-space: nowrap; }
+  #richieste > div.dx { border-radius: 30px 30px 8px 30px; background: #DCF8C6; }
+  #richieste small { display: block; font-size: 24px; font-weight: 800; color: #5B6475; }
+  /* vagas */
+  #posti { top: 420px; text-align: center; }
+  #posti h2 { font-size: 50px; }
+  #posti .box { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 18px; }
+  #posti .box div { height: 118px; border-radius: 18px; border: 5px solid var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; opacity: 0; }
+  #posti .box div small { font-size: 17px; font-weight: 900; color: var(--ink); }
+  #posti .box .preso { background: #E6E9EE; }
+  #posti .box .libero { background: #fff; border-style: dashed; }
+  #posti .box .nuovo { background: var(--giallo); border-style: solid; }
+  #posti .riga2 { display: flex; justify-content: center; gap: 22px; margin-top: 22px; }
+  #posti .riga2 div { font-size: 34px; font-weight: 900; color: var(--ink); background: #F3F5F8; border: 4px solid var(--ink); border-radius: 18px; padding: 8px 18px; opacity: 0; }
+  #posti .riga2 b { color: var(--rosso); }
+  #stamp-x2 { position: absolute; left: 0; right: 0; top: 1040px; text-align: center; font-size: 104px; -webkit-text-stroke-width: 20px; opacity: 0; line-height: 1.02; }
+  /* jogos */
+  #giochi { position: absolute; left: 0; right: 0; top: 380px; text-align: center; }
+  #giochi .pad { font-size: 230px; line-height: 1; opacity: 0; display: inline-block; }
+  #giochi .t1 { font-size: 92px; -webkit-text-stroke-width: 17px; opacity: 0; }
+  #giochi .t2 { font-size: 66px; -webkit-text-stroke-width: 13px; opacity: 0; }
+  #giochi .mini { position: absolute; font-size: 90px; opacity: 0; }
+  #presto { position: absolute; top: 300px; right: 70px; font-size: 64px; -webkit-text-stroke-width: 13px; background: none; opacity: 0; }
+  #punti i { position: absolute; left: 0; top: 0; font-style: normal; font-size: 64px; -webkit-text-stroke-width: 13px; opacity: 0; white-space: nowrap; }
+  /* contagem */
+  #conto { top: 520px; text-align: center; }
+  #conto .quando { font-size: 40px; font-weight: 900; color: var(--ink); margin-top: 8px; }
+  #conto .cifre { display: flex; justify-content: center; gap: 18px; margin-top: 18px; }
+  #conto .cifre div { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; width: 190px; padding: 8px 0; }
+  #conto .cifre b { display: block; font-size: 84px; font-weight: 900; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  #conto .cifre small { font-size: 26px; font-weight: 900; color: #5B6475; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 520px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 80px; -webkit-text-stroke-width: 15px; }
+  #cta .b { font-size: 70px; -webkit-text-stroke-width: 14px; margin-top: 16px; }
+  #cta .d { font-size: 54px; -webkit-text-stroke-width: 12px; margin-top: 40px; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="testa" class="forte"><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="views" class="forte"><div class="n g"></div><div class="l">VISUALIZZAZIONI 👀</div></div>
+<div id="otto" class="riquadro"><h2>🎨 CASE DECORATE: <span class="da">3</span></h2><div class="slot"></div></div>
+<div id="richieste"></div>
+<div id="posti" class="riquadro"><h2></h2><div class="box"></div><div class="riga2"><div>🏪 negozi <b>×2</b></div><div>📣 cartelloni <b>×2</b></div></div></div>
+<div id="stamp-x2" class="forte ro">POSTI<br><span class="g">RADDOPPIATI ×2</span></div>
+<div id="giochi" class="forte"><div class="pad">🎮</div><div class="t1">GIOCHI</div><div class="t2 g">DENTRO LA TUA CASA</div><div class="mini" style="left:110px;top:40px">🎯</div><div class="mini" style="right:110px;top:20px">🧩</div><div class="mini" style="left:150px;top:200px">🎲</div><div class="mini" style="right:140px;top:210px">🏆</div></div>
+<div id="presto" class="forte ro"></div>
+<div id="punti"></div>
+<div id="conto" class="riquadro"><h2>🗳️ SI ELEGGE IL PRIMO PRESIDENTE</h2><div class="quando">domenica 1 novembre · ore 21:00</div><div class="cifre"></div></div>
+<div id="coriandoli"></div>
+<div id="chip-7" class="chip forte" style="top:420px;font-size:74px">⚡ IN MENO DI <span class="g">7 GIORNI</span></div>
+<div id="chip-ogni" class="chip forte g" style="top:300px;font-size:80px;-webkit-text-stroke-width:15px">📍 IN OGNI CITTÀ</div>
+<div id="chip-presto" class="chip forte ro" style="top:250px;font-size:84px;-webkit-text-stroke-width:16px">🔜 PRESTO</div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA TUA CITTÀ</div><div class="b g">NEI COMMENTI 👇</div><div class="d g">@ITALIACASAPERCASA</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/raddoppio.js"></script>
+</body>
+</html>

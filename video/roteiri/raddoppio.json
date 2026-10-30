@@ -1,0 +1,858 @@
+{
+ "nome": "raddoppio",
+ "durata": 31.4,
+ "views": 1000000,
+ "decorate": [
+  {
+   "conta": "__moscoz__",
+   "squadra": "viola",
+   "extra": [
+    "neon",
+    "corona",
+    "tricolore",
+    "campione",
+    "cornice"
+   ]
+  },
+  {
+   "conta": "_gianni26_",
+   "squadra": null,
+   "extra": [
+    "tricolore",
+    "cornice",
+    "oro"
+   ]
+  },
+  {
+   "conta": "raideen_21",
+   "squadra": "granata",
+   "extra": [
+    "neon"
+   ]
+  },
+  {
+   "conta": "gi.an1616",
+   "squadra": null,
+   "extra": [
+    "neon"
+   ]
+  },
+  {
+   "conta": "gela.t10",
+   "squadra": null,
+   "extra": [
+    "tricolore",
+    "neon"
+   ]
+  },
+  {
+   "conta": "natan.nicora",
+   "squadra": "nerazzurro",
+   "extra": [
+    "neon",
+    "tricolore",
+    "cornice"
+   ]
+  },
+  {
+   "conta": "christian.ca_da_muro_",
+   "squadra": null,
+   "extra": [
+    "campione"
+   ],
+   "da": "ffrancescogallo"
+  },
+  {
+   "conta": "jackbiava",
+   "squadra": null,
+   "extra": [
+    "oro",
+    "corona",
+    "tricolore",
+    "cornice"
+   ]
+  }
+ ],
+ "vetrina3d": [
+  5,
+  7
+ ],
+ "citta_posti": "Milano",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "MENO",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "7",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIORNI",
+      0,
+      true
+     ],
+     [
+      "ABBIAMO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUPERATO",
+      0
+     ],
+     [
+      "UN",
+      0
+     ]
+    ],
+    [
+     [
+      "MILIONE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "VISUALIZZAZIONI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "SOLO",
+      0
+     ],
+     [
+      "NELLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ULTIME",
+      0
+     ],
+     [
+      "24",
+      0,
+      true
+     ],
+     [
+      "ORE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OLTRE",
+      0
+     ],
+     [
+      "1.500",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      0
+     ],
+     [
+      "NUOVE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LE",
+      0
+     ],
+     [
+      "CASE",
+      0
+     ]
+    ],
+    [
+     [
+      "DECORATE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IERI",
+      0
+     ],
+     [
+      "ERANO",
+      0
+     ],
+     [
+      "3",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      0
+     ],
+     [
+      "SONO",
+      0
+     ],
+     [
+      "8",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "ORA",
+      0
+     ],
+     [
+      "LA",
+      0
+     ]
+    ],
+    [
+     [
+      "NOVITÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "TANTI",
+      0,
+      true
+     ],
+     [
+      "CI",
+      0
+     ]
+    ],
+    [
+     [
+      "AVETE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHIESTO",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ]
+    ],
+    [
+     [
+      "SPAZIO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      0
+     ],
+     [
+      "LE",
+      0
+     ]
+    ],
+    [
+     [
+      "ATTIVITÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "ABBIAMO",
+      0
+     ]
+    ],
+    [
+     [
+      "DECISO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "RADDOPPIAMO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      0
+     ],
+     [
+      "POSTI",
+      0,
+      true
+     ],
+     [
+      "IN",
+      0
+     ]
+    ],
+    [
+     [
+      "OGNI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "PRESTO",
+      0
+     ]
+    ],
+    [
+     [
+      "ARRIVANO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      0
+     ],
+     [
+      "GIOCHI",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "DENTRO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      0
+     ],
+     [
+      "VALGONO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      0,
+      true
+     ],
+     [
+      "ALLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      0,
+      true
+     ],
+     [
+      "ELEGGIAMO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "PRIMO",
+      0
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEI",
+      0
+     ],
+     [
+      "COMMENTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "In meno di sette giorni abbiamo superato un milione di visualizzazioni!",
+  "E solo nelle ultime ventiquattro ore: oltre millecinquecento case nuove.",
+  "Le case decorate?",
+  "Ieri erano tre.",
+  "Oggi sono otto.",
+  "E ora la novità:",
+  "in tanti ci avete chiesto più spazio per le attività…",
+  "e abbiamo deciso: raddoppiamo i posti in ogni città!",
+  "E presto arrivano i giochi dentro la tua casa, che valgono punti.",
+  "Domenica alle ventuno eleggiamo il primo Presidente.",
+  "Scrivi la tua città nei commenti!"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  8,
+  8,
+  8,
+  9,
+  9,
+  9,
+  10,
+  10
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.sette": [
+   0,
+   3,
+   -0.05
+  ],
+  "eventi.superato": [
+   0,
+   6,
+   -0.05
+  ],
+  "eventi.milione": [
+   0,
+   8,
+   -0.08
+  ],
+  "eventi.visual": [
+   0,
+   10,
+   -0.05
+  ],
+  "eventi.solo": [
+   1,
+   1,
+   -0.05
+  ],
+  "eventi.ventiquattro": [
+   1,
+   4,
+   -0.05
+  ],
+  "eventi.oltre": [
+   1,
+   6,
+   -0.05
+  ],
+  "eventi.mille": [
+   1,
+   7,
+   -0.08
+  ],
+  "eventi.nuove": [
+   1,
+   9,
+   -0.05
+  ],
+  "eventi.decorate": [
+   2,
+   2,
+   -0.1
+  ],
+  "eventi.dec0": [
+   2,
+   0,
+   -0.1
+  ],
+  "eventi.ieri": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.tre": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.oggi": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.otto": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.ora": [
+   5,
+   0,
+   -0.1
+  ],
+  "eventi.novita": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.tanti": [
+   6,
+   1,
+   -0.05
+  ],
+  "eventi.chiesto": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.spazio": [
+   6,
+   6,
+   -0.05
+  ],
+  "eventi.attivita": [
+   6,
+   9,
+   -0.05
+  ],
+  "eventi.deciso": [
+   7,
+   2,
+   -0.05
+  ],
+  "eventi.raddoppiamo": [
+   7,
+   3,
+   -0.08
+  ],
+  "eventi.posti": [
+   7,
+   5,
+   -0.05
+  ],
+  "eventi.ogni": [
+   7,
+   7,
+   -0.05
+  ],
+  "eventi.citta": [
+   7,
+   8,
+   -0.05
+  ],
+  "eventi.presto": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.giochi": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.casa": [
+   8,
+   8,
+   -0.05
+  ],
+  "eventi.valgono": [
+   8,
+   10,
+   -0.05
+  ],
+  "eventi.punti": [
+   8,
+   11,
+   -0.05
+  ],
+  "eventi.domenica": [
+   9,
+   0,
+   -0.1
+  ],
+  "eventi.ventuno": [
+   9,
+   2,
+   -0.05
+  ],
+  "eventi.presidente": [
+   9,
+   6,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   10,
+   0,
+   -0.1
+  ],
+  "eventi.citta2": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.commenti": [
+   10,
+   5,
+   -0.05
+  ]
+ }
+}
