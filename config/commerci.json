@@ -283,5 +283,20 @@
     "testo": "",
     "logo": "",
     "giocatore": "ingrosso.gabriele.official"
+  },
+  {
+    "id": "261030-d48c9e9d",
+    "istat": "010025",
+    "approvato": "2026-10-30T09:37:57.608Z",
+    "fino": "2026-11-29T09:37:57.608Z",
+    "prodotto": "negozio",
+    "nome": "BOBO3DPRINT",
+    "tipo": "altro",
+    "colore": "#FFAB01",
+    "whatsapp": "3471192176",
+    "instagram": "bobo3dprint",
+    "descrizione": "Stampa 3D",
+    "testo": "",
+    "logo": ""
   }
 ]
