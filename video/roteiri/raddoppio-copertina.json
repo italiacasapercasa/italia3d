@@ -956,5 +956,41 @@
   "arquivo": "audio 13.mp3",
   "durata": 31.39
  },
- "copertina": {}
+ "copertina": {
+  "alto": {
+   "top": 130,
+   "linee": [
+    [
+     "🔥 L'ITALIA",
+     false,
+     96
+    ],
+    [
+     "STA ESPLODENDO",
+     true,
+     108
+    ]
+   ]
+  },
+  "basso": {
+   "top": 1220,
+   "linee": [
+    [
+     "📢 POSTI",
+     "ro",
+     136
+    ],
+    [
+     "RADDOPPIATI ×2",
+     true,
+     118
+    ],
+    [
+     "LA TUA CITTÀ C'È? 👇",
+     false,
+     80
+    ]
+   ]
+  }
+ }
 }

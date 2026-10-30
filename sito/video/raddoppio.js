@@ -423,11 +423,12 @@ async function preparar(roteiro) {
   ];
   if (R.copertina) {
     const cp = R.copertina;
-    if (cp.linee) {
+    // títulos da capa: um bloco em cima e outro embaixo (cada um { top, linee: [[texto, cor, tamanho]] })
+    for (const b of [cp.alto, cp.basso].filter(Boolean)) {
       const el = document.createElement('div');
       el.className = 'forte';
-      el.style.cssText = `position:absolute;left:30px;right:30px;top:${cp.titolo_top}px;text-align:center;line-height:1.05;`;
-      el.innerHTML = cp.linee.map(([txt, cor, size]) => `<div style="font-size:${size}px;-webkit-text-stroke-width:${Math.round(size * 0.19)}px"${cor ? ` class="${cor === true ? 'g' : cor}"` : ''}>${esc(txt)}</div>`).join('');
+      el.style.cssText = `position:absolute;left:20px;right:20px;top:${b.top}px;text-align:center;line-height:1.05;`;
+      el.innerHTML = b.linee.map(([txt, cor, size]) => `<div style="font-size:${size}px;-webkit-text-stroke-width:${Math.round(size * 0.19)}px"${cor ? ` class="${cor === true ? 'g' : cor}"` : ''}>${esc(txt)}</div>`).join('');
       document.body.appendChild(el);
     }
     $('#etichette').style.display = 'none';
