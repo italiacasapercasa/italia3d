@@ -2,11 +2,11 @@
   "aperto": true,
   "durata_giorni": 30,
   "decora": { "attivo": true, "prezzo": 499, "giorni": 10, "checkout": "https://pay.hotmart.com/R108207103E?off=ladlscjs" },
-  "su_misura": { "attivo": true, "prezzo": 990, "posti_per_citta": 3, "checkout": "https://pay.hotmart.com/R108193326G?off=crctj96h" },
+  "su_misura": { "attivo": true, "prezzo": 990, "posti_per_citta": 6, "checkout": "https://pay.hotmart.com/R108193326G?off=crctj96h" },
   "piani": [
-    { "id": "metropoli", "nome": "Metropoli", "da": 250000, "posti": { "negozio": 6, "cartellone": 2 }, "prezzo": { "negozio": { "pieno": 3990, "lancio": 1990 }, "cartellone": { "pieno": 5990, "lancio": 2990 } } },
-    { "id": "citta", "nome": "Città", "da": 30000, "posti": { "negozio": 4, "cartellone": 2 }, "prezzo": { "negozio": { "pieno": 2990, "lancio": 1490 }, "cartellone": { "pieno": 3990, "lancio": 1990 } } },
-    { "id": "borgo", "nome": "Borgo", "da": 0, "posti": { "negozio": 3, "cartellone": 1 }, "prezzo": { "negozio": { "pieno": 1990, "lancio": 990 }, "cartellone": { "pieno": 2990, "lancio": 1490 } } }
+    { "id": "metropoli", "nome": "Metropoli", "da": 250000, "posti": { "negozio": 12, "cartellone": 4 }, "prezzo": { "negozio": { "pieno": 3990, "lancio": 1990 }, "cartellone": { "pieno": 5990, "lancio": 2990 } } },
+    { "id": "citta", "nome": "Città", "da": 30000, "posti": { "negozio": 8, "cartellone": 4 }, "prezzo": { "negozio": { "pieno": 2990, "lancio": 1490 }, "cartellone": { "pieno": 3990, "lancio": 1990 } } },
+    { "id": "borgo", "nome": "Borgo", "da": 0, "posti": { "negozio": 6, "cartellone": 2 }, "prezzo": { "negozio": { "pieno": 1990, "lancio": 990 }, "cartellone": { "pieno": 2990, "lancio": 1490 } } }
   ],
   "checkout": {
     "metropoli": { "negozio": "https://pay.hotmart.com/A108184323M?off=a3pw72he", "cartellone": "https://pay.hotmart.com/D108184692D?off=xici5rs0" },
