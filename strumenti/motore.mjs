@@ -31,7 +31,8 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const doppi = eventi.doppi ?? [];
   const lim = limitiMandati(eventi.inizio, agora);
   const kc = mandatoDi(lim, agora);
-  const fator = (f, ts) => (doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
+  // o bônus de compra (mecenate) nunca dobra: é o valor prometido no e-mail, aprovado em qualquer hora
+  const fator = (f, ts) => (f !== F.mecenate && doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
   const speciali = eventi.speciali ?? [];
   const specialeDi = ts => speciali.find(s => ts >= s.da && ts < s.a) ?? null;
 

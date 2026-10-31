@@ -143,5 +143,17 @@ const s6 = calcolare({
 });
 const a6 = s6.case.find(x => x[0] === 'anna');
 ok(a6[7][1] === 15 && a6[7][2] === 1 && a6[7][3] === 20 + 20 + 3, `anna Halloween: commento ${a6[7][1]} (15), extra ${a6[7][2]} (1), tag ${a6[7][3]} (43)`);
+
+// mecenate aprovado dentro de "doppi tutto" continua +100 (não dobra)
+const s7 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' })],
+    storie: [], bloccati: [], post: [], doppi: [{ da: qui, a: qui + 10 * H, tipi: ['tutto'] }],
+    commerci: [{ id: 'n1', istat: '058091', ts: qui + H, nome: 'Libreria', giocatore: 'anna' }],
+  },
+  comuni, regioni, agora: qui + 12 * H,
+});
+ok(s7.case.find(x => x[0] === 'anna')[7][8] === 100, 'mecenate não dobra em doppi tutto');
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);
