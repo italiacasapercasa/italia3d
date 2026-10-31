@@ -131,6 +131,8 @@ export class UI {
     });
     this.doppio = (D.snap.doppi ?? []).find(d => agora >= Date.parse(d.da) && agora < Date.parse(d.a)) ?? null;
     if (this.doppio) add('chip-doppi', `⚡ <b>Punti doppi</b> ${this.doppio.tipi.includes('storia') ? 'nelle storie ' : ''}fino alle ${ora(Date.parse(this.doppio.a))}`, () => this.comeFunziona());
+    this.speciale = (D.snap.speciali ?? []).find(s => agora >= Date.parse(s.da) && agora < Date.parse(s.a)) ?? null;
+    if (this.speciale) add('chip-speciale', `🎃 <b>Solo oggi</b>: 1 commento per post · tagga 1 amico senza casa = <b>+${this.speciale.tag_nuovo}</b>`, () => this.comeFunziona());
     if (this.emFiamme.length) add('chip-fiamme', `🔥 <b>${num(this.emFiamme.length)}</b> ${this.emFiamme.length === 1 ? 'casa in fiamme' : 'case in fiamme'} ora`, () => this.fiamme());
     const dz = D.snap.derby;
     if (dz) add('chip-derby', `⚔️ ${esc(D.comunePorIstat.get(dz.a).nome)} <b>${num(dz.pts_a)}</b> – <b>${num(dz.pts_b)}</b> ${esc(D.comunePorIstat.get(dz.b).nome)}`, () => this.derby());
@@ -655,6 +657,7 @@ export class UI {
       <p class="intro">Le cariche si vincono ogni settimana con i punti del mandato (da domenica alle 21 a domenica alle 21, ora di Roma). Chi fa più punti governa, dall’alto verso il basso, una carica a persona. Il Presidente del Consiglio e i sindaci si eleggono la domenica alle 21 e governano tutta la settimana; le altre cariche si vincono in diretta.</p>
       <ol class="ranking cariche">${REGOLE.cariche.map(k => `<li><span class="quem"><b>${NOMI_CARICHE[k]}</b><small>${DESCR_CARICHE[k]}</small></span></li>`).join('')}</ol>
       <h3>3. Come guadagnare punti</h3>
+      ${this.speciale ? `<p class="intro">🎃 <b>${esc(this.speciale.nome ?? 'Regola di oggi')}</b>, fino alle ${ora(Date.parse(this.speciale.a))}: in ogni post conta 1 solo commento (i commenti extra non sommano) e 1 amico taggato. Se l’amico non ha ancora casa vale <b>+${this.speciale.tag_nuovo}</b>.${this.doppio ? ' E oggi i punti sono doppi!' : ''} Condividi il post nella tua storia e salvalo.</p>` : ''}
       <div class="azioni">${COME_GUADAGNARE(P).map(([k, nome, txt]) => `<div class="azione"><i style="background:${FONTI.find(f => f[0] === k)[2]}"></i><div><b>${nome}</b><small>${txt}</small></div></div>`).join('')}</div>
       <h3>4. La storia</h3>
       <p class="intro">Carica la tua casa nella storia e tagga @${PERFIL}: +${P.storia} punti (1 volta al giorno) e la tua casa in fiamme per 24 ore. Sulla mappa cerca il tuo @ e tocca «Carica la tua casa nella storia»: ti diamo l’immagine pronta.</p>

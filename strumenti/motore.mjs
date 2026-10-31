@@ -8,6 +8,9 @@
 //   storie:  [{ conta, ts }],                     // story que marcou o perfil
 //   bloccati:[conta],                             // escondidos do mapa (lote fica reservado)
 //   doppi:   [{ da: ms, a: ms, tipi: ['storia'] | ['tutto'] }],
+//   speciali:[{ da: ms, a: ms, nome, extra: false, tag_max: 1, tag_nuovo: 20 }],
+//            // regra de um dia: comentários extra não somam, só tag_max amigos por post contam e o amigo
+//            // ainda sem casa vale tag_nuovo (em vez de punti.tag)
 //   commerci:[{ id, istat, ts, fino: ms|null, prodotto, nome, tipo, colore, whatsapp, instagram, descrizione, testo, logo }],
 //            // aprovados: na hora "ts" reservam o próximo lote da cidade (as casas seguintes pulam esse lote);
 //            // depois de "fino" somem do mapa, mas o lote continua reservado (nenhuma casa muda de lugar)
@@ -28,6 +31,8 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const lim = limitiMandati(eventi.inizio, agora);
   const kc = mandatoDi(lim, agora);
   const fator = (f, ts) => (doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
+  const speciali = eventi.speciali ?? [];
+  const specialeDi = ts => speciali.find(s => ts >= s.da && ts < s.a) ?? null;
 
   const contas = new Map(), luoghi = new Map(), postEst = new Map(), votos = new Set(), eventos = [];
   const cont = { commenti: 0, validi: 0, pendenti: 0, rifiutati: 0, storie: 0 };
@@ -98,19 +103,23 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
       if (!a.casa) continue;                       // ainda sem cidade: "casa riservata"
       const ch = `${c.post}|${a.conta}`;
       let s = postEst.get(ch);
-      if (!s) postEst.set(ch, s = { n: 0, tags: new Set() });
+      if (!s) postEst.set(ch, s = { n: 0, tags: new Set(), tagsSp: 0 });
       s.n++;
+      const sp = specialeDi(c.ts);
       if (s.n === 1) add(a, F.commento, P.commento, c.ts);
-      else if (R.extra_attivo && s.n - 1 <= R.limiti.extra) add(a, F.extra, P.extra, c.ts);
+      else if (R.extra_attivo && sp?.extra !== false && s.n - 1 <= R.limiti.extra) add(a, F.extra, P.extra, c.ts);
       for (const t0 of c.tags ?? []) {
         const t = t0.toLowerCase();
         if (t === a.conta) continue;
         // o limite vale só para os +3 do tag: o amigo que entra depois conta como recruta mesmo além do 10º tag
         const alvo = conta(t);
+        const semCasa = !alvo.casa;
         if (!alvo.casa && !alvo.taggatoDa) alvo.taggatoDa = a.conta;
         if (s.tags.has(t) || s.tags.size >= R.limiti.tag) continue;
+        if (sp && s.tagsSp >= (sp.tag_max ?? R.limiti.tag)) continue;
         s.tags.add(t);
-        add(a, F.tag, P.tag, c.ts);
+        if (sp) s.tagsSp++;
+        add(a, F.tag, sp && semCasa && sp.tag_nuovo ? sp.tag_nuovo : P.tag, c.ts);
       }
       if (c.voto) {
         const v = c.voto.toLowerCase(), alvo = contas.get(v);
@@ -220,6 +229,7 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
       luoghi: lugares.length, regioni: regioni.length, comuni: comuni.length, storie: cont.storie, follower,
     },
     doppi: doppi.filter(d => d.a > agora - dia && d.da < agora + dia).map(d => ({ da: new Date(d.da).toISOString(), a: new Date(d.a).toISOString(), tipi: d.tipi })),
+    speciali: speciali.filter(s => s.a > agora - dia && s.da < agora + dia).map(s => ({ ...s, da: new Date(s.da).toISOString(), a: new Date(s.a).toISOString() })),
     luoghi: lugares.map(l => [l.ci, l.visiveis.length, l.visiveis[0].conta, Math.round(l.visiveis[0].casa.ts / 1000), l.lotti]),
     // [conta, luogo, lote, ts, punti_totali, punti_settimana, fiamme_fino, [fonti], serie_giorni]
     case: saidaCasas,

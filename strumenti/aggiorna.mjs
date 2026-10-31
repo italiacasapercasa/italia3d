@@ -25,6 +25,8 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
   const mod = ler(path.join(CFG, 'moderazione.json'), { bloccati: [], parole_vietate: [] });
   const corr = ler(path.join(CFG, 'correzioni.json'), { testi: {}, conte: {} });
   const doppi = ler(path.join(CFG, 'doppi.json'), []).map(d => ({ da: Date.parse(d.da), a: Date.parse(d.a), tipi: d.tipi ?? ['storia'] }));
+  // regras de um dia só (ex.: 1 comentário por post + amigo sem casa vale mais); fora da janela valem as normais
+  const speciali = ler(path.join(CFG, 'speciali.json'), []).map(s => ({ ...s, da: Date.parse(s.da), a: Date.parse(s.a) }));
   const manuali = ler(path.join(CFG, 'storie-manuali.json'), []);
   // comércios aprovados (amministra.mjs approva): ts = aprovação, fino = fim do período pago
   const commerci = ler(path.join(CFG, 'commerci.json'), []).map(n => ({ ...n, ts: Date.parse(n.approvato), fino: n.fino ? Date.parse(n.fino) : null }));
@@ -70,6 +72,7 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
     storie: storieEventi,
     bloccati: [...bloccati],
     doppi,
+    speciali,
     commerci,
     post: tags.filter(t => t.ts >= inizio && t.conta !== proprio).map(t => ({ conta: t.conta, ts: t.ts })),
   };

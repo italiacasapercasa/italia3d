@@ -14,7 +14,7 @@ import { listarPasta } from './zip.mjs';
 const RAIZ = path.resolve(import.meta.dirname, '..');
 const CFG = path.join(RAIZ, 'config', 'hostinger.json');
 const CURL = process.platform === 'win32' ? 'curl.exe' : 'curl';
-export const CONFIG_GIOCO = ['correzioni.json', 'moderazione.json', 'doppi.json', 'storie-manuali.json', 'commerci.json'];
+export const CONFIG_GIOCO = ['correzioni.json', 'moderazione.json', 'doppi.json', 'speciali.json', 'storie-manuali.json', 'commerci.json'];
 
 export function lerCfg() {
   const c = JSON.parse(fs.readFileSync(CFG, 'utf8'));

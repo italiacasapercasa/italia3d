@@ -106,5 +106,25 @@ const s4 = calcolare({
 });
 const a4 = s4.case.find(x => x[0] === 'anna');
 ok(a4[7][3] === 30 && a4[7][4] === 25, `anna: tag limitado a 10 (+30) e recruta do 12º amigo (+25) (deu tag ${a4[7][3]}, recluta ${a4[7][4]})`);
+
+// regra de um dia: na janela, extra não soma, só 1 amigo por post e o amigo sem casa vale +20 (×2 com doppi tutto);
+// antes da janela tudo normal
+const sp = { da: qui + 5 * H, a: qui + 10 * H, nome: 'Regola di oggi', extra: false, tag_max: 1, tag_nuovo: 20 };
+const s5 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [
+      c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' }),
+      c('anna', qui + 3e3, { post: 'p2' }), c('anna', qui + 4e3, { post: 'p2' }),                            // antes: +5 e +1
+      c('anna', qui + 6 * H, { post: 'p3', tags: ['novo1', 'novo2'] }), c('anna', qui + 6 * H + 1e3, { post: 'p3' }),   // novo1 +20, novo2 e extra 0
+      c('anna', qui + 7 * H, { post: 'p4', tags: ['bruno'] }),                                           // bruno tem casa: +3
+    ],
+    storie: [], bloccati: [], doppi: [{ da: qui + 6.5 * H, a: qui + 10 * H, tipi: ['tutto'] }], commerci: [], post: [], speciali: [sp],
+  },
+  comuni, regioni, agora: qui + 12 * H,
+});
+const a5 = s5.case.find(x => x[0] === 'anna');
+ok(a5[7][1] === 5 * 3 + 5 * 2 && a5[7][2] === 1 && a5[7][3] === 20 + 3 * 2, `anna regra do dia: commento ${a5[7][1]} (25), extra ${a5[7][2]} (1), tag ${a5[7][3]} (26)`);
+ok(s5.speciali.length === 1 && s5.speciali[0].tag_nuovo === 20, 'snapshot leva a regra do dia');
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);
