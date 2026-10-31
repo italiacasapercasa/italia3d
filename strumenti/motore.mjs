@@ -8,9 +8,10 @@
 //   storie:  [{ conta, ts }],                     // story que marcou o perfil
 //   bloccati:[conta],                             // escondidos do mapa (lote fica reservado)
 //   doppi:   [{ da: ms, a: ms, tipi: ['storia'] | ['tutto'] }],
-//   speciali:[{ da: ms, a: ms, nome, extra: false, tag_max: 1, tag_nuovo: 20 }],
-//            // regra de um dia: comentários extra não somam, só tag_max amigos por post contam e o amigo
-//            // ainda sem casa vale tag_nuovo (em vez de punti.tag)
+//   speciali:[{ da: ms, a: ms, nome, extra?: false, tag_max?: n, tag_unico?: true, tag_nuovo?: 20 }],
+//            // regra de um dia: extra:false = comentários extra não somam; tag_max = amigos por post;
+//            // tag_unico = cada amigo conta uma vez só na janela (nome repetido, mesmo em outro post, não vale);
+//            // tag_nuovo = pontos do amigo ainda sem casa (em vez de punti.tag)
 //   commerci:[{ id, istat, ts, fino: ms|null, prodotto, nome, tipo, colore, whatsapp, instagram, descrizione, testo, logo }],
 //            // aprovados: na hora "ts" reservam o próximo lote da cidade (as casas seguintes pulam esse lote);
 //            // depois de "fino" somem do mapa, mas o lote continua reservado (nenhuma casa muda de lugar)
@@ -117,8 +118,9 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
         if (!alvo.casa && !alvo.taggatoDa) alvo.taggatoDa = a.conta;
         if (s.tags.has(t) || s.tags.size >= R.limiti.tag) continue;
         if (sp && s.tagsSp >= (sp.tag_max ?? R.limiti.tag)) continue;
+        if (sp?.tag_unico && (a.tagsSp ??= new Set()).has(t)) continue;
         s.tags.add(t);
-        if (sp) s.tagsSp++;
+        if (sp) { s.tagsSp++; if (sp.tag_unico) a.tagsSp.add(t); }
         add(a, F.tag, sp && semCasa && sp.tag_nuovo ? sp.tag_nuovo : P.tag, c.ts);
       }
       if (c.voto) {

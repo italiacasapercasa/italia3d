@@ -126,5 +126,22 @@ const s5 = calcolare({
 const a5 = s5.case.find(x => x[0] === 'anna');
 ok(a5[7][1] === 5 * 3 + 5 * 2 && a5[7][2] === 1 && a5[7][3] === 20 + 3 * 2, `anna regra do dia: commento ${a5[7][1]} (25), extra ${a5[7][2]} (1), tag ${a5[7][3]} (26)`);
 ok(s5.speciali.length === 1 && s5.speciali[0].tag_nuovo === 20, 'snapshot leva a regra do dia');
+
+// regra de Halloween: comentários livres (extra normal), cada amigo diferente conta uma vez só no dia
+const sp2 = { da: qui + 5 * H, a: qui + 10 * H, nome: 'Regola di Halloween', tag_unico: true, tag_nuovo: 20 };
+const s6 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [
+      c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' }),
+      c('anna', qui + 6 * H, { post: 'p2', tags: ['novo1'] }), c('anna', qui + 6 * H + 1e3, { post: 'p2', tags: ['novo1', 'novo2'] }),   // novo1 repetido: 0
+      c('anna', qui + 6 * H + 2e3, { post: 'p3', tags: ['novo1', 'bruno'] }),                                                           // novo1 de novo: 0; bruno +3
+    ],
+    storie: [], bloccati: [], doppi: [], commerci: [], post: [], speciali: [sp2],
+  },
+  comuni, regioni, agora: qui + 12 * H,
+});
+const a6 = s6.case.find(x => x[0] === 'anna');
+ok(a6[7][1] === 15 && a6[7][2] === 1 && a6[7][3] === 20 + 20 + 3, `anna Halloween: commento ${a6[7][1]} (15), extra ${a6[7][2]} (1), tag ${a6[7][3]} (43)`);
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);
