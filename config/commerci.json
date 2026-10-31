@@ -298,5 +298,36 @@
     "descrizione": "Stampa 3D",
     "testo": "",
     "logo": ""
+  },
+  {
+    "id": "261031-ee8acc49",
+    "istat": "034042",
+    "approvato": "2026-10-31T07:11:42.002Z",
+    "fino": "2026-11-30T07:11:42.002Z",
+    "prodotto": "negozio",
+    "nome": "MOUSE",
+    "tipo": "servizi",
+    "colore": "#E0473C",
+    "whatsapp": "33379777600",
+    "instagram": "mouse.srl_",
+    "descrizione": "Vendo, compro e aggiusto tutti i computer, smartphone, tablet e stampanti. Specializzato su Apple!",
+    "testo": "",
+    "logo": "data/loghi/261031-ee8acc49.jpg"
+  },
+  {
+    "id": "261031-3249dbec",
+    "istat": "036015",
+    "approvato": "2026-10-31T07:11:48.186Z",
+    "fino": "2026-11-30T07:11:48.186Z",
+    "prodotto": "negozio",
+    "nome": "Tomolo EdiGio' Edizioni",
+    "tipo": "altro",
+    "colore": "#E0473C",
+    "whatsapp": "3479420936",
+    "instagram": "tomoloedigioedizioni",
+    "descrizione": "Tomolo EdiGio' è una casa editrice piccola e indipendente; nata come casa editrice per bambini, oggi pubblica libri per tutte le età e partecipa a fiere internazionali come Francoforte e Torino",
+    "testo": "",
+    "logo": "data/loghi/261031-3249dbec.jpg",
+    "giocatore": "dissy_doodleart"
   }
 ]
