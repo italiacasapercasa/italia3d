@@ -435,6 +435,7 @@ async function preparar(roteiro) {
       document.body.appendChild(el);
     }
     if (cp.senza_testa) $('#testa').style.display = 'none';
+    if (cp.senza_coriandoli) $('#coriandoli').style.display = 'none';
     $('#etichette').style.display = 'none';
   }
   console.log(`${totale} case · ${D.luoghi.length} città · @${c1.conta} ${D.luoghi[c1.luogo].nome} ${c1.sett} liv ${c1.livello} · @${c2.conta} ${D.luoghi[c2.luogo].nome} ${c2.sett} liv ${c2.livello} · gap ${gap} · dati ${D.snap.dati_fino} · commenti ${D.snap.contatori.commenti}`);
