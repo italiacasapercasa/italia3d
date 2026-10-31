@@ -81,8 +81,9 @@ a { color: inherit; }
 #schede button { border: 0; background: none; font-weight: 800; font-size: 15px; padding: 8px 13px; border-radius: 99px; white-space: nowrap; }
 #schede button.attiva { background: var(--giallo); }
 #schede button i { font-style: normal; }
-#piede { position: fixed; bottom: calc(var(--sab) + 4px); left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 700; color: #2B3A52; z-index: 14; pointer-events: none; }
-#piede a { pointer-events: auto; }
+/* pílula clara: legível sobre o mapa de dia e de noite */
+#piede { position: fixed; bottom: calc(var(--sab) + 4px); left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 16px); box-sizing: border-box; text-align: center; font-size: 11px; font-weight: 800; color: #152033; background: rgba(255, 255, 255, .9); border-radius: 999px; padding: 3px 10px; box-shadow: 0 1px 4px rgba(0, 0, 0, .25); z-index: 14; pointer-events: none; }
+#piede a { pointer-events: auto; color: #152033; }
 #avviso-demo { position: fixed; bottom: calc(var(--sab) + 128px); left: 10px; background: var(--rosso); color: #fff; font-weight: 900; font-size: 11px; padding: 3px 8px; border-radius: 8px; border: 2px solid var(--inchiostro); z-index: 14; }
 
 /* ---------- painel ---------- */
