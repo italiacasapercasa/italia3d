@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel halloween · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --zucca: #FF7A1A; --viola: #8E5CF7; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(40, 10, 60, .55) 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .z, .z { color: var(--zucca); }
+  .forte .ro { color: #FF5A4E; }
+  .forte .v { color: #7DFF8A; }
+  #testa { position: absolute; top: 110px; left: 20px; right: 20px; text-align: center; }
+  #righe { transform-origin: 50% 0; }
+  #r1, #r2 { font-size: 84px; line-height: 1.03; -webkit-text-stroke-width: 15px; }
+  #r1.grande, #r2.grande { font-size: 150px; -webkit-text-stroke-width: 26px; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.bianco { background: #fff; }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .box em { display: block; font-style: normal; font-size: 40px; font-weight: 900; color: var(--rosso); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; top: 470px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 26px 30px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 6px; font-size: 46px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  .chip { position: absolute; left: 50%; font-size: 70px; -webkit-text-stroke-width: 14px; transform: translateX(-50%) scale(0); white-space: nowrap; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.02; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+  /* feed de comentários */
+  #feed { top: 380px; left: 40px; right: 40px; padding: 18px 22px 10px; }
+  #feed .riga { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 3px dashed #E1E4EA; opacity: 0; position: relative; }
+  #feed .av { width: 72px; height: 72px; border-radius: 50%; flex: none; border: 4px solid var(--ink); background: linear-gradient(135deg, #FFC93C, #FF7A1A, #E0473C, #8E5CF7); }
+  #feed .tx { flex: 1; min-width: 0; font-size: 34px; font-weight: 800; color: var(--ink); line-height: 1.15; }
+  #feed .tx b { font-weight: 900; }
+  #feed .tx .tag { color: #2F6BD8; font-weight: 900; }
+  #feed .pt { flex: none; font-size: 40px; font-weight: 900; color: #fff; background: var(--verde); border: 4px solid var(--ink); border-radius: 18px; padding: 4px 14px; }
+  #feed .riga.no .tx { text-decoration: line-through; text-decoration-thickness: 5px; text-decoration-color: var(--rosso); }
+  #feed .riga.no .pt { background: var(--rosso); }
+  /* amigo sem casa */
+  #amico { position: absolute; left: 0; right: 0; top: 400px; text-align: center; }
+  #amico .ic { display: inline-block; position: relative; width: 300px; height: 280px; opacity: 0; }
+  #amico .muro { position: absolute; left: 50px; bottom: 0; width: 200px; height: 160px; border: 7px solid var(--ink); border-radius: 10px; background: #fff; box-sizing: border-box; }
+  #amico .tetto { position: absolute; left: 50%; bottom: 152px; transform: translateX(-50%); width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-bottom: 110px solid var(--rosso); }
+  #amico .q { position: absolute; left: 0; right: 0; bottom: 30px; font-size: 100px; font-weight: 900; color: var(--ink); }
+  #amico .l { font-size: 64px; -webkit-text-stroke-width: 13px; opacity: 0; }
+  #amico .n { font-size: 250px; -webkit-text-stroke-width: 40px; line-height: 1; opacity: 0; font-variant-numeric: tabular-nums; }
+  #amico .x2 { position: absolute; right: 120px; top: 520px; font-size: 96px; -webkit-text-stroke-width: 18px; opacity: 0; }
+  /* story */
+  #story { position: absolute; left: 270px; top: 300px; width: 540px; height: 900px; border-radius: 48px; border: 8px solid var(--ink); background: linear-gradient(160deg, #8E5CF7, #FF7A1A 60%, #FFC93C); opacity: 0; overflow: hidden; box-shadow: 0 14px 0 rgba(21,32,51,.3); }
+  #story .barra { position: absolute; left: 24px; right: 24px; top: 22px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.45); overflow: hidden; }
+  #story .barra i { display: block; height: 100%; width: 0; background: #fff; }
+  #story .av { position: absolute; left: 28px; top: 50px; width: 74px; height: 74px; border-radius: 50%; border: 5px solid #fff; background: var(--giallo); }
+  #story .nome { position: absolute; left: 116px; top: 66px; font-size: 32px; font-weight: 900; color: #fff; }
+  #story .casa { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 230px; line-height: 1; }
+  #story .tagp { position: absolute; left: 60px; right: 60px; top: 560px; background: #fff; border-radius: 20px; font-size: 36px; font-weight: 900; color: var(--ink); text-align: center; padding: 10px 0; }
+  #story .pts { position: absolute; left: 0; right: 0; top: 680px; text-align: center; font-size: 110px; -webkit-text-stroke-width: 20px; }
+  /* relógio e abóboras */
+  #orologio { position: absolute; left: 0; right: 0; top: 420px; text-align: center; opacity: 0; }
+  #orologio .t { font-size: 66px; -webkit-text-stroke-width: 13px; }
+  #orologio .c { font-size: 190px; -webkit-text-stroke-width: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #zucche { position: absolute; left: 60px; right: 60px; top: 900px; display: flex; justify-content: space-between; }
+  #zucche i { font-style: normal; font-size: 100px; opacity: 0; display: inline-block; }
+  #fumi i { position: absolute; font-style: normal; font-size: 90px; opacity: 0; }
+  /* contagem e dérbi */
+  #conto { top: 520px; text-align: center; }
+  #conto .quando { font-size: 40px; font-weight: 900; color: var(--ink); margin-top: 8px; }
+  #conto .cifre { display: flex; justify-content: center; gap: 18px; margin-top: 18px; }
+  #conto .cifre div { background: var(--giallo); border: 5px solid var(--ink); border-radius: 22px; width: 190px; padding: 8px 0; }
+  #conto .cifre b { display: block; font-size: 84px; font-weight: 900; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  #conto .cifre small { font-size: 26px; font-weight: 900; color: #5B6475; }
+  #derby { top: 430px; left: 40px; right: 40px; }
+  #derby h2 { font-size: 54px; }
+  #derby .riga { display: flex; align-items: center; gap: 16px; margin-top: 22px; }
+  #derby .pos { font-size: 64px; flex: none; width: 80px; text-align: center; }
+  #derby .who { flex: 1; min-width: 0; }
+  #derby .who b { display: block; font-size: 38px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #derby .who small { display: block; font-size: 28px; font-weight: 900; color: #5B6475; text-transform: uppercase; }
+  #derby .bar { height: 34px; border-radius: 17px; background: #E6E9EE; border: 4px solid var(--ink); margin-top: 8px; overflow: hidden; }
+  #derby .bar i { display: block; height: 100%; width: 0; }
+  #derby .pt { flex: none; font-size: 54px; font-weight: 900; color: var(--ink); font-variant-numeric: tabular-nums; min-width: 190px; text-align: right; }
+  #derby .gap { text-align: center; margin-top: 20px; font-size: 40px; font-weight: 900; color: var(--rosso); }
+  #cta { position: absolute; left: 20px; right: 20px; top: 470px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 80px; -webkit-text-stroke-width: 15px; }
+  #cta .b { font-size: 76px; -webkit-text-stroke-width: 15px; margin-top: 18px; }
+  #cta .d { font-size: 54px; -webkit-text-stroke-width: 12px; margin-top: 40px; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="testa" class="forte"><div id="righe"><div id="r1"></div><div id="r2"></div></div></div>
+<div id="feed" class="riquadro"><h2>💬 COMMENTA QUANTO VUOI</h2>
+  <div class="riga"><div class="av"></div><div class="tx"><b>tu</b> Brescia, Lombardia <span class="tag">@amico1</span></div><div class="pt">+40</div></div>
+  <div class="riga"><div class="av"></div><div class="tx"><b>tu</b> Forza Brescia! <span class="tag">@amico2</span></div><div class="pt">+40</div></div>
+  <div class="riga"><div class="av"></div><div class="tx"><b>tu</b> Vieni anche tu <span class="tag">@amico3</span></div><div class="pt">+40</div></div>
+  <div class="riga no"><div class="av"></div><div class="tx"><b>tu</b> Ancora! <span class="tag">@amico1</span></div><div class="pt">0</div></div>
+</div>
+<div id="stamp-nonvale" class="stamp forte ro" style="top:1110px;font-size:120px;-webkit-text-stroke-width:22px">❌ NON VALE</div>
+<div id="stamp-x2" class="stamp forte" style="top:640px;font-size:150px;-webkit-text-stroke-width:28px">PUNTI <span class="g">×2</span><br><span class="z" style="font-size:110px">SOLO OGGI 🎃</span></div>
+<div id="amico" class="forte"><div class="ic"><div class="tetto"></div><div class="muro"></div><div class="q">?</div></div><div class="l">AMICO SENZA CASA</div><div class="n g"></div></div>
+<div id="x2" class="forte z" style="position:absolute;right:110px;top:1020px;font-size:96px;-webkit-text-stroke-width:18px;opacity:0">×2 🎃</div>
+<div id="story"><div class="barra"><i></i></div><div class="av"></div><div class="nome">la tua storia</div><div class="casa">🏠</div><div class="tagp">📍 @italiacasapercasa</div><div class="pts forte g"></div></div>
+<div id="orologio" class="forte"><div class="t">⏰ FINISCE A MEZZANOTTE</div><div class="c g"></div></div>
+<div id="zucche"><i>🎃</i><i>🎃</i><i>🎃</i><i>🎃</i><i>🎃</i><i>🎃</i></div>
+<div id="fumi"></div>
+<div id="conto" class="riquadro"><h2>🗳️ SI ELEGGE IL PRIMO PRESIDENTE</h2><div class="quando">domani · domenica 1 novembre · ore 21:00</div><div class="cifre"></div></div>
+<div id="stamp-derby" class="stamp forte" style="top:300px;font-size:120px;-webkit-text-stroke-width:22px">⚔️ DERBY<br><span class="g">BRESCIANO</span></div>
+<div id="derby" class="riquadro"><h2>👑 CHI SARÀ PRESIDENTE?</h2><div class="righe"></div><div class="gap"></div></div>
+<div id="coriandoli"></div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA TUA CITTÀ</div><div class="b g">👥 TAGGA UN AMICO</div><div class="b">🏆 FAI VINCERE<br>LA TUA!</div><div class="d g">@ITALIACASAPERCASA</div></div>
+<div id="sott" class="forte"></div>
+<script type="module" src="video/halloween.js"></script>
+</body>
+</html>

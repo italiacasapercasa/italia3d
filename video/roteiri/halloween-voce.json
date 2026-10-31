@@ -1,0 +1,1321 @@
+{
+ "nome": "halloween",
+ "durata": 48.84,
+ "da": 20000,
+ "primo": "_andreacirelli_",
+ "secondo": "simone_fantoni__",
+ "citta_notte": "Brescia",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SIAMO",
+      0.03
+     ],
+     [
+      "GIÀ",
+      0.365
+     ],
+     [
+      "A",
+      0.558
+     ]
+    ],
+    [
+     [
+      "PIÙ",
+      0.751
+     ],
+     [
+      "DI",
+      0.943
+     ],
+     [
+      "24.000",
+      1.136,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 2.012
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      2.042,
+      true
+     ],
+     [
+      "IN",
+      2.378
+     ],
+     [
+      "TUTTA",
+      2.57
+     ]
+    ]
+   ],
+   "ini": 2.042,
+   "fim": 2.876
+  },
+  {
+   "linee": [
+    [
+     [
+      "ITALIA",
+      2.906
+     ]
+    ]
+   ],
+   "ini": 2.906,
+   "fim": 3.641
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      3.671
+     ],
+     [
+      "STANOTTE",
+      3.897
+     ],
+     [
+      "È",
+      4.459
+     ]
+    ],
+    [
+     [
+      "L'ULTIMA",
+      4.685
+     ]
+    ]
+   ],
+   "ini": 3.671,
+   "fim": 5.217
+  },
+  {
+   "linee": [
+    [
+     [
+      "NOTTE",
+      5.247
+     ],
+     [
+      "DI",
+      5.641
+     ]
+    ],
+    [
+     [
+      "HALLOWEEN",
+      5.867,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.247,
+   "fim": 6.843
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUINDI",
+      6.873
+     ],
+     [
+      "OGGI",
+      7.316
+     ]
+    ]
+   ],
+   "ini": 6.873,
+   "fim": 7.73
+  },
+  {
+   "linee": [
+    [
+     [
+      "CAMBIA",
+      7.76
+     ],
+     [
+      "TUTTO",
+      8.203,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.76,
+   "fim": 8.866
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      8.896
+     ],
+     [
+      "PER",
+      9.286
+     ],
+     [
+      "OGGI",
+      9.509
+     ]
+    ]
+   ],
+   "ini": 8.896,
+   "fim": 9.869
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      9.899
+     ],
+     [
+      "PUNTI",
+      10.123
+     ]
+    ],
+    [
+     [
+      "VALGONO",
+      10.512
+     ]
+    ]
+   ],
+   "ini": 9.899,
+   "fim": 11.038
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOPPIO",
+      11.068,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.068,
+   "fim": 11.848
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      11.878
+     ]
+    ],
+    [
+     [
+      "QUANTE",
+      12.412
+     ]
+    ]
+   ],
+   "ini": 11.878,
+   "fim": 12.757
+  },
+  {
+   "linee": [
+    [
+     [
+      "VOLTE",
+      12.787
+     ],
+     [
+      "VUOI",
+      13.162
+     ]
+    ]
+   ],
+   "ini": 12.787,
+   "fim": 13.691
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      13.721
+     ],
+     [
+      "OGNI",
+      13.891
+     ]
+    ],
+    [
+     [
+      "COMMENTO",
+      14.187
+     ]
+    ]
+   ],
+   "ini": 13.721,
+   "fim": 14.579
+  },
+  {
+   "linee": [
+    [
+     [
+      "DEVE",
+      14.609
+     ],
+     [
+      "TAGGARE",
+      14.906
+     ]
+    ]
+   ],
+   "ini": 14.609,
+   "fim": 15.298
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      15.328
+     ],
+     [
+      "AMICO",
+      15.498,
+      true
+     ]
+    ],
+    [
+     [
+      "DIVERSO",
+      15.92,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.328,
+   "fim": 16.658
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      16.688
+     ],
+     [
+      "NOME",
+      16.866
+     ]
+    ],
+    [
+     [
+      "RIPETUTO",
+      17.176,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.688,
+   "fim": 17.72
+  },
+  {
+   "linee": [
+    [
+     [
+      "NON",
+      17.75
+     ],
+     [
+      "VALE",
+      17.928
+     ]
+    ]
+   ],
+   "ini": 17.75,
+   "fim": 18.748
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      18.778
+     ],
+     [
+      "AMICO",
+      19.083,
+      true
+     ],
+     [
+      "CHE",
+      19.517
+     ]
+    ],
+    [
+     [
+      "NON",
+      19.692
+     ],
+     [
+      "HA",
+      19.867
+     ],
+     [
+      "ANCORA",
+      20.042
+     ]
+    ]
+   ],
+   "ini": 18.778,
+   "fim": 20.447
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASA",
+      20.477,
+      true
+     ],
+     [
+      "VALE",
+      20.781
+     ],
+     [
+      "20",
+      21.086,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.477,
+   "fim": 21.361
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      21.391
+     ]
+    ]
+   ],
+   "ini": 21.391,
+   "fim": 22.05
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      22.08
+     ],
+     [
+      "OGGI",
+      22.3
+     ]
+    ],
+    [
+     [
+      "DIVENTANO",
+      22.683
+     ]
+    ]
+   ],
+   "ini": 22.08,
+   "fim": 23.361
+  },
+  {
+   "linee": [
+    [
+     [
+      "40",
+      23.391,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.391,
+   "fim": 24.289
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      24.319
+     ],
+     [
+      "SE",
+      24.517
+     ],
+     [
+      "CONDIVIDI",
+      24.716
+     ]
+    ]
+   ],
+   "ini": 24.319,
+   "fim": 25.324
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      25.354
+     ],
+     [
+      "POST",
+      25.553
+     ],
+     [
+      "NELLA",
+      25.751
+     ]
+    ]
+   ],
+   "ini": 25.354,
+   "fim": 26.066
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      26.096
+     ],
+     [
+      "STORIA",
+      26.294,
+      true
+     ]
+    ],
+    [
+     [
+      "ANCHE",
+      26.639
+     ]
+    ]
+   ],
+   "ini": 26.096,
+   "fim": 26.955
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUEI",
+      26.985
+     ],
+     [
+      "PUNTI",
+      27.183
+     ]
+    ],
+    [
+     [
+      "RADDOPPIANO",
+      27.528,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.985,
+   "fim": 28.53
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      28.56
+     ],
+     [
+      "SBRIGATI",
+      28.769
+     ]
+    ]
+   ],
+   "ini": 28.56,
+   "fim": 29.258
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      29.288
+     ],
+     [
+      "MEZZANOTTE",
+      29.497,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.288,
+   "fim": 30.141
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      30.171
+     ],
+     [
+      "REGOLA",
+      30.38
+     ]
+    ],
+    [
+     [
+      "FINISCE",
+      30.899
+     ]
+    ]
+   ],
+   "ini": 30.171,
+   "fim": 31.387
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      31.417
+     ],
+     [
+      "LE",
+      31.626
+     ],
+     [
+      "ZUCCHE",
+      31.836,
+      true
+     ]
+    ]
+   ],
+   "ini": 31.417,
+   "fim": 32.17
+  },
+  {
+   "linee": [
+    [
+     [
+      "SPARISCONO",
+      32.2
+     ]
+    ]
+   ],
+   "ini": 32.2,
+   "fim": 33.241
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      33.271
+     ],
+     [
+      "DOMANI",
+      33.438
+     ],
+     [
+      "ALLE",
+      33.85
+     ]
+    ]
+   ],
+   "ini": 33.271,
+   "fim": 34.11
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      34.14,
+      true
+     ],
+     [
+      "SI",
+      34.553
+     ],
+     [
+      "ELEGGE",
+      34.719
+     ]
+    ]
+   ],
+   "ini": 34.14,
+   "fim": 35.102
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      35.132
+     ],
+     [
+      "PRIMO",
+      35.298
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      35.587,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.132,
+   "fim": 36.093
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      36.123
+     ]
+    ]
+   ],
+   "ini": 36.123,
+   "fim": 36.858
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      36.888
+     ],
+     [
+      "UN",
+      37.077
+     ],
+     [
+      "DERBY",
+      37.265,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.888,
+   "fim": 37.563
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUTTO",
+      37.593,
+      true
+     ]
+    ],
+    [
+     [
+      "BRESCIANO",
+      37.921,
+      true
+     ]
+    ]
+   ],
+   "ini": 37.593,
+   "fim": 38.693
+  },
+  {
+   "linee": [
+    [
+     [
+      "AZZANO",
+      38.723
+     ],
+     [
+      "MELLA",
+      39.202
+     ]
+    ]
+   ],
+   "ini": 38.723,
+   "fim": 39.509
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      39.539
+     ],
+     [
+      "IN",
+      39.732
+     ],
+     [
+      "TESTA",
+      39.925,
+      true
+     ]
+    ]
+   ],
+   "ini": 39.539,
+   "fim": 40.58
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      40.61
+     ],
+     [
+      "BRESCIA",
+      40.808,
+      true
+     ],
+     [
+      "LO",
+      41.151
+     ]
+    ],
+    [
+     [
+      "INSEGUE",
+      41.349
+     ]
+    ]
+   ],
+   "ini": 40.61,
+   "fim": 41.808
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      41.838
+     ],
+     [
+      "VICINO",
+      42.035,
+      true
+     ]
+    ]
+   ],
+   "ini": 41.838,
+   "fim": 42.94
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      42.97
+     ],
+     [
+      "VINCERÀ",
+      43.146,
+      true
+     ]
+    ]
+   ],
+   "ini": 42.97,
+   "fim": 43.971
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      44.001
+     ],
+     [
+      "LA",
+      44.36
+     ],
+     [
+      "TUA",
+      44.566
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      44.772,
+      true
+     ]
+    ]
+   ],
+   "ini": 44.001,
+   "fim": 45.101
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      45.131
+     ],
+     [
+      "UN",
+      45.49
+     ],
+     [
+      "AMICO",
+      45.696,
+      true
+     ]
+    ]
+   ],
+   "ini": 45.131,
+   "fim": 46.178
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      46.208
+     ],
+     [
+      "FAI",
+      46.414
+     ],
+     [
+      "VINCERE",
+      46.62,
+      true
+     ]
+    ]
+   ],
+   "ini": 46.208,
+   "fim": 47.102
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      47.132
+     ],
+     [
+      "TUA",
+      47.338
+     ]
+    ]
+   ],
+   "ini": 47.132,
+   "fim": 48.54
+  }
+ ],
+ "parlato": [
+  "Siamo già a più di ventiquattromila case in tutta Italia!",
+  "E stanotte è l'ultima notte di Halloween…",
+  "quindi oggi cambia tutto.",
+  "Solo per oggi, i punti valgono doppio!",
+  "Commenta quante volte vuoi:",
+  "ma ogni commento deve taggare un amico diverso.",
+  "Un nome ripetuto non vale.",
+  "Ogni amico che non ha ancora casa vale venti punti…",
+  "che oggi diventano quaranta!",
+  "E se condividi il post nella tua storia, anche quei punti raddoppiano.",
+  "Ma sbrigati: a mezzanotte la regola finisce e le zucche spariscono.",
+  "E domani alle ventuno si elegge il primo Presidente d'Italia.",
+  "È un derby tutto bresciano:",
+  "Azzano Mella è in testa…",
+  "ma Brescia lo insegue da vicino.",
+  "Chi vincerà?",
+  "Scrivi la tua città, tagga un amico, e fai vincere la tua!"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
+  3,
+  4,
+  4,
+  5,
+  5,
+  5,
+  6,
+  6,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  9,
+  9,
+  10,
+  10,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  11,
+  12,
+  12,
+  13,
+  13,
+  14,
+  14,
+  15,
+  16,
+  16,
+  16,
+  16
+ ],
+ "eventi": {
+  "inizio": -0.02,
+  "ventiquattro": 1.056,
+  "case": 1.992,
+  "italia": 2.856,
+  "stanotte": 3.847,
+  "ultima": 4.635,
+  "halloween": 5.817,
+  "quindi": 6.823,
+  "cambia": 7.71,
+  "tutto": 8.153,
+  "solo": 8.796,
+  "punti": 10.073,
+  "doppio": 10.988,
+  "commenta": 11.828,
+  "volte": 12.737,
+  "vuoi": 13.112,
+  "ogni": 13.841,
+  "taggare": 14.856,
+  "amico": 15.448,
+  "diverso": 15.87,
+  "nome": 16.816,
+  "ripetuto": 17.126,
+  "nonvale": 17.7,
+  "ogni2": 18.728,
+  "casa": 20.427,
+  "venti": 21.036,
+  "oggi2": 22.25,
+  "quaranta": 23.311,
+  "condividi": 24.666,
+  "storia": 26.244,
+  "raddoppiano": 27.478,
+  "sbrigati": 28.719,
+  "mezzanotte": 29.447,
+  "finisce": 30.849,
+  "zucche": 31.786,
+  "spariscono": 32.15,
+  "domani": 33.388,
+  "ventuno": 34.09,
+  "presidente": 35.537,
+  "derby": 37.185,
+  "bresciano": 37.871,
+  "azzano": 38.623,
+  "testa": 39.875,
+  "brescia": 40.758,
+  "insegue": 41.299,
+  "vicino": 41.985,
+  "chi": 42.87,
+  "vincera": 43.096,
+  "scrivi": 43.901,
+  "citta": 44.722,
+  "tagga": 45.081,
+  "fai": 46.364,
+  "tua": 47.288
+ },
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventiquattro": [
+   0,
+   5,
+   -0.08
+  ],
+  "eventi.case": [
+   0,
+   6,
+   -0.05
+  ],
+  "eventi.italia": [
+   0,
+   9,
+   -0.05
+  ],
+  "eventi.stanotte": [
+   1,
+   1,
+   -0.05
+  ],
+  "eventi.ultima": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.halloween": [
+   1,
+   6,
+   -0.05
+  ],
+  "eventi.quindi": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.cambia": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.tutto": [
+   2,
+   3,
+   -0.05
+  ],
+  "eventi.solo": [
+   3,
+   0,
+   -0.1
+  ],
+  "eventi.punti": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.doppio": [
+   3,
+   6,
+   -0.08
+  ],
+  "eventi.commenta": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.volte": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.vuoi": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.ogni": [
+   5,
+   1,
+   -0.05
+  ],
+  "eventi.taggare": [
+   5,
+   4,
+   -0.05
+  ],
+  "eventi.amico": [
+   5,
+   6,
+   -0.05
+  ],
+  "eventi.diverso": [
+   5,
+   7,
+   -0.05
+  ],
+  "eventi.nome": [
+   6,
+   1,
+   -0.05
+  ],
+  "eventi.ripetuto": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.nonvale": [
+   6,
+   3,
+   -0.05
+  ],
+  "eventi.ogni2": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.casa": [
+   7,
+   6,
+   -0.05
+  ],
+  "eventi.venti": [
+   7,
+   8,
+   -0.05
+  ],
+  "eventi.oggi2": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.quaranta": [
+   8,
+   3,
+   -0.08
+  ],
+  "eventi.condividi": [
+   9,
+   2,
+   -0.05
+  ],
+  "eventi.storia": [
+   9,
+   7,
+   -0.05
+  ],
+  "eventi.raddoppiano": [
+   9,
+   11,
+   -0.05
+  ],
+  "eventi.sbrigati": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.mezzanotte": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.finisce": [
+   10,
+   6,
+   -0.05
+  ],
+  "eventi.zucche": [
+   10,
+   9,
+   -0.05
+  ],
+  "eventi.spariscono": [
+   10,
+   10,
+   -0.05
+  ],
+  "eventi.domani": [
+   11,
+   1,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   11,
+   3,
+   -0.05
+  ],
+  "eventi.presidente": [
+   11,
+   8,
+   -0.05
+  ],
+  "eventi.derby": [
+   12,
+   2,
+   -0.08
+  ],
+  "eventi.bresciano": [
+   12,
+   4,
+   -0.05
+  ],
+  "eventi.azzano": [
+   13,
+   0,
+   -0.1
+  ],
+  "eventi.testa": [
+   13,
+   4,
+   -0.05
+  ],
+  "eventi.brescia": [
+   14,
+   1,
+   -0.05
+  ],
+  "eventi.insegue": [
+   14,
+   3,
+   -0.05
+  ],
+  "eventi.vicino": [
+   14,
+   5,
+   -0.05
+  ],
+  "eventi.chi": [
+   15,
+   0,
+   -0.1
+  ],
+  "eventi.vincera": [
+   15,
+   1,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   16,
+   0,
+   -0.1
+  ],
+  "eventi.citta": [
+   16,
+   3,
+   -0.05
+  ],
+  "eventi.tagga": [
+   16,
+   4,
+   -0.05
+  ],
+  "eventi.fai": [
+   16,
+   8,
+   -0.05
+  ],
+  "eventi.tua": [
+   16,
+   11,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 14.mp3",
+  "durata": 47.72
+ }
+}
