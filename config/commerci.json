@@ -330,5 +330,21 @@
     "testo": "",
     "logo": "data/loghi/261031-3249dbec.jpg",
     "giocatore": "dissy_doodleart"
+  },
+  {
+    "id": "261031-bdceaa22",
+    "istat": "011015",
+    "approvato": "2026-10-31T08:34:57.890Z",
+    "fino": "2026-11-30T08:34:57.890Z",
+    "prodotto": "negozio",
+    "nome": "Libreria Tomolo EdiGio'",
+    "tipo": "altro",
+    "colore": "#E0473C",
+    "whatsapp": "3479420936",
+    "instagram": "tomoloedigioedizioni",
+    "descrizione": "Una libreria indipendente (non ancora esistente irl) della piccola casa editrice Tomolo EdiGio' Edizioni, fondata dalla spezzina Viviana Sgorbini",
+    "testo": "",
+    "logo": "data/loghi/261031-bdceaa22.jpg",
+    "giocatore": "dissy_doodleart"
   }
 ]
