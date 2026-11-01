@@ -42,6 +42,7 @@ function sembraReale(array $p): bool {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
     [$local, $dominio] = explode('@', $email, 2);
     if (preg_match('/(esempio|example|test|prova|mailinator|yopmail)/', $dominio)) return false;
+    if (preg_match('/^(com|net|org|it|co|eu)\./', $dominio)) return false;     // "barbiere@com.it": domínio inventado
     if (preg_match('/(scuol|collegio|istitut|liceo|\.edu|^iis|^itis|^ipsia)/', $dominio)) return false;
     if (preg_match('/^(nome|test|prova|calcio|giovanni|mario|esempio|example|asd|aaa|ciao|boh)\d*$/', $local)) return false;
     if (preg_match('/(200[5-9]|201\d|0909|1010|1111|1212)/', $local) || preg_match('/\D(0[89]|1[0-6])$/', $local)) return false;   // ano/idade de criança
