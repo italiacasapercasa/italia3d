@@ -436,10 +436,9 @@ $('#vai-pagare').onclick = async () => {
         <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: carta, <b>PayPal</b> (tocca «Mostra di più»), <b>Klarna «paga in 30 giorni»</b> o bonifico SEPA. I tuoi dati di pagamento non passano da noi.</p>
         <p>🧾 <b>Hai Partita IVA?</b> Inseriscila nel pagamento: l’IVA viene azzerata (verifica VIES).</p>
         ${d.su_misura
-          ? `<p><b>Sono due pagamenti:</b> il negozio e l’aggiunta «su misura».</p>
-             <a class="botao" href="${esc(conCodice(link))}" target="_blank" rel="noopener">💳 1 · Paga il negozio</a>
-             <a class="botao sec" href="${esc(conCodice(linkMisura))}" target="_blank" rel="noopener">🎨 2 · Paga «su misura»</a>`
-          : `<a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>`}
+          ? `<p>🎨 <b>Un solo pagamento:</b> nella pagina di pagamento <b>spunta la casella «Negozio su misura» (+${euro(cfg.su_misura.prezzo)})</b> prima di «Acquista ora».</p>`
+          : ''}
+        <a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>
         <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
       // avisa o servidor que a pessoa foi para o pagamento (para saber quem desiste antes ou dentro da Hotmart)
       $('#p3').querySelectorAll('a.botao').forEach(a => a.addEventListener('click', () => navigator.sendBeacon?.(`api/negozio.php?clic=${idPedido}`), { once: true }));
