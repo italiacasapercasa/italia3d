@@ -1,0 +1,976 @@
+{
+ "nome": "vetrina",
+ "durata": 36.2,
+ "negozi": [
+  "Libreria Tomolo EdiGio'",
+  "Mobili Trezza",
+  "Ristorante Vistamare",
+  "Nauroz Tex-Mex"
+ ],
+ "numeri": {
+  "views": 1415798,
+  "persone": 391478,
+  "visite": 70000,
+  "giorni": [
+   [
+    "26/10",
+    5320
+   ],
+   [
+    "27/10",
+    19852
+   ],
+   [
+    "28/10",
+    19319
+   ],
+   [
+    "29/10",
+    10805
+   ],
+   [
+    "30/10",
+    8213
+   ],
+   [
+    "31/10",
+    7441
+   ]
+  ]
+ },
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "QUESTA",
+      0
+     ]
+    ],
+    [
+     [
+      "LIBRERIA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "SPEZIA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      0
+     ],
+     [
+      "SULLA",
+      0
+     ],
+     [
+      "MAPPA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "3D",
+      0,
+      true
+     ],
+     [
+      "DELL'ITALIA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "ANCHE",
+      0
+     ],
+     [
+      "QUESTO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEGOZIO",
+      0
+     ],
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "MOBILI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      0
+     ],
+     [
+      "TEGGIANO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUESTO",
+      0
+     ]
+    ],
+    [
+     [
+      "RISTORANTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      0
+     ],
+     [
+      "FORMIA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "QUESTO",
+      0
+     ]
+    ],
+    [
+     [
+      "TEX-MEX",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      0
+     ],
+     [
+      "CHIAVARI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      0
+     ],
+     [
+      "TOCCA",
+      0
+     ],
+     [
+      "IL",
+      0
+     ]
+    ],
+    [
+     [
+      "NEGOZIO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VEDE",
+      0
+     ],
+     [
+      "LA",
+      0
+     ]
+    ],
+    [
+     [
+      "DESCRIZIONE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "L'INSTAGRAM",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "PULSANTE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      0
+     ],
+     [
+      "SCRIVERTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      0
+     ],
+     [
+      "WHATSAPP",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "7",
+      0
+     ],
+     [
+      "GIORNI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      0
+     ],
+     [
+      "NOSTRI",
+      0
+     ],
+     [
+      "VIDEO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "HANNO",
+      0
+     ],
+     [
+      "FATTO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      0
+     ],
+     [
+      "MILIONE",
+      0,
+      true
+     ],
+     [
+      "E",
+      0
+     ]
+    ],
+    [
+     [
+      "400.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISUALIZZAZIONI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISTE",
+      0
+     ],
+     [
+      "DA",
+      0
+     ],
+     [
+      "QUASI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "400.000",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "PERSONE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "SITO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      0
+     ],
+     [
+      "AVUTO",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ]
+    ],
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "70.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VISITE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "HAI",
+      0
+     ]
+    ],
+    [
+     [
+      "UN'ATTIVITÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "METTILA",
+      0
+     ],
+     [
+      "NELLA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CITTÀ",
+      0
+     ],
+     [
+      "DA",
+      0
+     ],
+     [
+      "9",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "EURO",
+      0
+     ],
+     [
+      "E",
+      0
+     ],
+     [
+      "90",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "IVA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "I",
+      0
+     ],
+     [
+      "POSTI",
+      0
+     ],
+     [
+      "IN",
+      0
+     ]
+    ],
+    [
+     [
+      "OGNI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      0
+     ],
+     [
+      "SONO",
+      0
+     ]
+    ],
+    [
+     [
+      "POCHI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LINK",
+      0
+     ],
+     [
+      "IN",
+      0
+     ],
+     [
+      "BIO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "PROSSIMA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ATTIVITÀ",
+      0
+     ],
+     [
+      "SULLA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      0
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Questa libreria di La Spezia è sulla mappa 3D dell'Italia.",
+  "E anche questo negozio di mobili a Teggiano…",
+  "questo ristorante a Formia…",
+  "e questo tex-mex a Chiavari.",
+  "Chi tocca il negozio vede la descrizione, l'Instagram e il pulsante per scriverti su WhatsApp.",
+  "In sette giorni i nostri video hanno fatto un milione e quattrocentomila visualizzazioni, viste da quasi quattrocentomila persone,",
+  "e il sito ha avuto più di settantamila visite.",
+  "Hai un'attività?",
+  "Mettila nella tua città, da nove euro e novanta più IVA.",
+  "I posti in ogni città sono pochi.",
+  "Link in bio…",
+  "e la prossima attività sulla mappa…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  8,
+  8,
+  8,
+  8,
+  9,
+  9,
+  10,
+  11,
+  11,
+  11
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.libreria": [
+   0,
+   1,
+   -0.05
+  ],
+  "eventi.spezia": [
+   0,
+   4,
+   -0.05
+  ],
+  "eventi.mappa0": [
+   0,
+   7,
+   -0.05
+  ],
+  "eventi.italia0": [
+   0,
+   9,
+   -0.05
+  ],
+  "eventi.anche": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.mobili": [
+   1,
+   5,
+   -0.05
+  ],
+  "eventi.teggiano": [
+   1,
+   7,
+   -0.05
+  ],
+  "eventi.r3": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.ristorante": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.formia": [
+   2,
+   3,
+   -0.05
+  ],
+  "eventi.e3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.texmex": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.chiavari": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.chi": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.tocca": [
+   4,
+   1,
+   -0.05
+  ],
+  "eventi.negozio": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.descrizione": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.instagram": [
+   4,
+   7,
+   -0.05
+  ],
+  "eventi.pulsante": [
+   4,
+   10,
+   -0.05
+  ],
+  "eventi.whatsapp": [
+   4,
+   14,
+   -0.05
+  ],
+  "eventi.insette": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.milione": [
+   5,
+   9,
+   -0.05
+  ],
+  "eventi.visual": [
+   5,
+   12,
+   -0.05
+  ],
+  "eventi.quasi": [
+   5,
+   15,
+   -0.05
+  ],
+  "eventi.persone": [
+   5,
+   17,
+   -0.05
+  ],
+  "eventi.sito": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.settantamila": [
+   6,
+   7,
+   -0.05
+  ],
+  "eventi.visite": [
+   6,
+   8,
+   -0.05
+  ],
+  "eventi.hai": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.attivita": [
+   7,
+   1,
+   -0.05
+  ],
+  "eventi.mettila": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.citta6": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.nove": [
+   8,
+   5,
+   -0.05
+  ],
+  "eventi.novanta": [
+   8,
+   8,
+   -0.05
+  ],
+  "eventi.iva": [
+   8,
+   10,
+   -0.05
+  ],
+  "eventi.posti": [
+   9,
+   1,
+   -0.05
+  ],
+  "eventi.pochi": [
+   9,
+   6,
+   -0.05
+  ],
+  "eventi.link": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.bio": [
+   10,
+   2,
+   -0.05
+  ],
+  "eventi.prossima": [
+   11,
+   2,
+   -0.05
+  ],
+  "eventi.mappa9": [
+   11,
+   5,
+   -0.05
+  ]
+ }
+}
