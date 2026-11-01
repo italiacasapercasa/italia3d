@@ -172,10 +172,47 @@ function fuochi(h) {
   return pts;
 }
 
+// ---------- decorações dos eleitos (não se compram: o motor dá a quem ganha a eleição de domingo) ----------
+// faixa tricolor: cinta verde-branca-vermelha em volta da casa, a meia altura
+function fascia(corpo, h) {
+  const g = new THREE.Group(), bb = (corpo.geometry.boundingBox ?? (corpo.geometry.computeBoundingBox(), corpo.geometry.boundingBox));
+  const w = bb.max.x - bb.min.x + 0.03, d = bb.max.z - bb.min.z + 0.03, cx = (bb.max.x + bb.min.x) / 2, cz = (bb.max.z + bb.min.z) / 2;
+  // nas torres a faixa fica perto do topo (a meia altura some entre os prédios)
+  const y0 = h > 1.5 ? h - 0.3 : Math.min(h * 0.55, h - 0.12), alt = h > 1.5 ? 0.07 : Math.max(0.03, Math.min(0.06, h * 0.035));
+  ['#2E9B55', '#FFFFFF', '#E0473C'].forEach((cor, i) => {
+    const m = lambert(cor), y = y0 + (1 - i) * alt;
+    for (const [sx, sz, px, pz] of [[w, 0.012, 0, d / 2], [w, 0.012, 0, -d / 2], [0.012, d, w / 2, 0], [0.012, d, -w / 2, 0]]) {
+      const b = new THREE.Mesh(new THREE.BoxGeometry(sx, alt, sz), m);
+      b.position.set(cx + px, y, cz + pz); g.add(b);
+    }
+  });
+  return g;
+}
+// cúpula dourada do Presidente (tambor + cúpula + lanterna com pináculo)
+function cupola() {
+  const g = new THREE.Group();
+  const tamb = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.1, 18), oroMat); tamb.position.y = 0.05; g.add(tamb);
+  const cup = new THREE.Mesh(new THREE.SphereGeometry(0.2, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), oroMat); cup.position.y = 0.1; g.add(cup);
+  const lant = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.04, 0.08, 8), oroMat); lant.position.y = 0.33; g.add(lant);
+  const pin = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.14, 8), oroMat); pin.position.y = 0.44; g.add(pin);
+  return g;
+}
+// dois feixes de luz dourada subindo da casa do Presidente (girando devagar)
+function fasci() {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshBasicMaterial({ color: '#FFE08A', transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  for (const s of [-1, 1]) {
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.05, 7, 12, 1, true), mat);
+    b.geometry.translate(0, 3.5, 0); b.rotation.z = s * 0.22; b.userData.s = s; g.add(b);
+  }
+  g.userData.mat = mat;
+  return g;
+}
+
 // altura total com o que flutua e os fogos (em lotes; para enquadrar a câmera)
 const topoDi = (casa, sel) => {
   const ex = sel.extra, h = ALTURA_NIVEL[casa.livello];
-  const y = h + 0.25 + (ex.has('corona') ? 0.35 : 0) + (ex.has('campione') ? 0.42 : 0);
+  const y = h + 0.25 + (ex.has('presidenza') ? 0.5 : 0) + (ex.has('corona') ? 0.35 : 0) + (ex.has('campione') ? 0.42 : 0);
   return ex.has('fuochi') ? y + 0.9 : Math.max(y, ex.has('palloncini') ? h * 0.75 + 0.6 : 0);
 };
 
@@ -199,7 +236,7 @@ function costruisci(D, citta, notte, casa, sel) {
     g.add(b);
   };
   if (squadra) { const b = bandiera([squadra.muro, squadra.tetto, squadra.muro, squadra.tetto]); pianta(b, -1); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.004) * 0.35; }); }
-  if (ex.has('tricolore')) { const b = bandiera(['#2E9B55', '#FFFFFF', '#E0473C']); pianta(b, 1); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.004 + 1) * 0.35; }); }
+  if (ex.has('tricolore') || ex.has('fascia')) { const b = bandiera(['#2E9B55', '#FFFFFF', '#E0473C']); pianta(b, 1); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.004 + 1) * 0.35; }); }
   if (oro) {
     const s = scintille(); g.add(s); g.add(alone('#FFC93C'));
     anim.push(t => {
@@ -214,8 +251,23 @@ function costruisci(D, citta, notte, casa, sel) {
     const a = alone('#00E5FF'); g.add(a);
     anim.push(t => { m.color.setHSL((t * 0.00012) % 1, 1, 0.55); a.material.color.copy(m.color); });
   }
-  // coisas que flutuam em cima da casa, uma acima da outra
+  // eleitos: faixa tricolor (sindaco e Presidente); o Presidente ganha ainda cúpula dourada, feixes de luz e aura pulsando
+  if (ex.has('fascia')) g.add(fascia(corpo, h));
   let y = h + 0.25;
+  if (ex.has('presidenza')) {
+    const cup = cupola(); cup.position.y = h; g.add(cup);
+    const fx = fasci(); fx.position.y = h + 0.45; g.add(fx);
+    const au = alone('#FFD34D'); au.scale.setScalar(1.25); g.add(au);
+    anim.push(t => {
+      oroMat.emissive.set(notte() ? '#B38A10' : '#5A4300');
+      fx.rotation.y = t * 0.0004;
+      fx.children.forEach(b => { b.rotation.z = b.userData.s * (0.22 + 0.08 * Math.sin(t * 0.0011 + b.userData.s)); });
+      fx.userData.mat.opacity = (notte() ? 0.42 : 0.22) + 0.08 * Math.sin(t * 0.002);
+      const k = 0.5 + 0.5 * Math.sin(t * 0.003); au.material.opacity = 0.3 + 0.3 * k; au.scale.setScalar(1.15 + 0.2 * k);
+    });
+    y += 0.5;
+  }
+  // coisas que flutuam em cima da casa, uma acima da outra
   if (ex.has('corona')) { const c = corona(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003) * 0.04, 0); c.rotation.y = t * 0.0012; }); y += 0.35; }
   if (ex.has('campione')) { const c = trofeo(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003 + 1) * 0.04, 0); c.rotation.y = -t * 0.001; }); y += 0.42; }
   if (ex.has('palloncini')) { const b = palloncini(h); g.add(b); anim.push(b.userData.anima); }
@@ -239,6 +291,13 @@ export class Decori {
     this.giro = null;            // câmera girando em volta da casa
     this.cfg = { attivo: false, prezzo: 499, giorni: 10, checkout: '' };
     this.ANIM = {}; this.GIRO = {};
+    // eleitos da última eleição (snapshot): o Presidente e um sindaco por cidade ganham a decoração do cargo
+    const k = D.snap.cariche ?? {};
+    this.presidente = k.presidente?.conta ?? null;
+    this.sindacoDi = new Map();   // id da cidade -> conta do sindaco (desenhado só quando a cidade chega perto)
+    for (const s of Object.values(k.sindaci ?? {})) { const c = D.porConta.get(s.conta); if (c) this.sindacoDi.set(D.luoghi[c.luogo].id, s.conta); }
+    this.sindaci = new Set(this.sindacoDi.values());
+    this.desenhando = false;
     mappa.aoFrame.push(t => this.quadro(t));
     mappa.aoMover.push(() => this.visibili());
     mappa.canvas.addEventListener('pointerdown', () => this.ferma());
@@ -251,6 +310,7 @@ export class Decori {
     try { Object.assign(this.cfg, (await (await fetch(`data/negozio.json?t=${Date.now()}`)).json()).decora ?? {}); } catch { /* sem config: fica desligado */ }
     if (this.aperto) this.ligarPillola();
     await this.ricarica();
+    if (this.presidente && !this.attive.has(this.presidente)) this.disegna(this.D.porConta.get(this.presidente), this.unisci(this.presidente, vuota()));
     if (this.aperto && location.hash === '#decora') this.home();   // link da página do produto na Hotmart
     setInterval(() => this.ricarica(), 120e3);
     // voltou do pagamento: espera o webhook confirmar
@@ -275,13 +335,23 @@ export class Decori {
     for (const conta of new Set([...vecchie.keys(), ...novas.keys()])) {
       if (this.ed?.casa.conta === conta) continue;   // prévia aberta: não mexe
       const p = novas.get(conta);
-      this.disegna(this.D.porConta.get(conta), p ? p.sel : vuota(), p?.da);
+      this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
     }
     // painel dessa casa aberto (ex.: ?casa= no carregamento): refaz para mostrar o selo
     const aberta = !this.ed && !this.ui.painel.hidden && $('#pannello h2.conta')?.textContent.slice(1);
     if (aberta && (vecchie.has(aberta) || novas.has(aberta))) this.ui.casa(this.D.porConta.get(aberta), false);
   }
   pagata(conta) { const p = this.pagate.get(conta); return p && p.scade > Date.now() ? p : null; }
+  // cargo da conta (presidente / sindaco / null) e a seleção com a decoração do cargo somada à comprada
+  cargo(conta) { return conta === this.presidente ? 'presidente' : this.sindaci.has(conta) ? 'sindaco' : null; }
+  unisci(conta, sel) {
+    const c = this.cargo(conta);
+    if (!c) return sel;
+    const s = copia(sel);
+    s.extra.add('fascia');
+    if (c === 'presidente') s.extra.add('presidenza');
+    return s;
+  }
 
   // ---------- desenho ----------
   // tira a casa do InstancedMesh da cidade (a cidade é remontada) e desenha a versão decorada; sel vazia = casa normal
@@ -304,6 +374,18 @@ export class Decori {
   // só as decorações das cidades perto da câmera aparecem e animam (longe não gasta bateria)
   visibili() {
     const perto = new Set(this.citta.grupo.visible ? this.citta.perto : []);
+    // sindaci: a casa decorada só é montada quando a cidade dele chega perto (são milhares)
+    if (!this.desenhando) {
+      this.desenhando = true;
+      for (const l of perto) {
+        const conta = this.sindacoDi.get(l.id);
+        if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) {
+          const p = this.pagata(conta);
+          this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+        }
+      }
+      this.desenhando = false;
+    }
     let alguma = false;
     for (const a of this.attive.values()) { a.g.visible = perto.has(this.D.luoghi[a.casa.luogo]); alguma ||= a.g.visible; }
     if (alguma) this.mappa.animatori.add(this.ANIM); else this.mappa.animatori.delete(this.ANIM);
@@ -319,6 +401,9 @@ export class Decori {
     if (!a) return null;
     const fogo = casa.fiamme > Date.now() / 1000, base = `${fogo ? '🔥 ' : ''}@${esc(casa.conta)}`, cornice = a.sel.extra.has('cornice');
     const y = casa.y + (a.pilha + 0.25) * LOTE;
+    const cg = this.cargo(casa.conta);
+    if (cg === 'presidente') return { cls: 'et-casa vip', html: `👑 ${base}<small>PRESIDENTE DEL CONSIGLIO</small>`, y };
+    if (cg === 'sindaco') return { cls: 'et-casa vip', html: `🏛️ ${base}<small>SINDACO DI ${esc(this.D.luoghi[casa.luogo].nome).toUpperCase()}</small>`, y };
     if (a.da) return { cls: `et-casa ${cornice ? 'vip' : 'regalo'}`, html: `${cornice ? '✨ ' : ''}${base}<small>🎁 da @${esc(a.da)}</small>`, y };
     if (cornice) return { cls: 'et-casa vip', html: `✨ ${base}<small>CASA SPECIALE</small>`, y };
     return { cls: 'et-casa deco', html: `✨ ${base}`, y };
