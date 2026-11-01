@@ -169,7 +169,10 @@ export class UI {
   }
   rodape() {
     const s = this.D.snap, t = Date.parse(s.dati_fino);
-    $('#versione').textContent = `Aggiornato: ${dataBreve(t)} ${new Date(t).getFullYear()}, ${ora(t)} (ora di Roma) · ${s.versao}`;
+    // curto para caber numa linha no celular (em duas, a de cima some atrás das abas); a versão fica no title
+    const v = $('#versione');
+    v.textContent = `Aggiornato alle ${ora(t)} del ${dataBreve(t)}`;
+    v.title = s.versao;
   }
 
   // ---------- busca ----------
