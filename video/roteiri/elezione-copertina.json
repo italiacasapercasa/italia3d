@@ -1,0 +1,840 @@
+{
+ "nome": "elezione",
+ "durata": 29.6,
+ "primo": "_andreacirelli_",
+ "secondo": "simone_fantoni__",
+ "citta_tu": "Napoli",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "STASERA",
+      0.03
+     ],
+     [
+      "ALLE",
+      0.526
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 0.845
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      0.875,
+      true
+     ],
+     [
+      "L'ITALIA",
+      1.371
+     ]
+    ]
+   ],
+   "ini": 0.875,
+   "fim": 1.837
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      1.867
+     ],
+     [
+      "IL",
+      2.364
+     ],
+     [
+      "SUO",
+      2.564
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      2.764
+     ]
+    ]
+   ],
+   "ini": 1.867,
+   "fim": 3.082
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      3.112,
+      true
+     ]
+    ]
+   ],
+   "ini": 3.112,
+   "fim": 4.167
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      4.197
+     ],
+     [
+      "TESTA",
+      4.418
+     ],
+     [
+      "C'È",
+      4.802
+     ]
+    ],
+    [
+     [
+      "ANDREA",
+      5.022,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.197,
+   "fim": 5.376
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      5.406
+     ],
+     [
+      "AZZANO",
+      5.627
+     ]
+    ],
+    [
+     [
+      "MELLA",
+      6.174
+     ]
+    ]
+   ],
+   "ini": 5.406,
+   "fim": 6.919
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUASI",
+      6.949
+     ],
+     [
+      "7.000",
+      7.378,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.949,
+   "fim": 8.142
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      8.172,
+      true
+     ]
+    ]
+   ],
+   "ini": 8.172,
+   "fim": 9.045
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      9.075
+     ],
+     [
+      "SIMONE",
+      9.298,
+      true
+     ],
+     [
+      "DA",
+      9.852
+     ]
+    ],
+    [
+     [
+      "BRESCIA",
+      10.075
+     ]
+    ]
+   ],
+   "ini": 9.075,
+   "fim": 10.433
+  },
+  {
+   "linee": [
+    [
+     [
+      "LO",
+      10.463
+     ],
+     [
+      "INSEGUE",
+      10.686,
+      true
+     ]
+    ]
+   ],
+   "ini": 10.463,
+   "fim": 11.621
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      11.651
+     ],
+     [
+      "ALLA",
+      11.846
+     ],
+     [
+      "STESSA",
+      12.186
+     ]
+    ]
+   ],
+   "ini": 11.651,
+   "fim": 12.495
+  },
+  {
+   "linee": [
+    [
+     [
+      "ORA",
+      12.525
+     ],
+     [
+      "QUASI",
+      12.864
+     ]
+    ],
+    [
+     [
+      "5.000",
+      13.203,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.525,
+   "fim": 13.802
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      13.832,
+      true
+     ],
+     [
+      "ELEGGONO",
+      14.171
+     ]
+    ]
+   ],
+   "ini": 13.832,
+   "fim": 14.769
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      14.799
+     ],
+     [
+      "LORO",
+      14.994
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      15.333,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.799,
+   "fim": 16.164
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      16.194
+     ],
+     [
+      "PIÙ",
+      16.385
+     ],
+     [
+      "FORTE",
+      16.577,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.194,
+   "fim": 16.88
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      16.91
+     ],
+     [
+      "OGNI",
+      17.101
+     ],
+     [
+      "COMUNE",
+      17.434
+     ]
+    ]
+   ],
+   "ini": 16.91,
+   "fim": 18.346
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      18.376
+     ],
+     [
+      "ESSERE",
+      18.546
+     ]
+    ]
+   ],
+   "ini": 18.376,
+   "fim": 18.938
+  },
+  {
+   "linee": [
+    [
+     [
+      "TU",
+      18.968,
+      true
+     ],
+     [
+      "IL",
+      19.138
+     ],
+     [
+      "SINDACO",
+      19.308,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.968,
+   "fim": 19.7
+  },
+  {
+   "linee": [
+    [
+     [
+      "DELLA",
+      19.73
+     ],
+     [
+      "TUA",
+      20.026
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      20.196,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.73,
+   "fim": 20.902
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      20.932,
+      true
+     ],
+     [
+      "ORA",
+      21.365
+     ]
+    ],
+    [
+     [
+      "CON",
+      21.669
+     ],
+     [
+      "LA",
+      21.843
+     ],
+     [
+      "TUA",
+      22.018
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      22.193,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.932,
+   "fim": 22.836
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      22.866
+     ],
+     [
+      "COMMENTO",
+      23.236
+     ]
+    ]
+   ],
+   "ini": 22.866,
+   "fim": 23.733
+  },
+  {
+   "linee": [
+    [
+     [
+      "TI",
+      23.763
+     ],
+     [
+      "DÀ",
+      23.975
+     ],
+     [
+      "PUNTI",
+      24.188,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.763,
+   "fim": 24.928
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      24.958
+     ],
+     [
+      "DOPO",
+      25.288
+     ]
+    ]
+   ],
+   "ini": 24.958,
+   "fim": 25.587
+  },
+  {
+   "linee": [
+    [
+     [
+      "LE",
+      25.617
+     ],
+     [
+      "21",
+      25.807,
+      true
+     ],
+     [
+      "SI",
+      26.277
+     ]
+    ],
+    [
+     [
+      "RIPARTE",
+      26.467
+     ]
+    ]
+   ],
+   "ini": 25.617,
+   "fim": 26.907
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      26.937
+     ],
+     [
+      "ZERO",
+      27.126,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.937,
+   "fim": 27.906
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      27.936
+     ],
+     [
+      "STASERA",
+      28.114
+     ],
+     [
+      "ALLE",
+      28.554
+     ]
+    ]
+   ],
+   "ini": 27.936,
+   "fim": 28.834
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      28.864,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.864,
+   "fim": 30.06
+  }
+ ],
+ "parlato": [
+  "Stasera alle ventuno, l'Italia elegge il suo primo Presidente.",
+  "In testa c'è Andrea, da Azzano Mella:",
+  "quasi settemila punti.",
+  "Ma Simone, da Brescia, lo insegue.",
+  "E alla stessa ora, quasi cinquemila città eleggono il loro sindaco.",
+  "Il più forte di ogni comune.",
+  "Vuoi essere tu il sindaco della tua città?",
+  "Commenta ora con la tua città:",
+  "ogni commento ti dà punti.",
+  "Perché dopo le ventuno si riparte da zero…",
+  "e stasera alle ventuno…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  8,
+  8,
+  9,
+  9,
+  9,
+  10,
+  10
+ ],
+ "eventi": {
+  "inizio": -0.02,
+  "ventuno": 0.825,
+  "elegge": 1.817,
+  "presidente": 3.032,
+  "intesta": 4.147,
+  "andrea": 4.972,
+  "azzano": 5.577,
+  "quasi": 6.899,
+  "settemila": 7.328,
+  "punti0": 8.122,
+  "ma": 9.025,
+  "simone": 9.248,
+  "brescia": 10.025,
+  "insegue": 10.636,
+  "e5": 11.601,
+  "ora5": 12.475,
+  "cinquemila": 13.153,
+  "citta5": 13.782,
+  "sindaco": 15.283,
+  "forte": 16.527,
+  "comune": 17.384,
+  "vuoi": 18.326,
+  "tu": 18.918,
+  "sindaco2": 19.258,
+  "citta6": 20.146,
+  "commenta": 20.882,
+  "citta7": 21.968,
+  "ogni": 22.816,
+  "commento": 23.186,
+  "punti": 24.138,
+  "perche": 24.908,
+  "ventuno2": 25.757,
+  "riparte": 26.417,
+  "zero": 27.076,
+  "stasera2": 28.064,
+  "ventuno3": 28.814
+ },
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.elegge": [
+   0,
+   4,
+   -0.05
+  ],
+  "eventi.presidente": [
+   0,
+   8,
+   -0.08
+  ],
+  "eventi.intesta": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.andrea": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.azzano": [
+   1,
+   5,
+   -0.05
+  ],
+  "eventi.quasi": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.settemila": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.punti0": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.ma": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.simone": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.brescia": [
+   3,
+   3,
+   -0.05
+  ],
+  "eventi.insegue": [
+   3,
+   5,
+   -0.05
+  ],
+  "eventi.e5": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.ora5": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.cinquemila": [
+   4,
+   5,
+   -0.05
+  ],
+  "eventi.citta5": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.sindaco": [
+   4,
+   10,
+   -0.05
+  ],
+  "eventi.forte": [
+   5,
+   2,
+   -0.05
+  ],
+  "eventi.comune": [
+   5,
+   5,
+   -0.05
+  ],
+  "eventi.vuoi": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.tu": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.sindaco2": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.citta6": [
+   6,
+   7,
+   -0.05
+  ],
+  "eventi.commenta": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.citta7": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.ogni": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.commento": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.punti": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.perche": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno2": [
+   9,
+   3,
+   -0.05
+  ],
+  "eventi.riparte": [
+   9,
+   5,
+   -0.05
+  ],
+  "eventi.zero": [
+   9,
+   7,
+   -0.05
+  ],
+  "eventi.stasera2": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.ventuno3": [
+   10,
+   3,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 16.mp3",
+  "durata": 29.46
+ },
+ "copertina": {
+  "basso": {
+   "top": 1130,
+   "linee": [
+    [
+     "CHI DIVENTA",
+     null,
+     112
+    ],
+    [
+     "PRESIDENTE? 👇",
+     true,
+     124
+    ]
+   ]
+  }
+ }
+}

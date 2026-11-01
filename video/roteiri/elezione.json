@@ -1,0 +1,728 @@
+{
+ "nome": "elezione",
+ "durata": 29.6,
+ "primo": "_andreacirelli_",
+ "secondo": "simone_fantoni__",
+ "citta_tu": "Napoli",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "STASERA",
+      0
+     ],
+     [
+      "ALLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      0,
+      true
+     ],
+     [
+      "L'ITALIA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ELEGGE",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "SUO",
+      0
+     ]
+    ],
+    [
+     [
+      "PRIMO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0
+     ],
+     [
+      "TESTA",
+      0
+     ],
+     [
+      "C'È",
+      0
+     ]
+    ],
+    [
+     [
+      "ANDREA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      0
+     ],
+     [
+      "AZZANO",
+      0
+     ]
+    ],
+    [
+     [
+      "MELLA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUASI",
+      0
+     ],
+     [
+      "7.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      0
+     ],
+     [
+      "SIMONE",
+      0,
+      true
+     ],
+     [
+      "DA",
+      0
+     ]
+    ],
+    [
+     [
+      "BRESCIA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LO",
+      0
+     ],
+     [
+      "INSEGUE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "ALLA",
+      0
+     ],
+     [
+      "STESSA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ORA",
+      0
+     ],
+     [
+      "QUASI",
+      0
+     ]
+    ],
+    [
+     [
+      "5.000",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ],
+     [
+      "ELEGGONO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "LORO",
+      0
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "FORTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "COMUNE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      0
+     ],
+     [
+      "ESSERE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TU",
+      0,
+      true
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "SINDACO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DELLA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      0,
+      true
+     ],
+     [
+      "ORA",
+      0
+     ]
+    ],
+    [
+     [
+      "CON",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "COMMENTO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TI",
+      0
+     ],
+     [
+      "DÀ",
+      0
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      0
+     ],
+     [
+      "DOPO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LE",
+      0
+     ],
+     [
+      "21",
+      0,
+      true
+     ],
+     [
+      "SI",
+      0
+     ]
+    ],
+    [
+     [
+      "RIPARTE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      0
+     ],
+     [
+      "ZERO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "STASERA",
+      0
+     ],
+     [
+      "ALLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      0,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Stasera alle ventuno, l'Italia elegge il suo primo Presidente.",
+  "In testa c'è Andrea, da Azzano Mella:",
+  "quasi settemila punti.",
+  "Ma Simone, da Brescia, lo insegue.",
+  "E alla stessa ora, quasi cinquemila città eleggono il loro sindaco.",
+  "Il più forte di ogni comune.",
+  "Vuoi essere tu il sindaco della tua città?",
+  "Commenta ora con la tua città:",
+  "ogni commento ti dà punti.",
+  "Perché dopo le ventuno si riparte da zero…",
+  "e stasera alle ventuno…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  8,
+  8,
+  9,
+  9,
+  9,
+  10,
+  10
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.elegge": [
+   0,
+   4,
+   -0.05
+  ],
+  "eventi.presidente": [
+   0,
+   8,
+   -0.08
+  ],
+  "eventi.intesta": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.andrea": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.azzano": [
+   1,
+   5,
+   -0.05
+  ],
+  "eventi.quasi": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.settemila": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.punti0": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.ma": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.simone": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.brescia": [
+   3,
+   3,
+   -0.05
+  ],
+  "eventi.insegue": [
+   3,
+   5,
+   -0.05
+  ],
+  "eventi.e5": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.ora5": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.cinquemila": [
+   4,
+   5,
+   -0.05
+  ],
+  "eventi.citta5": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.sindaco": [
+   4,
+   10,
+   -0.05
+  ],
+  "eventi.forte": [
+   5,
+   2,
+   -0.05
+  ],
+  "eventi.comune": [
+   5,
+   5,
+   -0.05
+  ],
+  "eventi.vuoi": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.tu": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.sindaco2": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.citta6": [
+   6,
+   7,
+   -0.05
+  ],
+  "eventi.commenta": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.citta7": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.ogni": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.commento": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.punti": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.perche": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno2": [
+   9,
+   3,
+   -0.05
+  ],
+  "eventi.riparte": [
+   9,
+   5,
+   -0.05
+  ],
+  "eventi.zero": [
+   9,
+   7,
+   -0.05
+  ],
+  "eventi.stasera2": [
+   10,
+   1,
+   -0.05
+  ],
+  "eventi.ventuno3": [
+   10,
+   3,
+   -0.05
+  ]
+ }
+}
