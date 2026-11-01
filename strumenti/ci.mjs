@@ -35,6 +35,14 @@ try {
   await aggiornare({ completo: process.argv.includes('--completo') });
   pubblicare();
 
+  // recuperação de carrinho: o servidor manda o e-mail (1 vez por pedido) para quem abandonou o pagamento; a chave é a mesma do STORIE_URL
+  try {
+    const u = new URL(env('STORIE_URL'));
+    const r = await fetch(`${u.origin}/api/recupero.php?chiave=${encodeURIComponent(u.searchParams.get('chiave') ?? '')}`);
+    const j = await r.json();
+    console.log(`recuperação de carrinho: ${j.inviati} e-mail(s) enviado(s) (${j.ora_roma}h em Roma)`);
+  } catch (e) { console.log(`recuperação de carrinho falhou: ${e.message}`); }
+
   // token renovado nesta execução: guarda no servidor para as próximas
   const novo = lerJson(arq('config', 'instagram.json'), {}).token;
   if (novo && novo !== token) {
