@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel dozzina · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --wa: #25D366; --blu: #3FA9F5; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(10, 15, 50, .6) 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  #titolo { position: absolute; left: 20px; right: 20px; top: 150px; text-align: center; opacity: 0; transform-origin: 50% 0; }
+  #titolo .t1 { font-size: 100px; -webkit-text-stroke-width: 19px; line-height: 1.02; }
+  #titolo .t2 { font-size: 66px; -webkit-text-stroke-width: 13px; margin-top: 6px; }
+  /* abertura: contador de casas e "solo 12" */
+  #apertura { position: absolute; left: 0; right: 0; top: 140px; text-align: center; }
+  #apertura .n { font-size: 150px; -webkit-text-stroke-width: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #apertura .s { font-size: 64px; -webkit-text-stroke-width: 13px; margin-top: 4px; }
+  #solo { position: absolute; left: 0; right: 0; top: 140px; text-align: center; opacity: 0; }
+  #solo .n { font-size: 170px; -webkit-text-stroke-width: 30px; line-height: 1; }
+  #solo .s { font-size: 70px; -webkit-text-stroke-width: 14px; margin-top: 6px; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: #fff; border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.oro { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .box em { display: block; font-style: normal; font-size: 32px; font-weight: 900; color: var(--rosso); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  /* corrida da semana */
+  #classifica { top: 250px; padding: 22px 24px 18px; }
+  #classifica h3 { margin: 0 0 14px; text-align: center; font-size: 46px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  #classifica .riga { display: flex; align-items: center; gap: 16px; border: 5px solid var(--ink); border-radius: 24px; padding: 10px 20px; margin-bottom: 12px; opacity: 0; background: #fff; }
+  #classifica .riga i { font-style: normal; font-size: 52px; font-weight: 900; color: var(--ink); width: 50px; text-align: center; }
+  #classifica .riga div { flex: 1; min-width: 0; }
+  #classifica .riga b { display: block; font-size: 42px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #classifica .riga small { display: block; font-size: 30px; font-weight: 900; color: #5B6475; text-transform: uppercase; }
+  #classifica .riga span { font-size: 58px; font-weight: 900; color: var(--ink); font-variant-numeric: tabular-nums; }
+  #classifica .riga.su { background: #FFF1C2; box-shadow: 0 0 0 8px var(--giallo); }
+  #classifica .diff { text-align: center; opacity: 0; margin: 4px 0 10px; }
+  #classifica .diff b { display: inline-block; background: var(--rosso); color: #fff; font-size: 44px; font-weight: 900; border: 5px solid var(--ink); border-radius: 999px; padding: 4px 30px; }
+  #classifica .quando { text-align: center; font-size: 40px; font-weight: 900; color: var(--ink); opacity: 0; margin-top: 6px; }
+  /* visitas */
+  #visite { position: absolute; left: 0; right: 0; top: 260px; text-align: center; opacity: 0; }
+  #visite .ic { font-size: 120px; line-height: 1; -webkit-text-stroke: 0; }
+  #visite .n { font-size: 210px; -webkit-text-stroke-width: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #visite .s { font-size: 66px; -webkit-text-stroke-width: 13px; }
+  #reazioni i { position: absolute; left: 0; top: 0; font-style: normal; font-size: 84px; opacity: 0; }
+  #chip { position: absolute; left: 50%; top: 470px; transform: translateX(-50%); white-space: nowrap; background: var(--giallo); color: var(--ink); font-size: 48px; font-weight: 900; border: 6px solid var(--ink); border-radius: 999px; padding: 10px 36px; box-shadow: 0 8px 0 rgba(21,32,51,.3); opacity: 0; }
+  /* cartão da loja (igual ao do site) */
+  #scheda { top: 330px; left: 90px; right: 90px; padding: 0; overflow: hidden; }
+  #scheda .testa { height: 120px; display: flex; align-items: center; gap: 20px; padding: 0 26px; border-bottom: 5px solid var(--ink); }
+  #scheda .testa .logo { width: 86px; height: 86px; border-radius: 20px; border: 4px solid var(--ink); background: #fff center/cover no-repeat; flex: none; }
+  #scheda .testa b { font-size: 40px; font-weight: 900; color: #fff; -webkit-text-stroke: 8px var(--ink); paint-order: stroke fill; line-height: 1.05; }
+  #scheda .corpo { padding: 20px 28px 26px; }
+  #scheda .corpo p { margin: 0; font-size: 30px; font-weight: 800; color: var(--ink); line-height: 1.25; }
+  #scheda .corpo small { display: block; margin-top: 10px; font-size: 26px; font-weight: 800; color: #5B6475; }
+  #scheda .wa { margin-top: 18px; background: var(--wa); color: #fff; border: 5px solid var(--ink); border-radius: 26px; font-size: 38px; font-weight: 900; text-align: center; padding: 14px 0; }
+  #scheda .msg { margin-top: 16px; background: #DCF8C6; border: 4px solid var(--ink); border-radius: 22px 22px 22px 6px; font-size: 32px; font-weight: 800; color: var(--ink); padding: 10px 20px; opacity: 0; display: inline-block; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; }
+  #tocco { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: rgba(255,255,255,.55); border: 6px solid #fff; opacity: 0; pointer-events: none; }
+  /* vagas, link, chamada */
+  #posti { position: absolute; left: 0; right: 0; top: 330px; text-align: center; opacity: 0; }
+  #posti .t { font-size: 96px; -webkit-text-stroke-width: 18px; }
+  #posti .slot { display: flex; justify-content: center; gap: 16px; margin-top: 30px; flex-wrap: wrap; padding: 0 80px; }
+  #posti .slot i { font-style: normal; width: 170px; height: 150px; border-radius: 26px; border: 6px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 80px; -webkit-text-stroke: 0; opacity: 0; }
+  #posti .s { font-size: 60px; -webkit-text-stroke-width: 12px; margin-top: 26px; opacity: 0; }
+  #link { position: absolute; left: 0; right: 0; top: 470px; text-align: center; opacity: 0; }
+  #link .a { font-size: 130px; -webkit-text-stroke-width: 24px; }
+  #link .b { display: inline-block; margin-top: 30px; background: #fff; color: var(--ink); font-size: 56px; font-weight: 900; border: 6px solid var(--ink); border-radius: 999px; padding: 12px 40px; -webkit-text-stroke: 0; text-transform: none; opacity: 0; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 330px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 84px; -webkit-text-stroke-width: 16px; }
+  #cta .b { font-size: 76px; -webkit-text-stroke-width: 15px; margin-top: 26px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="reazioni"></div>
+<div id="titolo" class="forte"><div class="t1"></div><div class="t2 g"></div></div>
+<div id="apertura" class="forte"><div class="n"></div><div class="s">CASE IN <span class="g">ITALIA</span></div></div>
+<div id="solo" class="forte"><div class="n">SOLO <span class="g"></span></div><div class="s">✨ BRILLANO <span class="g">COSÌ</span></div></div>
+<div id="classifica" class="riquadro"><h3>👑 Corsa al Presidente</h3><div class="righe"></div><div class="quando">⏰ Si vota domenica alle 21:00</div></div>
+<div id="visite" class="forte"><div class="ic">👀</div><div class="n g"></div><div class="s">PERSONE OGNI GIORNO<br>SU QUESTA MAPPA</div></div>
+<div id="chip">🎁 €4,99 · 10 giorni</div>
+<div id="scheda" class="riquadro"><div class="testa"><div class="logo"></div><b></b></div><div class="corpo"><p></p><small></small><div class="wa">💬 Scrivi su WhatsApp</div><div class="msg">Ciao! Vi ho trovato sulla mappa 👋</div></div></div>
+<div id="posti" class="forte"><div class="t">⚠️ POSTI <span class="g">LIMITATI</span></div><div class="slot"><i>🏪</i><i>🏪</i><i>🏪</i><i>🏪</i><i>🏪</i><i>🏪</i></div><div class="s">IN OGNI <span class="g">CITTÀ</span></div></div>
+<div id="link" class="forte"><div class="a">🔗 LINK<br><span class="g">IN BIO</span></div><div class="b">@italiacasapercasa</div></div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA<br><span class="g">TUA CITTÀ</span> 👇</div><div class="b">📲 MANDALO A CHI<br><span class="g">HA UN NEGOZIO</span></div></div>
+<div id="tocco"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">💬 Commenta la tua città → ricevi una casa 3D</div>
+<script type="module" src="video/dozzina.js"></script>
+</body>
+</html>

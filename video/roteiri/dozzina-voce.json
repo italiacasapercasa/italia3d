@@ -1,0 +1,1496 @@
+{
+ "nome": "dozzina",
+ "durata": 45.2,
+ "apertura": "fabiolombardis",
+ "citta": [
+  [
+   "Capri",
+   "gi.an1616"
+  ],
+  [
+   "Firenze",
+   "__moscoz__"
+  ],
+  [
+   "Sorrento",
+   "giulio_ortoo"
+  ]
+ ],
+ "presidente": "_andreacirelli_",
+ "sfidanti": [
+  [
+   "Termoli",
+   "le0_caru"
+  ],
+  [
+   "Malnate",
+   "fabi_sante012"
+  ]
+ ],
+ "sindaco_esempio": "jacopo21530",
+ "demo_citta": "Bologna",
+ "negozio": "Mobili Trezza",
+ "decori": [
+  [
+   "raideen_21",
+   [
+    "neon",
+    "fuochi"
+   ]
+  ],
+  [
+   "__moscoz__",
+   [
+    "neon",
+    "corona",
+    "tricolore",
+    "campione",
+    "fuochi",
+    "cornice"
+   ]
+  ],
+  [
+   "_gianni26_",
+   [
+    "tricolore",
+    "cornice",
+    "fuochi",
+    "oro"
+   ]
+  ],
+  [
+   "gi.an1616",
+   [
+    "neon"
+   ]
+  ],
+  [
+   "gela.t10",
+   [
+    "tricolore",
+    "fuochi",
+    "neon"
+   ]
+  ],
+  [
+   "christian.ca_da_muro_",
+   [
+    "campione"
+   ]
+  ],
+  [
+   "krew_0809",
+   [
+    "oro",
+    "fuochi",
+    "cornice"
+   ]
+  ],
+  [
+   "natan.nicora",
+   [
+    "neon",
+    "fuochi",
+    "tricolore",
+    "cornice"
+   ]
+  ],
+  [
+   "jackbiava",
+   [
+    "oro",
+    "corona",
+    "fuochi",
+    "tricolore",
+    "cornice"
+   ]
+  ],
+  [
+   "giulio_ortoo",
+   [
+    "tricolore",
+    "neon",
+    "fuochi"
+   ]
+  ],
+  [
+   "giovann_o_lord",
+   [
+    "oro",
+    "corona",
+    "neon"
+   ]
+  ],
+  [
+   "fabiolombardis",
+   [
+    "campione",
+    "fuochi",
+    "tricolore",
+    "cornice",
+    "oro",
+    "neon",
+    "corona"
+   ]
+  ]
+ ],
+ "giorni": [
+  [
+   "27/10",
+   19852
+  ],
+  [
+   "28/10",
+   19319
+  ],
+  [
+   "29/10",
+   10805
+  ],
+  [
+   "30/10",
+   8213
+  ],
+  [
+   "31/10",
+   7441
+  ],
+  [
+   "01/11",
+   6971
+  ]
+ ],
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      0.03
+     ],
+     [
+      "25.000",
+      0.228
+     ],
+     [
+      "CASE",
+      1.16
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.475
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      1.505
+     ],
+     [
+      "ITALIA",
+      1.703
+     ]
+    ]
+   ],
+   "ini": 1.505,
+   "fim": 2.639
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      2.669
+     ],
+     [
+      "UNA",
+      3.008
+     ]
+    ],
+    [
+     [
+      "DOZZINA",
+      3.347,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.669,
+   "fim": 3.8
+  },
+  {
+   "linee": [
+    [
+     [
+      "BRILLANO",
+      3.83,
+      true
+     ],
+     [
+      "COSÌ",
+      4.314
+     ]
+    ]
+   ],
+   "ini": 3.83,
+   "fim": 5.16
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      5.19
+     ],
+     [
+      "È",
+      5.514
+     ],
+     [
+      "A",
+      5.7
+     ],
+     [
+      "CAPRI",
+      5.886,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.19,
+   "fim": 6.556
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      6.586
+     ],
+     [
+      "A",
+      6.939
+     ],
+     [
+      "FIRENZE",
+      7.142,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.586,
+   "fim": 7.919
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      7.949
+     ],
+     [
+      "A",
+      8.312
+     ],
+     [
+      "SORRENTO",
+      8.52,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.949,
+   "fim": 9.377
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      9.407
+     ],
+     [
+      "DA",
+      9.579
+     ],
+     [
+      "IERI",
+      9.751
+     ]
+    ]
+   ],
+   "ini": 9.407,
+   "fim": 10.24
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      10.27
+     ],
+     [
+      "PRESIDENTE",
+      10.456,
+      true
+     ]
+    ]
+   ],
+   "ini": 10.27,
+   "fim": 11.027
+  },
+  {
+   "linee": [
+    [
+     [
+      "HA",
+      11.057
+     ],
+     [
+      "UNA",
+      11.243
+     ],
+     [
+      "CUPOLA",
+      11.568,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.057,
+   "fim": 12.001
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ORO",
+      12.031,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.031,
+   "fim": 12.517
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      12.547
+     ],
+     [
+      "4.800",
+      12.769,
+      true
+     ]
+    ],
+    [
+     [
+      "SINDACI",
+      13.974,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.547,
+   "fim": 14.493
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      14.523
+     ],
+     [
+      "FASCIA",
+      14.745,
+      true
+     ]
+    ],
+    [
+     [
+      "TRICOLORE",
+      15.13,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.523,
+   "fim": 16.252
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      16.282
+     ],
+     [
+      "LA",
+      16.471
+     ],
+     [
+      "NUOVA",
+      16.659
+     ]
+    ]
+   ],
+   "ini": 16.282,
+   "fim": 16.958
+  },
+  {
+   "linee": [
+    [
+     [
+      "CORSA",
+      16.988,
+      true
+     ],
+     [
+      "È",
+      17.316
+     ],
+     [
+      "GIÀ",
+      17.505
+     ]
+    ],
+    [
+     [
+      "INIZIATA",
+      17.694
+     ]
+    ]
+   ],
+   "ini": 16.988,
+   "fim": 18.639
+  },
+  {
+   "linee": [
+    [
+     [
+      "TERMOLI",
+      18.669,
+      true
+     ],
+     [
+      "E",
+      19.138
+     ]
+    ],
+    [
+     [
+      "MALNATE",
+      19.327,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.669,
+   "fim": 19.766
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      19.796
+     ],
+     [
+      "QUASI",
+      20.125
+     ]
+    ],
+    [
+     [
+      "PARI",
+      20.455,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.796,
+   "fim": 21.306
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      21.336
+     ],
+     [
+      "GIORNO",
+      21.699
+     ]
+    ]
+   ],
+   "ini": 21.336,
+   "fim": 22.032
+  },
+  {
+   "linee": [
+    [
+     [
+      "7.000",
+      22.062,
+      true
+     ],
+     [
+      "PERSONE",
+      22.735
+     ]
+    ]
+   ],
+   "ini": 22.062,
+   "fim": 23.223
+  },
+  {
+   "linee": [
+    [
+     [
+      "APRONO",
+      23.253
+     ],
+     [
+      "QUESTA",
+      23.771
+     ]
+    ]
+   ],
+   "ini": 23.253,
+   "fim": 24.104
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      24.134,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.134,
+   "fim": 24.878
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      24.908
+     ],
+     [
+      "CASA",
+      25.215
+     ]
+    ],
+    [
+     [
+      "DECORATA",
+      25.521,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.908,
+   "fim": 26.359
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      26.389
+     ],
+     [
+      "NOTANO",
+      26.575
+     ]
+    ],
+    [
+     [
+      "TUTTI",
+      27.037,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.389,
+   "fim": 27.713
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      27.743
+     ],
+     [
+      "PUOI",
+      27.914
+     ]
+    ],
+    [
+     [
+      "REGALARLA",
+      28.084,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.743,
+   "fim": 28.602
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      28.632
+     ],
+     [
+      "UN",
+      28.802
+     ],
+     [
+      "AMICO",
+      28.972,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.632,
+   "fim": 29.364
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      29.394
+     ],
+     [
+      "IL",
+      29.565
+     ],
+     [
+      "TUO",
+      29.735
+     ]
+    ],
+    [
+     [
+      "NOME",
+      29.905,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.394,
+   "fim": 30.171
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOPRA",
+      30.201
+     ]
+    ]
+   ],
+   "ini": 30.201,
+   "fim": 30.898
+  },
+  {
+   "linee": [
+    [
+     [
+      "HAI",
+      30.928
+     ],
+     [
+      "UN",
+      31.101
+     ],
+     [
+      "NEGOZIO",
+      31.273,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.928,
+   "fim": 32.025
+  },
+  {
+   "linee": [
+    [
+     [
+      "METTILO",
+      32.055
+     ],
+     [
+      "NELLA",
+      32.478
+     ]
+    ]
+   ],
+   "ini": 32.055,
+   "fim": 32.746
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUA",
+      32.776
+     ],
+     [
+      "CITTÀ",
+      32.946,
+      true
+     ]
+    ]
+   ],
+   "ini": 32.776,
+   "fim": 33.588
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      33.618
+     ],
+     [
+      "TI",
+      33.818
+     ],
+     [
+      "TROVA",
+      34.019
+     ]
+    ]
+   ],
+   "ini": 33.618,
+   "fim": 34.337
+  },
+  {
+   "linee": [
+    [
+     [
+      "TI",
+      34.367
+     ],
+     [
+      "SCRIVE",
+      34.568
+     ],
+     [
+      "SU",
+      34.916
+     ]
+    ],
+    [
+     [
+      "WHATSAPP",
+      35.117,
+      true
+     ]
+    ]
+   ],
+   "ini": 34.367,
+   "fim": 35.436
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      35.466
+     ],
+     [
+      "UN",
+      35.666
+     ],
+     [
+      "TOCCO",
+      35.866,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.466,
+   "fim": 36.628
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      36.658
+     ],
+     [
+      "I",
+      36.831
+     ],
+     [
+      "POSTI",
+      37.004
+     ]
+    ]
+   ],
+   "ini": 36.658,
+   "fim": 37.275
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      37.305
+     ],
+     [
+      "OGNI",
+      37.478
+     ],
+     [
+      "CITTÀ",
+      37.779,
+      true
+     ]
+    ]
+   ],
+   "ini": 37.305,
+   "fim": 38.05
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      38.08
+     ],
+     [
+      "POCHI",
+      38.381,
+      true
+     ]
+    ]
+   ],
+   "ini": 38.08,
+   "fim": 39.023
+  },
+  {
+   "linee": [
+    [
+     [
+      "LINK",
+      39.053,
+      true
+     ],
+     [
+      "IN",
+      39.294
+     ],
+     [
+      "BIO",
+      39.534,
+      true
+     ]
+    ]
+   ],
+   "ini": 39.053,
+   "fim": 40.047
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      40.077
+     ],
+     [
+      "LA",
+      40.407
+     ],
+     [
+      "TUA",
+      40.596
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      40.785,
+      true
+     ]
+    ]
+   ],
+   "ini": 40.077,
+   "fim": 41.085
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUI",
+      41.115
+     ],
+     [
+      "SOTTO",
+      41.304
+     ]
+    ]
+   ],
+   "ini": 41.115,
+   "fim": 41.874
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      41.904
+     ],
+     [
+      "MANDA",
+      42.078
+     ],
+     [
+      "QUESTO",
+      42.379
+     ]
+    ]
+   ],
+   "ini": 41.904,
+   "fim": 42.651
+  },
+  {
+   "linee": [
+    [
+     [
+      "VIDEO",
+      42.681
+     ],
+     [
+      "A",
+      42.983
+     ],
+     [
+      "CHI",
+      43.157
+     ],
+     [
+      "HA",
+      43.33
+     ]
+    ],
+    [
+     [
+      "UN",
+      43.503
+     ],
+     [
+      "NEGOZIO",
+      43.677,
+      true
+     ]
+    ]
+   ],
+   "ini": 42.681,
+   "fim": 44.412
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      44.442
+     ]
+    ]
+   ],
+   "ini": 44.442,
+   "fim": 45.64
+  }
+ ],
+ "parlato": [
+  "Su venticinquemila case in Italia…",
+  "solo una dozzina brillano così.",
+  "Una è a Capri.",
+  "Una a Firenze.",
+  "Una a Sorrento.",
+  "E da ieri…",
+  "il Presidente ha una cupola d'oro,",
+  "e quattromilaottocento sindaci la fascia tricolore.",
+  "Ma la nuova corsa è già iniziata:",
+  "Termoli e Malnate sono quasi pari.",
+  "Ogni giorno settemila persone aprono questa mappa.",
+  "Una casa decorata…",
+  "la notano tutti.",
+  "E puoi regalarla a un amico, con il tuo nome sopra.",
+  "Hai un negozio?",
+  "Mettilo nella tua città:",
+  "chi ti trova, ti scrive su WhatsApp con un tocco.",
+  "Ma i posti per ogni città sono pochi.",
+  "Link in bio.",
+  "Scrivi la tua città qui sotto…",
+  "e manda questo video a chi ha un negozio.",
+  "Perché…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  1,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  10,
+  10,
+  10,
+  10,
+  11,
+  12,
+  13,
+  13,
+  13,
+  13,
+  14,
+  15,
+  15,
+  16,
+  16,
+  16,
+  17,
+  17,
+  17,
+  18,
+  19,
+  19,
+  20,
+  20,
+  21
+ ],
+ "eventi": {
+  "su": -0.02,
+  "venticinque": 0.178,
+  "italia": 1.653,
+  "solo": 2.619,
+  "dozzina": 3.297,
+  "brillano": 3.78,
+  "cosi": 4.264,
+  "una2": 5.14,
+  "capri": 5.836,
+  "una3": 6.536,
+  "firenze": 7.092,
+  "una4": 7.899,
+  "sorrento": 8.47,
+  "e5": 9.357,
+  "ieri": 9.701,
+  "il6": 10.22,
+  "presidente": 10.406,
+  "cupola": 11.518,
+  "oro": 11.981,
+  "e7": 12.497,
+  "quattromila": 12.719,
+  "sindaci7": 13.924,
+  "fascia": 14.695,
+  "tricolore": 15.08,
+  "ma8": 16.232,
+  "corsa": 16.938,
+  "iniziata": 17.644,
+  "termoli": 18.619,
+  "malnate": 19.277,
+  "quasi": 20.075,
+  "pari": 20.405,
+  "ogni": 21.286,
+  "settemila": 22.012,
+  "persone": 22.685,
+  "aprono": 23.203,
+  "mappa10": 24.084,
+  "una11": 24.858,
+  "decorata": 25.471,
+  "la12": 26.339,
+  "notano": 26.525,
+  "tutti": 26.987,
+  "e13": 27.693,
+  "regalarla": 28.034,
+  "amico": 28.922,
+  "nome": 29.855,
+  "sopra": 30.151,
+  "hai": 30.878,
+  "negozio14": 31.223,
+  "mettilo": 32.005,
+  "citta15": 32.896,
+  "chi": 33.568,
+  "trova": 33.969,
+  "scrive": 34.518,
+  "whatsapp": 35.067,
+  "tocco": 35.816,
+  "ma17": 36.608,
+  "posti": 36.954,
+  "pochi": 38.331,
+  "link": 39.003,
+  "bio": 39.484,
+  "scrivi": 40.027,
+  "citta19": 40.735,
+  "e20": 41.854,
+  "manda": 42.028,
+  "negozio20": 43.627,
+  "perche": 44.392
+ },
+ "sincro": {
+  "eventi.su": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.venticinque": [
+   0,
+   1,
+   -0.05
+  ],
+  "eventi.italia": [
+   0,
+   4,
+   -0.05
+  ],
+  "eventi.solo": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.dozzina": [
+   1,
+   2,
+   -0.05
+  ],
+  "eventi.brillano": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.cosi": [
+   1,
+   4,
+   -0.05
+  ],
+  "eventi.una2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.capri": [
+   2,
+   3,
+   -0.05
+  ],
+  "eventi.una3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.firenze": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.una4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.sorrento": [
+   4,
+   2,
+   -0.05
+  ],
+  "eventi.e5": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.ieri": [
+   5,
+   2,
+   -0.05
+  ],
+  "eventi.il6": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.presidente": [
+   6,
+   1,
+   -0.05
+  ],
+  "eventi.cupola": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.oro": [
+   6,
+   5,
+   -0.05
+  ],
+  "eventi.e7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.quattromila": [
+   7,
+   1,
+   -0.05
+  ],
+  "eventi.sindaci7": [
+   7,
+   2,
+   -0.05
+  ],
+  "eventi.fascia": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.tricolore": [
+   7,
+   5,
+   -0.05
+  ],
+  "eventi.ma8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.corsa": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.iniziata": [
+   8,
+   6,
+   -0.05
+  ],
+  "eventi.termoli": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.malnate": [
+   9,
+   2,
+   -0.05
+  ],
+  "eventi.quasi": [
+   9,
+   4,
+   -0.05
+  ],
+  "eventi.pari": [
+   9,
+   5,
+   -0.05
+  ],
+  "eventi.ogni": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.settemila": [
+   10,
+   2,
+   -0.05
+  ],
+  "eventi.persone": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.aprono": [
+   10,
+   4,
+   -0.05
+  ],
+  "eventi.mappa10": [
+   10,
+   6,
+   -0.05
+  ],
+  "eventi.una11": [
+   11,
+   0,
+   -0.05
+  ],
+  "eventi.decorata": [
+   11,
+   2,
+   -0.05
+  ],
+  "eventi.la12": [
+   12,
+   0,
+   -0.05
+  ],
+  "eventi.notano": [
+   12,
+   1,
+   -0.05
+  ],
+  "eventi.tutti": [
+   12,
+   2,
+   -0.05
+  ],
+  "eventi.e13": [
+   13,
+   0,
+   -0.05
+  ],
+  "eventi.regalarla": [
+   13,
+   2,
+   -0.05
+  ],
+  "eventi.amico": [
+   13,
+   5,
+   -0.05
+  ],
+  "eventi.nome": [
+   13,
+   9,
+   -0.05
+  ],
+  "eventi.sopra": [
+   13,
+   10,
+   -0.05
+  ],
+  "eventi.hai": [
+   14,
+   0,
+   -0.05
+  ],
+  "eventi.negozio14": [
+   14,
+   2,
+   -0.05
+  ],
+  "eventi.mettilo": [
+   15,
+   0,
+   -0.05
+  ],
+  "eventi.citta15": [
+   15,
+   3,
+   -0.05
+  ],
+  "eventi.chi": [
+   16,
+   0,
+   -0.05
+  ],
+  "eventi.trova": [
+   16,
+   2,
+   -0.05
+  ],
+  "eventi.scrive": [
+   16,
+   4,
+   -0.05
+  ],
+  "eventi.whatsapp": [
+   16,
+   6,
+   -0.05
+  ],
+  "eventi.tocco": [
+   16,
+   9,
+   -0.05
+  ],
+  "eventi.ma17": [
+   17,
+   0,
+   -0.05
+  ],
+  "eventi.posti": [
+   17,
+   2,
+   -0.05
+  ],
+  "eventi.pochi": [
+   17,
+   7,
+   -0.05
+  ],
+  "eventi.link": [
+   18,
+   0,
+   -0.05
+  ],
+  "eventi.bio": [
+   18,
+   2,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   19,
+   0,
+   -0.05
+  ],
+  "eventi.citta19": [
+   19,
+   3,
+   -0.05
+  ],
+  "eventi.e20": [
+   20,
+   0,
+   -0.05
+  ],
+  "eventi.manda": [
+   20,
+   1,
+   -0.05
+  ],
+  "eventi.negozio20": [
+   20,
+   8,
+   -0.05
+  ],
+  "eventi.perche": [
+   21,
+   0,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 19.mp3",
+  "durata": 45.16
+ }
+}
