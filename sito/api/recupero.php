@@ -72,7 +72,9 @@ foreach ($pedidos as $arq => $p) {
     $piano = (string)($p['piano'] ?? ''); $prod = (string)($p['prodotto'] ?? 'negozio');
     $link = $cfg['checkout'][$piano][$prod] ?? '';
     if ($link === '') continue;
-    $link .= (str_contains($link, '?') ? '&' : '?') . http_build_query(['sck' => $p['id'], 'email' => $p['email'], 'name' => $p['nome']]);
+    $mis = !empty($p['su_misura']);
+    // su misura: a página personalizada da Hotmart (checkoutMode=10) é a única que mostra o order bump
+    $link .= (str_contains($link, '?') ? '&' : '?') . http_build_query(['sck' => $p['id'], 'email' => $p['email'], 'name' => $p['nome']] + ($mis ? ['checkoutMode' => '10'] : []));
     $citta = $nomeComune[$p['istat'] ?? ''] ?? '';
     $posti = 0;
     foreach ($cfg['piani'] ?? [] as $pi) if ($pi['id'] === $piano) $posti = (int)($pi['posti'][$prod] ?? 0);
@@ -81,8 +83,8 @@ foreach ($pedidos as $arq => $p) {
     $assunto = "La tua attività a $citta è quasi sulla mappa 📍";
     $corpo = "Ciao!\n\nHai iniziato a mettere «{$p['nome']}» sulla mappa 3D di Italia Casa per Casa, a $citta, ma il pagamento non è stato completato.\n\n"
         . 'I posti a ' . $citta . ' sono limitati: ' . ($restano === 1 ? 'ne resta 1' : "ne restano $restano") . ". Completa qui in 1 minuto:\n$link\n\n"
-        . (!empty($p['su_misura']) ? '🎨 Hai scelto «su misura»: nella pagina di pagamento spunta la casella «Negozio su misura» (+' . $euro((int)($cfg['su_misura']['prezzo'] ?? 990)) . ").\n\n" : '')
-        . "• Paghi con carta, PayPal (tocca «Mostra di più»), Klarna «paga in 30 giorni» o bonifico SEPA.\n"
+        . ($mis ? '🎨 Hai scelto «su misura»: nella pagina di pagamento, sotto «Acquista insieme», tocca «Aggiungi all\'acquisto» su «Negozio su misura» (+' . $euro((int)($cfg['su_misura']['prezzo'] ?? 990)) . " + IVA).\n\n" : '')
+        . ($mis ? "• Paghi con carta, PayPal o addebito bancario.\n" : "• Paghi con carta, PayPal (tocca «Mostra di più»), Klarna «paga in 30 giorni» o bonifico SEPA.\n")
         . "• Hai Partita IVA? Inseriscila nel pagamento: l'IVA viene azzerata.\n"
         . "• Controlliamo ogni attività prima di pubblicarla; se non la approviamo, ti restituiamo l'importo.\n\n"
         . "Se hai avuto un problema col pagamento, rispondi a questa e-mail e ti aiutiamo.\n\n"

@@ -429,14 +429,19 @@ $('#vai-pagare').onclick = async () => {
       idPedido = j.id;
     }
     const p = piano(), link = cfg.checkout?.[p.id]?.[d.prodotto], linkMisura = d.su_misura ? cfg.su_misura?.checkout : '';
-    const conCodice = l => { const u = new URL(l); u.searchParams.set('sck', idPedido); u.searchParams.set('email', d.email); u.searchParams.set('name', d.nome); return u.href; };
+    const conCodice = l => {
+      const u = new URL(l); u.searchParams.set('sck', idPedido); u.searchParams.set('email', d.email); u.searchParams.set('name', d.nome);
+      // su misura: a página personalizada da Hotmart (checkoutMode=10) é a única que mostra o order bump «Negozio su misura»
+      if (d.su_misura) u.searchParams.set('checkoutMode', '10');
+      return u.href;
+    };
     if (link && (!d.su_misura || linkMisura)) {
       $('#p3').innerHTML = `
         <h2>Ultimo passo: il pagamento</h2>
-        <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: carta, <b>PayPal</b> (tocca «Mostra di più»), <b>Klarna «paga in 30 giorni»</b> o bonifico SEPA. I tuoi dati di pagamento non passano da noi.</p>
+        <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: ${d.su_misura ? 'carta, <b>PayPal</b> o addebito bancario' : 'carta, <b>PayPal</b> (tocca «Mostra di più»), <b>Klarna «paga in 30 giorni»</b> o bonifico SEPA'}. I tuoi dati di pagamento non passano da noi.</p>
         <p>🧾 <b>Hai Partita IVA?</b> Inseriscila nel pagamento: l’IVA viene azzerata (verifica VIES).</p>
         ${d.su_misura
-          ? `<p>🎨 <b>Un solo pagamento:</b> nella pagina di pagamento <b>spunta la casella «Negozio su misura» (+${euro(cfg.su_misura.prezzo)})</b> prima di «Acquista ora».</p>`
+          ? `<p>🎨 <b>Un solo pagamento:</b> nella pagina di pagamento, sotto «Acquista insieme», tocca <b>«Aggiungi all'acquisto»</b> su «Negozio su misura» (+${euro(cfg.su_misura.prezzo)} + IVA) prima di «Acquista ora».</p>`
           : ''}
         <a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>
         <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
