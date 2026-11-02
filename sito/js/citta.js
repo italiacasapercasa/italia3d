@@ -95,6 +95,10 @@ function geometriaBorda() {
   return g;
 }
 
+// largura do barranco para uma queda d (km): rampa de ~25°, no máximo 900 m
+const larguraScarpata = d => Math.min(0.9, Math.max(0, d) * 2.2);
+const SCARPATA_MIN = 0.015;   // queda abaixo disso (≈5 m reais): sem barranco, a borda baixa basta
+
 // InstancedMesh que cresce sob demanda
 class Camada {
   constructor(grupo, geo, mat, nome) { this.grupo = grupo; this.geo = geo; this.mat = mat; this.nome = nome; this.cap = 0; this.mesh = null; this.n = 0; this.buf = null; }
@@ -143,6 +147,7 @@ export class Citta {
     const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
     const brilho = new THREE.MeshBasicMaterial({ vertexColors: true });
     this.mat = mat;
+    this.matScarpata = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
     const add = (nome, geo, m = mat) => new Camada(this.grupo, geo, m, nome);
     this.camadas = {
       cela: add('cela', geometriaCela(false)),
@@ -242,7 +247,8 @@ export class Citta {
       hmax = Math.max(hmax, h); hmin = Math.min(hmin, h);
     }
     const hc = hmax + 0.004;
-    c = { hc, raio, partes: {}, casas: [], alvos: [], extras: null };
+    const bordi = [];
+    c = { hc, raio, partes: {}, casas: [], alvos: [], extras: null, bordi };
     const push = (k, el) => { (c.partes[k] ??= []).push(...el); };
     const usados = new Set();
     for (let r = 0; r <= ultimo; r++) usados.add(ORDEM[r].join(','));
@@ -255,10 +261,12 @@ export class Citta {
         const lm = matriz(cx + sx * ((QW - RUA) / 2 + CALCADA / 2), hc + 0.0005, cz + sz * ((QH - RUA) / 2 + CALCADA / 2), a, LOTE);
         push('lampione', lm); push('lampLuce', lm);
       }
-      if (!usados.has(`${i},${j + 1}`)) push('borda', matriz(cx, hc, cz + QH / 2, 0, QW, prof, 1));
-      if (!usados.has(`${i},${j - 1}`)) push('borda', matriz(cx, hc, cz - QH / 2, Math.PI, QW, prof, 1));
-      if (!usados.has(`${i + 1},${j}`)) push('borda', matriz(cx + QW / 2, hc, cz, Math.PI / 2, QH, prof, 1));
-      if (!usados.has(`${i - 1},${j}`)) push('borda', matriz(cx - QW / 2, hc, cz, -Math.PI / 2, QH, prof, 1));
+      // bordas do platô: parede vertical + a lista para o barranco (com as pontas que são canto para fora)
+      const livre = (a, b) => !usados.has(`${a},${b}`);
+      if (livre(i, j + 1)) { push('borda', matriz(cx, hc, cz + QH / 2, 0, QW, prof, 1)); bordi.push([cx - QW / 2, cz + QH / 2, cx + QW / 2, cz + QH / 2, 0, 1, livre(i - 1, j), livre(i + 1, j)]); }
+      if (livre(i, j - 1)) { push('borda', matriz(cx, hc, cz - QH / 2, Math.PI, QW, prof, 1)); bordi.push([cx - QW / 2, cz - QH / 2, cx + QW / 2, cz - QH / 2, 0, -1, livre(i - 1, j), livre(i + 1, j)]); }
+      if (livre(i + 1, j)) { push('borda', matriz(cx + QW / 2, hc, cz, Math.PI / 2, QH, prof, 1)); bordi.push([cx + QW / 2, cz - QH / 2, cx + QW / 2, cz + QH / 2, 1, 0, livre(i, j - 1), livre(i, j + 1)]); }
+      if (livre(i - 1, j)) { push('borda', matriz(cx - QW / 2, hc, cz, -Math.PI / 2, QH, prof, 1)); bordi.push([cx - QW / 2, cz - QH / 2, cx - QW / 2, cz + QH / 2, -1, 0, livre(i, j - 1), livre(i, j + 1)]); }
       const esp = (t) => push(t, matriz(cx, hc + 0.001, cz, 0, LOTE));
       if (p === 'piazza') {
         esp(l.case >= sogliaDi('fontana') ? 'fontana' : 'piazza'); push('bandiera', matriz(cx + 1.45 * LOTE, hc + 0.001, cz + 0.55 * LOTE, 0, LOTE));
@@ -310,26 +318,68 @@ export class Citta {
       c.alvos.push({ tipo: 'commercio', x, z, y: hc, h: cm.prodotto === 'cartellone' ? 0.95 : 0.66, r: 0.5, commercio: cm, rot: q.rot });
     }
     for (const k of Object.keys(c.partes)) c.partes[k] = new Float32Array(c.partes[k]);
-    c.alberi = this.alberiCidade(l, usados);
+    c.alberi = this.alberiCidade(l, usados, hc);
     this.cache.set(l.id, c);
     return c;
   }
 
+  // barranco em volta do platô: em encosta o chão da cidade fica na altura do ponto mais alto e, do lado de baixo,
+  // a parede vertical virava um paredão (litoral da Ligúria, Costiera, vales dos Alpes); a rampa desce até o terreno
+  scarpataCidade(l) {
+    const c = this.dadosCidade(l);
+    if (c.scarpata !== undefined) return c.scarpata;
+    const mp = this.mappa, hc = c.hc, N = 6, pos = [], cor = [];
+    const topo = new THREE.Color('#7FB55C'), basso = new THREE.Color('#5F8F45');
+    let fundo = 0;
+    for (const [x0, z0, x1, z1, nx, nz, abreIni, abreFim] of c.bordi) {
+      const tx = x1 - x0, tz = z1 - z0, L = Math.hypot(tx, tz), ux = tx / L, uz = tz / L, P = [];
+      for (let k = 0; k <= N; k++) {
+        const px = x0 + tx * k / N, pz = z0 + tz * k / N, d = Math.max(0, hc - mp.altura(px, pz)), w = larguraScarpata(d);
+        // pontas em leque só nos cantos para fora: cobrem o vão entre as rampas de duas bordas
+        const lado = k === 0 && abreIni ? -1 : k === N && abreFim ? 1 : 0;
+        const ox = px + (nx + ux * lado) * w, oz = pz + (nz + uz * lado) * w;
+        P.push([px, hc, pz, ox, mp.altura(ox, oz) - 0.002, oz]);
+        fundo = Math.max(fundo, d);
+      }
+      for (let k = 0; k < N; k++) {
+        const a = P[k], b = P[k + 1];
+        for (const [v, cima] of [[a, 1], [a, 0], [b, 1], [b, 1], [a, 0], [b, 0]]) {
+          pos.push(...(cima ? v.slice(0, 3) : v.slice(3)));
+          const t = cima ? topo : basso; cor.push(t.r, t.g, t.b);
+        }
+      }
+    }
+    if (fundo < SCARPATA_MIN) return (c.scarpata = null);   // cidade plana: só a borda baixa de sempre
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pos), 3));
+    g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(cor), 3));
+    g.computeVertexNormals();
+    return (c.scarpata = new THREE.Mesh(g, this.matScarpata));
+  }
+
   // bosque em volta da cidade: começa colado nas quadras (inclusive nos cantos entre elas) e rareia para fora;
   // fora do mar e sempre igual para a mesma cidade
-  alberiCidade(l, usados) {
+  alberiCidade(l, usados, hc) {
     const mp = this.mappa, rnd = casuale(hash(l.comune.istat)), mix = MIX[zonaDi(l.regione.cod)];
     let rCity = 0;
     for (const k of usados) { const [i, j] = k.split(',').map(Number); rCity = Math.max(rCity, Math.hypot((Math.abs(i) + 0.5) * QW, (Math.abs(j) + 0.5) * QH)); }
     const tipos = Object.entries(mix), rOut = rCity + 0.3 + rCity * 0.25, out = {};
+    const quadre = [...usados].map(k => k.split(',').map(Number));
     const N = Math.round(Math.min(3200, Math.PI * rOut * rOut * 650));   // tentativas (~650 por km², antes de rarear)
     for (let k = 0; k < N; k++) {
       const a = rnd() * Math.PI * 2, r = rOut * Math.sqrt(rnd());
       const x = l.x + Math.cos(a) * r, z = l.z + Math.sin(a) * r;
       if (usados.has(`${Math.round((x - l.x) / QW)},${Math.round((z - l.z) / QH)}`)) continue;   // dentro da cidade
       if (rnd() > Math.exp(-Math.max(0, r - rCity * 0.8) / 0.22)) continue;                       // rareia longe das casas
-      const h = mp.altura(x, z);
+      let h = mp.altura(x, z);
       if (h < 0.002) continue;                       // mar
+      // no barranco (cidade em encosta): a árvore fica em cima da rampa, não enterrada nela
+      if (hc - h > SCARPATA_MIN) {
+        const w = larguraScarpata(hc - h);
+        let fora = Infinity;
+        for (const [i, j] of quadre) fora = Math.min(fora, Math.hypot(Math.max(0, Math.abs(x - l.x - i * QW) - QW / 2), Math.max(0, Math.abs(z - l.z - j * QH) - QH / 2)));
+        if (fora < w) h = Math.max(h, hc - (hc - h) * fora / w);
+      }
       let u = rnd(), tipo = tipos[0][0];
       for (const [t, p] of tipos) { if (u < p) { tipo = t; break; } u -= p; }
       (out[tipo] ??= []).push(...matriz(x, h, z, rnd() * 6.28, LOTE * (0.85 + rnd() * 0.6)));
@@ -397,6 +447,8 @@ export class Citta {
       for (const ci of c.casas) { const casa = this.D.casas[ci]; if (casa.fiamme > agora) this.chamas.push(casa); }
       const ex = this.extrasCidade(l);
       if (ex) this.extras.add(ex);
+      const sc = this.scarpataCidade(l);
+      if (sc) this.extras.add(sc);
     }
     for (const c of Object.values(this.camadas)) c.finalizar();
   }
