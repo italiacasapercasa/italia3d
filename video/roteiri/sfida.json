@@ -1,0 +1,582 @@
+{
+ "nome": "sfida",
+ "durata": 21.3,
+ "a": {
+  "nome": "Napoli",
+  "ic": "🌋"
+ },
+ "b": {
+  "nome": "Torino",
+  "ic": "🐂"
+ },
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "NAPOLI",
+      0,
+      true
+     ],
+     [
+      "STA",
+      0
+     ]
+    ],
+    [
+     [
+      "DISTRUGGENDO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TORINO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      0
+     ],
+     [
+      "IL",
+      0
+     ],
+     [
+      "DERBY",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DELLA",
+      0
+     ]
+    ],
+    [
+     [
+      "SETTIMANA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "NAPOLI",
+      0,
+      true
+     ],
+     [
+      "HA",
+      0
+     ]
+    ],
+    [
+     [
+      "QUASI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "DOPPIO",
+      0,
+      true
+     ],
+     [
+      "DEI",
+      0
+     ]
+    ],
+    [
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TORINESI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOVE",
+      0
+     ],
+     [
+      "SIETE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "COMMENTO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      0
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PORTA",
+      0
+     ],
+     [
+      "PUNTI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLA",
+      0
+     ],
+     [
+      "TUA",
+      0
+     ],
+     [
+      "CITTÀ",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      0,
+      true
+     ],
+     [
+      "ALLE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "21",
+      0,
+      true
+     ],
+     [
+      "SI",
+      0
+     ],
+     [
+      "CHIUDE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SE",
+      0
+     ],
+     [
+      "SEI",
+      0
+     ],
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "NAPOLI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "O",
+      0
+     ],
+     [
+      "DI",
+      0
+     ],
+     [
+      "TORINO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVILO",
+      0,
+      true
+     ],
+     [
+      "QUI",
+      0
+     ]
+    ],
+    [
+     [
+      "SOTTO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "TAGGA",
+      0,
+      true
+     ],
+     [
+      "UN",
+      0
+     ]
+    ],
+    [
+     [
+      "AMICO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TORINESE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      0
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Napoli sta distruggendo Torino.",
+  "È il derby della settimana…",
+  "e Napoli ha quasi il doppio dei punti.",
+  "Torinesi…",
+  "dove siete?",
+  "Ogni commento con la tua città porta punti alla tua città.",
+  "Domenica alle ventuno si chiude.",
+  "Se sei di Napoli o di Torino, scrivilo qui sotto…",
+  "e tagga un amico torinese.",
+  "Perché…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  3,
+  4,
+  5,
+  5,
+  5,
+  5,
+  6,
+  6,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.distruggendo": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.torino0": [
+   0,
+   3,
+   -0.05
+  ],
+  "eventi.e1": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.derby": [
+   1,
+   2,
+   -0.05
+  ],
+  "eventi.settimana": [
+   1,
+   4,
+   -0.05
+  ],
+  "eventi.e2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.napoli2": [
+   2,
+   1,
+   -0.05
+  ],
+  "eventi.quasi": [
+   2,
+   3,
+   -0.05
+  ],
+  "eventi.doppio": [
+   2,
+   5,
+   -0.05
+  ],
+  "eventi.punti2": [
+   2,
+   7,
+   -0.05
+  ],
+  "eventi.torinesi": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.dove": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.siete": [
+   4,
+   1,
+   -0.05
+  ],
+  "eventi.ogni": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.commento": [
+   5,
+   1,
+   -0.05
+  ],
+  "eventi.citta5": [
+   5,
+   4,
+   -0.05
+  ],
+  "eventi.porta": [
+   5,
+   5,
+   -0.05
+  ],
+  "eventi.punti5": [
+   5,
+   6,
+   -0.05
+  ],
+  "eventi.citta5b": [
+   5,
+   9,
+   -0.05
+  ],
+  "eventi.domenica": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   6,
+   2,
+   -0.05
+  ],
+  "eventi.chiude": [
+   6,
+   4,
+   -0.05
+  ],
+  "eventi.se": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.napoli7": [
+   7,
+   3,
+   -0.05
+  ],
+  "eventi.torino7": [
+   7,
+   6,
+   -0.05
+  ],
+  "eventi.scrivilo": [
+   7,
+   7,
+   -0.05
+  ],
+  "eventi.sotto": [
+   7,
+   9,
+   -0.05
+  ],
+  "eventi.e8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.tagga": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.amico": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.torinese": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.perche": [
+   9,
+   0,
+   -0.05
+  ]
+ }
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel sfida · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --na: #0E8BD0; --to: #7A1E2E; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(10, 20, 60, .6) 100%); }
+  #tinta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(14, 139, 208, .55) 0 50%, rgba(122, 30, 46, .6) 50% 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .az { color: #6FD3FF; }
+  .forte .gr { color: #FF8FA3; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  /* placar do derby */
+  #tab { position: absolute; left: 50px; right: 50px; top: 150px; transform-origin: 50% 0; }
+  #tab .tit { text-align: center; font-size: 50px; margin-bottom: 14px; -webkit-text-stroke-width: 11px; }
+  #tab .lati { display: flex; border: 7px solid var(--ink); border-radius: 40px; overflow: hidden; box-shadow: 0 12px 0 rgba(21,32,51,.3); }
+  #tab .lato { flex: 1; text-align: center; padding: 18px 0 14px; color: #fff; }
+  #tab .a { background: var(--na); }
+  #tab .b { background: var(--to); }
+  #tab small { display: block; font-size: 52px; font-weight: 900; line-height: 1; }
+  #tab .n { display: block; font-size: 160px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; -webkit-text-stroke: 14px var(--ink); paint-order: stroke fill; }
+  #tab .vs { position: absolute; left: 50%; top: 160px; width: 140px; height: 140px; margin-left: -70px; border-radius: 50%; background: var(--giallo); border: 7px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 66px; }
+  #tab .barra { margin-top: 22px; height: 54px; border: 6px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--to); box-shadow: 0 8px 0 rgba(21,32,51,.3); }
+  #tab .barra i { display: block; height: 100%; background: var(--na); border-right: 6px solid var(--ink); }
+  #tab .gap { margin: 22px auto 0; width: max-content; background: var(--rosso); color: #fff; font-size: 54px; font-weight: 900; border: 6px solid var(--ink); border-radius: 999px; padding: 4px 34px; box-shadow: 0 8px 0 rgba(21,32,51,.3); }
+  /* cidade */
+  #clab { position: absolute; left: 0; right: 0; top: 230px; text-align: center; opacity: 0; }
+  #clab .nm { font-size: 110px; -webkit-text-stroke-width: 20px; }
+  #clab .n { font-size: 230px; line-height: .95; -webkit-text-stroke-width: 34px; font-variant-numeric: tabular-nums; }
+  #clab .u { font-size: 66px; -webkit-text-stroke-width: 13px; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.02; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { border: 5px solid var(--ink); border-radius: 22px; padding: 8px 24px 10px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; font-size: 44px; font-weight: 900; color: #fff; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  /* comentários */
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  .riquadro h2 { margin: 0 0 6px; font-size: 44px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; }
+  #feed { top: 560px; }
+  #feed .riga { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 3px dashed #E1E4EA; opacity: 0; }
+  #feed .av { width: 70px; height: 70px; border-radius: 50%; flex: none; border: 4px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 38px; }
+  #feed .tx { flex: 1; min-width: 0; font-size: 38px; font-weight: 800; color: var(--ink); line-height: 1.15; }
+  #feed .pt { flex: none; font-size: 36px; font-weight: 900; color: #fff; border: 4px solid var(--ink); border-radius: 18px; padding: 4px 14px; }
+  #calendario { position: absolute; left: 0; right: 0; top: 330px; text-align: center; opacity: 0; }
+  #calendario .cal { display: inline-block; width: 520px; background: #fff; border: 8px solid var(--ink); border-radius: 40px; overflow: hidden; box-shadow: 0 14px 0 rgba(21,32,51,.3); -webkit-text-stroke: 0; }
+  #calendario .cal .top { background: var(--rosso); color: #fff; font-size: 56px; font-weight: 900; padding: 10px 0; }
+  #calendario .cal .gg { font-size: 230px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  #calendario .cal .mm { font-size: 50px; font-weight: 900; color: var(--ink); padding-bottom: 16px; }
+  #calendario .ora { font-size: 92px; -webkit-text-stroke-width: 17px; margin-top: 26px; }
+  #vs-a, #vs-b { position: absolute; top: 300px; width: 540px; text-align: center; font-size: 76px; letter-spacing: 0; -webkit-text-stroke-width: 15px; opacity: 0; line-height: 1.05; white-space: nowrap; }
+  #vs-a { left: 0; } #vs-b { right: 0; }
+  #vs-a i, #vs-b i { display: block; font-style: normal; font-size: 150px; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 330px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 88px; -webkit-text-stroke-width: 17px; }
+  #cta .b { font-size: 80px; -webkit-text-stroke-width: 16px; margin-top: 30px; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="tinta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="tab"><div class="tit forte">⚔️ DERBY DELLA <span class="g">SETTIMANA</span></div><div class="lati"><div class="lato a"><small>🌋 NAPOLI</small><b class="n"></b></div><div class="lato b"><small>🐂 TORINO</small><b class="n"></b></div></div><div class="vs">⚔️</div><div class="barra"><i></i></div><div class="gap"></div></div>
+<div id="clab" class="forte"><div class="nm"></div><div class="n g"></div><div class="u">PUNTI QUESTA SETTIMANA</div></div>
+<div id="stamp-doppio" class="stamp forte" style="top:820px;font-size:130px;-webkit-text-stroke-width:24px">QUASI IL <span class="g">DOPPIO</span> 😳</div>
+<div id="stamp-dove" class="stamp forte" style="top:760px;font-size:150px;-webkit-text-stroke-width:28px">DOVE <span class="g">SIETE?</span> 👀</div>
+<div id="feed" class="riquadro"><h2>💬 OGNI COMMENTO = PUNTI ALLA TUA CITTÀ</h2>
+  <div class="riga"><div class="av" style="background:var(--to)">🐂</div><div class="tx">Torino!! Non molliamo</div><div class="pt" style="background:var(--to)">+ PUNTI</div></div>
+  <div class="riga"><div class="av" style="background:var(--na)">🌋</div><div class="tx">Napoli 💙 sempre</div><div class="pt" style="background:var(--na)">+ PUNTI</div></div>
+  <div class="riga"><div class="av" style="background:var(--to)">🐂</div><div class="tx">Torino, Piemonte</div><div class="pt" style="background:var(--to)">+ PUNTI</div></div>
+</div>
+<div id="calendario" class="forte"><div class="cal"><div class="top">DOMENICA</div><div class="gg">8</div><div class="mm">NOVEMBRE</div></div><div class="ora">⏰ SI CHIUDE ALLE <span class="g">21:00</span></div></div>
+<div id="vs-a" class="forte az"><i>🌋</i>NAPOLETANI</div>
+<div id="vs-b" class="forte gr"><i>🐂</i>TORINESI</div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA<br><span class="g">TUA CITTÀ</span> 👇</div><div class="b">🏷️ TAGGA UN AMICO<br><span class="g">TORINESE</span> 👀</div></div>
+<div id="coriandoli"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">💬 Commenta la tua città → ricevi una casa 3D</div>
+<script type="module" src="video/sfida.js"></script>
+</body>
+</html>
