@@ -44,7 +44,8 @@ function sembraReale(array $p): bool {
     if (preg_match('/(esempio|example|test|prova|mailinator|yopmail)/', $dominio)) return false;
     if (preg_match('/^(com|net|org|it|co|eu)\./', $dominio)) return false;     // "barbiere@com.it": domínio inventado
     if (preg_match('/(scuol|collegio|istitut|liceo|\.edu|^iis|^itis|^ipsia)/', $dominio)) return false;
-    if (preg_match('/^(nome|test|prova|calcio|giovanni|mario|esempio|example|asd|aaa|ciao|boh)\d*$/', $local)) return false;
+    // só o primeiro nome (giuseppe@gmail.com): o endereço quase sempre é de outra pessoa
+    if (preg_match('/^(nome|test|prova|calcio|esempio|example|asd|aaa|ciao|boh|giovanni|mario|giuseppe|francesco|antonio|marco|luca|andrea|paolo|alessandro|roberto|stefano|lorenzo|matteo|davide|simone|federico|riccardo|daniele|fabio|luigi|salvatore|vincenzo|pietro|carlo|franco|domenico|michele|gabriele|enrico|massimo|angelo|sergio|claudio|maria|anna|giulia|francesca|chiara|sara|laura|valentina|elena|alessandra|martina|giorgia|federica|silvia|paola|roberta)\d*$/', $local)) return false;
     if (preg_match('/(200[5-9]|201\d|0909|1010|1111|1212)/', $local) || preg_match('/\D(0[89]|1[0-6])$/', $local)) return false;   // ano/idade de criança
     if (mb_strlen($nome) < 3 || preg_match('/(.)\1{2,}/iu', $nome)) return false;   // "Us", "Bhoooo", "Ghhhjkjf"
     if (!preg_match('/[aeiouàèéìòù]/iu', $nome)) return false;
