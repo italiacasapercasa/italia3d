@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel eletto · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --blu: #3FA9F5; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(10, 15, 50, .6) 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  .forte .ro { color: #FF5A4E; }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  #titolo { position: absolute; left: 20px; right: 20px; top: 150px; text-align: center; opacity: 0; transform-origin: 50% 0; }
+  #titolo .t1 { font-size: 100px; -webkit-text-stroke-width: 19px; line-height: 1.02; }
+  #titolo .t2 { font-size: 66px; -webkit-text-stroke-width: 13px; margin-top: 6px; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.02; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: #fff; border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.oro { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .box .n { display: block; font-size: 58px; font-weight: 900; color: var(--ink); line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .cartello .box em { display: block; font-style: normal; font-size: 38px; font-weight: 900; color: var(--rosso); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  /* busca */
+  #cerca { top: 360px; padding: 18px; }
+  #cerca .barra { display: flex; align-items: center; gap: 14px; border: 5px solid var(--ink); border-radius: 999px; padding: 10px 14px 10px 26px; font-size: 44px; font-weight: 800; color: var(--ink); }
+  #cerca .barra .tx { flex: 1; min-height: 56px; }
+  #cerca .barra .bt { background: var(--giallo); border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; font-size: 38px; font-weight: 900; }
+  #cerca .ris { margin-top: 18px; border-top: 3px dashed #E1E4EA; padding-top: 16px; text-align: center; opacity: 0; }
+  #cerca .ris b { display: block; font-size: 40px; font-weight: 900; color: #5B6475; text-transform: uppercase; }
+  #cerca .ris span { display: block; font-size: 56px; font-weight: 900; color: var(--ink); }
+  /* nova semana e calendário */
+  #reset { position: absolute; left: 0; right: 0; top: 300px; text-align: center; opacity: 0; }
+  #reset .n { font-size: 260px; -webkit-text-stroke-width: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #reset .t { font-size: 66px; -webkit-text-stroke-width: 13px; margin-top: 10px; }
+  #reset .lead { display: inline-block; margin-top: 24px; background: #fff; color: var(--ink); border: 6px solid var(--ink); border-radius: 26px; padding: 10px 28px; font-size: 42px; font-weight: 900; -webkit-text-stroke: 0; text-transform: none; }
+  #calendario { position: absolute; left: 0; right: 0; top: 330px; text-align: center; opacity: 0; }
+  #calendario .cal { display: inline-block; width: 520px; background: #fff; border: 8px solid var(--ink); border-radius: 40px; overflow: hidden; box-shadow: 0 14px 0 rgba(21,32,51,.3); -webkit-text-stroke: 0; }
+  #calendario .cal .top { background: var(--rosso); color: #fff; font-size: 56px; font-weight: 900; padding: 10px 0; }
+  #calendario .cal .gg { font-size: 230px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  #calendario .cal .mm { font-size: 50px; font-weight: 900; color: var(--ink); padding-bottom: 16px; }
+  #calendario .ora { font-size: 92px; -webkit-text-stroke-width: 17px; margin-top: 26px; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 380px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 84px; -webkit-text-stroke-width: 16px; }
+  #cta .b { font-size: 80px; -webkit-text-stroke-width: 16px; margin-top: 24px; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="titolo" class="forte"><div class="t1"></div><div class="t2 g"></div></div>
+<div id="stamp-uff" class="stamp forte" style="top:170px;font-size:130px;-webkit-text-stroke-width:24px">È <span class="g">UFFICIALE!</span></div>
+<div id="stamp-sind" class="stamp forte" style="top:240px;font-size:84px;-webkit-text-stroke-width:16px">🏛️ SINDACO<br><span class="g">DI BRESCIA</span></div>
+<div id="cerca" class="riquadro"><div class="barra"><div class="tx"></div><div class="bt">cerca</div></div><div class="ris"><b></b><span></span></div></div>
+<div id="reset" class="forte"><div class="n g"></div><div class="t">🔄 NUOVA <span class="g">SETTIMANA</span></div><div class="lead"></div></div>
+<div id="calendario" class="forte"><div class="cal"><div class="top">DOMENICA</div><div class="gg">8</div><div class="mm">NOVEMBRE</div></div><div class="ora">⏰ ORE <span class="g">21:00</span></div></div>
+<div id="cta" class="forte"><div class="a1">📍 SCRIVI LA<br><span class="g">TUA CITTÀ</span> 👇</div><div class="b">IL PROSSIMO<br><span class="g">PRESIDENTE</span><br>PUOI ESSERE TU</div></div>
+<div id="coriandoli"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">💬 Commenta la tua città → ricevi una casa 3D</div>
+<script type="module" src="video/eletto.js"></script>
+</body>
+</html>

@@ -1,0 +1,1295 @@
+{
+ "nome": "eletto",
+ "durata": 47.2,
+ "presidente": "_andreacirelli_",
+ "secondo": "simone_fantoni__",
+ "sindaci": [
+  [
+   "Roma",
+   "jacopo21530"
+  ],
+  [
+   "Napoli",
+   "eddy_napolitano"
+  ],
+  [
+   "Milano",
+   "leone.cattabeni"
+  ]
+ ],
+ "fascia_esempio": "mattia.marcato",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "È",
+      0.113
+     ],
+     [
+      "UFFICIALE",
+      0.347,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.113,
+   "fim": 1.072
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      1.102
+     ],
+     [
+      "PRIMO",
+      1.336
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      1.744,
+      true
+     ]
+    ]
+   ],
+   "ini": 1.102,
+   "fim": 2.469
+  },
+  {
+   "linee": [
+    [
+     [
+      "D'ITALIA",
+      2.499
+     ],
+     [
+      "È",
+      3.08
+     ]
+    ],
+    [
+     [
+      "ANDREA",
+      3.314,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.499,
+   "fim": 3.692
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      3.722
+     ],
+     [
+      "AZZANO",
+      3.956
+     ]
+    ],
+    [
+     [
+      "MELLA",
+      4.537
+     ]
+    ]
+   ],
+   "ini": 3.722,
+   "fim": 5.28
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      5.31
+     ],
+     [
+      "DI",
+      5.54
+     ],
+     [
+      "6.700",
+      5.77,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.31,
+   "fim": 6.992
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      7.022
+     ]
+    ]
+   ],
+   "ini": 7.022,
+   "fim": 7.925
+  },
+  {
+   "linee": [
+    [
+     [
+      "SIMONE",
+      7.955,
+      true
+     ],
+     [
+      "HA",
+      8.48
+     ]
+    ],
+    [
+     [
+      "PERSO",
+      8.692
+     ]
+    ]
+   ],
+   "ini": 7.955,
+   "fim": 9.031
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      9.061
+     ],
+     [
+      "MENO",
+      9.272
+     ],
+     [
+      "DI",
+      9.641
+     ]
+    ],
+    [
+     [
+      "1.000",
+      9.853,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.061,
+   "fim": 10.191
+  },
+  {
+   "linee": [
+    [
+     [
+      "PUNTI",
+      10.221
+     ]
+    ]
+   ],
+   "ini": 10.221,
+   "fim": 11.031
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      11.061
+     ],
+     [
+      "DIVENTA",
+      11.276
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      11.807,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.061,
+   "fim": 12.309
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      12.339
+     ],
+     [
+      "BRESCIA",
+      12.554,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.339,
+   "fim": 13.378
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      13.408
+     ],
+     [
+      "STANOTTE",
+      13.612
+     ]
+    ],
+    [
+     [
+      "SONO",
+      14.117
+     ]
+    ]
+   ],
+   "ini": 13.408,
+   "fim": 14.441
+  },
+  {
+   "linee": [
+    [
+     [
+      "STATI",
+      14.471
+     ],
+     [
+      "ELETTI",
+      14.825
+     ]
+    ]
+   ],
+   "ini": 14.471,
+   "fim": 15.3
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUASI",
+      15.33
+     ],
+     [
+      "5.000",
+      15.685,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.33,
+   "fim": 16.311
+  },
+  {
+   "linee": [
+    [
+     [
+      "SINDACI",
+      16.341,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.341,
+   "fim": 17.195
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      17.225
+     ],
+     [
+      "ROMA",
+      17.48
+     ],
+     [
+      "JACOPO",
+      17.924,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.225,
+   "fim": 18.527
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      18.557
+     ],
+     [
+      "NAPOLI",
+      18.812
+     ],
+     [
+      "EDDY",
+      19.445,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.557,
+   "fim": 19.859
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      19.889
+     ],
+     [
+      "MILANO",
+      20.144
+     ],
+     [
+      "LEONE",
+      20.777,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.889,
+   "fim": 21.662
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      21.692
+     ],
+     [
+      "OGGI",
+      21.881
+     ],
+     [
+      "OGNI",
+      22.21
+     ]
+    ]
+   ],
+   "ini": 21.692,
+   "fim": 22.509
+  },
+  {
+   "linee": [
+    [
+     [
+      "SINDACO",
+      22.539,
+      true
+     ],
+     [
+      "HA",
+      23.008
+     ],
+     [
+      "LA",
+      23.197
+     ]
+    ],
+    [
+     [
+      "FASCIA",
+      23.386,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.539,
+   "fim": 23.685
+  },
+  {
+   "linee": [
+    [
+     [
+      "TRICOLORE",
+      23.715,
+      true
+     ]
+    ],
+    [
+     [
+      "SULLA",
+      24.324
+     ]
+    ]
+   ],
+   "ini": 23.715,
+   "fim": 24.623
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUA",
+      24.653
+     ],
+     [
+      "CASA",
+      24.843
+     ]
+    ]
+   ],
+   "ini": 24.653,
+   "fim": 25.553
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      25.583
+     ],
+     [
+      "IL",
+      25.782
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      25.981,
+      true
+     ]
+    ]
+   ],
+   "ini": 25.583,
+   "fim": 26.591
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      26.621
+     ],
+     [
+      "CUPOLA",
+      26.967,
+      true
+     ]
+    ],
+    [
+     [
+      "D'ORO",
+      27.46,
+      true
+     ]
+    ]
+   ],
+   "ini": 26.621,
+   "fim": 27.776
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      27.806
+     ],
+     [
+      "FASCI",
+      28.005
+     ],
+     [
+      "DI",
+      28.351
+     ]
+    ],
+    [
+     [
+      "LUCE",
+      28.55,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.806,
+   "fim": 28.866
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEL",
+      28.896
+     ],
+     [
+      "CIELO",
+      29.094
+     ]
+    ]
+   ],
+   "ini": 28.896,
+   "fim": 29.953
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      29.983
+     ],
+     [
+      "NELLA",
+      30.184
+     ],
+     [
+      "TUA",
+      30.533
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      30.733,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.983,
+   "fim": 31.052
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      31.082
+     ],
+     [
+      "È",
+      31.283
+     ],
+     [
+      "IL",
+      31.483
+     ]
+    ],
+    [
+     [
+      "SINDACO",
+      31.683,
+      true
+     ]
+    ]
+   ],
+   "ini": 31.082,
+   "fim": 32.151
+  },
+  {
+   "linee": [
+    [
+     [
+      "CERCALO",
+      32.181
+     ],
+     [
+      "SULLA",
+      32.678
+     ]
+    ]
+   ],
+   "ini": 32.181,
+   "fim": 32.997
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      33.027,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.027,
+   "fim": 33.769
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      33.799
+     ],
+     [
+      "ATTENZIONE",
+      34.012
+     ]
+    ]
+   ],
+   "ini": 33.799,
+   "fim": 34.67
+  },
+  {
+   "linee": [
+    [
+     [
+      "È",
+      34.7
+     ],
+     [
+      "GIÀ",
+      34.914
+     ],
+     [
+      "INIZIATA",
+      35.128
+     ]
+    ]
+   ],
+   "ini": 34.7,
+   "fim": 35.786
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      35.816
+     ],
+     [
+      "NUOVA",
+      36.187
+     ]
+    ],
+    [
+     [
+      "SETTIMANA",
+      36.559
+     ]
+    ]
+   ],
+   "ini": 35.816,
+   "fim": 37.217
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      37.247
+     ],
+     [
+      "TUTTI",
+      37.461
+     ]
+    ],
+    [
+     [
+      "RIPARTONO",
+      37.833
+     ]
+    ]
+   ],
+   "ini": 37.247,
+   "fim": 38.491
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      38.521
+     ],
+     [
+      "ZERO",
+      38.734,
+      true
+     ]
+    ]
+   ],
+   "ini": 38.521,
+   "fim": 39.615
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      39.645,
+      true
+     ]
+    ],
+    [
+     [
+      "PROSSIMA",
+      40.194
+     ]
+    ]
+   ],
+   "ini": 39.645,
+   "fim": 40.588
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE",
+      40.618
+     ],
+     [
+      "21",
+      40.915,
+      true
+     ],
+     [
+      "SI",
+      41.338
+     ]
+    ],
+    [
+     [
+      "VOTA",
+      41.508
+     ]
+    ]
+   ],
+   "ini": 40.618,
+   "fim": 41.775
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      41.805
+     ],
+     [
+      "NUOVO",
+      41.976
+     ]
+    ]
+   ],
+   "ini": 41.805,
+   "fim": 42.679
+  },
+  {
+   "linee": [
+    [
+     [
+      "SCRIVI",
+      42.709
+     ],
+     [
+      "LA",
+      43.086
+     ],
+     [
+      "TUA",
+      43.302
+     ]
+    ],
+    [
+     [
+      "CITTÀ",
+      43.518,
+      true
+     ]
+    ]
+   ],
+   "ini": 42.709,
+   "fim": 43.865
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUI",
+      43.895
+     ],
+     [
+      "SOTTO",
+      44.111
+     ]
+    ]
+   ],
+   "ini": 43.895,
+   "fim": 44.458
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      44.488
+     ],
+     [
+      "PROSSIMO",
+      44.704
+     ]
+    ]
+   ],
+   "ini": 44.488,
+   "fim": 45.211
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      45.241,
+      true
+     ]
+    ],
+    [
+     [
+      "PUOI",
+      45.939
+     ]
+    ]
+   ],
+   "ini": 45.241,
+   "fim": 46.125
+  },
+  {
+   "linee": [
+    [
+     [
+      "ESSERE",
+      46.155
+     ],
+     [
+      "TU",
+      46.692,
+      true
+     ]
+    ]
+   ],
+   "ini": 46.155,
+   "fim": 47.89
+  }
+ ],
+ "parlato": [
+  "È ufficiale: il primo Presidente d'Italia è Andrea, da Azzano Mella!",
+  "Più di seimilasettecento punti.",
+  "Simone ha perso per meno di mille punti…",
+  "ma diventa sindaco di Brescia.",
+  "E stanotte sono stati eletti quasi cinquemila sindaci.",
+  "A Roma Jacopo, a Napoli Eddy, a Milano Leone.",
+  "Da oggi ogni sindaco ha la fascia tricolore sulla sua casa…",
+  "e il Presidente una cupola d'oro, con fasci di luce nel cielo.",
+  "E nella tua città, chi è il sindaco? Cercalo sulla mappa.",
+  "Ma attenzione: è già iniziata una nuova settimana, e tutti ripartono da zero.",
+  "Domenica prossima alle ventuno si vota di nuovo.",
+  "Scrivi la tua città qui sotto… il prossimo presidente puoi essere tu."
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  2,
+  2,
+  2,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  5,
+  5,
+  5,
+  6,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  8,
+  8,
+  9,
+  9,
+  9,
+  9,
+  9,
+  10,
+  10,
+  10,
+  11,
+  11,
+  11,
+  11,
+  11
+ ],
+ "eventi": {
+  "inizio": 0.063,
+  "ufficiale": 0.297,
+  "presidente": 1.694,
+  "andrea": 3.264,
+  "azzano": 3.906,
+  "piu": 5.26,
+  "seimila": 5.72,
+  "punti1": 6.972,
+  "simone": 7.905,
+  "perso": 8.642,
+  "mille": 9.803,
+  "ma3": 11.011,
+  "diventa": 11.226,
+  "sindaco3": 11.757,
+  "brescia": 12.504,
+  "e4": 13.358,
+  "eletti": 14.775,
+  "cinquemila": 15.635,
+  "sindaci4": 16.291,
+  "roma": 17.38,
+  "jacopo": 17.874,
+  "napoli": 18.712,
+  "eddy": 19.395,
+  "milano": 20.044,
+  "leone": 20.727,
+  "daoggi": 21.642,
+  "fascia": 23.147,
+  "tricolore": 23.336,
+  "casa6": 24.603,
+  "e7": 25.533,
+  "cupola": 26.917,
+  "oro": 27.41,
+  "fasci": 27.955,
+  "cielo": 28.846,
+  "e8": 29.933,
+  "citta8": 31.032,
+  "sindaco8": 31.633,
+  "cercalo": 32.131,
+  "mappa8": 32.977,
+  "attenzione": 33.962,
+  "nuova": 35.766,
+  "settimana": 36.137,
+  "tutti": 37.197,
+  "zero": 38.471,
+  "domenica": 39.595,
+  "ventuno": 40.865,
+  "vota": 41.458,
+  "scrivi": 42.659,
+  "citta11": 43.468,
+  "prossimo": 44.438,
+  "tu": 46.642
+ },
+ "sincro": {
+  "eventi.inizio": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.ufficiale": [
+   0,
+   1,
+   -0.05
+  ],
+  "eventi.presidente": [
+   0,
+   4,
+   -0.05
+  ],
+  "eventi.andrea": [
+   0,
+   7,
+   -0.05
+  ],
+  "eventi.azzano": [
+   0,
+   9,
+   -0.05
+  ],
+  "eventi.piu": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.seimila": [
+   1,
+   2,
+   -0.05
+  ],
+  "eventi.punti1": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.simone": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.perso": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.mille": [
+   2,
+   6,
+   -0.05
+  ],
+  "eventi.ma3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.diventa": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.sindaco3": [
+   3,
+   2,
+   -0.05
+  ],
+  "eventi.brescia": [
+   3,
+   4,
+   -0.05
+  ],
+  "eventi.e4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.eletti": [
+   4,
+   4,
+   -0.05
+  ],
+  "eventi.cinquemila": [
+   4,
+   6,
+   -0.05
+  ],
+  "eventi.sindaci4": [
+   4,
+   7,
+   -0.05
+  ],
+  "eventi.roma": [
+   5,
+   1,
+   -0.1
+  ],
+  "eventi.jacopo": [
+   5,
+   2,
+   -0.05
+  ],
+  "eventi.napoli": [
+   5,
+   4,
+   -0.1
+  ],
+  "eventi.eddy": [
+   5,
+   5,
+   -0.05
+  ],
+  "eventi.milano": [
+   5,
+   7,
+   -0.1
+  ],
+  "eventi.leone": [
+   5,
+   8,
+   -0.05
+  ],
+  "eventi.daoggi": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.fascia": [
+   6,
+   5,
+   -0.05
+  ],
+  "eventi.tricolore": [
+   6,
+   6,
+   -0.05
+  ],
+  "eventi.casa6": [
+   6,
+   9,
+   -0.05
+  ],
+  "eventi.e7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.cupola": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.oro": [
+   7,
+   5,
+   -0.05
+  ],
+  "eventi.fasci": [
+   7,
+   7,
+   -0.05
+  ],
+  "eventi.cielo": [
+   7,
+   10,
+   -0.05
+  ],
+  "eventi.e8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.citta8": [
+   8,
+   4,
+   -0.05
+  ],
+  "eventi.sindaco8": [
+   8,
+   7,
+   -0.05
+  ],
+  "eventi.cercalo": [
+   8,
+   8,
+   -0.05
+  ],
+  "eventi.mappa8": [
+   8,
+   10,
+   -0.05
+  ],
+  "eventi.attenzione": [
+   9,
+   1,
+   -0.05
+  ],
+  "eventi.nuova": [
+   9,
+   5,
+   -0.05
+  ],
+  "eventi.settimana": [
+   9,
+   6,
+   -0.05
+  ],
+  "eventi.tutti": [
+   9,
+   8,
+   -0.05
+  ],
+  "eventi.zero": [
+   9,
+   11,
+   -0.05
+  ],
+  "eventi.domenica": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.ventuno": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.vota": [
+   10,
+   5,
+   -0.05
+  ],
+  "eventi.scrivi": [
+   11,
+   0,
+   -0.05
+  ],
+  "eventi.citta11": [
+   11,
+   3,
+   -0.05
+  ],
+  "eventi.prossimo": [
+   11,
+   6,
+   -0.05
+  ],
+  "eventi.tu": [
+   11,
+   11,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 18.mp3",
+  "durata": 47.07
+ },
+ "copertina": {
+  "senza_stamp": true,
+  "alto": {
+   "top": 150,
+   "linee": [
+    [
+     "👑 IL PRIMO",
+     null,
+     104
+    ],
+    [
+     "PRESIDENTE",
+     true,
+     126
+    ],
+    [
+     "D'ITALIA",
+     null,
+     104
+    ]
+   ]
+  },
+  "basso": {
+   "top": 1160,
+   "linee": [
+    [
+     "E 4.803 SINDACI",
+     null,
+     96
+    ],
+    [
+     "🏛️ SEI TU? 👇",
+     true,
+     112
+    ]
+   ]
+  }
+ }
+}
