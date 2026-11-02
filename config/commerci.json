@@ -346,5 +346,20 @@
     "testo": "",
     "logo": "data/loghi/261031-bdceaa22.jpg",
     "giocatore": "dissy_doodleart"
+  },
+  {
+    "id": "261102-e8003e25",
+    "istat": "010046",
+    "approvato": "2026-11-02T18:58:31.063Z",
+    "fino": "2026-12-02T18:58:31.063Z",
+    "prodotto": "negozio",
+    "nome": "Vulolu | stoffe e accessori dall'Africa",
+    "tipo": "abbigliamento",
+    "colore": "#3E8E4E",
+    "whatsapp": "3470010926",
+    "instagram": "vulolu_africa",
+    "descrizione": "Vendo stoffe autentiche africane, ma anche vestiti e accessori realizzati da cooperative locali di rifugiati, disabili e altro ancora!",
+    "testo": "",
+    "logo": ""
   }
 ]
