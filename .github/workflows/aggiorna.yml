@@ -40,7 +40,8 @@ jobs:
   aggiorna:
     if: github.event.schedule != '0 6 1 * *'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # a coleta passou de 14 min (157 mil comentários); com 15 o job era cancelado antes de publicar
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
