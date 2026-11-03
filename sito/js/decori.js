@@ -174,16 +174,18 @@ function fuochi(h) {
 
 // ---------- decorações dos eleitos (não se compram: o motor dá a quem ganha a eleição de domingo) ----------
 // faixa tricolor: cinta verde-branca-vermelha em volta da casa, a meia altura
-function fascia(corpo, h) {
+// no chão em volta da casa: três molduras rentes ao solo (verde por dentro, branca, vermelha por fora), dentro do lote
+function fascia(corpo) {
   const g = new THREE.Group(), bb = (corpo.geometry.boundingBox ?? (corpo.geometry.computeBoundingBox(), corpo.geometry.boundingBox));
-  const w = bb.max.x - bb.min.x + 0.03, d = bb.max.z - bb.min.z + 0.03, cx = (bb.max.x + bb.min.x) / 2, cz = (bb.max.z + bb.min.z) / 2;
-  // nas torres a faixa fica perto do topo (a meia altura some entre os prédios)
-  const y0 = h > 1.5 ? h - 0.3 : Math.min(h * 0.55, h - 0.12), alt = h > 1.5 ? 0.07 : Math.max(0.03, Math.min(0.06, h * 0.035));
-  ['#2E9B55', '#FFFFFF', '#E0473C'].forEach((cor, i) => {
-    const m = lambert(cor), y = y0 + (1 - i) * alt;
-    for (const [sx, sz, px, pz] of [[w, 0.012, 0, d / 2], [w, 0.012, 0, -d / 2], [0.012, d, w / 2, 0], [0.012, d, -w / 2, 0]]) {
+  const w = bb.max.x - bb.min.x, d = bb.max.z - bb.min.z, cx = (bb.max.x + bb.min.x) / 2, cz = (bb.max.z + bb.min.z) / 2;
+  // folga e largura de cada faixa: encolhem se a casa ocupa quase o lote inteiro (meio lote = 0.5)
+  const livre = 0.48 - Math.max(w, d) / 2, vao = Math.max(0.012, Math.min(0.035, livre * 0.2)), fx = Math.max(0.02, Math.min(0.05, (livre - vao) / 3)), alt = 0.018;
+  ['#2E9B55', '#FFFFFF', '#E0473C'].forEach((cor, k) => {
+    const m = lambert(cor), o = vao + k * fx;   // distância da parede até a borda de dentro desta faixa
+    const W = w + 2 * (o + fx), Dz = d + 2 * o;
+    for (const [sx, sz, px, pz] of [[W, fx, 0, d / 2 + o + fx / 2], [W, fx, 0, -(d / 2 + o + fx / 2)], [fx, Dz, w / 2 + o + fx / 2, 0], [fx, Dz, -(w / 2 + o + fx / 2), 0]]) {
       const b = new THREE.Mesh(new THREE.BoxGeometry(sx, alt, sz), m);
-      b.position.set(cx + px, y, cz + pz); g.add(b);
+      b.position.set(cx + px, alt / 2, cz + pz); g.add(b);
     }
   });
   return g;
@@ -252,7 +254,7 @@ export function costruisci(D, citta, notte, casa, sel) {
     anim.push(t => { m.color.setHSL((t * 0.00012) % 1, 1, 0.55); a.material.color.copy(m.color); });
   }
   // eleitos: faixa tricolor (sindaco e Presidente); o Presidente ganha ainda cúpula dourada, feixes de luz e aura pulsando
-  if (ex.has('fascia')) g.add(fascia(corpo, h));
+  if (ex.has('fascia')) g.add(fascia(corpo));
   let y = h + 0.25;
   if (ex.has('presidenza')) {
     const cup = cupola(); cup.position.y = h; g.add(cup);
