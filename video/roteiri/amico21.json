@@ -1,0 +1,584 @@
+{
+ "nome": "amico21",
+ "variante": "regola",
+ "durata": 21.5,
+ "demo_citta": "Bologna",
+ "deco_citta": "Firenze",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0
+     ],
+     [
+      "OGGI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      0
+     ],
+     [
+      "REGOLA",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "NUOVA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      0,
+      true
+     ],
+     [
+      "UN",
+      0
+     ],
+     [
+      "AMICO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      0
+     ],
+     [
+      "NON",
+      0
+     ],
+     [
+      "HA",
+      0
+     ]
+    ],
+    [
+     [
+      "ANCORA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "+20",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SE",
+      0
+     ],
+     [
+      "PRENDE",
+      0
+     ],
+     [
+      "LA",
+      0
+     ]
+    ],
+    [
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+50",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0
+     ],
+     [
+      "A",
+      0
+     ],
+     [
+      "TE",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "+50",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      0
+     ],
+     [
+      "LUI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "CHI",
+      0
+     ],
+     [
+      "PORTA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "AMICI",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "DIVERSI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      0
+     ],
+     [
+      "TUTTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      0,
+      true
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "SUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DECORATA",
+      0,
+      true
+     ],
+     [
+      "COME",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOLE",
+      0
+     ],
+     [
+      "PER",
+      0
+     ],
+     [
+      "10",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIORNI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "DALLE",
+      0
+     ],
+     [
+      "11:00",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      0
+     ],
+     [
+      "MEZZANOTTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      0,
+      true
+     ],
+     [
+      "QUI",
+      0
+     ]
+    ],
+    [
+     [
+      "SOTTO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "TUO",
+      0
+     ],
+     [
+      "AMICO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      0
+     ],
+     [
+      "SOLO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      0,
+      true
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Solo oggi,",
+  "una regola nuova.",
+  "Tagga un amico che non ha ancora la casa:",
+  "più venti punti.",
+  "Se prende la casa…",
+  "cinquanta punti a te, e cinquanta a lui.",
+  "E chi porta più amici diversi di tutti…",
+  "vince la sua casa decorata come vuole, per dieci giorni!",
+  "Dalle undici a mezzanotte.",
+  "Tagga qui sotto il tuo amico…",
+  "perché solo oggi…"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  2,
+  2,
+  3,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  10,
+  10
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.p0": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.p1": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.p2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.p3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.p4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.p5": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.p6": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.p7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.p8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.p9": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.p10": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.oggi": [
+   0,
+   1,
+   -0.05
+  ],
+  "eventi.nuova": [
+   1,
+   2,
+   -0.05
+  ],
+  "eventi.amico": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.casa2": [
+   2,
+   7,
+   -0.05
+  ],
+  "eventi.venti": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.casa4": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.te": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.lui": [
+   5,
+   7,
+   -0.05
+  ],
+  "eventi.tutti": [
+   6,
+   7,
+   -0.05
+  ],
+  "eventi.decorata": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.dieci": [
+   7,
+   8,
+   -0.05
+  ],
+  "eventi.undici": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.mezzanotte": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.amico9": [
+   9,
+   5,
+   -0.05
+  ]
+ }
+}

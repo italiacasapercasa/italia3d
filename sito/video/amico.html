@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel amico · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --blu: #3FA9F5; --viola: #8E5CF7; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(10, 15, 50, .6) 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  /* título fixo do evento com o relógio */
+  #testa { position: absolute; left: 60px; right: 60px; top: 70px; background: linear-gradient(180deg, #FFE38A, #FFC93C); border: 6px solid var(--ink); border-radius: 30px; padding: 10px 20px 12px; text-align: center; box-shadow: 0 8px 0 rgba(21,32,51,.3); }
+  #testa b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); text-transform: uppercase; line-height: 1.1; }
+  #testa span { display: block; font-size: 52px; font-weight: 900; color: #B3261E; font-variant-numeric: tabular-nums; line-height: 1.05; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.04; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: #fff; border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.oro { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box em { display: block; font-style: normal; font-size: 32px; font-weight: 900; color: var(--rosso); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  /* comentário com o tag */
+  #comm { top: 430px; display: flex; align-items: center; gap: 20px; }
+  #comm .av { width: 96px; height: 96px; border-radius: 50%; border: 5px solid var(--ink); background: var(--blu); flex: none; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+  #comm .tx { flex: 1; font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+  #comm .tx small { display: block; font-size: 30px; color: #5B6475; }
+  #comm .tag { color: #2160C4; background: #E3EEFF; border-radius: 12px; padding: 0 8px; }
+  #comm .pt { position: absolute; right: -24px; top: -46px; background: var(--verde); color: #fff; font-size: 64px; font-weight: 900; border: 6px solid var(--ink); border-radius: 26px; padding: 4px 22px; opacity: 0; }
+  /* +50 / +50 */
+  #duo { position: absolute; left: 40px; right: 40px; top: 430px; display: flex; gap: 30px; }
+  #duo > div { flex: 1; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 18px 10px 22px; text-align: center; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; }
+  #duo i { display: block; font-style: normal; font-size: 110px; line-height: 1.1; }
+  #duo b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  #duo span { display: block; font-size: 120px; font-weight: 900; color: var(--verde); line-height: 1; -webkit-text-stroke: 8px var(--ink); paint-order: stroke fill; }
+  /* ranking */
+  #rank { top: 400px; }
+  #rank h3 { margin: 0 0 12px; text-align: center; font-size: 46px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  #rank .riga { display: flex; align-items: center; gap: 18px; border: 5px solid var(--ink); border-radius: 24px; padding: 10px 22px; margin-bottom: 12px; opacity: 0; }
+  #rank .riga i { font-style: normal; font-size: 56px; width: 70px; text-align: center; }
+  #rank .riga b { flex: 1; font-size: 46px; font-weight: 900; color: var(--ink); }
+  #rank .riga span { font-size: 40px; font-weight: 900; color: #5B6475; }
+  #rank .riga.primo { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  /* relógio */
+  #orologio { position: absolute; left: 0; right: 0; top: 430px; text-align: center; opacity: 0; }
+  #orologio .ore { display: inline-block; background: #fff; border: 8px solid var(--ink); border-radius: 40px; padding: 10px 40px; font-size: 90px; font-weight: 900; color: var(--ink); box-shadow: 0 12px 0 rgba(21,32,51,.3); -webkit-text-stroke: 0; }
+  #orologio .cd { font-size: 170px; -webkit-text-stroke-width: 30px; margin-top: 30px; font-variant-numeric: tabular-nums; }
+  #orologio .t { font-size: 66px; -webkit-text-stroke-width: 13px; }
+  /* +70, amigos, desafio */
+  #somma { position: absolute; left: 0; right: 0; top: 400px; text-align: center; opacity: 0; }
+  #somma .linha { font-size: 84px; -webkit-text-stroke-width: 16px; opacity: 0; }
+  #somma .tot { font-size: 200px; -webkit-text-stroke-width: 34px; line-height: 1; opacity: 0; }
+  #amici { position: absolute; left: 80px; right: 80px; top: 440px; display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+  #amici i { font-style: normal; width: 150px; height: 150px; border-radius: 50%; border: 6px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 80px; opacity: 0; }
+  #amici-tot { top: 830px; font-size: 180px; -webkit-text-stroke-width: 32px; }
+  #sfida { position: absolute; left: 50px; right: 50px; top: 400px; opacity: 0; }
+  #sfida .lati { display: flex; border: 7px solid var(--ink); border-radius: 40px; overflow: hidden; box-shadow: 0 12px 0 rgba(21,32,51,.3); }
+  #sfida .lato { flex: 1; text-align: center; padding: 16px 0 12px; color: #fff; }
+  #sfida .a { background: var(--verde); } #sfida .b { background: #B8860B; }
+  #sfida small { display: block; font-size: 48px; font-weight: 900; }
+  #sfida .n { display: block; font-size: 150px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; -webkit-text-stroke: 14px var(--ink); paint-order: stroke fill; }
+  #sfida .vs { position: absolute; left: 50%; top: 70px; width: 130px; height: 130px; margin-left: -65px; border-radius: 50%; background: var(--giallo); border: 7px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 60px; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 430px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 96px; -webkit-text-stroke-width: 18px; }
+  #cta .b { font-size: 70px; -webkit-text-stroke-width: 14px; margin-top: 24px; }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="testa"><b>🤝 Solo oggi: porta un amico</b><span></span></div>
+<div id="stampi"></div>
+<div id="comm" class="riquadro"><div class="av">😎</div><div class="tx"><small>@tu</small>Roma, Lazio 🏠 <span class="tag">@il_tuo_amico</span></div><div class="pt">+20</div></div>
+<div id="duo"><div><i>😎</i><b>Tu</b><span>+50</span></div><div><i>🤩</i><b>Il tuo amico</b><span>+50</span></div></div>
+<div id="rank" class="riquadro"><h3>🤝 Chi porta più amici?</h3>
+  <div class="riga primo"><i>🏆</i><b>Sarai tu?</b><span>? amici</span></div>
+  <div class="riga"><i>2</i><b>…</b><span>? amici</span></div>
+  <div class="riga"><i>3</i><b>…</b><span>? amici</span></div>
+</div>
+<div id="orologio" class="forte"><div class="ore">🕚 11:00 → 🕛 24:00</div><div class="cd g"></div><div class="t">FINO A <span class="g">MEZZANOTTE</span></div></div>
+<div id="somma" class="forte"><div class="linha">🏷️ TAG <span class="g">+20</span></div><div class="linha">🏠 CASA <span class="g">+50</span></div><div class="tot g">+70</div></div>
+<div id="amici"></div>
+<div id="amici-tot" class="stamp forte"></div>
+<div id="sfida"><div class="lati"><div class="lato a"><small>😎 TU</small><b class="n"></b></div><div class="lato b"><small>👑 PRESIDENTE</small><b class="n"></b></div></div><div class="vs">⚔️</div></div>
+<div id="cta" class="forte"><div class="a1">🏷️ TAGGA QUI<br><span class="g">IL TUO AMICO</span> 👇</div><div class="b">CHE NON HA<br><span class="g">ANCORA LA CASA</span></div></div>
+<div id="coriandoli"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">💬 Commenta la tua città → ricevi una casa 3D</div>
+<script type="module" src="video/amico.js"></script>
+</body>
+</html>

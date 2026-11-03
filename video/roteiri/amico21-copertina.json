@@ -1,0 +1,690 @@
+{
+ "nome": "amico21",
+ "variante": "regola",
+ "durata": 21.5,
+ "demo_citta": "Bologna",
+ "deco_citta": "Firenze",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0.03
+     ],
+     [
+      "OGGI",
+      0.403,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 1.002
+  },
+  {
+   "linee": [
+    [
+     [
+      "UNA",
+      1.032
+     ],
+     [
+      "REGOLA",
+      1.335,
+      true
+     ]
+    ],
+    [
+     [
+      "NUOVA",
+      1.766,
+      true
+     ]
+    ]
+   ],
+   "ini": 1.032,
+   "fim": 2.504
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      2.534,
+      true
+     ],
+     [
+      "UN",
+      2.799
+     ],
+     [
+      "AMICO",
+      2.951,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.534,
+   "fim": 3.299
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      3.329
+     ],
+     [
+      "NON",
+      3.481
+     ],
+     [
+      "HA",
+      3.633
+     ]
+    ],
+    [
+     [
+      "ANCORA",
+      3.785
+     ]
+    ]
+   ],
+   "ini": 3.329,
+   "fim": 4.133
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      4.163
+     ],
+     [
+      "CASA",
+      4.315,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.163,
+   "fim": 4.864
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      4.894
+     ],
+     [
+      "+20",
+      5.153,
+      true
+     ],
+     [
+      "PUNTI",
+      5.603
+     ]
+    ]
+   ],
+   "ini": 4.894,
+   "fim": 6.455
+  },
+  {
+   "linee": [
+    [
+     [
+      "SE",
+      6.485
+     ],
+     [
+      "PRENDE",
+      6.668
+     ],
+     [
+      "LA",
+      6.987
+     ]
+    ],
+    [
+     [
+      "CASA",
+      7.17,
+      true
+     ]
+    ]
+   ],
+   "ini": 6.485,
+   "fim": 7.833
+  },
+  {
+   "linee": [
+    [
+     [
+      "+50",
+      7.863,
+      true
+     ],
+     [
+      "PUNTI",
+      8.385
+     ],
+     [
+      "A",
+      8.751
+     ],
+     [
+      "TE",
+      8.962,
+      true
+     ]
+    ],
+    [
+     [
+      "E",
+      9.172
+     ],
+     [
+      "+50",
+      9.382,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.863,
+   "fim": 9.874
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      9.904
+     ],
+     [
+      "LUI",
+      10.114,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.904,
+   "fim": 10.686
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      10.716
+     ],
+     [
+      "CHI",
+      10.891
+     ],
+     [
+      "PORTA",
+      11.066
+     ]
+    ]
+   ],
+   "ini": 10.716,
+   "fim": 11.342
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      11.372
+     ],
+     [
+      "AMICI",
+      11.547,
+      true
+     ]
+    ],
+    [
+     [
+      "DIVERSI",
+      11.982,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.372,
+   "fim": 12.388
+  },
+  {
+   "linee": [
+    [
+     [
+      "DI",
+      12.418
+     ],
+     [
+      "TUTTI",
+      12.593
+     ]
+    ]
+   ],
+   "ini": 12.418,
+   "fim": 13.185
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      13.215,
+      true
+     ],
+     [
+      "LA",
+      13.569
+     ],
+     [
+      "SUA",
+      13.773
+     ]
+    ],
+    [
+     [
+      "CASA",
+      13.976,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.215,
+   "fim": 14.3
+  },
+  {
+   "linee": [
+    [
+     [
+      "DECORATA",
+      14.33,
+      true
+     ],
+     [
+      "COME",
+      14.986
+     ]
+    ]
+   ],
+   "ini": 14.33,
+   "fim": 15.31
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOLE",
+      15.34
+     ],
+     [
+      "PER",
+      15.694
+     ],
+     [
+      "10",
+      15.897,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.34,
+   "fim": 16.221
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIORNI",
+      16.251,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.251,
+   "fim": 16.885
+  },
+  {
+   "linee": [
+    [
+     [
+      "DALLE",
+      16.915
+     ],
+     [
+      "11:00",
+      17.263,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.915,
+   "fim": 17.728
+  },
+  {
+   "linee": [
+    [
+     [
+      "A",
+      17.758
+     ],
+     [
+      "MEZZANOTTE",
+      17.957,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.758,
+   "fim": 18.957
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      18.987,
+      true
+     ],
+     [
+      "QUI",
+      19.257
+     ]
+    ],
+    [
+     [
+      "SOTTO",
+      19.412
+     ]
+    ]
+   ],
+   "ini": 18.987,
+   "fim": 19.651
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      19.681
+     ],
+     [
+      "TUO",
+      19.836
+     ],
+     [
+      "AMICO",
+      19.991,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.681,
+   "fim": 20.667
+  },
+  {
+   "linee": [
+    [
+     [
+      "PERCHÉ",
+      20.697
+     ],
+     [
+      "SOLO",
+      20.912
+     ]
+    ]
+   ],
+   "ini": 20.697,
+   "fim": 21.096
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      21.126,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.126,
+   "fim": 22.33
+  }
+ ],
+ "parlato": [
+  "Solo oggi,",
+  "una regola nuova.",
+  "Tagga un amico che non ha ancora la casa:",
+  "più venti punti.",
+  "Se prende la casa…",
+  "cinquanta punti a te, e cinquanta a lui.",
+  "E chi porta più amici diversi di tutti…",
+  "vince la sua casa decorata come vuole, per dieci giorni!",
+  "Dalle undici a mezzanotte.",
+  "Tagga qui sotto il tuo amico…",
+  "perché solo oggi…"
+ ],
+ "frasi_parlato": [
+  0,
+  1,
+  2,
+  2,
+  2,
+  3,
+  4,
+  5,
+  5,
+  6,
+  6,
+  6,
+  7,
+  7,
+  7,
+  7,
+  8,
+  8,
+  9,
+  9,
+  10,
+  10
+ ],
+ "eventi": {
+  "p0": -0.02,
+  "p1": 0.982,
+  "p2": 2.484,
+  "p3": 4.844,
+  "p4": 6.435,
+  "p5": 7.813,
+  "p6": 10.666,
+  "p7": 13.165,
+  "p8": 16.865,
+  "p9": 18.937,
+  "p10": 20.647,
+  "oggi": 0.353,
+  "nuova": 1.716,
+  "amico": 2.901,
+  "casa2": 4.113,
+  "venti": 5.103,
+  "casa4": 7.12,
+  "te": 8.912,
+  "lui": 10.064,
+  "tutti": 12.543,
+  "decorata": 14.28,
+  "dieci": 15.847,
+  "undici": 17.213,
+  "mezzanotte": 17.907,
+  "amico9": 19.941
+ },
+ "sincro": {
+  "eventi.p0": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.p1": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.p2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.p3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.p4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.p5": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.p6": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.p7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.p8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.p9": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.p10": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.oggi": [
+   0,
+   1,
+   -0.05
+  ],
+  "eventi.nuova": [
+   1,
+   2,
+   -0.05
+  ],
+  "eventi.amico": [
+   2,
+   2,
+   -0.05
+  ],
+  "eventi.casa2": [
+   2,
+   7,
+   -0.05
+  ],
+  "eventi.venti": [
+   3,
+   1,
+   -0.05
+  ],
+  "eventi.casa4": [
+   4,
+   3,
+   -0.05
+  ],
+  "eventi.te": [
+   5,
+   3,
+   -0.05
+  ],
+  "eventi.lui": [
+   5,
+   7,
+   -0.05
+  ],
+  "eventi.tutti": [
+   6,
+   7,
+   -0.05
+  ],
+  "eventi.decorata": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.dieci": [
+   7,
+   8,
+   -0.05
+  ],
+  "eventi.undici": [
+   8,
+   1,
+   -0.05
+  ],
+  "eventi.mezzanotte": [
+   8,
+   3,
+   -0.05
+  ],
+  "eventi.amico9": [
+   9,
+   5,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 21.mp3",
+  "durata": 21.47
+ },
+ "copertina": {
+  "alto": {
+   "top": 330,
+   "linee": [
+    [
+     "SOLO OGGI",
+     true,
+     170
+    ],
+    [
+     "PORTA UN AMICO",
+     null,
+     100
+    ]
+   ]
+  },
+  "basso": {
+   "top": 1150,
+   "linee": [
+    [
+     "+50 A TE E +50 A LUI",
+     null,
+     80
+    ],
+    [
+     "🏆 CASA DECORATA GRATIS",
+     true,
+     78
+    ]
+   ]
+  }
+ }
+}

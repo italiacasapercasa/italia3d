@@ -1,0 +1,604 @@
+{
+ "nome": "amico22",
+ "variante": "perche",
+ "durata": 25.85,
+ "demo_citta": "Bologna",
+ "deco_citta": "Firenze",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      0
+     ],
+     [
+      "DIVENTARE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "DOMENICA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      0
+     ],
+     [
+      "È",
+      0
+     ],
+     [
+      "IL",
+      0
+     ]
+    ],
+    [
+     [
+      "GIORNO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      0
+     ],
+     [
+      "AMICO",
+      0,
+      true
+     ],
+     [
+      "CHE",
+      0
+     ]
+    ],
+    [
+     [
+      "PORTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEL",
+      0
+     ],
+     [
+      "GIOCO",
+      0
+     ],
+     [
+      "VALE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+70",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+20",
+      0,
+      true
+     ],
+     [
+      "QUANDO",
+      0
+     ],
+     [
+      "LO",
+      0
+     ]
+    ],
+    [
+     [
+      "TAGGHI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+50",
+      0,
+      true
+     ],
+     [
+      "QUANDO",
+      0
+     ]
+    ],
+    [
+     [
+      "PRENDE",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      0
+     ],
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "10",
+      0,
+      true
+     ],
+     [
+      "AMICI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "+700",
+      0,
+      true
+     ],
+     [
+      "PUNTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ABBASTANZA",
+      0
+     ],
+     [
+      "PER",
+      0
+     ]
+    ],
+    [
+     [
+      "SFIDARE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "PRESIDENTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      0
+     ],
+     [
+      "CHI",
+      0
+     ],
+     [
+      "PORTA",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      0
+     ],
+     [
+      "AMICI",
+      0,
+      true
+     ],
+     [
+      "DI",
+      0
+     ]
+    ],
+    [
+     [
+      "TUTTI",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      0,
+      true
+     ],
+     [
+      "LA",
+      0
+     ],
+     [
+      "SUA",
+      0
+     ]
+    ],
+    [
+     [
+      "CASA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUPER",
+      0,
+      true
+     ],
+     [
+      "DECORATA",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      0
+     ],
+     [
+      "10",
+      0,
+      true
+     ],
+     [
+      "GIORNI",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      0
+     ],
+     [
+      "FINO",
+      0
+     ],
+     [
+      "A",
+      0
+     ]
+    ],
+    [
+     [
+      "MEZZANOTTE",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      0,
+      true
+     ],
+     [
+      "ADESSO",
+      0
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      0
+     ],
+     [
+      "TUO",
+      0
+     ],
+     [
+      "AMICO",
+      0,
+      true
+     ]
+    ]
+   ]
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLORA",
+      0
+     ]
+    ]
+   ]
+  }
+ ],
+ "parlato": [
+  "Vuoi diventare Presidente domenica?",
+  "Oggi è il giorno.",
+  "Ogni amico che porti nel gioco vale settanta punti:",
+  "venti quando lo tagghi,",
+  "cinquanta quando prende la casa.",
+  "Dieci amici…",
+  "settecento punti.",
+  "Abbastanza per sfidare il Presidente.",
+  "E chi porta più amici di tutti vince la sua casa super decorata,",
+  "per dieci giorni.",
+  "Solo fino a mezzanotte.",
+  "Tagga adesso il tuo amico…",
+  "Allora…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  1,
+  2,
+  2,
+  2,
+  3,
+  4,
+  4,
+  5,
+  6,
+  7,
+  7,
+  8,
+  8,
+  8,
+  8,
+  9,
+  10,
+  11,
+  11,
+  12
+ ],
+ "eventi": {},
+ "sincro": {
+  "eventi.p0": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.p1": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.p2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.p3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.p4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.p5": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.p6": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.p7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.p8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.p9": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.p10": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.p11": [
+   11,
+   0,
+   -0.05
+  ],
+  "eventi.p12": [
+   12,
+   0,
+   -0.05
+  ],
+  "eventi.presidente": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.domenica": [
+   0,
+   3,
+   -0.05
+  ],
+  "eventi.giorno": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.settanta": [
+   2,
+   7,
+   -0.05
+  ],
+  "eventi.tagghi": [
+   3,
+   3,
+   -0.05
+  ],
+  "eventi.casa": [
+   4,
+   4,
+   -0.05
+  ],
+  "eventi.amici5": [
+   5,
+   1,
+   -0.05
+  ],
+  "eventi.sfidare": [
+   7,
+   2,
+   -0.05
+  ],
+  "eventi.pres7": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.vince": [
+   8,
+   7,
+   -0.05
+  ],
+  "eventi.super": [
+   8,
+   11,
+   -0.05
+  ],
+  "eventi.dieci9": [
+   9,
+   1,
+   -0.05
+  ],
+  "eventi.mezzanotte": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.amico11": [
+   11,
+   4,
+   -0.05
+  ]
+ }
+}

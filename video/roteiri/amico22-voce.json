@@ -1,0 +1,680 @@
+{
+ "nome": "amico22",
+ "variante": "perche",
+ "durata": 25.85,
+ "demo_citta": "Bologna",
+ "deco_citta": "Firenze",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "VUOI",
+      0.03
+     ],
+     [
+      "DIVENTARE",
+      0.199
+     ]
+    ]
+   ],
+   "ini": 0.03,
+   "fim": 0.712
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      0.742,
+      true
+     ]
+    ],
+    [
+     [
+      "DOMENICA",
+      1.285,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.742,
+   "fim": 2.201
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGGI",
+      2.231
+     ],
+     [
+      "È",
+      2.638
+     ],
+     [
+      "IL",
+      2.872
+     ]
+    ],
+    [
+     [
+      "GIORNO",
+      3.106,
+      true
+     ]
+    ]
+   ],
+   "ini": 2.231,
+   "fim": 3.678
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      3.708
+     ],
+     [
+      "AMICO",
+      4.057,
+      true
+     ],
+     [
+      "CHE",
+      4.554
+     ]
+    ],
+    [
+     [
+      "PORTI",
+      4.755
+     ]
+    ]
+   ],
+   "ini": 3.708,
+   "fim": 5.074
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEL",
+      5.104
+     ],
+     [
+      "GIOCO",
+      5.304
+     ],
+     [
+      "VALE",
+      5.653
+     ]
+    ]
+   ],
+   "ini": 5.104,
+   "fim": 5.972
+  },
+  {
+   "linee": [
+    [
+     [
+      "+70",
+      6.002,
+      true
+     ],
+     [
+      "PUNTI",
+      6.5
+     ]
+    ]
+   ],
+   "ini": 6.002,
+   "fim": 7.198
+  },
+  {
+   "linee": [
+    [
+     [
+      "+20",
+      7.228,
+      true
+     ],
+     [
+      "QUANDO",
+      7.585
+     ],
+     [
+      "LO",
+      7.941
+     ]
+    ],
+    [
+     [
+      "TAGGHI",
+      8.145,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.228,
+   "fim": 8.721
+  },
+  {
+   "linee": [
+    [
+     [
+      "+50",
+      8.751,
+      true
+     ],
+     [
+      "QUANDO",
+      9.261
+     ]
+    ],
+    [
+     [
+      "PRENDE",
+      9.619
+     ]
+    ]
+   ],
+   "ini": 8.751,
+   "fim": 9.947
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      9.977
+     ],
+     [
+      "CASA",
+      10.183,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.977,
+   "fim": 10.883
+  },
+  {
+   "linee": [
+    [
+     [
+      "10",
+      10.913,
+      true
+     ],
+     [
+      "AMICI",
+      11.251,
+      true
+     ]
+    ]
+   ],
+   "ini": 10.913,
+   "fim": 11.969
+  },
+  {
+   "linee": [
+    [
+     [
+      "+700",
+      11.999,
+      true
+     ],
+     [
+      "PUNTI",
+      12.85
+     ]
+    ]
+   ],
+   "ini": 11.999,
+   "fim": 13.641
+  },
+  {
+   "linee": [
+    [
+     [
+      "ABBASTANZA",
+      13.671
+     ],
+     [
+      "PER",
+      14.279
+     ]
+    ],
+    [
+     [
+      "SFIDARE",
+      14.467,
+      true
+     ]
+    ]
+   ],
+   "ini": 13.671,
+   "fim": 14.905
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      14.935
+     ],
+     [
+      "PRESIDENTE",
+      15.124,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.935,
+   "fim": 16.076
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      16.106
+     ],
+     [
+      "CHI",
+      16.297
+     ],
+     [
+      "PORTA",
+      16.489
+     ]
+    ]
+   ],
+   "ini": 16.106,
+   "fim": 16.793
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      16.823
+     ],
+     [
+      "AMICI",
+      17.015,
+      true
+     ],
+     [
+      "DI",
+      17.491
+     ]
+    ],
+    [
+     [
+      "TUTTI",
+      17.682
+     ]
+    ]
+   ],
+   "ini": 16.823,
+   "fim": 17.986
+  },
+  {
+   "linee": [
+    [
+     [
+      "VINCE",
+      18.016,
+      true
+     ],
+     [
+      "LA",
+      18.35
+     ],
+     [
+      "SUA",
+      18.542
+     ]
+    ],
+    [
+     [
+      "CASA",
+      18.733,
+      true
+     ]
+    ]
+   ],
+   "ini": 18.016,
+   "fim": 19.037
+  },
+  {
+   "linee": [
+    [
+     [
+      "SUPER",
+      19.067,
+      true
+     ],
+     [
+      "DECORATA",
+      19.401,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.067,
+   "fim": 20.194
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      20.224
+     ],
+     [
+      "10",
+      20.452,
+      true
+     ],
+     [
+      "GIORNI",
+      20.849,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.224,
+   "fim": 21.556
+  },
+  {
+   "linee": [
+    [
+     [
+      "SOLO",
+      21.586
+     ],
+     [
+      "FINO",
+      21.855
+     ],
+     [
+      "A",
+      22.123
+     ]
+    ],
+    [
+     [
+      "MEZZANOTTE",
+      22.277,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.586,
+   "fim": 23.232
+  },
+  {
+   "linee": [
+    [
+     [
+      "TAGGA",
+      23.262,
+      true
+     ],
+     [
+      "ADESSO",
+      23.512
+     ]
+    ]
+   ],
+   "ini": 23.262,
+   "fim": 23.839
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      23.869
+     ],
+     [
+      "TUO",
+      24.012
+     ],
+     [
+      "AMICO",
+      24.156,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.869,
+   "fim": 24.992
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLORA",
+      25.022
+     ]
+    ]
+   ],
+   "ini": 25.022,
+   "fim": 26.22
+  }
+ ],
+ "parlato": [
+  "Vuoi diventare Presidente domenica?",
+  "Oggi è il giorno.",
+  "Ogni amico che porti nel gioco vale settanta punti:",
+  "venti quando lo tagghi,",
+  "cinquanta quando prende la casa.",
+  "Dieci amici…",
+  "settecento punti.",
+  "Abbastanza per sfidare il Presidente.",
+  "E chi porta più amici di tutti vince la sua casa super decorata,",
+  "per dieci giorni.",
+  "Solo fino a mezzanotte.",
+  "Tagga adesso il tuo amico…",
+  "Allora…"
+ ],
+ "frasi_parlato": [
+  0,
+  0,
+  1,
+  2,
+  2,
+  2,
+  3,
+  4,
+  4,
+  5,
+  6,
+  7,
+  7,
+  8,
+  8,
+  8,
+  8,
+  9,
+  10,
+  11,
+  11,
+  12
+ ],
+ "eventi": {
+  "p0": -0.02,
+  "p1": 2.181,
+  "p2": 3.658,
+  "p3": 7.178,
+  "p4": 8.701,
+  "p5": 10.863,
+  "p6": 11.949,
+  "p7": 13.621,
+  "p8": 16.056,
+  "p9": 20.174,
+  "p10": 21.536,
+  "p11": 23.212,
+  "p12": 24.972,
+  "presidente": 0.692,
+  "domenica": 1.235,
+  "giorno": 3.056,
+  "settanta": 5.952,
+  "tagghi": 8.095,
+  "casa": 10.133,
+  "amici5": 11.201,
+  "sfidare": 14.417,
+  "pres7": 15.074,
+  "vince": 17.966,
+  "super": 19.017,
+  "dieci9": 20.402,
+  "mezzanotte": 22.227,
+  "amico11": 24.106
+ },
+ "sincro": {
+  "eventi.p0": [
+   0,
+   0,
+   -0.05
+  ],
+  "eventi.p1": [
+   1,
+   0,
+   -0.05
+  ],
+  "eventi.p2": [
+   2,
+   0,
+   -0.05
+  ],
+  "eventi.p3": [
+   3,
+   0,
+   -0.05
+  ],
+  "eventi.p4": [
+   4,
+   0,
+   -0.05
+  ],
+  "eventi.p5": [
+   5,
+   0,
+   -0.05
+  ],
+  "eventi.p6": [
+   6,
+   0,
+   -0.05
+  ],
+  "eventi.p7": [
+   7,
+   0,
+   -0.05
+  ],
+  "eventi.p8": [
+   8,
+   0,
+   -0.05
+  ],
+  "eventi.p9": [
+   9,
+   0,
+   -0.05
+  ],
+  "eventi.p10": [
+   10,
+   0,
+   -0.05
+  ],
+  "eventi.p11": [
+   11,
+   0,
+   -0.05
+  ],
+  "eventi.p12": [
+   12,
+   0,
+   -0.05
+  ],
+  "eventi.presidente": [
+   0,
+   2,
+   -0.05
+  ],
+  "eventi.domenica": [
+   0,
+   3,
+   -0.05
+  ],
+  "eventi.giorno": [
+   1,
+   3,
+   -0.05
+  ],
+  "eventi.settanta": [
+   2,
+   7,
+   -0.05
+  ],
+  "eventi.tagghi": [
+   3,
+   3,
+   -0.05
+  ],
+  "eventi.casa": [
+   4,
+   4,
+   -0.05
+  ],
+  "eventi.amici5": [
+   5,
+   1,
+   -0.05
+  ],
+  "eventi.sfidare": [
+   7,
+   2,
+   -0.05
+  ],
+  "eventi.pres7": [
+   7,
+   4,
+   -0.05
+  ],
+  "eventi.vince": [
+   8,
+   7,
+   -0.05
+  ],
+  "eventi.super": [
+   8,
+   11,
+   -0.05
+  ],
+  "eventi.dieci9": [
+   9,
+   1,
+   -0.05
+  ],
+  "eventi.mezzanotte": [
+   10,
+   3,
+   -0.05
+  ],
+  "eventi.amico11": [
+   11,
+   4,
+   -0.05
+  ]
+ },
+ "audio": {
+  "arquivo": "audio 22.mp3",
+  "durata": 25.8
+ }
+}
