@@ -75,6 +75,10 @@
   .gruppo input[type=range] { width: 100%; border: 0; padding: 0; accent-color: var(--ink); }
   .idea { justify-self: end; padding: 7px 14px; font-size: 14px; }
   #anteprima img { display: block; width: 100%; border-radius: 12px; }
+  /* guia "cosa vedrai" antes de ir para a Hotmart */
+  .guida { border: 3px solid var(--ink); border-radius: 16px; padding: 12px; background: #F4FBFF; margin: 10px 0 14px; }
+  .guida img { display: block; width: 100%; height: auto; border-radius: 10px; border: 2px solid #D9DDE3; margin: 4px 0 10px; }
+  .guida ol { margin: 0; padding-left: 22px; display: grid; gap: 7px; font-weight: 700; font-size: 14px; line-height: 1.4; }
 </style>
 <script>try { navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: 'v', p: 'negozio', ref: document.referrer })); } catch (e) {}</script>
 </head>
@@ -438,11 +442,19 @@ $('#vai-pagare').onclick = async () => {
     if (link && (!d.su_misura || linkMisura)) {
       $('#p3').innerHTML = `
         <h2>Ultimo passo: il pagamento</h2>
-        <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. Pagamento sicuro con Hotmart: ${d.su_misura ? 'carta, <b>PayPal</b> o addebito bancario' : 'carta, <b>PayPal</b> (tocca «Mostra di più»), <b>Klarna «paga in 30 giorni»</b> o bonifico SEPA'}. I tuoi dati di pagamento non passano da noi.</p>
-        <p>🧾 <b>Hai Partita IVA?</b> Inseriscila nel pagamento: l’IVA viene azzerata (verifica VIES).</p>
-        ${d.su_misura
-          ? `<p>🎨 <b>Un solo pagamento:</b> nella pagina di pagamento, sotto «Acquista insieme», tocca <b>«Aggiungi all'acquisto»</b> su «Negozio su misura» (+${euro(cfg.su_misura.prezzo)} + IVA) prima di «Acquista ora».</p>`
-          : ''}
+        <p>Il tuo posto a ${esc(scelta.nome)} resta riservato appena paghi. I pagamenti li gestisce <b>Hotmart</b>, la piattaforma sicura che usiamo: i tuoi dati di pagamento non passano da noi.</p>
+        <div class="guida">
+          <b>👀 Ecco cosa vedrai:</b>
+          <img src="img/pagamento-hotmart.jpg" alt="La pagina di pagamento Hotmart di Italia Casa per Casa" width="618" height="228" loading="lazy">
+          <ol>
+            <li><b>Email (due volte), nome e cellulare</b>: servono per mandarti la ricevuta.</li>
+            <li>🧾 <b>Hai Partita IVA?</b> Tocca «Inserisci la Partita IVA comunitaria»: l’IVA viene azzerata.</li>
+            <li>💳 Scegli come pagare: ${d.su_misura ? 'carta, <b>PayPal</b> o addebito bancario' : 'carta, <b>Klarna «paga in 30 giorni»</b>, bonifico SEPA o <b>PayPal</b> (tocca «Mostra di più»)'}.</li>
+            ${d.su_misura ? `<li>🎨 Sotto «Acquista insieme», tocca <b>«Aggiungi all'acquisto»</b> su «Negozio su misura» (+${euro(cfg.su_misura.prezzo)} + IVA): un solo pagamento.</li>` : ''}
+            <li>✅ Controlla il totale (<b>${conIva(p.prezzo[d.prodotto].lancio + (d.su_misura ? cfg.su_misura.prezzo : 0))} IVA inclusa</b>) e tocca <b>«Acquista ora»</b>.</li>
+          </ol>
+          <p class="aiuto" style="margin:10px 0 0">Vedi un’altra valuta (R$, $…)? In alto tocca «Cambiare paese» e scegli Italia.</p>
+        </div>
         <a class="botao" href="${esc(conCodice(link))}">💳 Vai al pagamento</a>
         <p class="aiuto">Codice richiesta: <b>${idPedido}</b>. Controlliamo ogni attività prima di metterla sulla mappa; se non la approviamo, ti restituiamo l’importo.</p>`;
       // avisa o servidor que a pessoa foi para o pagamento (para saber quem desiste antes ou dentro da Hotmart)
