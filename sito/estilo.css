@@ -67,6 +67,13 @@ a { color: inherit; }
 #chips { margin-top: 10px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
 .chip { background: var(--crema); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 5px 14px; font-weight: 800; font-size: 14px; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
 .chip b { color: #F06A1D; }
+/* regra do dia "porta un amico": faixa fixa com contagem regressiva */
+#evento { display: block; margin: 10px auto 0; max-width: 460px; width: 100%; background: linear-gradient(180deg, #FFE38A, #FFC93C); border: 3px solid var(--inchiostro); border-radius: 18px; padding: 8px 14px 9px; box-shadow: 0 4px 0 rgba(21,32,51,.25); text-align: center; color: var(--inchiostro); font: inherit; cursor: pointer; animation: pulsa 1.6s ease-in-out infinite; }
+#evento[hidden] { display: none; }
+#evento b { display: block; font-size: 17px; font-weight: 900; text-transform: uppercase; }
+#evento .cd { display: block; font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; color: #B3261E; }
+#evento small { display: block; font-size: 12.5px; font-weight: 800; line-height: 1.25; }
+@keyframes pulsa { 50% { transform: scale(1.025); } }
 
 /* ---------- controles ---------- */
 #controlli { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 15; }

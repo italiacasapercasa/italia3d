@@ -5,5 +5,18 @@
     "nome": "Regola di Halloween",
     "tag_unico": true,
     "tag_nuovo": 20
+  },
+  {
+    "da": "2026-11-03T11:00:00+01:00",
+    "a": "2026-11-04T00:00:00+01:00",
+    "nome": "Porta un amico",
+    "titolo": "🤝 Solo oggi: porta un amico",
+    "tag_unico": true,
+    "tag_primo": true,
+    "tag_nuovo": 20,
+    "tag_giorno_max": 10,
+    "recluta": 50,
+    "benvenuto": 50,
+    "premio": "Chi porta più amici vince una decorazione gratis per 10 giorni sulla sua casa."
   }
 ]

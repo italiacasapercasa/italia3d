@@ -144,6 +144,31 @@ const s6 = calcolare({
 const a6 = s6.case.find(x => x[0] === 'anna');
 ok(a6[7][1] === 15 && a6[7][2] === 1 && a6[7][3] === 20 + 20 + 3, `anna Halloween: commento ${a6[7][1]} (15), extra ${a6[7][2]} (1), tag ${a6[7][3]} (43)`);
 
+// "porta un amico": +20 só para o 1º que marca o amigo sem casa (até 2 por pessoa aqui), +50 a quem indicou e +50 ao amigo
+// que ganha casa na janela; fora da janela, recruta normal (+25) e sem boas-vindas
+const sp3 = { da: qui + 5 * H, a: qui + 10 * H, nome: 'Porta un amico', tag_unico: true, tag_primo: true, tag_nuovo: 20, tag_giorno_max: 2, recluta: 50, benvenuto: 50 };
+const s8 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [
+      c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' }),
+      c('bruno', qui + 3e3, { post: 'p2', tags: ['velho'] }),                                                   // antes: bruno marca velho (+3)
+      c('anna', qui + 6 * H, { post: 'p3', tags: ['novo1', 'novo2', 'novo3', 'velho', 'bruno'] }),              // novo1 +20, novo2 +20, novo3 +3 (limite), velho +3 (bruno marcou antes), bruno +3 (tem casa)
+      c('bruno', qui + 6 * H + 1e3, { post: 'p3', tags: ['novo1'] }),                                           // novo1 já é da anna: +3
+      c('novo1', qui + 7 * H, { luogo: '058091' }), c('velho', qui + 7 * H + 1e3, { luogo: '058091' }),       // entram na janela
+      c('novo2', qui + 11 * H, { luogo: '058091' }),                                                            // entra depois: +25, sem boas-vindas
+    ],
+    storie: [], bloccati: [], doppi: [], commerci: [], post: [], speciali: [sp3],
+  },
+  comuni, regioni, agora: qui + 12 * H,
+});
+const f8 = conta => s8.case.find(x => x[0] === conta)[7];
+ok(f8('anna')[3] === 20 + 20 + 3 + 3 + 3 && f8('anna')[4] === 50 + 25, `anna porta un amico: tag ${f8('anna')[3]} (49), recluta ${f8('anna')[4]} (75)`);
+ok(f8('bruno')[3] === 3 + 3 && f8('bruno')[4] === 50, `bruno: tag ${f8('bruno')[3]} (6), recluta ${f8('bruno')[4]} (50 do velho)`);
+ok(f8('novo1')[4] === 50 && f8('velho')[4] === 50 && f8('novo2')[4] === 0, `boas-vindas: novo1 ${f8('novo1')[4]}, velho ${f8('velho')[4]}, novo2 ${f8('novo2')[4]} (50/50/0)`);
+const k8 = s8.speciali[0];
+ok(k8.entrati === 2 && k8.classifica.length === 2 && k8.classifica.every(x => x.n === 1), `ranking do dia: ${JSON.stringify(k8.classifica)} · entrati ${k8.entrati}`);
+
 // mecenate aprovado dentro de "doppi tutto" continua +100 (não dobra)
 const s7 = calcolare({
   eventi: {

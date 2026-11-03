@@ -12,6 +12,8 @@
 //            // regra de um dia: extra:false = comentários extra não somam; tag_max = amigos por post;
 //            // tag_unico = cada amigo conta uma vez só na janela (nome repetido, mesmo em outro post, não vale);
 //            // tag_nuovo = pontos do amigo ainda sem casa (em vez de punti.tag)
+//            // tag_primo = os tag_nuovo só para o 1º que marcou esse amigo no jogo; tag_giorno_max = quantos tag_nuovo por pessoa na janela
+//            // recluta = pontos de quem indicou quando o amigo ganha casa na janela (em vez de punti.recluta); benvenuto = pontos do amigo novo
 //   commerci:[{ id, istat, ts, fino: ms|null, prodotto, nome, tipo, colore, whatsapp, instagram, descrizione, testo, logo }],
 //            // aprovados: na hora "ts" reservam o próximo lote da cidade (as casas seguintes pulam esse lote);
 //            // depois de "fino" somem do mapa, mas o lote continua reservado (nenhuma casa muda de lugar)
@@ -35,6 +37,7 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const fator = (f, ts) => (f !== F.mecenate && doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
   const speciali = eventi.speciali ?? [];
   const specialeDi = ts => speciali.find(s => ts >= s.da && ts < s.a) ?? null;
+  const reclute = new Map();   // regra do dia → Map(conta → amigos que entraram na janela), para o ranking do site
 
   const contas = new Map(), luoghi = new Map(), postEst = new Map(), votos = new Set(), eventos = [];
   const cont = { commenti: 0, validi: 0, pendenti: 0, rifiutati: 0, storie: 0 };
@@ -69,8 +72,12 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     add(a, F.casa, P.casa, ts);
     if (a.taggatoDa && !a.recrutado) {
       a.recrutado = true;
-      const quem = contas.get(a.taggatoDa);
-      if (quem?.casa) add(quem, F.recluta, P.recluta, ts);
+      const quem = contas.get(a.taggatoDa), sp = specialeDi(ts);
+      if (quem?.casa) {
+        add(quem, F.recluta, sp?.recluta ?? P.recluta, ts);
+        if (sp?.benvenuto) add(a, F.recluta, sp.benvenuto, ts);
+        if (sp?.recluta && !quem.bloc && !a.bloc) { const m = reclute.get(sp) ?? reclute.set(sp, new Map()).get(sp); m.set(quem.conta, (m.get(quem.conta) ?? 0) + 1); }
+      }
     }
   };
 
@@ -122,7 +129,11 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
         if (sp?.tag_unico && (a.tagsSp ??= new Set()).has(t)) continue;
         s.tags.add(t);
         if (sp) { s.tagsSp++; if (sp.tag_unico) a.tagsSp.add(t); }
-        add(a, F.tag, sp && semCasa && sp.tag_nuovo ? sp.tag_nuovo : P.tag, c.ts);
+        // amigo novo: só o 1º que o marcou no jogo (tag_primo) e até tag_giorno_max amigos por pessoa na janela
+        const nuovo = sp?.tag_nuovo && semCasa && (!sp.tag_primo || alvo.taggatoDa === a.conta)
+          && (a.nuoviSp?.get(sp) ?? 0) < (sp.tag_giorno_max ?? Infinity);
+        if (nuovo) (a.nuoviSp ??= new Map()).set(sp, (a.nuoviSp.get(sp) ?? 0) + 1);
+        add(a, F.tag, nuovo ? sp.tag_nuovo : P.tag, c.ts);
       }
       if (c.voto) {
         const v = c.voto.toLowerCase(), alvo = contas.get(v);
@@ -232,7 +243,10 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
       luoghi: lugares.length, regioni: regioni.length, comuni: comuni.length, storie: cont.storie, follower,
     },
     doppi: doppi.filter(d => d.a > agora - dia && d.da < agora + dia).map(d => ({ da: new Date(d.da).toISOString(), a: new Date(d.a).toISOString(), tipi: d.tipi })),
-    speciali: speciali.filter(s => s.a > agora - dia && s.da < agora + dia).map(s => ({ ...s, da: new Date(s.da).toISOString(), a: new Date(s.a).toISOString() })),
+    speciali: speciali.filter(s => s.a > agora - dia && s.da < agora + dia).map(s => {
+      const m = reclute.get(s), classifica = m ? [...m].sort((x, y) => y[1] - x[1] || (x[0] < y[0] ? -1 : 1)).slice(0, 10).map(([conta, n]) => ({ conta, n })) : [];
+      return { ...s, da: new Date(s.da).toISOString(), a: new Date(s.a).toISOString(), ...(s.recluta ? { classifica, entrati: m ? [...m.values()].reduce((x, y) => x + y, 0) : 0 } : {}) };
+    }),
     luoghi: lugares.map(l => [l.ci, l.visiveis.length, l.visiveis[0].conta, Math.round(l.visiveis[0].casa.ts / 1000), l.lotti]),
     // [conta, luogo, lote, ts, punti_totali, punti_settimana, fiamme_fino, [fonti], serie_giorni]
     case: saidaCasas,

@@ -132,7 +132,8 @@ export class UI {
     this.doppio = (D.snap.doppi ?? []).find(d => agora >= Date.parse(d.da) && agora < Date.parse(d.a)) ?? null;
     if (this.doppio) add('chip-doppi', `⚡ <b>Punti doppi</b> ${this.doppio.tipi.includes('storia') ? 'nelle storie ' : ''}fino alle ${ora(Date.parse(this.doppio.a))}`, () => this.comeFunziona());
     this.speciale = (D.snap.speciali ?? []).find(s => agora >= Date.parse(s.da) && agora < Date.parse(s.a)) ?? null;
-    if (this.speciale) add('chip-speciale', `🎃 <b>Solo oggi</b>: ogni amico diverso senza casa che tagghi = <b>+${this.speciale.tag_nuovo}</b>`, () => this.comeFunziona());
+    if (this.speciale && !this.speciale.recluta) add('chip-speciale', `🎃 <b>Solo oggi</b>: ogni amico diverso senza casa che tagghi = <b>+${this.speciale.tag_nuovo}</b>`, () => this.comeFunziona());
+    this.bannerEvento();
     if (this.emFiamme.length) add('chip-fiamme', `🔥 <b>${num(this.emFiamme.length)}</b> ${this.emFiamme.length === 1 ? 'casa in fiamme' : 'case in fiamme'} ora`, () => this.fiamme());
     const dz = D.snap.derby;
     if (dz) add('chip-derby', `⚔️ ${esc(D.comunePorIstat.get(dz.a).nome)} <b>${num(dz.pts_a)}</b> – <b>${num(dz.pts_b)}</b> ${esc(D.comunePorIstat.get(dz.b).nome)}`, () => this.derby());
@@ -648,6 +649,40 @@ export class UI {
       <p class="nota">Carica la tua casa nella storia e tagga @${PERFIL}: +${REGOLE.punti.storia} punti e la tua casa in fiamme per ${REGOLE.fiamme_h} ore.</p>`);
   }
 
+  // regra do dia "porta un amico" (speciali com recluta): faixa fixa sob a busca com contagem regressiva
+  // (até o início e depois até o fim); some sozinha quando acaba
+  bannerEvento() {
+    const agora = Date.now(), el = $('#evento');
+    const s = this.eventoAmico = (this.D.snap.speciali ?? []).find(x => x.recluta && agora < Date.parse(x.a)) ?? null;
+    clearInterval(this.cdEvento);
+    el.hidden = !s;
+    if (!s) return;
+    const da = Date.parse(s.da), a = Date.parse(s.a);
+    el.innerHTML = `<b>${esc(s.titolo ?? s.nome)}</b><span class="cd"></span><small>+${s.tag_nuovo} per ogni amico senza casa che tagghi · +${s.recluta} a te e +${s.benvenuto} a lui quando prende casa</small>`;
+    el.onclick = () => this.evento();
+    const hms = ms => [3600e3, 60e3, 1e3].map((u, i) => String(Math.floor(ms / u) % (i ? 60 : 100)).padStart(2, '0')).join(':');
+    const tick = () => {
+      const t = Date.now();
+      if (t >= a) { el.hidden = true; clearInterval(this.cdEvento); return; }
+      el.querySelector('.cd').textContent = t < da ? `si parte tra ⏳ ${hms(da - t)}` : `finisce tra ⏳ ${hms(a - t)}`;
+    };
+    tick();
+    this.cdEvento = setInterval(tick, 1000);
+  }
+  evento() {
+    const s = this.eventoAmico;
+    if (!s) return;
+    const iniziato = Date.now() >= Date.parse(s.da), cl = s.classifica ?? [];
+    this.abrir(`
+      <h2>${esc(s.titolo ?? s.nome)}</h2>
+      <div class="sub">${iniziato ? 'fino a mezzanotte (ora di Roma)' : `dalle ${ora(Date.parse(s.da))} a mezzanotte (ora di Roma)`}</div>
+      <div class="carta meta"><b>Tagga nei commenti un amico che non ha ancora la casa: +${s.tag_nuovo} punti.</b><small>Se commenta la sua città e prende la casa: <b>+${s.recluta}</b> a te e <b>+${s.benvenuto}</b> a lui. Vale solo il primo che lo tagga, fino a ${s.tag_giorno_max} amici a testa; chi ha già la casa non conta. I punti contano anche per le elezioni di domenica.</small></div>
+      ${s.premio ? `<p class="intro">🏆 ${esc(s.premio)}</p>` : ''}
+      <h3>🤝 Chi ha portato più amici oggi${s.entrati ? ` · ${num(s.entrati)} entrati` : ''}</h3>
+      ${cl.length ? `<ol class="ranking">${cl.map((x, i) => `<li data-casa="${esc(x.conta)}"><span class="pos">${i + 1}</span><span class="quem"><b>@${esc(x.conta)}</b><small>${num(x.n)} ${x.n === 1 ? 'amico entrato' : 'amici entrati'}</small></span></li>`).join('')}</ol>` : `<p class="nota">${iniziato ? 'Ancora nessuno: il primo amico che entra ti mette in cima!' : 'La classifica parte alle ' + ora(Date.parse(s.da)) + '.'}</p>`}
+      <p class="nota">La classifica si aggiorna con la mappa, ogni pochi minuti.</p>`);
+  }
+
   comeFunziona() {
     const P = REGOLE.punti;
     this.abrir(`
@@ -660,7 +695,8 @@ export class UI {
       <p class="intro">Le cariche si vincono ogni settimana con i punti del mandato (da domenica alle 21 a domenica alle 21, ora di Roma). Chi fa più punti governa, dall’alto verso il basso, una carica a persona. Il Presidente del Consiglio e i sindaci si eleggono la domenica alle 21 e governano tutta la settimana; le altre cariche si vincono in diretta.</p>
       <ol class="ranking cariche">${REGOLE.cariche.map(k => `<li><span class="quem"><b>${NOMI_CARICHE[k]}</b><small>${DESCR_CARICHE[k]}</small></span></li>`).join('')}</ol>
       <h3>3. Come guadagnare punti</h3>
-      ${this.speciale ? `<p class="intro">🎃 <b>${esc(this.speciale.nome ?? 'Regola di oggi')}</b>, fino alle ${ora(Date.parse(this.speciale.a))}: commenta quanto vuoi, ma ogni amico taggato conta una volta sola (un nome ripetuto non vale). Ogni amico diverso che non ha ancora casa vale <b>+${this.speciale.tag_nuovo}</b>.${this.doppio ? ' E oggi i punti sono doppi!' : ''} Condividi il post nella tua storia.</p>` : ''}
+      ${this.speciale?.recluta ? `<p class="intro">🤝 <b>${esc(this.speciale.nome)}</b>, fino alle ${ora(Date.parse(this.speciale.a))}: ogni amico senza casa che tagghi per primo vale <b>+${this.speciale.tag_nuovo}</b> (fino a ${this.speciale.tag_giorno_max}); se prende casa, <b>+${this.speciale.recluta}</b> a te e <b>+${this.speciale.benvenuto}</b> a lui.</p>` : ''}
+      ${this.speciale && !this.speciale.recluta ? `<p class="intro">🎃 <b>${esc(this.speciale.nome ?? 'Regola di oggi')}</b>, fino alle ${ora(Date.parse(this.speciale.a))}: commenta quanto vuoi, ma ogni amico taggato conta una volta sola (un nome ripetuto non vale). Ogni amico diverso che non ha ancora casa vale <b>+${this.speciale.tag_nuovo}</b>.${this.doppio ? ' E oggi i punti sono doppi!' : ''} Condividi il post nella tua storia.</p>` : ''}
       <div class="azioni">${COME_GUADAGNARE(P).map(([k, nome, txt]) => `<div class="azione"><i style="background:${FONTI.find(f => f[0] === k)[2]}"></i><div><b>${nome}</b><small>${txt}</small></div></div>`).join('')}</div>
       <h3>4. La storia</h3>
       <p class="intro">Carica la tua casa nella storia e tagga @${PERFIL}: +${P.storia} punti (1 volta al giorno) e la tua casa in fiamme per 24 ore. Sulla mappa cerca il tuo @ e tocca «Carica la tua casa nella storia»: ti diamo l’immagine pronta.</p>
