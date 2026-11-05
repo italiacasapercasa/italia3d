@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel sfidante · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --blu: #3FA9F5; --viola: #8E5CF7; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #vignetta { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(10, 15, 50, .6) 100%); }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  #titolo { position: absolute; left: 20px; right: 20px; top: 150px; text-align: center; opacity: 0; transform-origin: 50% 0; }
+  #titolo .t1 { font-size: 100px; -webkit-text-stroke-width: 19px; line-height: 1.02; }
+  #titolo .t2 { font-size: 66px; -webkit-text-stroke-width: 13px; margin-top: 6px; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.04; }
+  /* abertura: contador dos amigos novos */
+  #apertura { position: absolute; left: 0; right: 0; top: 130px; text-align: center; opacity: 0; }
+  #apertura .a { font-size: 76px; -webkit-text-stroke-width: 15px; }
+  #apertura .n { font-size: 260px; -webkit-text-stroke-width: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #apertura .s { font-size: 64px; -webkit-text-stroke-width: 13px; margin-top: 4px; }
+  #facce { position: absolute; left: 50px; right: 50px; top: 720px; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  #facce i { font-style: normal; width: 112px; height: 112px; border-radius: 50%; border: 5px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 62px; opacity: 0; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: #fff; border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.oro { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .box em { display: block; font-style: normal; font-size: 32px; font-weight: 900; color: var(--rosso); }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  /* ranking do evento */
+  #rank { top: 300px; padding: 22px 24px 14px; }
+  #rank h3 { margin: 0 0 14px; text-align: center; font-size: 46px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  #rank .riga { display: flex; align-items: center; gap: 16px; border: 5px solid var(--ink); border-radius: 24px; padding: 10px 20px; margin-bottom: 12px; opacity: 0; background: #fff; }
+  #rank .riga i { font-style: normal; font-size: 52px; font-weight: 900; color: var(--ink); width: 64px; text-align: center; }
+  #rank .riga div { flex: 1; min-width: 0; }
+  #rank .riga b { display: block; font-size: 42px; font-weight: 900; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #rank .riga small { display: block; font-size: 28px; font-weight: 900; color: #5B6475; text-transform: uppercase; }
+  #rank .riga span { font-size: 60px; font-weight: 900; color: var(--ink); font-variant-numeric: tabular-nums; }
+  #rank .riga.primo { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  /* desafio ao Presidente */
+  #sfida { position: absolute; left: 50px; right: 50px; top: 330px; opacity: 0; }
+  #sfida .lati { display: flex; border: 7px solid var(--ink); border-radius: 40px; overflow: hidden; box-shadow: 0 12px 0 rgba(21,32,51,.3); }
+  #sfida .lato { flex: 1; text-align: center; padding: 18px 0 14px; color: #fff; }
+  #sfida .a { background: var(--verde); } #sfida .b { background: #B8860B; }
+  #sfida small { display: block; font-size: 40px; font-weight: 900; -webkit-text-stroke: 8px var(--ink); paint-order: stroke fill; }
+  #sfida .n { display: block; font-size: 130px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; -webkit-text-stroke: 14px var(--ink); paint-order: stroke fill; }
+  #sfida .vs { position: absolute; left: 50%; top: 70px; width: 120px; height: 120px; margin-left: -60px; border-radius: 50%; background: var(--giallo); border: 7px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 56px; }
+  #sfida .diff { text-align: center; margin-top: 34px; font-size: 150px; -webkit-text-stroke-width: 28px; opacity: 0; }
+  #sfida .diff small { display: block; font-size: 60px; -webkit-text-stroke-width: 12px; }
+  /* domenica */
+  #orologio { position: absolute; left: 0; right: 0; top: 300px; text-align: center; opacity: 0; }
+  #orologio .ore { display: inline-block; background: #fff; border: 8px solid var(--ink); border-radius: 40px; padding: 10px 40px; font-size: 84px; font-weight: 900; color: var(--ink); box-shadow: 0 12px 0 rgba(21,32,51,.3); -webkit-text-stroke: 0; }
+  #orologio .g4 { font-size: 220px; -webkit-text-stroke-width: 36px; margin-top: 30px; line-height: 1; opacity: 0; }
+  #orologio .t { font-size: 76px; -webkit-text-stroke-width: 15px; opacity: 0; }
+  /* comentário = pontos */
+  #comm { top: 470px; display: flex; align-items: center; gap: 20px; }
+  #comm .av { width: 96px; height: 96px; border-radius: 50%; border: 5px solid var(--ink); background: var(--blu); flex: none; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+  #comm .tx { flex: 1; font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+  #comm .tx small { display: block; font-size: 30px; color: #5B6475; }
+  #comm .tag { color: #2160C4; background: #E3EEFF; border-radius: 12px; padding: 0 8px; opacity: 0; }
+  #comm .pt { position: absolute; right: -24px; top: -50px; background: var(--verde); color: #fff; font-size: 56px; font-weight: 900; border: 6px solid var(--ink); border-radius: 26px; padding: 4px 22px; opacity: 0; }
+  #piu { top: 720px; font-size: 104px; -webkit-text-stroke-width: 20px; }
+  #cta { position: absolute; left: 20px; right: 20px; top: 300px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 96px; -webkit-text-stroke-width: 18px; }
+  #link { position: absolute; left: 0; right: 0; top: 280px; text-align: center; opacity: 0; }
+  #link .a { font-size: 120px; -webkit-text-stroke-width: 22px; }
+  #link .b { display: inline-block; margin-top: 26px; background: var(--giallo); color: var(--ink); font-size: 52px; font-weight: 900; border: 6px solid var(--ink); border-radius: 999px; padding: 10px 38px; -webkit-text-stroke: 0; text-transform: none; opacity: 0; box-shadow: 0 8px 0 rgba(21,32,51,.3); }
+  #coriandoli i { position: absolute; left: 0; top: 0; width: 22px; height: 34px; border-radius: 4px; opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="vignetta"></div>
+<div id="velo"></div>
+<div id="etichette"></div>
+<div id="titolo" class="forte"><div class="t1"></div><div class="t2 g"></div></div>
+<div id="stampi"></div>
+<div id="apertura" class="forte"><div class="a">🤝 IERI, IN <span class="g">1 GIORNO</span></div><div class="n g"></div><div class="s">PERSONE <span class="g">NUOVE</span></div></div>
+<div id="facce"></div>
+<div id="rank" class="riquadro"><h3>🤝 Chi ha portato più amici</h3><div class="righe"></div></div>
+<div id="sfida"><div class="lati"><div class="lato a"><small>😎 TERMOLI</small><b class="n"></b></div><div class="lato b"><small>👑 PRESIDENTE</small><b class="n"></b></div></div><div class="vs">⚔️</div><div class="diff forte g"><small>DISTANZA</small>-108</div></div>
+<div id="orologio" class="forte"><div class="ore">🗳️ DOMENICA · 21:00</div><div class="g4 g">4</div><div class="t">GIORNI AL <span class="g">VOTO</span></div></div>
+<div id="comm" class="riquadro"><div class="av">😎</div><div class="tx"><small>@tu</small>Termoli 🏠 <span class="tag">@il_tuo_amico</span></div><div class="pt">+PUNTI</div></div>
+<div id="piu" class="stamp forte">🤝 AMICO =<br><span class="g">ANCORA DI PIÙ</span></div>
+<div id="cta" class="forte"><div class="a1">📍 COMMENTA LA<br><span class="g">TUA CITTÀ</span> 👇</div></div>
+<div id="link" class="forte"><div class="a">🔗 LINK<br><span class="g">IN BIO</span></div><div class="b">✨ Decora la tua casa</div></div>
+<div id="coriandoli"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">💬 Commenta la tua città → ricevi una casa 3D</div>
+<script type="module" src="video/sfidante.js"></script>
+</body>
+</html>

@@ -1,1112 +1,985 @@
 {
  "nome": "vetrina",
- "durata": 37.7,
- "negozi": [
-  "Libreria Tomolo EdiGio'",
-  "Mobili Trezza",
-  "Ristorante Vistamare",
-  "Nauroz Tex-Mex"
- ],
- "numeri": {
-  "views": 1415798,
-  "persone": 391478,
-  "visite": 70000,
-  "giorni": [
-   [
-    "26/10",
-    5320
-   ],
-   [
-    "27/10",
-    19852
-   ],
-   [
-    "28/10",
-    19319
-   ],
-   [
-    "29/10",
-    10805
-   ],
-   [
-    "30/10",
-    8213
-   ],
-   [
-    "31/10",
-    7441
-   ]
-  ]
- },
+ "durata": 45.59,
+ "negozio": "Gabhub",
+ "negozio_borgo": "Mobili Trezza",
+ "visite": 7019,
  "frasi": [
   {
    "linee": [
     [
      [
-      "QUESTA",
-      0.03
+      "LUNEDÌ",
+      0.06
      ]
-    ],
+    ]
+   ],
+   "ini": 0.06,
+   "fim": 0.82
+  },
+  {
+   "linee": [
     [
      [
-      "LIBRERIA",
-      0.395,
+      "7.000",
+      0.85,
+      true
+     ],
+     [
+      "PERSONE",
+      1.71,
       true
      ]
     ]
    ],
-   "ini": 0.03,
-   "fim": 0.885
-  },
-  {
-   "linee": [
-    [
-     [
-      "DI",
-      0.915
-     ],
-     [
-      "LA",
-      1.124
-     ],
-     [
-      "SPEZIA",
-      1.334,
-      true
-     ]
-    ]
-   ],
-   "ini": 0.915,
-   "fim": 1.669
-  },
-  {
-   "linee": [
-    [
-     [
-      "È",
-      1.699
-     ],
-     [
-      "SULLA",
-      1.908
-     ],
-     [
-      "MAPPA",
-      2.273
-     ]
-    ]
-   ],
-   "ini": 1.699,
-   "fim": 2.608
-  },
-  {
-   "linee": [
-    [
-     [
-      "3D",
-      2.638,
-      true
-     ],
-     [
-      "DELL'ITALIA",
-      2.848
-     ]
-    ]
-   ],
-   "ini": 2.638,
-   "fim": 3.835
-  },
-  {
-   "linee": [
-    [
-     [
-      "E",
-      3.865
-     ],
-     [
-      "ANCHE",
-      4.027
-     ],
-     [
-      "QUESTO",
-      4.309
-     ]
-    ]
-   ],
-   "ini": 3.865,
-   "fim": 4.562
-  },
-  {
-   "linee": [
-    [
-     [
-      "NEGOZIO",
-      4.592
-     ],
-     [
-      "DI",
-      4.994
-     ]
-    ],
-    [
-     [
-      "MOBILI",
-      5.156,
-      true
-     ]
-    ]
-   ],
-   "ini": 4.592,
-   "fim": 5.528
-  },
-  {
-   "linee": [
-    [
-     [
-      "A",
-      5.558
-     ],
-     [
-      "TEGGIANO",
-      5.721,
-      true
-     ]
-    ]
-   ],
-   "ini": 5.558,
-   "fim": 6.63
-  },
-  {
-   "linee": [
-    [
-     [
-      "QUESTO",
-      6.66
-     ]
-    ],
-    [
-     [
-      "RISTORANTE",
-      6.991,
-      true
-     ]
-    ]
-   ],
-   "ini": 6.66,
-   "fim": 7.572
-  },
-  {
-   "linee": [
-    [
-     [
-      "A",
-      7.602
-     ],
-     [
-      "FORMIA",
-      7.792,
-      true
-     ]
-    ]
-   ],
-   "ini": 7.602,
-   "fim": 8.513
-  },
-  {
-   "linee": [
-    [
-     [
-      "E",
-      8.543
-     ],
-     [
-      "QUESTO",
-      8.77
-     ]
-    ],
-    [
-     [
-      "TEX-MEX",
-      9.167,
-      true
-     ]
-    ]
-   ],
-   "ini": 8.543,
-   "fim": 9.533
-  },
-  {
-   "linee": [
-    [
-     [
-      "A",
-      9.563
-     ],
-     [
-      "CHIAVARI",
-      9.79,
-      true
-     ]
-    ]
-   ],
-   "ini": 9.563,
-   "fim": 10.821
-  },
-  {
-   "linee": [
-    [
-     [
-      "CHI",
-      10.851
-     ],
-     [
-      "TOCCA",
-      11.059
-     ],
-     [
-      "IL",
-      11.42
-     ]
-    ],
-    [
-     [
-      "NEGOZIO",
-      11.627
-     ]
-    ]
-   ],
-   "ini": 10.851,
-   "fim": 12.111
-  },
-  {
-   "linee": [
-    [
-     [
-      "VEDE",
-      12.141
-     ],
-     [
-      "LA",
-      12.502
-     ]
-    ],
-    [
-     [
-      "DESCRIZIONE",
-      12.709,
-      true
-     ]
-    ]
-   ],
-   "ini": 12.141,
-   "fim": 13.347
-  },
-  {
-   "linee": [
-    [
-     [
-      "L'INSTAGRAM",
-      13.377,
-      true
-     ]
-    ]
-   ],
-   "ini": 13.377,
-   "fim": 13.862
-  },
-  {
-   "linee": [
-    [
-     [
-      "E",
-      13.892
-     ],
-     [
-      "IL",
-      14.099
-     ],
-     [
-      "PULSANTE",
-      14.306
-     ]
-    ]
-   ],
-   "ini": 13.892,
-   "fim": 14.79
-  },
-  {
-   "linee": [
-    [
-     [
-      "PER",
-      14.82
-     ],
-     [
-      "SCRIVERTI",
-      15.028
-     ]
-    ]
-   ],
-   "ini": 14.82,
-   "fim": 15.512
-  },
-  {
-   "linee": [
-    [
-     [
-      "SU",
-      15.542
-     ],
-     [
-      "WHATSAPP",
-      15.749,
-      true
-     ]
-    ]
-   ],
-   "ini": 15.542,
-   "fim": 16.642
-  },
-  {
-   "linee": [
-    [
-     [
-      "IN",
-      16.672
-     ],
-     [
-      "7",
-      16.871
-     ],
-     [
-      "GIORNI",
-      17.217
-     ]
-    ]
-   ],
-   "ini": 16.672,
-   "fim": 17.532
-  },
-  {
-   "linee": [
-    [
-     [
-      "I",
-      17.562
-     ],
-     [
-      "NOSTRI",
-      17.761
-     ],
-     [
-      "VIDEO",
-      18.107
-     ]
-    ]
-   ],
-   "ini": 17.562,
-   "fim": 18.423
+   "ini": 0.85,
+   "fim": 2.19
   },
   {
    "linee": [
     [
      [
       "HANNO",
-      18.453
+      2.22
      ],
      [
-      "FATTO",
-      18.798
+      "APERTO",
+      2.58
      ]
     ]
    ],
-   "ini": 18.453,
-   "fim": 19.114
+   "ini": 2.22,
+   "fim": 3.04
   },
   {
    "linee": [
     [
      [
-      "UN",
-      19.144
+      "QUESTA",
+      3.07
      ],
      [
-      "MILIONE",
-      19.343,
-      true
-     ],
-     [
-      "E",
-      19.836
-     ]
-    ],
-    [
-     [
-      "400.000",
-      20.034,
+      "MAPPA",
+      3.43,
       true
      ]
     ]
    ],
-   "ini": 19.144,
-   "fim": 20.939
+   "ini": 3.07,
+   "fim": 3.87
   },
   {
    "linee": [
     [
      [
-      "VISUALIZZAZIONI",
-      20.969
-     ]
-    ]
-   ],
-   "ini": 20.969,
-   "fim": 21.873
-  },
-  {
-   "linee": [
-    [
-     [
-      "VISTE",
-      21.903
+      "SOPRA",
+      3.9
      ],
      [
-      "DA",
-      22.249
-     ],
-     [
-      "QUASI",
-      22.448
-     ]
-    ]
-   ],
-   "ini": 21.903,
-   "fim": 22.763
-  },
-  {
-   "linee": [
-    [
-     [
-      "400.000",
-      22.793,
-      true
-     ]
-    ],
-    [
-     [
-      "PERSONE",
-      23.728
-     ]
-    ]
-   ],
-   "ini": 22.793,
-   "fim": 24.284
-  },
-  {
-   "linee": [
-    [
-     [
-      "E",
-      24.314
-     ],
-     [
-      "IL",
-      24.509
-     ],
-     [
-      "SITO",
-      24.704
-     ]
-    ]
-   ],
-   "ini": 24.314,
-   "fim": 25.014
-  },
-  {
-   "linee": [
-    [
-     [
-      "HA",
-      25.044
-     ],
-     [
-      "AVUTO",
-      25.239
-     ],
-     [
-      "PIÙ",
-      25.723
-     ]
-    ],
-    [
-     [
-      "DI",
-      25.919
-     ],
-     [
-      "70.000",
-      26.114,
-      true
-     ]
-    ]
-   ],
-   "ini": 25.044,
-   "fim": 26.857
-  },
-  {
-   "linee": [
-    [
-     [
-      "VISITE",
-      26.887
-     ]
-    ]
-   ],
-   "ini": 26.887,
-   "fim": 27.777
-  },
-  {
-   "linee": [
-    [
-     [
-      "HAI",
-      27.807
-     ]
-    ],
-    [
-     [
-      "UN'ATTIVITÀ",
-      27.967,
-      true
-     ]
-    ]
-   ],
-   "ini": 27.807,
-   "fim": 28.914
-  },
-  {
-   "linee": [
-    [
-     [
-      "METTILA",
-      28.944
-     ],
-     [
-      "NELLA",
-      29.394
-     ]
-    ]
-   ],
-   "ini": 28.944,
-   "fim": 29.68
-  },
-  {
-   "linee": [
-    [
-     [
-      "TUA",
-      29.71
-     ],
-     [
-      "CITTÀ",
-      29.891
-     ],
-     [
-      "DA",
-      30.206
-     ],
-     [
-      "9",
-      30.388,
-      true
-     ]
-    ]
-   ],
-   "ini": 29.71,
-   "fim": 30.673
-  },
-  {
-   "linee": [
-    [
-     [
-      "EURO",
-      30.703
-     ],
-     [
-      "E",
-      31.019
-     ],
-     [
-      "90",
-      31.2,
-      true
-     ]
-    ]
-   ],
-   "ini": 30.703,
-   "fim": 31.62
-  },
-  {
-   "linee": [
-    [
-     [
-      "PIÙ",
-      31.65
-     ],
-     [
-      "IVA",
-      31.831
-     ]
-    ]
-   ],
-   "ini": 31.65,
-   "fim": 32.448
-  },
-  {
-   "linee": [
-    [
-     [
-      "I",
-      32.478
-     ],
-     [
-      "POSTI",
-      32.648
-     ],
-     [
-      "IN",
-      32.943
-     ]
-    ],
-    [
-     [
-      "OGNI",
-      33.113
-     ]
-    ]
-   ],
-   "ini": 32.478,
-   "fim": 33.378
-  },
-  {
-   "linee": [
-    [
-     [
-      "CITTÀ",
-      33.408
+      "CI",
+      4.29
      ],
      [
       "SONO",
-      33.703
+      4.38
+     ]
+    ]
+   ],
+   "ini": 3.9,
+   "fim": 4.86
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      4.89
+     ],
+     [
+      "DI",
+      5.02
+     ],
+     [
+      "27.000",
+      5.22,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.89,
+   "fim": 6.62
+  },
+  {
+   "linee": [
+    [
+     [
+      "CASE",
+      6.65
+     ]
+    ]
+   ],
+   "ini": 6.65,
+   "fim": 7.17
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      7.2
+     ],
+     [
+      "SOLO",
+      7.33,
+      true
+     ],
+     [
+      "22",
+      7.9,
+      true
+     ]
+    ],
+    [
+     [
+      "ATTIVITÀ",
+      8.34
+     ]
+    ]
+   ],
+   "ini": 7.2,
+   "fim": 9.41
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUESTO",
+      9.44
+     ],
+     [
+      "È",
+      10.19
+     ]
+    ],
+    [
+     [
+      "GABHUB",
+      10.29,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.44,
+   "fim": 10.99
+  },
+  {
+   "linee": [
+    [
+     [
+      "A ROMA",
+      11.02,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.02,
+   "fim": 11.81
+  },
+  {
+   "linee": [
+    [
+     [
+      "LO TOCCHI",
+      11.84,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.84,
+   "fim": 12.64
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      12.67
+     ],
+     [
+      "C'È",
+      12.75
+     ],
+     [
+      "TUTTO",
+      12.99,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.67,
+   "fim": 13.71
+  },
+  {
+   "linee": [
+    [
+     [
+      "COSA",
+      13.74
+     ],
+     [
+      "FA",
+      14.11
+     ],
+     [
+      "DOV'È",
+      14.73
+     ]
+    ]
+   ],
+   "ini": 13.74,
+   "fim": 14.84
+  },
+  {
+   "linee": [
+    [
+     [
+      "",
+      14.87
+     ]
+    ]
+   ],
+   "ini": 14.87,
+   "fim": 15.15
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      15.18
+     ],
+     [
+      "IL",
+      15.25
+     ],
+     [
+      "TASTO",
+      15.45
+     ]
+    ]
+   ],
+   "ini": 15.18,
+   "fim": 15.74
+  },
+  {
+   "linee": [
+    [
+     [
+      "PER",
+      15.77
+     ],
+     [
+      "SCRIVERGLI",
+      16
+     ]
+    ]
+   ],
+   "ini": 15.77,
+   "fim": 16.65
+  },
+  {
+   "linee": [
+    [
+     [
+      "SU",
+      16.68
+     ],
+     [
+      "WHATSAPP",
+      16.83,
+      true
+     ]
+    ]
+   ],
+   "ini": 16.68,
+   "fim": 17.69
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      17.72
+     ],
+     [
+      "CITTÀ",
+      18.06,
+      true
+     ],
+     [
+      "HA",
+      18.55
      ]
     ],
     [
      [
       "POCHI",
-      33.999,
+      18.71,
       true
      ]
     ]
    ],
-   "ini": 33.408,
-   "fim": 34.607
+   "ini": 17.72,
+   "fim": 19.02
+  },
+  {
+   "linee": [
+    [
+     [
+      "POSTI",
+      19.05,
+      true
+     ]
+    ]
+   ],
+   "ini": 19.05,
+   "fim": 19.65
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      19.68
+     ],
+     [
+      "UN",
+      19.85
+     ],
+     [
+      "PAESE",
+      20.02
+     ]
+    ]
+   ],
+   "ini": 19.68,
+   "fim": 20.64
+  },
+  {
+   "linee": [
+    [
+     [
+      "PICCOLO",
+      20.67,
+      true
+     ],
+     [
+      "SOLO",
+      21.06,
+      true
+     ]
+    ]
+   ],
+   "ini": 20.67,
+   "fim": 21.38
+  },
+  {
+   "linee": [
+    [
+     [
+      "6",
+      21.41,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.41,
+   "fim": 21.89
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      21.92
+     ],
+     [
+      "ARRIVA",
+      22.14
+     ]
+    ],
+    [
+     [
+      "PRIMA",
+      22.57,
+      true
+     ]
+    ]
+   ],
+   "ini": 21.92,
+   "fim": 22.9
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRENDE",
+      22.93
+     ],
+     [
+      "IL",
+      23.36
+     ]
+    ],
+    [
+     [
+      "POSTO",
+      23.68,
+      true
+     ]
+    ]
+   ],
+   "ini": 22.93,
+   "fim": 24.09
+  },
+  {
+   "linee": [
+    [
+     [
+      "COSTA",
+      24.12
+     ],
+     [
+      "MENO",
+      24.47
+     ],
+     [
+      "DI",
+      24.91
+     ]
+    ],
+    [
+     [
+      "UN",
+      25.05
+     ],
+     [
+      "CAFFÈ",
+      25.11,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.12,
+   "fim": 25.42
+  },
+  {
+   "linee": [
+    [
+     [
+      "AL",
+      25.45
+     ],
+     [
+      "GIORNO",
+      25.54
+     ]
+    ]
+   ],
+   "ini": 25.45,
+   "fim": 26.17
+  },
+  {
+   "linee": [
+    [
+     [
+      "DA",
+      26.2
+     ],
+     [
+      "9,90",
+      26.38,
+      true
+     ],
+     [
+      "€",
+      26.68
+     ]
+    ]
+   ],
+   "ini": 26.2,
+   "fim": 26.99
+  },
+  {
+   "linee": [
+    [
+     [
+      "",
+      27.02
+     ],
+     [
+      "",
+      27.08
+     ],
+     [
+      "",
+      27.55
+     ]
+    ]
+   ],
+   "ini": 27.02,
+   "fim": 28.09
+  },
+  {
+   "linee": [
+    [
+     [
+      "PIÙ",
+      28.12
+     ],
+     [
+      "IVA",
+      28.39,
+      true
+     ],
+     [
+      "PER",
+      28.66
+     ],
+     [
+      "30",
+      28.87,
+      true
+     ]
+    ],
+    [
+     [
+      "GIORNI",
+      29.3,
+      true
+     ]
+    ]
+   ],
+   "ini": 28.12,
+   "fim": 29.99
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON PARTITA",
+      30.02
+     ]
+    ]
+   ],
+   "ini": 30.02,
+   "fim": 30.92
+  },
+  {
+   "linee": [
+    [
+     [
+      "IVA",
+      30.95,
+      true
+     ],
+     [
+      "L'IVA",
+      31.14
+     ],
+     [
+      "SI",
+      31.5
+     ]
+    ],
+    [
+     [
+      "AZZERA",
+      31.77,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.95,
+   "fim": 32.43
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      32.46
+     ],
+     [
+      "SE",
+      32.52
+     ],
+     [
+      "NON",
+      32.64
+     ]
+    ],
+    [
+     [
+      "APPROVIAMO",
+      32.81
+     ]
+    ]
+   ],
+   "ini": 32.46,
+   "fim": 33.42
+  },
+  {
+   "linee": [
+    [
+     [
+      "L'ATTIVITÀ",
+      33.45
+     ],
+     [
+      "TI",
+      34.17
+     ]
+    ],
+    [
+     [
+      "RIMBORSIAMO",
+      34.25,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.45,
+   "fim": 34.89
+  },
+  {
+   "linee": [
+    [
+     [
+      "TUTTO",
+      34.92,
+      true
+     ]
+    ]
+   ],
+   "ini": 34.92,
+   "fim": 35.43
+  },
+  {
+   "linee": [
+    [
+     [
+      "CI",
+      35.46
+     ],
+     [
+      "VOGLIONO",
+      35.6
+     ]
+    ]
+   ],
+   "ini": 35.46,
+   "fim": 36.34
+  },
+  {
+   "linee": [
+    [
+     [
+      "DUE",
+      36.37,
+      true
+     ],
+     [
+      "MINUTI",
+      36.45,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.37,
+   "fim": 36.99
   },
   {
    "linee": [
     [
      [
       "LINK",
-      34.637
+      37.02,
+      true
      ],
      [
       "IN",
-      34.869
+      37.41
      ],
      [
       "BIO",
-      35.101,
+      37.5,
       true
+     ]
+    ],
+    [
+     [
+      "TOCCA",
+      38.08
      ]
     ]
    ],
-   "ini": 34.637,
-   "fim": 35.713
+   "ini": 37.02,
+   "fim": 38.53
   },
   {
    "linee": [
     [
      [
-      "E",
-      35.743
+      "NEGOZI",
+      38.56,
+      true
      ],
+     [
+      "SCEGLI",
+      39.38
+     ]
+    ]
+   ],
+   "ini": 38.56,
+   "fim": 39.8
+  },
+  {
+   "linee": [
+    [
      [
       "LA",
-      35.896
+      39.83
      ],
      [
-      "PROSSIMA",
-      36.048,
+      "TUA",
+      39.98
+     ],
+     [
+      "CITTÀ",
+      40.21,
       true
      ]
     ]
    ],
-   "ini": 35.743,
-   "fim": 36.397
+   "ini": 39.83,
+   "fim": 40.83
   },
   {
    "linee": [
     [
      [
-      "ATTIVITÀ",
-      36.427
+      "HAI",
+      40.86
      ],
      [
-      "SULLA",
-      36.918
+      "",
+      41.07
+     ]
+    ],
+    [
+     [
+      "UN'ATTIVITÀ",
+      41.19,
+      true
      ]
     ]
    ],
-   "ini": 36.427,
-   "fim": 37.153
+   "ini": 40.86,
+   "fim": 41.79
   },
   {
    "linee": [
     [
      [
-      "MAPPA",
-      37.183
+      "O",
+      41.82
+     ],
+     [
+      "CONOSCI",
+      41.86
+     ]
+    ],
+    [
+     [
+      "QUALCUNO",
+      42.29,
+      true
      ]
     ]
    ],
-   "ini": 37.183,
-   "fim": 38.38
+   "ini": 41.82,
+   "fim": 42.8
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      42.83
+     ],
+     [
+      "CE",
+      43.04
+     ],
+     [
+      "L'HA",
+      43.23
+     ]
+    ]
+   ],
+   "ini": 42.83,
+   "fim": 43.63
+  },
+  {
+   "linee": [
+    [
+     [
+      "MANDAGLI",
+      43.66,
+      true
+     ],
+     [
+      "",
+      43.94
+     ]
+    ],
+    [
+     [
+      "QUESTO",
+      44.1
+     ]
+    ]
+   ],
+   "ini": 43.66,
+   "fim": 44.62
+  },
+  {
+   "linee": [
+    [
+     [
+      "VIDEO",
+      44.65,
+      true
+     ]
+    ]
+   ],
+   "ini": 44.65,
+   "fim": 45.29
   }
  ],
  "parlato": [
-  "Questa libreria di La Spezia è sulla mappa 3D dell'Italia.",
-  "E anche questo negozio di mobili a Teggiano…",
-  "questo ristorante a Formia…",
-  "e questo tex-mex a Chiavari.",
-  "Chi tocca il negozio vede la descrizione, l'Instagram e il pulsante per scriverti su WhatsApp.",
-  "In sette giorni i nostri video hanno fatto un milione e quattrocentomila visualizzazioni, viste da quasi quattrocentomila persone,",
-  "e il sito ha avuto più di settantamila visite.",
-  "Hai un'attività?",
-  "Mettila nella tua città, da nove euro e novanta più IVA.",
-  "I posti in ogni città sono pochi.",
-  "Link in bio…",
-  "e la prossima attività sulla mappa…"
- ],
- "frasi_parlato": [
-  0,
-  0,
-  0,
-  0,
-  1,
-  1,
-  1,
-  2,
-  2,
-  3,
-  3,
-  4,
-  4,
-  4,
-  4,
-  4,
-  4,
-  5,
-  5,
-  5,
-  5,
-  5,
-  5,
-  5,
-  6,
-  6,
-  6,
-  7,
-  8,
-  8,
-  8,
-  8,
-  9,
-  9,
-  10,
-  11,
-  11,
-  11
+  "Lunedì,",
+  "7000 persone hanno aperto questa mappa.",
+  "Sopra ci sono più di 27000 case,",
+  "e solo 22 attività.",
+  "Questo è Gabhub, a_Roma.",
+  "Lo_tocchi,",
+  "e c'è tutto:",
+  "cosa fa, dove è~,",
+  "e il tasto per scrivergli su WhatsApp.",
+  "Ogni città ha pochi posti:",
+  "in un paese piccolo, solo 6.",
+  "Chi arriva prima, prende il posto.",
+  "Costa meno di un caffè al giorno:",
+  "da 9 euro e~ 90 centesimi più IVA per 30 giorni.",
+  "Con_Partita IVA, l'IVA si azzera.",
+  "E se non approviamo l'attività, ti rimborsiamo tutto.",
+  "Ci vogliono due minuti:",
+  "link in bio, tocca Negozi, scegli la tua città.",
+  "Hai un~ attività~?",
+  "O conosci qualcuno che ce l'ha?",
+  "Manda~ gli~ questo video!"
  ],
  "eventi": {
-  "inizio": -0.02,
-  "libreria": 0.345,
-  "spezia": 1.284,
-  "mappa0": 2.223,
-  "italia0": 2.798,
-  "anche": 3.815,
-  "mobili": 5.106,
-  "teggiano": 5.671,
-  "r3": 6.61,
-  "ristorante": 6.941,
-  "formia": 7.742,
-  "e3": 8.493,
-  "texmex": 9.117,
-  "chiavari": 9.74,
-  "chi": 10.801,
-  "tocca": 11.009,
-  "negozio": 11.577,
-  "descrizione": 12.659,
-  "instagram": 13.327,
-  "pulsante": 14.256,
-  "whatsapp": 15.699,
-  "insette": 16.622,
-  "milione": 19.293,
-  "visual": 20.919,
-  "quasi": 22.398,
-  "persone": 23.678,
-  "sito": 24.654,
-  "settantamila": 26.064,
-  "visite": 26.837,
-  "hai": 27.757,
-  "attivita": 27.917,
-  "mettila": 28.894,
-  "citta6": 29.841,
-  "nove": 30.338,
-  "novanta": 31.15,
-  "iva": 31.781,
-  "posti": 32.598,
-  "pochi": 33.949,
-  "link": 34.587,
-  "bio": 35.051,
-  "prossima": 35.998,
-  "mappa9": 37.133
- },
- "sincro": {
-  "eventi.inizio": [
-   0,
-   0,
-   -0.05
-  ],
-  "eventi.libreria": [
-   0,
-   1,
-   -0.05
-  ],
-  "eventi.spezia": [
-   0,
-   4,
-   -0.05
-  ],
-  "eventi.mappa0": [
-   0,
-   7,
-   -0.05
-  ],
-  "eventi.italia0": [
-   0,
-   9,
-   -0.05
-  ],
-  "eventi.anche": [
-   1,
-   0,
-   -0.05
-  ],
-  "eventi.mobili": [
-   1,
-   5,
-   -0.05
-  ],
-  "eventi.teggiano": [
-   1,
-   7,
-   -0.05
-  ],
-  "eventi.r3": [
-   2,
-   0,
-   -0.05
-  ],
-  "eventi.ristorante": [
-   2,
-   1,
-   -0.05
-  ],
-  "eventi.formia": [
-   2,
-   3,
-   -0.05
-  ],
-  "eventi.e3": [
-   3,
-   0,
-   -0.05
-  ],
-  "eventi.texmex": [
-   3,
-   2,
-   -0.05
-  ],
-  "eventi.chiavari": [
-   3,
-   4,
-   -0.05
-  ],
-  "eventi.chi": [
-   4,
-   0,
-   -0.05
-  ],
-  "eventi.tocca": [
-   4,
-   1,
-   -0.05
-  ],
-  "eventi.negozio": [
-   4,
-   3,
-   -0.05
-  ],
-  "eventi.descrizione": [
-   4,
-   6,
-   -0.05
-  ],
-  "eventi.instagram": [
-   4,
-   7,
-   -0.05
-  ],
-  "eventi.pulsante": [
-   4,
-   10,
-   -0.05
-  ],
-  "eventi.whatsapp": [
-   4,
-   14,
-   -0.05
-  ],
-  "eventi.insette": [
-   5,
-   0,
-   -0.05
-  ],
-  "eventi.milione": [
-   5,
-   9,
-   -0.05
-  ],
-  "eventi.visual": [
-   5,
-   12,
-   -0.05
-  ],
-  "eventi.quasi": [
-   5,
-   15,
-   -0.05
-  ],
-  "eventi.persone": [
-   5,
-   17,
-   -0.05
-  ],
-  "eventi.sito": [
-   6,
-   2,
-   -0.05
-  ],
-  "eventi.settantamila": [
-   6,
-   7,
-   -0.05
-  ],
-  "eventi.visite": [
-   6,
-   8,
-   -0.05
-  ],
-  "eventi.hai": [
-   7,
-   0,
-   -0.05
-  ],
-  "eventi.attivita": [
-   7,
-   1,
-   -0.05
-  ],
-  "eventi.mettila": [
-   8,
-   0,
-   -0.05
-  ],
-  "eventi.citta6": [
-   8,
-   3,
-   -0.05
-  ],
-  "eventi.nove": [
-   8,
-   5,
-   -0.05
-  ],
-  "eventi.novanta": [
-   8,
-   8,
-   -0.05
-  ],
-  "eventi.iva": [
-   8,
-   10,
-   -0.05
-  ],
-  "eventi.posti": [
-   9,
-   1,
-   -0.05
-  ],
-  "eventi.pochi": [
-   9,
-   6,
-   -0.05
-  ],
-  "eventi.link": [
-   10,
-   0,
-   -0.05
-  ],
-  "eventi.bio": [
-   10,
-   2,
-   -0.05
-  ],
-  "eventi.prossima": [
-   11,
-   2,
-   -0.05
-  ],
-  "eventi.mappa9": [
-   11,
-   5,
-   -0.05
-  ]
+  "p0": 0.01,
+  "p1": 0.8,
+  "p2": 3.85,
+  "p3": 7.15,
+  "p4": 9.39,
+  "p5": 11.79,
+  "p6": 12.62,
+  "p7": 13.69,
+  "p8": 15.13,
+  "p9": 17.67,
+  "p10": 19.63,
+  "p11": 21.87,
+  "p12": 24.07,
+  "p13": 26.15,
+  "p14": 29.97,
+  "p15": 32.41,
+  "p16": 35.41,
+  "p17": 36.97,
+  "p18": 40.81,
+  "p19": 41.77,
+  "p20": 43.61,
+  "settemila": 0.8,
+  "persone": 1.66,
+  "mappa1": 3.38,
+  "ventisette": 5.17,
+  "solo3": 7.28,
+  "ventidue": 7.85,
+  "gabhub": 10.24,
+  "roma": 10.97,
+  "tocchi": 11.79,
+  "cosa": 13.69,
+  "dove": 14.68,
+  "tasto": 15.4,
+  "whatsapp": 16.78,
+  "pochi": 18.66,
+  "paese": 19.97,
+  "sei": 21.36,
+  "chi": 21.87,
+  "prima": 22.52,
+  "prende": 22.88,
+  "posto": 23.63,
+  "caffe": 25.06,
+  "nove": 26.33,
+  "trenta": 28.82,
+  "partita": 29.97,
+  "azzera": 31.72,
+  "approviamo": 32.76,
+  "rimborsiamo": 34.2,
+  "tutto15": 34.87,
+  "due": 36.32,
+  "minuti": 36.4,
+  "link": 36.97,
+  "tocca": 38.03,
+  "scegli": 39.33,
+  "hai": 40.81,
+  "conosci": 41.81,
+  "manda": 43.61,
+  "video": 44.6
  },
  "audio": {
-  "arquivo": "audio 17.mp3",
-  "durata": 37.64
+  "durata": 45.09
  },
  "copertina": {
-  "basso": {
-   "top": 1120,
+  "alto": {
+   "top": 250,
    "linee": [
     [
-     "LA TUA ATTIVITÀ",
+     "HAI UN",
      null,
-     100
+     110
     ],
     [
-     "QUI DA €9,90 👇",
+     "NEGOZIO?",
+     true,
+     160
+    ]
+   ]
+  },
+  "basso": {
+   "top": 1180,
+   "linee": [
+    [
+     "METTILO SULLA",
+     null,
+     92
+    ],
+    [
+     "MAPPA 3D 📍",
      true,
      116
     ]

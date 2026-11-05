@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<title>Registra reel vetrina · Italia Casa per Casa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=block" rel="stylesheet">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<style>
+  :root { --ink: #152033; --giallo: #FFC93C; --rosso: #E0473C; --verde: #2E9B55; --wa: #25D366; --blu: #3FA9F5; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #8EBFD2; font-family: 'Nunito', sans-serif; }
+  #mappa { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+  #velo { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .forte { color: #fff; font-weight: 900; -webkit-text-stroke: 16px var(--ink); paint-order: stroke fill; text-transform: uppercase; letter-spacing: 1px; }
+  .forte .g, .g { color: var(--giallo); }
+  #sott { position: absolute; left: 40px; right: 40px; top: 1330px; text-align: center; font-size: 92px; line-height: 1.1; }
+  #fisso { position: absolute; left: 50%; top: 1588px; transform: translateX(-50%); white-space: nowrap; background: rgba(255, 255, 255, .94); color: var(--ink); font-size: 36px; font-weight: 900; border: 4px solid var(--ink); border-radius: 999px; padding: 6px 26px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
+  #titolo { position: absolute; left: 20px; right: 20px; top: 150px; text-align: center; opacity: 0; transform-origin: 50% 0; }
+  #titolo .t1 { font-size: 100px; -webkit-text-stroke-width: 19px; line-height: 1.02; }
+  #titolo .t2 { font-size: 66px; -webkit-text-stroke-width: 13px; margin-top: 6px; }
+  .stamp { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; line-height: 1.04; }
+  .chip { position: absolute; left: 50%; white-space: nowrap; background: #fff; color: var(--ink); font-size: 50px; font-weight: 900; border: 6px solid var(--ink); border-radius: 999px; padding: 8px 34px; box-shadow: 0 8px 0 rgba(21,32,51,.3); opacity: 0; }
+  /* contadores */
+  #contatore { position: absolute; left: 0; right: 0; top: 230px; text-align: center; opacity: 0; }
+  #contatore .ic { font-size: 120px; line-height: 1; -webkit-text-stroke: 0; }
+  #contatore .n { font-size: 220px; -webkit-text-stroke-width: 36px; line-height: 1; font-variant-numeric: tabular-nums; }
+  #contatore .s { font-size: 66px; -webkit-text-stroke-width: 13px; }
+  #pins > div { position: absolute; left: 0; top: 0; width: 76px; height: 76px; margin: -76px 0 0 -38px; border-radius: 50% 50% 50% 0; transform-origin: 50% 100%; background: var(--giallo); border: 5px solid var(--ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 38px; opacity: 0; }
+  #etichette > div { position: absolute; left: 0; top: 0; opacity: 0; transform-origin: 50% 100%; }
+  .cartello { display: flex; flex-direction: column; align-items: center; }
+  .cartello .box { background: #fff; border: 5px solid var(--ink); border-radius: 22px; padding: 10px 26px 12px; text-align: center; box-shadow: 0 6px 0 rgba(21,32,51,.25); white-space: nowrap; }
+  .cartello .box.oro { background: linear-gradient(180deg, #FFE38A, #FFC93C); }
+  .cartello .box b { display: block; font-size: 46px; font-weight: 900; color: var(--ink); line-height: 1.05; }
+  .cartello .box span { display: block; font-size: 30px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  .cartello .freccia { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 16px solid var(--ink); }
+  .riquadro { position: absolute; left: 60px; right: 60px; background: #fff; border: 6px solid var(--ink); border-radius: 36px; padding: 22px 28px; box-shadow: 0 10px 0 rgba(21,32,51,.25); opacity: 0; box-sizing: border-box; transform-origin: 50% 0; }
+  /* cartão da loja (igual ao do site) */
+  #scheda { top: 300px; left: 90px; right: 90px; padding: 0; overflow: hidden; }
+  #scheda .testa { height: 130px; display: flex; align-items: center; gap: 20px; padding: 0 26px; border-bottom: 5px solid var(--ink); }
+  #scheda .testa .logo { width: 90px; height: 90px; border-radius: 20px; border: 4px solid var(--ink); background: #fff; flex: none; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+  #scheda .testa b { font-size: 52px; font-weight: 900; color: #fff; -webkit-text-stroke: 9px var(--ink); paint-order: stroke fill; line-height: 1.05; }
+  #scheda .corpo { padding: 20px 28px 26px; }
+  #scheda .riga { font-size: 36px; font-weight: 900; color: var(--ink); border-radius: 16px; padding: 6px 12px; margin: 0 -12px 6px; }
+  #scheda .riga.on { background: #FFF1C2; box-shadow: 0 0 0 5px var(--giallo); }
+  #scheda .wa { margin-top: 18px; background: var(--wa); color: #fff; border: 5px solid var(--ink); border-radius: 26px; font-size: 40px; font-weight: 900; text-align: center; padding: 14px 0; }
+  #scheda .msg { margin-top: 16px; background: #DCF8C6; border: 4px solid var(--ink); border-radius: 22px 22px 22px 6px; font-size: 32px; font-weight: 800; color: var(--ink); padding: 10px 20px; opacity: 0; display: inline-block; }
+  .lampo { box-shadow: 0 0 0 10px var(--giallo) !important; }
+  #tocco { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: rgba(255,255,255,.55); border: 6px solid #fff; opacity: 0; pointer-events: none; }
+  /* vagas */
+  #posti { position: absolute; left: 0; right: 0; top: 330px; text-align: center; opacity: 0; }
+  #posti .slot { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; padding: 0 110px; }
+  #posti .slot i { font-style: normal; width: 230px; height: 170px; border-radius: 26px; border: 6px solid var(--ink); background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 76px; -webkit-text-stroke: 0; opacity: 0; line-height: 1; }
+  #posti .slot i small { font-size: 28px; font-weight: 900; color: var(--ink); margin-top: 6px; }
+  #posti .slot i.preso { background: #C9F2D6; }
+  #posti .slot i.preso small { color: var(--verde); }
+  /* preço */
+  #prezzo { top: 330px; text-align: center; padding: 26px 28px 30px; }
+  #prezzo .caffe { font-size: 52px; font-weight: 900; color: var(--ink); text-transform: uppercase; }
+  #prezzo .p { font-size: 150px; font-weight: 900; color: var(--verde); line-height: 1.05; -webkit-text-stroke: 10px var(--ink); paint-order: stroke fill; opacity: 0; }
+  #prezzo .p small { font-size: 62px; }
+  #prezzo .d { font-size: 50px; font-weight: 900; color: var(--ink); opacity: 0; }
+  #prezzo .iva { display: inline-block; margin-top: 18px; background: var(--giallo); font-size: 46px; font-weight: 900; color: var(--ink); border: 5px solid var(--ink); border-radius: 999px; padding: 6px 30px; opacity: 0; }
+  /* passos */
+  #passi { position: absolute; left: 70px; right: 70px; top: 300px; opacity: 0; }
+  #passi .tempo { text-align: center; font-size: 110px; -webkit-text-stroke-width: 20px; margin-bottom: 24px; }
+  #passi .p { display: flex; align-items: center; gap: 22px; background: #fff; border: 6px solid var(--ink); border-radius: 30px; padding: 16px 26px; margin-bottom: 18px; box-shadow: 0 8px 0 rgba(21,32,51,.25); opacity: 0; -webkit-text-stroke: 0; }
+  #passi .p i { font-style: normal; width: 78px; height: 78px; border-radius: 50%; background: var(--giallo); border: 5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 46px; font-weight: 900; color: var(--ink); flex: none; }
+  #passi .p b { font-size: 50px; font-weight: 900; color: var(--ink); text-transform: none; }
+  /* chamada final */
+  #cta { position: absolute; left: 20px; right: 20px; top: 280px; text-align: center; }
+  #cta > div { opacity: 0; transform-origin: 50% 50%; }
+  #cta .a1 { font-size: 100px; -webkit-text-stroke-width: 19px; }
+  #cta .a2 { font-size: 70px; -webkit-text-stroke-width: 14px; margin-top: 20px; }
+  #cta .a3 { font-size: 92px; -webkit-text-stroke-width: 18px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<canvas id="mappa"></canvas>
+<div id="velo"></div>
+<div id="pins"></div>
+<div id="etichette"></div>
+<div id="titolo" class="forte"><div class="t1"></div><div class="t2 g"></div></div>
+<div id="stampi"></div>
+<div id="giorno" class="chip" style="top:120px">📅 Lunedì</div>
+<div id="contatore" class="forte"><div class="ic">👀</div><div class="n g"></div><div class="s"></div></div>
+<div id="scheda" class="riquadro"><div class="testa"><div class="logo">🏪</div><b></b></div><div class="corpo"><div class="riga r1"></div><div class="riga r2"></div><div class="wa">💬 Scrivi su WhatsApp</div><div class="msg">Ciao! Vi ho trovato sulla mappa 👋</div></div></div>
+<div id="posti" class="forte"><div class="slot"></div></div>
+<div id="prezzo" class="riquadro"><div class="caffe">☕ Meno di un caffè al giorno</div><div class="p">9,90 €<small> + IVA</small></div><div class="d">📅 PER 30 GIORNI</div><div class="iva">🧾 Con Partita IVA: IVA 0 €</div></div>
+<div id="passi" class="forte"><div class="tempo">⏱️ 2 <span class="g">MINUTI</span></div><div class="p"><i>1</i><b>🔗 Link in bio</b></div><div class="p"><i>2</i><b>🏪 Tocca «Negozi»</b></div><div class="p"><i>3</i><b>📍 Scegli la tua città</b></div></div>
+<div id="cta" class="forte"><div class="a1">🏪 HAI UN'<span class="g">ATTIVITÀ</span>?</div><div class="a2">O CONOSCI QUALCUNO<br>CHE CE L'HA?</div><div class="a3">📲 MANDAGLI<br><span class="g">QUESTO VIDEO</span></div></div>
+<div id="tocco"></div>
+<div id="sott" class="forte"></div>
+<div id="fisso">🏪 Il tuo negozio sulla mappa → link in bio</div>
+<script type="module" src="video/vetrina.js"></script>
+</body>
+</html>

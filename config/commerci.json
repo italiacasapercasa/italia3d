@@ -361,5 +361,21 @@
     "descrizione": "Vendo stoffe autentiche africane, ma anche vestiti e accessori realizzati da cooperative locali di rifugiati, disabili e altro ancora!",
     "testo": "",
     "logo": ""
+  },
+  {
+    "id": "261105-67a2ec20",
+    "istat": "018110",
+    "approvato": "2026-11-05T16:00:31.756Z",
+    "fino": "2026-12-05T16:00:31.756Z",
+    "prodotto": "cartellone",
+    "nome": "Uelman Multiservizi",
+    "tipo": "servizi",
+    "colore": "#152033",
+    "whatsapp": "3518689502",
+    "instagram": "manu15nick",
+    "descrizione": "Multiservizi, ristrutturazioni, sottotetti in legno, facciate esterne, imbiancatura, ecc…",
+    "testo": "Qualità prezzo, come se fosse casa mia!",
+    "logo": "data/loghi/261105-67a2ec20.jpg",
+    "giocatore": "manu15nick"
   }
 ]

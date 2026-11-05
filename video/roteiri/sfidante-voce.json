@@ -1,0 +1,844 @@
+{
+ "nome": "sfidante",
+ "durata": 39.16,
+ "vincitore": "le0_caru",
+ "sfidante_pts": 1561,
+ "presidente_pts": 1669,
+ "entrati": 286,
+ "demo_citta": "Bologna",
+ "frasi": [
+  {
+   "linee": [
+    [
+     [
+      "IERI",
+      0.05
+     ]
+    ]
+   ],
+   "ini": 0.05,
+   "fim": 0.48
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      0.51
+     ],
+     [
+      "UN",
+      0.7
+     ],
+     [
+      "SOLO",
+      0.85,
+      true
+     ]
+    ]
+   ],
+   "ini": 0.51,
+   "fim": 1.17
+  },
+  {
+   "linee": [
+    [
+     [
+      "GIORNO",
+      1.2
+     ]
+    ]
+   ],
+   "ini": 1.2,
+   "fim": 1.87
+  },
+  {
+   "linee": [
+    [
+     [
+      "SONO",
+      1.9
+     ],
+     [
+      "ENTRATE",
+      2.3
+     ]
+    ]
+   ],
+   "ini": 1.9,
+   "fim": 2.83
+  },
+  {
+   "linee": [
+    [
+     [
+      "NEL",
+      2.86
+     ],
+     [
+      "GIOCO",
+      3.12
+     ],
+     [
+      "286",
+      3.55,
+      true
+     ]
+    ],
+    [
+     [
+      "PERSONE",
+      4.39
+     ]
+    ]
+   ],
+   "ini": 2.86,
+   "fim": 4.92
+  },
+  {
+   "linee": [
+    [
+     [
+      "NUOVE",
+      4.95,
+      true
+     ]
+    ]
+   ],
+   "ini": 4.95,
+   "fim": 5.63
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      5.66
+     ],
+     [
+      "UNO",
+      5.76
+     ],
+     [
+      "SOLO",
+      6.02,
+      true
+     ]
+    ]
+   ],
+   "ini": 5.66,
+   "fim": 6.36
+  },
+  {
+   "linee": [
+    [
+     [
+      "NE",
+      6.39
+     ],
+     [
+      "HA PORTATE",
+      6.58
+     ]
+    ]
+   ],
+   "ini": 6.39,
+   "fim": 7.03
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUINDICI",
+      7.06,
+      true
+     ]
+    ]
+   ],
+   "ini": 7.06,
+   "fim": 8.03
+  },
+  {
+   "linee": [
+    [
+     [
+      "UN",
+      8.06
+     ],
+     [
+      "RAGAZZO",
+      8.21
+     ],
+     [
+      "DI",
+      8.76
+     ]
+    ],
+    [
+     [
+      "TERMOLI",
+      8.89,
+      true
+     ]
+    ]
+   ],
+   "ini": 8.06,
+   "fim": 9.55
+  },
+  {
+   "linee": [
+    [
+     [
+      "IL",
+      9.58
+     ],
+     [
+      "PREMIO",
+      9.73,
+      true
+     ]
+    ]
+   ],
+   "ini": 9.58,
+   "fim": 10.33
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      10.36
+     ],
+     [
+      "SUA",
+      10.56
+     ],
+     [
+      "CASA",
+      10.72,
+      true
+     ]
+    ]
+   ],
+   "ini": 10.36,
+   "fim": 11
+  },
+  {
+   "linee": [
+    [
+     [
+      "DECORATA",
+      11.03,
+      true
+     ],
+     [
+      "COME",
+      11.65
+     ]
+    ]
+   ],
+   "ini": 11.03,
+   "fim": 11.93
+  },
+  {
+   "linee": [
+    [
+     [
+      "VUOLE",
+      11.96,
+      true
+     ]
+    ]
+   ],
+   "ini": 11.96,
+   "fim": 12.46
+  },
+  {
+   "linee": [
+    [
+     [
+      "GRATIS",
+      12.49,
+      true
+     ],
+     [
+      "PER",
+      12.94
+     ],
+     [
+      "10",
+      13.63,
+      true
+     ]
+    ],
+    [
+     [
+      "GIORNI",
+      13.74,
+      true
+     ]
+    ]
+   ],
+   "ini": 12.49,
+   "fim": 14.57
+  },
+  {
+   "linee": [
+    [
+     [
+      "MA",
+      14.6
+     ],
+     [
+      "NON",
+      14.76
+     ],
+     [
+      "È",
+      15.01
+     ]
+    ],
+    [
+     [
+      "FINITA",
+      15.09,
+      true
+     ]
+    ]
+   ],
+   "ini": 14.6,
+   "fim": 15.55
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUI",
+      15.58
+     ]
+    ]
+   ],
+   "ini": 15.58,
+   "fim": 15.96
+  },
+  {
+   "linee": [
+    [
+     [
+      "CON",
+      15.99
+     ],
+     [
+      "QUEI",
+      16.23
+     ],
+     [
+      "PUNTI",
+      16.57,
+      true
+     ]
+    ]
+   ],
+   "ini": 15.99,
+   "fim": 16.95
+  },
+  {
+   "linee": [
+    [
+     [
+      "ADESSO",
+      16.98
+     ],
+     [
+      "È",
+      17.47
+     ],
+     [
+      "A",
+      17.57
+     ]
+    ],
+    [
+     [
+      "SOLI",
+      17.63
+     ]
+    ]
+   ],
+   "ini": 16.98,
+   "fim": 17.94
+  },
+  {
+   "linee": [
+    [
+     [
+      "108",
+      17.97,
+      true
+     ],
+     [
+      "PUNTI",
+      18.7,
+      true
+     ],
+     [
+      "DAL",
+      19.11
+     ]
+    ],
+    [
+     [
+      "PRESIDENTE",
+      19.36,
+      true
+     ]
+    ]
+   ],
+   "ini": 17.97,
+   "fim": 20.49
+  },
+  {
+   "linee": [
+    [
+     [
+      "DOMENICA",
+      20.52,
+      true
+     ],
+     [
+      "ALLE",
+      21.22
+     ]
+    ]
+   ],
+   "ini": 20.52,
+   "fim": 21.43
+  },
+  {
+   "linee": [
+    [
+     [
+      "ALLE 21",
+      21.46,
+      true
+     ],
+     [
+      "SI",
+      21.93
+     ]
+    ],
+    [
+     [
+      "DECIDE",
+      22.09
+     ]
+    ]
+   ],
+   "ini": 21.46,
+   "fim": 22.53
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHI",
+      22.56
+     ],
+     [
+      "SARÀ",
+      22.82
+     ],
+     [
+      "IL",
+      23.12
+     ]
+    ],
+    [
+     [
+      "PROSSIMO",
+      23.28
+     ]
+    ]
+   ],
+   "ini": 22.56,
+   "fim": 23.88
+  },
+  {
+   "linee": [
+    [
+     [
+      "PRESIDENTE",
+      23.91,
+      true
+     ]
+    ]
+   ],
+   "ini": 23.91,
+   "fim": 24.81
+  },
+  {
+   "linee": [
+    [
+     [
+      "MANCANO",
+      24.84
+     ],
+     [
+      "4",
+      25.39,
+      true
+     ]
+    ],
+    [
+     [
+      "GIORNI",
+      25.63,
+      true
+     ]
+    ]
+   ],
+   "ini": 24.84,
+   "fim": 26.33
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      26.36
+     ],
+     [
+      "COMMENTO",
+      26.69
+     ]
+    ]
+   ],
+   "ini": 26.36,
+   "fim": 27.31
+  },
+  {
+   "linee": [
+    [
+     [
+      "VALE",
+      27.34
+     ],
+     [
+      "PUNTI",
+      27.61,
+      true
+     ]
+    ]
+   ],
+   "ini": 27.34,
+   "fim": 28.14
+  },
+  {
+   "linee": [
+    [
+     [
+      "OGNI",
+      28.17
+     ],
+     [
+      "AMICO",
+      28.53,
+      true
+     ],
+     [
+      "CHE",
+      28.94
+     ]
+    ],
+    [
+     [
+      "PORTI",
+      29.14
+     ]
+    ]
+   ],
+   "ini": 28.17,
+   "fim": 29.5
+  },
+  {
+   "linee": [
+    [
+     [
+      "ANCORA",
+      29.53
+     ],
+     [
+      "DI",
+      30.02
+     ],
+     [
+      "PIÙ",
+      30.18,
+      true
+     ]
+    ]
+   ],
+   "ini": 29.53,
+   "fim": 30.55
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMMENTA",
+      30.58
+     ],
+     [
+      "LA",
+      31.23
+     ]
+    ],
+    [
+     [
+      "TUA",
+      31.39
+     ],
+     [
+      "CITTÀ",
+      31.63,
+      true
+     ]
+    ]
+   ],
+   "ini": 30.58,
+   "fim": 32.29
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      32.32
+     ],
+     [
+      "TUA",
+      32.52
+     ],
+     [
+      "CASA",
+      32.68,
+      true
+     ]
+    ]
+   ],
+   "ini": 32.32,
+   "fim": 32.91
+  },
+  {
+   "linee": [
+    [
+     [
+      "COMPARE",
+      32.94
+     ],
+     [
+      "SULLA",
+      33.39
+     ]
+    ]
+   ],
+   "ini": 32.94,
+   "fim": 33.69
+  },
+  {
+   "linee": [
+    [
+     [
+      "MAPPA",
+      33.72,
+      true
+     ]
+    ]
+   ],
+   "ini": 33.72,
+   "fim": 34.14
+  },
+  {
+   "linee": [
+    [
+     [
+      "E",
+      34.17
+     ],
+     [
+      "SE",
+      34.23
+     ],
+     [
+      "VUOI",
+      34.36
+     ]
+    ]
+   ],
+   "ini": 34.17,
+   "fim": 34.59
+  },
+  {
+   "linee": [
+    [
+     [
+      "CHE",
+      34.62
+     ],
+     [
+      "BRILLI",
+      34.82,
+      true
+     ]
+    ],
+    [
+     [
+      "COME",
+      35.21
+     ]
+    ]
+   ],
+   "ini": 34.62,
+   "fim": 35.44
+  },
+  {
+   "linee": [
+    [
+     [
+      "QUELLA",
+      35.47
+     ],
+     [
+      "DEL",
+      35.86
+     ]
+    ],
+    [
+     [
+      "VINCITORE",
+      36.06,
+      true
+     ]
+    ]
+   ],
+   "ini": 35.47,
+   "fim": 36.85
+  },
+  {
+   "linee": [
+    [
+     [
+      "LA",
+      36.88
+     ],
+     [
+      "DECORI",
+      37.07
+     ],
+     [
+      "DAL",
+      37.56
+     ]
+    ],
+    [
+     [
+      "LINK",
+      37.77,
+      true
+     ]
+    ]
+   ],
+   "ini": 36.88,
+   "fim": 38
+  },
+  {
+   "linee": [
+    [
+     [
+      "IN",
+      38.03
+     ],
+     [
+      "BIO",
+      38.26,
+      true
+     ]
+    ]
+   ],
+   "ini": 38.03,
+   "fim": 38.86
+  }
+ ],
+ "parlato": [
+  "Ieri,",
+  "in un solo giorno,",
+  "sono entrate nel gioco 286 persone nuove.",
+  "E uno solo ne ha_portate quindici.",
+  "Un ragazzo di Termoli.",
+  "Il premio?",
+  "La sua casa decorata come vuole,",
+  "gratis per 10 giorni.",
+  "Ma non è finita qui:",
+  "con quei punti,",
+  "adesso è a soli 108 punti dal Presidente.",
+  "Domenica alle 21 si decide chi sarà il prossimo Presidente.",
+  "Mancano 4 giorni.",
+  "Ogni commento vale punti.",
+  "Ogni amico che porti, ancora di più.",
+  "Commenta la tua città:",
+  "la tua casa compare sulla mappa.",
+  "E se vuoi che brilli come quella del vincitore,",
+  "la decori dal link in bio."
+ ],
+ "eventi": {
+  "p0": 0,
+  "p1": 0.46,
+  "p2": 1.85,
+  "p3": 5.61,
+  "p4": 8.01,
+  "p5": 9.53,
+  "p6": 10.31,
+  "p7": 12.44,
+  "p8": 14.55,
+  "p9": 15.94,
+  "p10": 16.93,
+  "p11": 20.47,
+  "p12": 24.79,
+  "p13": 26.31,
+  "p14": 28.12,
+  "p15": 30.53,
+  "p16": 32.27,
+  "p17": 34.12,
+  "p18": 36.83,
+  "duecento": 3.5,
+  "nuove": 4.9,
+  "solo": 5.97,
+  "quindici": 7.01,
+  "termoli": 8.84,
+  "premio": 9.68,
+  "decorata": 10.98,
+  "vuole": 11.91,
+  "dieci": 13.58,
+  "finita": 15.04,
+  "cento": 17.92,
+  "pres10": 19.31,
+  "domenica": 20.47,
+  "ventuno": 21.41,
+  "prossimo": 23.23,
+  "quattro": 25.34,
+  "giorni12": 25.58,
+  "punti13": 27.56,
+  "amico14": 28.48,
+  "ancora": 29.48,
+  "piu": 30.13,
+  "citta15": 31.58,
+  "casa16": 32.63,
+  "mappa16": 33.67,
+  "brilli": 34.77,
+  "link": 37.72,
+  "bio": 38.21
+ },
+ "audio": {
+  "durata": 38.61
+ }
+}
