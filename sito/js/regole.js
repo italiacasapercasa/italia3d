@@ -1,8 +1,9 @@
 // Regras do jogo. Compartilhado entre o site e os scripts Node (sem DOM).
 export const REGOLE = {
   versao: 'regola-2.0',
-  // mecenate/misura: quem compra um negócio no mapa; só fazem a casa crescer, NÃO contam no mandato (eleições)
-  punti: { casa: 10, commento: 5, extra: 1, tag: 3, recluta: 25, voto: 5, storia: 20, post: 20, mecenate: 100, misura: 50 },
+  // mecenate/misura: quem compra um negócio no mapa; decoro: casa decorada (paga), só enquanto a decoração está ativa.
+  // Os três só fazem a casa crescer, NÃO contam no mandato (eleições)
+  punti: { casa: 10, commento: 5, extra: 1, tag: 3, recluta: 25, voto: 5, storia: 20, post: 20, mecenate: 100, misura: 50, decoro: 50 },
   // extra e tag: por post; storia e post (no feed, marcando o perfil): por dia (fuso de Roma)
   limiti: { extra: 10, tag: 10, storia: 1, post: 1 },
   extra_attivo: true,          // false = comentar várias vezes no mesmo post não soma
@@ -108,6 +109,7 @@ export const FONTI = [
   ['storia', 'Storie con il nostro @', '#FF8A00'],
   ['post', 'Post con il nostro @', '#D94F8A'],
   ['mecenate', 'Attività sulla mappa', '#6C4FD3'],
+  ['decoro', 'Casa decorata', '#FF5FC8'],
 ];
 
 export const COME_GUADAGNARE = p => [
@@ -119,6 +121,7 @@ export const COME_GUADAGNARE = p => [
   ['storia', 'Storia con il nostro @', `+${p.storia} (1 al giorno) e casa in fiamme 24 h`],
   ['post', 'Post nel feed con il nostro @', `+${p.post} (1 al giorno): tagga @italiacasapercasa nella foto`],
   ['mecenate', 'Metti la tua attività sulla mappa', `+${p.mecenate} (+${p.misura} su misura) e badge Mecenate: fanno crescere la casa, ma non contano per le elezioni`],
+  ['decoro', 'Decora la tua casa', `+${p.decoro} finché è decorata: la casa cresce, ma non contano per le elezioni`],
   ['casa', 'Avere una casa', `+${p.casa}, una volta`],
 ];
 

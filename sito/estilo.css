@@ -250,7 +250,7 @@ textarea.convite { width: 100%; box-sizing: border-box; font: 700 14px 'Nunito',
 #pillole > [hidden] { display: none; }
 #decora { position: relative; background: linear-gradient(90deg, #FFE08A, #FFB3D1, #B9E4FF, #FFE08A) !important; background-size: 300% 100% !important; animation: arcobaleno 6s linear infinite; min-width: 168px; }
 #decora .novita { position: absolute; top: -11px; right: -8px; background: var(--rosso); color: #fff; font-size: 9px; font-weight: 900; padding: 1px 6px; border-radius: 99px; border: 2px solid var(--inchiostro); animation: pulsa 1.4s ease-in-out infinite; }
-#decora .testo { display: inline-block; transition: opacity .25s, transform .25s; }
+#decora .testo { display: inline-block; white-space: nowrap; transition: opacity .25s, transform .25s; }
 #decora .testo.via { opacity: 0; transform: translateY(5px); }
 @keyframes arcobaleno { to { background-position: 300% 0; } }
 @keyframes pulsa { 50% { transform: scale(1.15); } }
@@ -288,6 +288,21 @@ button.paga-dec small { display: block; font-size: 12px; font-weight: 700; }
 .consenso-dec input { width: 20px; height: 20px; flex: none; margin-top: 1px; }
 button.decora-btn { display: block; width: 100%; margin-top: 10px; background: linear-gradient(90deg, #FFE08A, #FFB3D1, #B9E4FF); border: 3px solid var(--inchiostro); border-radius: 18px; padding: 11px; font-weight: 900; font-size: 15px; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
 .badge.regalo { background: #FFE3EE; }
+button.decora-btn small { display: block; font-size: 11.5px; font-weight: 800; opacity: .8; margin-top: 2px; }
+button.decora-btn.sec { background: #fff; font-size: 13.5px; padding: 8px; }
+button.decora-btn.rinnova { background: linear-gradient(90deg, #FFD54A, #FFB020); }
+button.decora-btn.rinnova.urgente { animation: decora-pulso 1.6s ease-in-out infinite; }
+.vantaggio-dec { background: linear-gradient(90deg, #FFF4C2, #FFE3EE); border: 2px solid #F2B33D; border-radius: 12px; padding: 7px 10px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+/* pílula do decorador: borda brilhante de tempos em tempos (decori.js ligarPillola) */
+#decora.brilha { animation: arcobaleno 6s linear infinite, decora-brilha 2.4s ease-out 1, decora-pulo .6s ease-out 2; }
+@keyframes decora-brilha {
+  0% { box-shadow: 0 0 0 0 rgba(255,201,60,.95), 0 0 0 0 rgba(255,95,200,.7); }
+  35% { box-shadow: 0 0 0 6px rgba(255,201,60,.95), 0 0 26px 12px rgba(255,95,200,.75); }
+  100% { box-shadow: 0 0 0 12px rgba(255,201,60,0), 0 0 30px 16px rgba(255,95,200,0); }
+}
+@keyframes decora-pulo { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-4px) rotate(-2deg); } 60% { transform: translateY(0) rotate(2deg); } }
+@keyframes decora-pulso { 50% { transform: scale(1.03); box-shadow: 0 0 0 4px rgba(255,176,32,.45); } }
+@media (prefers-reduced-motion: reduce) { #decora.brilha, button.decora-btn.rinnova.urgente { animation: none; } }
 .et-casa.vip { background: linear-gradient(90deg, #FFE08A, #FFC93C, #FFE08A); border: 2.5px solid var(--inchiostro); box-shadow: 0 0 0 2px #fff, 0 0 10px 3px rgba(255, 201, 60, .9); font-size: 13px; padding: 2px 10px; text-align: center; }
 .et-casa.vip small { display: block; font-size: 9.5px; font-weight: 900; color: #7A2E00; }
 .et-casa.regalo { background: #FFE3EE; text-align: center; font-size: 12px; padding: 2px 9px; }

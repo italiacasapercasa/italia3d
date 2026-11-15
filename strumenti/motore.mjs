@@ -17,11 +17,12 @@
 //   commerci:[{ id, istat, ts, fino: ms|null, prodotto, nome, tipo, colore, whatsapp, instagram, descrizione, testo, logo }],
 //            // aprovados: na hora "ts" reservam o próximo lote da cidade (as casas seguintes pulam esse lote);
 //            // depois de "fino" somem do mapa, mas o lote continua reservado (nenhuma casa muda de lugar)
+//   decori:  [{ conta, ts: ms|null, scade: ms }],  // casas decoradas pagas (data/decori.json): +decoro até "scade"
 // }
 import { REGOLE, livelloDi } from '../sito/js/regole.js';
 import { giornoRoma, limitiMandati, mandatoDi } from '../sito/js/tempo.js';
 
-const F = { casa: 0, commento: 1, extra: 2, tag: 3, recluta: 4, voto: 5, storia: 6, post: 7, mecenate: 8 };
+const F = { casa: 0, commento: 1, extra: 2, tag: 3, recluta: 4, voto: 5, storia: 6, post: 7, mecenate: 8, decoro: 9 };
 const NOMES_F = Object.keys(F);
 const dia = 86400e3;
 const ontem = d => new Date(Date.parse(`${d}T12:00:00Z`) - dia).toISOString().slice(0, 10);
@@ -33,8 +34,8 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
   const doppi = eventi.doppi ?? [];
   const lim = limitiMandati(eventi.inizio, agora);
   const kc = mandatoDi(lim, agora);
-  // o bônus de compra (mecenate) nunca dobra: é o valor prometido no e-mail, aprovado em qualquer hora
-  const fator = (f, ts) => (f !== F.mecenate && doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
+  // os bônus de compra (mecenate, decoro) nunca dobram: é o valor prometido, aprovado em qualquer hora
+  const fator = (f, ts) => (f !== F.mecenate && f !== F.decoro && doppi.some(d => ts >= d.da && ts < d.a && (d.tipi.includes('tutto') || d.tipi.includes(NOMES_F[f]))) ? 2 : 1);
   const speciali = eventi.speciali ?? [];
   const specialeDi = ts => speciali.find(s => ts >= s.da && ts < s.a) ?? null;
   const reclute = new Map();   // regra do dia → Map(conta → amigos que entraram na janela), para o ranking do site
@@ -156,6 +157,16 @@ export function calcolare({ eventi, comuni, regioni, agora, versao = 'snap', dem
     const a = n.giocatore && contas.get(n.giocatore.toLowerCase());
     if (!a?.casa || n.ts > agora) continue;
     add(a, F.mecenate, P.mecenate + (n.stile ? P.misura : 0), Math.max(n.ts, a.casa.ts), false);
+  }
+
+  // ---------- casas decoradas (data/decori.json): +decoro enquanto a decoração estiver ativa, uma vez por casa ----------
+  // vence = os pontos saem e a casa volta ao tamanho de antes (incentivo para renovar); não contam nas eleições
+  const decorate = new Set();
+  for (const d of eventi.decori ?? []) {
+    const a = d.conta && contas.get(d.conta.toLowerCase());
+    if (!a?.casa || decorate.has(a.conta) || !(d.scade > agora) || (d.ts ?? 0) > agora) continue;
+    decorate.add(a.conta);
+    add(a, F.decoro, P.decoro, Math.max(d.ts ?? 0, a.casa.ts), false);
   }
 
   // ---------- casas visíveis ----------

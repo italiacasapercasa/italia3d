@@ -1,10 +1,13 @@
 // Casa decorada: cores de time, ouro, neon, coroa, fogos... na própria casa ou de presente para um amigo.
-// Só estética (não dá pontos). Compras pagas ficam em data/decori.json (reescrito pelo webhook da Hotmart a cada pagamento).
+// Casa decorada paga = +50 pontos enquanto ativa (motore.mjs; fazem a casa crescer, não contam nas eleições).
+// "Rinnova" só para o dono (casa marcada como "è la mia casa"): os dias novos somam ao fim da atual (hotmart.php).
+// Compras pagas ficam em data/decori.json (reescrito pelo webhook da Hotmart a cada pagamento).
 // Teste antes do lançamento: ?decora=1 mostra o botão mesmo com "decora.attivo": false em data/negozio.json.
 import * as THREE from 'three';
 import { geometriaCasa, ALTURA_NIVEL, stileRegione } from './modelli.js';
 import { LOTE, posLote } from './citta.js';
 import { PERFIL } from './storie.js';
+import { REGOLE } from './regole.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -291,7 +294,7 @@ export class Decori {
     this.attive = new Map();     // conta -> { casa, sel, da, g, anima, pilha } (desenhadas agora: pagas + prévia)
     this.ed = null;              // edição aberta: { modo, casa, sel, da }
     this.giro = null;            // câmera girando em volta da casa
-    this.cfg = { attivo: false, prezzo: 499, giorni: 10, checkout: '' };
+    this.cfg = { attivo: false, prezzo: 499, giorni: 30, checkout: '' };
     this.ANIM = {}; this.GIRO = {};
     // eleitos da última eleição (snapshot): o Presidente e um sindaco por cidade ganham a decoração do cargo
     const k = D.snap.cariche ?? {};
@@ -344,6 +347,18 @@ export class Decori {
     if (aberta && (vecchie.has(aberta) || novas.has(aberta))) this.ui.casa(this.D.porConta.get(aberta), false);
   }
   pagata(conta) { const p = this.pagate.get(conta); return p && p.scade > Date.now() ? p : null; }
+  // decoração da própria casa (não presente) que o dono pode renovar: ativa, ou vencida há menos de 14 dias
+  // (a vencida some do data/decori.json: fica a última vista guardada no navegador)
+  rinnovabile(conta) {
+    if (!conta || conta !== this.ui?.minha) return null;
+    const p = this.pagata(conta);
+    if (p && !p.da) { gravar('decora_mia', { conta, scade: p.scade, sel: { squadra: p.sel.squadra, extra: [...p.sel.extra] } }); return { scade: p.scade, sel: p.sel, attiva: true }; }
+    if (p) return null;
+    const m = ler('decora_mia');
+    if (!m || m.conta !== conta || Date.now() - m.scade > 14 * 86400e3) return null;
+    return { scade: m.scade, sel: { squadra: m.sel?.squadra ?? null, extra: new Set(m.sel?.extra ?? []) }, attiva: false };
+  }
+  giorniA(ms) { return Math.max(0, Math.ceil((ms - Date.now()) / 86400e3)); }
   // cargo da conta (presidente / sindaco / null) e a seleção com a decoração do cargo somada à comprada
   cargo(conta) { return conta === this.presidente ? 'presidente' : this.sindaci.has(conta) ? 'sindaco' : null; }
   unisci(conta, sel) {
@@ -420,12 +435,21 @@ export class Decori {
   badge(casa) {
     const p = this.pagata(casa.conta);
     if (!p) return '';
-    return p.da ? `<span class="badge regalo">🎁 Regalo da @${esc(p.da)} · fino al ${dataCurta(p.scade)}</span>` : `<span class="badge regalo">✨ Casa speciale fino al ${dataCurta(p.scade)}</span>`;
+    const pts = `+${this.punti} punti`;
+    return p.da ? `<span class="badge regalo">🎁 Regalo da @${esc(p.da)} · ${pts} · fino al ${dataCurta(p.scade)}</span>` : `<span class="badge regalo">✨ Casa speciale · ${pts} · fino al ${dataCurta(p.scade)}</span>`;
   }
+  get punti() { return REGOLE.punti.decoro; }
   bottone(casa, eMinha) {
     if (!this.aperto) return '';
-    return eMinha ? `<button class="decora-btn" data-decora="${esc(casa.conta)}" data-modo="mia">✨ Decora la tua casa</button>`
-      : `<button class="decora-btn" data-decora="${esc(casa.conta)}">🎁 Fai un regalo a @${esc(casa.conta)}</button>`;
+    const r = eMinha && this.rinnovabile(casa.conta);
+    if (r) {
+      const g = this.giorniA(r.scade);
+      const nota = r.attiva ? (g <= 1 ? '⏳ Scade domani!' : `Scade tra ${g} giorni`) : '⌛ Scaduta: la casa ha perso i suoi +' + this.punti + ' punti';
+      return `<button class="decora-btn rinnova${r.attiva && g > 5 ? '' : ' urgente'}" data-dp="rinnova" data-v="${esc(casa.conta)}">🔄 Rinnova · +${this.cfg.giorni} giorni · ${eur(this.cfg.prezzo)}<small>${nota}</small></button>
+        <button class="decora-btn sec" data-decora="${esc(casa.conta)}" data-modo="mia">✨ Cambia decorazione</button>`;
+    }
+    return eMinha ? `<button class="decora-btn" data-decora="${esc(casa.conta)}" data-modo="mia">✨ Decora la tua casa<small>+${this.punti} punti finché è decorata</small></button>`
+      : `<button class="decora-btn" data-decora="${esc(casa.conta)}">🎁 Fai un regalo a @${esc(casa.conta)}<small>+${this.punti} punti alla sua casa</small></button>`;
   }
 
   // ---------- câmera ----------
@@ -468,15 +492,37 @@ export class Decori {
   }
 
   // ---------- pílula ----------
+  // botão do mapa: troca a frase a cada 3,2 s; de tempos em tempos borda brilhante + pulinho; selo "NOVITÀ" alternando com
+  // as novidades até a pessoa abrir o decorador uma vez (NOVITA_VER: trocar o texto para o selo voltar para todos)
   ligarPillola() {
     const b = $('#decora'), velho = $('#fai-video');
     if (!b) return;
     b.hidden = false;
     if (velho) velho.hidden = true;
-    const testo = b.querySelector('.testo'), frasi = ['✨ Decora la tua casa', '🎁 Regala a un amico'];
-    let i = 0;
-    setInterval(() => { testo.classList.add('via'); setTimeout(() => { i = (i + 1) % frasi.length; testo.textContent = frasi[i]; testo.classList.remove('via'); }, 250); }, 3200);
-    b.onclick = () => this.home();
+    const NOVITA_VER = 'v30-punti';
+    const testo = b.querySelector('.testo'), selo = b.querySelector('.novita');
+    const vista = () => ler('decora_vista') === NOVITA_VER;
+    if (selo) selo.hidden = vista();
+    const frasi = () => {
+      const r = this.rinnovabile(this.ui?.minha);
+      // curtas (cabem numa linha ao lado de "il tuo negozio" no celular)
+      const base = ['✨ Decora la tua casa', `⭐ Casa +${this.punti} punti`, `📅 Ora ${this.cfg.giorni} giorni`, '🎁 Regala a un amico'];
+      return r && (!r.attiva || this.giorniA(r.scade) <= 5) ? ['🔄 Rinnova la casa', ...base] : base;
+    };
+    const seli = ['NOVITÀ', `${this.cfg.giorni} GIORNI`, `+${this.punti} PUNTI`];
+    let i = 0, k = 0;
+    setInterval(() => {
+      const f = frasi();
+      testo.classList.add('via');
+      setTimeout(() => { i = (i + 1) % f.length; testo.textContent = f[i]; testo.classList.remove('via'); }, 250);
+      if (selo && !selo.hidden) { k = (k + 1) % seli.length; selo.textContent = seli[k]; }
+    }, 3200);
+    // brilho: logo ao abrir o mapa e depois a cada 18 s (mais raro depois que a pessoa já abriu)
+    const brilha = () => { b.classList.remove('brilha'); void b.offsetWidth; b.classList.add('brilha'); };
+    setTimeout(brilha, 2500);
+    setInterval(() => { if (!vista() || Math.random() < 0.35) brilha(); }, 18000);
+    b.addEventListener('animationend', e => { if (e.animationName === 'decora-brilha') b.classList.remove('brilha'); });
+    b.onclick = () => { gravar('decora_vista', NOVITA_VER); if (selo) selo.hidden = true; this.home(); };
   }
 
   // ---------- telas ----------
@@ -490,6 +536,7 @@ export class Decori {
       eff: () => { const s = ed.sel.extra; s.has(v) ? s.delete(v) : s.add(v); if (v === 'oro' && s.has('oro')) ed.sel.squadra = null; this.aggiorna(); },
       notte: () => { this.mappa.definirNotte(v === '1'); if (this.festa?.luci) this.festa.luci.visible = v === '1'; },
       checkout: () => this.checkout(),
+      rinnova: () => this.rinnova(v),
       paga: () => this.paga(t),
       indietro: () => this.editor(ed.modo, ed.casa, true),
       home: () => this.home(),
@@ -498,14 +545,27 @@ export class Decori {
 
   home() {
     this.annulla(); this.ferma(); document.body.classList.remove('decora-edit');
+    const mia = this.ui.minha, r = this.rinnovabile(mia);
     this.ui.abrir(`
       <h2>Rendi speciale una casa ✨</h2>
       <div class="sub">Provala <b>gratis</b> qui sulla mappa. Paghi solo se ti piace: <b>${eur(this.cfg.prezzo)}</b>, tutto incluso, per ${this.cfg.giorni} giorni.</div>
+      <div class="vantaggio-dec">⭐ <b>+${this.punti} punti</b> alla casa decorata, per tutti i ${this.cfg.giorni} giorni: sale di livello e si vede di più sulla mappa.</div>
+      ${r ? `<button class="decora-btn rinnova urgente" data-dp="rinnova" data-v="${esc(mia)}">🔄 Rinnova la tua casa · +${this.cfg.giorni} giorni<small>${r.attiva ? `scade il ${dataCurta(r.scade)}: i nuovi giorni si sommano` : 'scaduta: riaccendila con gli stessi effetti'}</small></button>` : ''}
       <div class="scelta2">
         <button data-dp="mia"><span class="em">🏠</span><span><b>La mia casa</b><small>Colori della tua squadra, casa d’oro, neon, corona…</small></span></button>
         <button data-dp="regalo"><span class="em">🎁</span><span><b>Regala a un amico</b><small>Una sorpresa sulla sua casa, con il tuo nome sopra</small></span></button>
       </div>
-      <div class="regola">✅ Solo estetica: non dà punti e non cambia la classifica. Vince sempre chi gioca.</div>`);
+      <div class="regola">✅ I +${this.punti} punti fanno crescere la casa, ma non contano per le elezioni: Presidente e Sindaci li sceglie sempre chi gioca.</div>`);
+  }
+  // renovação (só o dono): mesmos efeitos, direto para o pagamento; os dias novos somam ao fim da atual (hotmart.php)
+  rinnova(conta) {
+    const casa = this.D.porConta.get(conta), r = this.rinnovabile(conta);
+    if (!casa || !r) return;
+    this.annulla();
+    this.ed = { modo: 'mia', casa, sel: copia(r.sel), da: null, rinnovo: r };
+    this.vaiACasa(casa);
+    this.disegna(casa, this.ed.sel);
+    this.checkout();
   }
   // botão do painel da casa: casa de outra pessoa = presente; a sua = decorar
   apri(conta, modo) {
@@ -547,7 +607,7 @@ export class Decori {
       <div class="tag-luogo">📍 ${esc(l.nome)}</div>
       <h2 class="conta">${regalo ? '🎁 ' : ''}@${esc(casa.conta)}</h2>
       <div class="sub">${regalo ? 'Tocca un regalo: lo vedi subito sulla sua casa.' : 'Tocca e guarda la tua casa cambiare. È solo un’anteprima.'}</div>
-      ${p ? `<div class="regola">${p.da ? `🎁 Ha già un regalo da @${esc(p.da)}` : '✨ È già decorata'} fino al ${dataCurta(p.scade)}: un nuovo acquisto la sostituisce.</div>` : ''}
+      ${p ? `<div class="regola">${p.da ? `🎁 Ha già un regalo da @${esc(p.da)}` : '✨ È già decorata'} fino al ${dataCurta(p.scade)}: un nuovo acquisto cambia gli effetti e aggiunge ${this.cfg.giorni} giorni.</div>` : ''}
       ${regalo ? `<div class="cerca-dec"><span>da @</span><input id="dec-da" placeholder="il_tuo_account" value="${esc(ed.da ?? '')}" autocomplete="off" autocapitalize="off" spellcheck="false"></div><div class="nota" id="dec-da-nota" style="margin-top:4px"></div>` : ''}
       ${regalo ? '' : `<div class="gruppo-dec">⚽ Colori della tua squadra</div>
       <div class="griglia-dec">${SQUADRE.map(s => `<button data-dp="squadra" data-v="${s.id}"><span class="sw" style="background:linear-gradient(90deg,${s.muro} 0 25%,${s.tetto} 25% 50%,${s.muro} 50% 75%,${s.tetto} 75%)"></span><b>${s.nome}</b></button>`).join('')}</div>`}
@@ -580,9 +640,13 @@ export class Decori {
   checkout() {
     const ed = this.ed, n = quanti(ed.sel);
     this.ferma();
+    // renovação ainda ativa: a nova data conta a partir do fim da atual
+    const p = ed.modo === 'mia' ? this.pagata(ed.casa.conta) : null;
+    const fine = Math.max(Date.now(), p ? p.scade : 0) + this.cfg.giorni * 86400e3;
     this.ui.abrir(`
-      <h2>Quasi fatto! 🔒</h2>
+      <h2>${ed.rinnovo ? 'Rinnova la tua casa 🔄' : 'Quasi fatto! 🔒'}</h2>
       <div class="sub">${ed.modo === 'regalo' ? `Regalo per @${esc(ed.casa.conta)} da @${esc(ed.da)}` : `Casa di @${esc(ed.casa.conta)}`} · ${n} ${n === 1 ? 'effetto' : 'effetti'} · ${this.cfg.giorni} giorni · <b>${eur(this.cfg.prezzo)}</b></div>
+      <div class="vantaggio-dec">⭐ +${this.punti} punti · ${p ? `scade il ${dataCurta(p.scade)} → <b>nuova scadenza ${dataCurta(fine)}</b>` : `visibile a tutti fino al <b>${dataCurta(fine)}</b>`}</div>
       <label class="consenso-dec"><input type="checkbox" id="dec-ok"><span>Voglio che la decorazione si attivi subito dopo il pagamento. Ho letto la <a href="privacy.html#decorazioni" target="_blank" rel="noopener">privacy</a>.</span></label>
       <div class="regola">👨‍👩‍👧 Hai meno di 18 anni? Chiedi a un genitore prima di pagare.</div>
       <button class="paga-dec" data-dp="paga" style="margin-top:12px">Vai al pagamento sicuro · ${eur(this.cfg.prezzo)}<small>carta, PayPal, Google Pay · con Hotmart</small></button>
@@ -628,6 +692,7 @@ export class Decori {
     this.ui.abrir(`
       <h2>${regalo ? 'Regalo consegnato! 🎁' : 'Fatto! La tua casa brilla ✨'}</h2>
       <div class="sub">${regalo ? `@${esc(casa.conta)} lo vede appena apre la mappa. Mandagli la storia e taggalo! 👇` : `Ora la vedono tutti sulla mappa, fino al ${dataCurta(p.scade)}.`}</div>
+      <div class="vantaggio-dec">⭐ +${this.punti} punti ${regalo ? 'alla sua casa' : 'alla tua casa'}: arrivano entro 10 minuti.</div>
       <div class="anteprima vuota" id="dec-img">preparo la storia…</div>
       <div class="bottoni"><button class="sec" data-dp="home">✨ Decora un’altra casa</button></div>`);
     await new Promise(r => setTimeout(r, 1800));   // espera o voo da câmera

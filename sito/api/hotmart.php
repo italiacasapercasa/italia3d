@@ -49,15 +49,24 @@ if ($evento === 'PURCHASE_OUT_OF_SHOPPING_CART') {
 
 $novo = ['PURCHASE_APPROVED' => 'pagato', 'PURCHASE_COMPLETE' => 'pagato', 'PURCHASE_REFUNDED' => 'rimborsato', 'PURCHASE_CHARGEBACK' => 'rimborsato', 'PURCHASE_CANCELED' => 'annullato'][$evento] ?? null;
 
-// casa decorada (api/decora.php): pago liga por N dias (data/negozio.json decora.giorni); reembolso desliga na hora
+// casa decorada (api/decora.php): pago liga por N dias (data/negozio.json decora.giorni), somados ao fim da decoração
+// ainda ativa da mesma casa (botão "Rinnova"); reembolso desliga na hora
 $pastaDec = CARTELLA . '/decori';
 if ($novo && preg_match('/^\d{6}-[0-9a-f]{8}$/', $sck) && is_file("$pastaDec/$sck.json")) {
     $p = json_decode((string)file_get_contents("$pastaDec/$sck.json"), true) ?: [];
     if ($novo === 'pagato' && empty($p['scade'])) {
         $cfg = json_decode((string)@file_get_contents(__DIR__ . '/../data/negozio.json'), true) ?: [];
-        $giorni = max(1, (int)($cfg['decora']['giorni'] ?? 10));
+        $giorni = max(1, (int)($cfg['decora']['giorni'] ?? 30));
+        // renovação: se a casa ainda está decorada, os dias novos começam quando a decoração atual acaba
+        $base = time();
+        foreach (glob("$pastaDec/[0-9][0-9][0-9][0-9][0-9][0-9]-*.json") ?: [] as $a) {
+            $q = json_decode((string)file_get_contents($a), true) ?: [];
+            if (($q['id'] ?? '') === $sck || ($q['conta'] ?? '') !== ($p['conta'] ?? '') || !in_array($q['pagamento'] ?? '', ['pagato', 'omaggio'], true) || ($q['stato'] ?? '') === 'rimosso') continue;
+            $base = max($base, (int)strtotime((string)($q['scade'] ?? '')));
+        }
         $p['attivo_da'] = gmdate('c');
-        $p['scade'] = gmdate('c', time() + $giorni * 86400);
+        $p['scade'] = gmdate('c', $base + $giorni * 86400);
+        if ($base > time()) $p['rinnovo'] = true;
     }
     // PURCHASE_COMPLETE chega dias depois do APPROVED: não desfaz um reembolso
     if (!($novo === 'pagato' && ($p['pagamento'] ?? '') === 'rimborsato')) $p['pagamento'] = $novo;
@@ -91,7 +100,7 @@ function rigeneraDecori(string $pasta, string $destino): void {
         $c = (string)$p['conta'];
         if (!isset($por[$c]) || strcmp((string)$p['attivo_da'], (string)$por[$c]['attivo_da']) > 0) $por[$c] = $p;
     }
-    $lista = array_values(array_map(fn($p) => ['id' => $p['id'], 'conta' => $p['conta'], 'da' => $p['da'] ?? '', 'squadra' => $p['squadra'] ?? '', 'extra' => $p['extra'] ?? [], 'scade' => $p['scade']], $por));
+    $lista = array_values(array_map(fn($p) => ['id' => $p['id'], 'conta' => $p['conta'], 'da' => $p['da'] ?? '', 'squadra' => $p['squadra'] ?? '', 'extra' => $p['extra'] ?? [], 'attivo_da' => $p['attivo_da'] ?? '', 'scade' => $p['scade']], $por));
     $tmp = "$destino.tmp";
     file_put_contents($tmp, json_encode(['agg' => gmdate('c'), 'decori' => $lista], JSON_UNESCAPED_UNICODE), LOCK_EX);
     rename($tmp, $destino);

@@ -44,7 +44,7 @@ let falhas = 0;
 const ok = (cond, msg) => { console.log(`${cond ? '✔' : '✘'} ${msg}`); if (!cond) falhas++; };
 
 ok(casa('anna')[4] === 10 + 5 + 10 + 6 + 50 + 5, `anna: casa+commento+10 extras+2 tags+2 recrute+1 voto = 86 (deu ${casa('anna')[4]})`);
-ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0, 0, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
+ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0, 0, 0, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
 ok(casa('bruno')[4] === 10 + 5 + 2 + 20 + 5, `bruno: casa+commento+2 extras (votos)+1 storia+commento no mandato 2 = 42 (deu ${casa('bruno')[4]})`);
 ok(casa('bruno')[5] === 5, `bruno: pontos do mandato 2 = 5 (deu ${casa('bruno')[5]})`);
 ok(casa('bruno')[6] === 0, 'bruno: chamas apagadas (story há mais de 24 h)');
@@ -180,5 +180,19 @@ const s7 = calcolare({
   comuni, regioni, agora: qui + 12 * H,
 });
 ok(s7.case.find(x => x[0] === 'anna')[7][8] === 100, 'mecenate não dobra em doppi tutto');
+
+// casa decorada: +50 enquanto ativa (não dobra, não conta no mandato, 1 vez por casa); vencida = sem pontos
+const s9 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' })],
+    storie: [], bloccati: [], post: [], commerci: [], doppi: [{ da: qui, a: qui + 10 * H, tipi: ['tutto'] }],
+    decori: [{ conta: 'Anna', ts: qui + H, scade: qui + 30 * H }, { conta: 'anna', ts: qui + 2 * H, scade: qui + 40 * H }, { conta: 'bruno', ts: qui + H, scade: qui + 5 * H }],
+  },
+  comuni, regioni, agora: qui + 12 * H,
+});
+const c9 = conta => s9.case.find(x => x[0] === conta);
+ok(c9('anna')[7][9] === 50 && c9('anna')[5] === 10 * 2 + 5 * 2, `anna decorata: decoro ${c9('anna')[7][9]} (50), mandato ${c9('anna')[5]} (30, sem os 50)`);
+ok(c9('bruno')[7][9] === 0, `bruno decoração vencida: decoro ${c9('bruno')[7][9]} (0)`);
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);

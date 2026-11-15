@@ -37,7 +37,7 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
   Casas decoradas (decori.js; pagas pela Hotmart, ligam sozinhas):
   decori [tutti]                         decorações ativas; "tutti" mostra também não pagas, vencidas e removidas
   decori rimuovi <id>                    desliga agora (ex.: quem ganhou o presente pediu para tirar)
-  decori pagato <id> [HP...]             pago na Hotmart mas o aviso não chegou: liga por 10 dias a partir de agora
+  decori pagato <id> [HP...]             pago na Hotmart mas o aviso não chegou: liga por decora.giorni (30) dias (renovação soma ao fim da atual)
   decori omaggio <conta> <efeitos> [da]  decoração grátis (testes, vídeos, compensação); efeitos separados por vírgula,
                                          ex.: nerazzurro,corona,neon  (time: bianconero nerazzurro rossonero azzurro giallorosso
                                          biancoceleste viola granata rossoblu; efeitos: oro neon corona fuochi campione palloncini tricolore cornice)
@@ -205,9 +205,10 @@ try {
       const rigenera = lista => {
         const por = new Map();
         for (const p of lista.filter(ativa)) if (!por.has(p.conta) || p.attivo_da > por.get(p.conta).attivo_da) por.set(p.conta, p);
-        const pub = { agg: new Date().toISOString(), decori: [...por.values()].map(p => ({ id: p.id, conta: p.conta, da: p.da ?? '', squadra: p.squadra ?? '', extra: p.extra ?? [], scade: p.scade })) };
+        const pub = { agg: new Date().toISOString(), decori: [...por.values()].map(p => ({ id: p.id, conta: p.conta, da: p.da ?? '', squadra: p.squadra ?? '', extra: p.extra ?? [], attivo_da: p.attivo_da ?? '', scade: p.scade })) };
         const arq = path.join(local, 'decori-pubblico.json');
         fs.writeFileSync(arq, JSON.stringify(pub));
+        fs.writeFileSync(path.join(RAIZ, 'dati-grezzi', 'decori.json'), JSON.stringify(pub));   // aggiorna.mjs no PC lê daqui (+pontos)
         ftp.enviar([{ local: arq, remoto: `${ftp.web}data/decori.json` }]);
         console.log(`lista pública atualizada: ${pub.decori.length} casa(s) decorada(s) no mapa`);
       };
@@ -222,12 +223,18 @@ try {
         console.log(`ok: @${p.conta} sem decoração${p.pagamento === 'pagato' ? ' (se for reembolsar, faça na Hotmart)' : ''}`);
         break;
       }
-      // pago na Hotmart, mas o webhook não chegou: liga como o hotmart.php faria (10 dias a partir de agora)
+      // pago na Hotmart, mas o webhook não chegou: liga como o hotmart.php faria (decora.giorni a partir de agora,
+      // ou do fim da decoração ainda ativa da mesma casa = renovação)
       if (args[0] === 'pagato') {
         const p = baixar(args[1] ?? '');
         if (!p) throw new Error(`decoração ${args[1]} não encontrada no servidor`);
-        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 10, agora = new Date();
-        if (!p.scade) { p.attivo_da = agora.toISOString(); p.scade = new Date(agora.getTime() + giorni * 86400e3).toISOString(); }
+        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 30, agora = new Date();
+        if (!p.scade) {
+          const outras = ids().filter(id => id !== p.id).map(baixar).filter(q => q && q.conta === p.conta && ativa(q));
+          const base = Math.max(agora.getTime(), ...outras.map(q => Date.parse(q.scade)));
+          p.attivo_da = agora.toISOString(); p.scade = new Date(base + giorni * 86400e3).toISOString();
+          if (base > agora.getTime()) p.rinnovo = true;
+        }
         p.pagamento = 'pagato'; p.pagamento_em = agora.toISOString();
         if (args[2]) p.transazione = args[2];
         salvar(p);
@@ -244,7 +251,7 @@ try {
         if (da && !conte.has(da)) throw new Error(`@${da} não tem casa no mapa`);
         const ruins = sel.filter(x => !SQ.includes(x) && !EF.includes(x));
         if (!sel.length || ruins.length) throw new Error(`efeitos inválidos: ${ruins.join(', ') || '(nenhum)'}`);
-        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 10, agora = new Date();
+        const giorni = ler(path.join(RAIZ, 'sito', 'data', 'negozio.json'), {}).decora?.giorni ?? 30, agora = new Date();
         const p = {
           id: `${agora.toISOString().slice(2, 10).replace(/-/g, '')}-${Math.random().toString(16).slice(2, 10).padEnd(8, '0')}`, creato: agora.toISOString(), stato: 'nuovo',
           modo: da ? 'regalo' : 'mia', conta, da, squadra: sel.find(x => SQ.includes(x)) ?? '', extra: sel.filter(x => EF.includes(x)),

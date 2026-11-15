@@ -30,6 +30,8 @@ try {
   // correções, moderação, pontos em dobro e stories manuais feitas no PC (amministra.mjs envia para o servidor)
   const baixadas = CONFIG_GIOCO.filter(n => ftp.baixar(`${ftp.priv}config-gioco/${n}`, arq('config', n)));
   console.log(`configurações do jogo do servidor: ${baixadas.join(', ') || 'nenhuma (usando as do repositório)'}`);
+  // casas decoradas (escrito no servidor pelo webhook da Hotmart): +pontos enquanto ativas. Falhou = fica a cópia anterior
+  console.log(`casas decoradas: ${ftp.baixar(`${ftp.web}data/decori.json`, arq('dati-grezzi', 'decori.json')) ? 'ok' : 'não baixou (usando a cópia anterior)'}`);
 
   const { aggiornare } = await import('./aggiorna.mjs');
   await aggiornare({ completo: process.argv.includes('--completo') });

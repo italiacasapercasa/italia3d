@@ -30,6 +30,10 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
   const manuali = ler(path.join(CFG, 'storie-manuali.json'), []);
   // comércios aprovados (amministra.mjs approva): ts = aprovação, fino = fim do período pago
   const commerci = ler(path.join(CFG, 'commerci.json'), []).map(n => ({ ...n, ts: Date.parse(n.approvato), fino: n.fino ? Date.parse(n.fino) : null }));
+  // casas decoradas pagas: cópia do data/decori.json do site (o ci.mjs baixa a cada execução); só as ativas dão pontos
+  const decori = (ler(path.join(RAIZ, 'dati-grezzi', 'decori.json'), {}).decori ?? [])
+    .map(d => ({ conta: d.conta, ts: d.attivo_da ? Date.parse(d.attivo_da) : null, scade: Date.parse(d.scade) }))
+    .filter(d => d.conta && d.scade);
   const proprio = (cfg.username ?? '').toLowerCase();
   const bloccati = new Set(mod.bloccati.map(s => s.toLowerCase()));
 
@@ -74,6 +78,7 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
     doppi,
     speciali,
     commerci,
+    decori,
     post: tags.filter(t => t.ts >= inizio && t.conta !== proprio).map(t => ({ conta: t.conta, ts: t.ts })),
   };
 }
