@@ -389,3 +389,9 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 .ms-pt b { font-size: 30px; font-weight: 900; }
 .ms-pt small { display: block; color: var(--grigio); font-weight: 800; font-size: 13px; }
 @media (prefers-reduced-motion: reduce) { #schede button.novita::after, .ms-indizi li { animation: none; } }
+
+/* abas que chamam atenção: Giochi (verde-água) e Vetrina (coral); ativa = borda escura */
+#schede button[data-aba="giochi"], #schede button[data-aba="negozi"] { color: #fff; margin: 0 2px; text-shadow: 0 1px 0 rgba(21,32,51,.35); }
+#schede button[data-aba="giochi"] { background: linear-gradient(180deg, #2DD4BF, #0F9F8F); }
+#schede button[data-aba="negozi"] { background: linear-gradient(180deg, #FF8A5C, #E8553A); }
+#schede button[data-aba="giochi"].attiva, #schede button[data-aba="negozi"].attiva { box-shadow: inset 0 0 0 3px var(--inchiostro); }
