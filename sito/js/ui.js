@@ -45,6 +45,8 @@ export class UI {
 
   // ---------- painel ----------
   abrir(html, aba = null) {
+    this.selez = null;          // outro painel: casa deixa de estar selecionada (casa() regrava depois)
+    this.botaoCasa();
     this.conteudo.innerHTML = html;
     this.painel.hidden = false;
     this.painel.classList.remove('mini');
@@ -58,6 +60,8 @@ export class UI {
     this.decori?.chiudi();
     this.painel.hidden = true;
     this.citta.evidenzia(null);
+    this.selez = null;
+    this.botaoCasa();
     document.querySelectorAll('#schede button').forEach(b => b.classList.toggle('attiva', b.dataset.aba === 'mappa'));
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   }
@@ -164,9 +168,21 @@ export class UI {
     $('#zoom-piu').onclick = () => this.mappa.zoom(0.45);
     $('#zoom-meno').onclick = () => this.mappa.zoom(2.2);
     $('#vedi-paese').onclick = () => { this.mappa.verPais(); };
-    const ir = $('#vai-casa');
-    ir.hidden = !this.minha;
-    ir.onclick = () => this.minha && this.casa(this.D.porConta.get(this.minha));
+    // 🏠: volta à casa selecionada (qualquer uma); sem seleção, à minha casa
+    $('#vai-casa').onclick = () => {
+      if (this.selez) { const p = this.citta.posCasa(this.selez); this.focar(p.x, p.z, 0.6, 0.62); }
+      else if (this.minha) this.casa(this.D.porConta.get(this.minha));
+    };
+    this.botaoCasa();
+  }
+  botaoCasa() {
+    const b = $('#vai-casa');
+    if (!b) return;
+    const alvo = this.selez?.conta ?? this.minha;
+    b.hidden = !alvo;
+    const txt = !alvo ? 'Vai alla mia casa' : alvo === this.minha ? 'Torna alla mia casa' : `Torna alla casa di @${alvo}`;
+    b.title = txt;
+    b.setAttribute('aria-label', txt);
   }
   rodape() {
     const s = this.D.snap, t = Date.parse(s.dati_fino);
@@ -292,12 +308,14 @@ export class UI {
         ${eMinha ? '<button class="sec" data-minha="">non è la mia casa</button>' : `<button data-minha="${esc(c.conta)}">è la mia casa 🏠</button>`}
       </div>
       ${this.decori?.bottone(c, eMinha) ?? ''}`);
+    this.selez = c;
+    this.botaoCasa();
   }
   definirMinha(conta) {
     this.minha = conta || null;
     gravar('minha_casa', conta || '');
     this.et.destaque = this.minha;
-    $('#vai-casa').hidden = !this.minha;
+    this.botaoCasa();
     if (conta) { this.aviso('Fatto! Il bottone 🏠 ti riporta qui.'); this.casa(this.D.porConta.get(conta), false); }
     else this.fechar();
   }
