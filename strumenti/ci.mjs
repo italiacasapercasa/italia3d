@@ -33,9 +33,17 @@ try {
   // casas decoradas (escrito no servidor pelo webhook da Hotmart): +pontos enquanto ativas. Falhou = fica a cópia anterior
   console.log(`casas decoradas: ${ftp.baixar(`${ftp.web}data/decori.json`, arq('dati-grezzi', 'decori.json')) ? 'ok' : 'não baixou (usando a cópia anterior)'}`);
 
+  // missioni (giochi do site): partidas e códigos de vínculo gravados pelo api/missioni.php
+  const ms = ['giocate.jsonl', 'codici.json'].filter(n => ftp.baixar(`${ftp.priv}dati/missioni/${n}`, arq('dati-grezzi', 'missioni', n)));
+  console.log(`missioni: ${ms.join(', ') || 'nada no servidor ainda'}`);
+
   const { aggiornare } = await import('./aggiorna.mjs');
   await aggiornare({ completo: process.argv.includes('--completo') });
   pubblicare();
+  // celulares vinculados (o código foi comentado): de volta ao servidor, que mostra "telefono collegato"
+  try {
+    if (fs.existsSync(arq('dati-grezzi', 'missioni', 'vincolati.json'))) ftp.enviar([{ local: arq('dati-grezzi', 'missioni', 'vincolati.json'), remoto: `${ftp.priv}dati/missioni/vincolati.json` }]);
+  } catch (e) { console.log(`missioni: envio dos vinculados falhou: ${e.message}`); }
 
   // recuperação de carrinho: o servidor manda o e-mail (1 vez por pedido) para quem abandonou o pagamento; a chave é a mesma do STORIE_URL
   try {

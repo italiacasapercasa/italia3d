@@ -44,7 +44,7 @@ let falhas = 0;
 const ok = (cond, msg) => { console.log(`${cond ? '✔' : '✘'} ${msg}`); if (!cond) falhas++; };
 
 ok(casa('anna')[4] === 10 + 5 + 10 + 6 + 50 + 5, `anna: casa+commento+10 extras+2 tags+2 recrute+1 voto = 86 (deu ${casa('anna')[4]})`);
-ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0, 0, 0, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
+ok(JSON.stringify(casa('anna')[7]) === JSON.stringify([10, 5, 10, 6, 50, 5, 0, 0, 0, 0, 0, 0]), `anna: fontes ${JSON.stringify(casa('anna')[7])}`);
 ok(casa('bruno')[4] === 10 + 5 + 2 + 20 + 5, `bruno: casa+commento+2 extras (votos)+1 storia+commento no mandato 2 = 42 (deu ${casa('bruno')[4]})`);
 ok(casa('bruno')[5] === 5, `bruno: pontos do mandato 2 = 5 (deu ${casa('bruno')[5]})`);
 ok(casa('bruno')[6] === 0, 'bruno: chamas apagadas (story há mais de 24 h)');
@@ -194,5 +194,28 @@ const s9 = calcolare({
 const c9 = conta => s9.case.find(x => x[0] === conta);
 ok(c9('anna')[7][9] === 50 && c9('anna')[5] === 10 * 2 + 5 * 2, `anna decorata: decoro ${c9('anna')[7][9]} (50), mandato ${c9('anna')[5]} (30, sem os 50)`);
 ok(c9('bruno')[7][9] === 0, `bruno decoração vencida: decoro ${c9('bruno')[7][9]} (0)`);
+// missioni: +5 por acerto, só 15/dia no mandato; ranking da semana: top 3 ganham 50/30/15 (só casa) e o 1º vira Campione; série de dias
+const g = (conta, gioco, dia, h, ok, p) => ({ gioco, conta, giorno: `2026-10-${dia}`, ts: daRoma(2026, 10, dia, h), ok, p });
+const s10 = calcolare({
+  eventi: {
+    ...eventi,
+    commenti: [c('anna', qui + 1e3, { luogo: '058091' }), c('bruno', qui + 2e3, { luogo: '058091' })],
+    storie: [], bloccati: [], post: [], commerci: [], doppi: [{ da: qui, a: dom21, tipi: ['tutto'] }],
+    missioni: [
+      ...['a', 'b', 'c', 'd'].map(x => g('anna', x, 16, 10, true, 100)),   // 4 acertos no mesmo dia: 20, só 15 no mandato
+      g('anna', 'a', 17, 10, true, 300), g('anna', 'a', 18, 20, true, 200),
+      g('bruno', 'a', 16, 11, true, 100), g('bruno', 'a', 17, 11, false, 0),
+      g('fabio', 'a', 17, 11, true, 400),                                   // sem casa: ignorado
+    ],
+  },
+  comuni, regioni, agora,
+});
+const c10 = conta => s10.case.find(x => x[0] === conta);
+ok(c10('anna')[7][10] === 30 && c10('anna')[7][11] === 50, `anna missioni: ${c10('anna')[7][10]} (30) + prêmio ${c10('anna')[7][11]} (50)`);
+ok(c10('bruno')[7][10] === 5 && c10('bruno')[7][11] === 30, `bruno missioni: ${c10('bruno')[7][10]} (5) + prêmio ${c10('bruno')[7][11]} (30)`);
+ok(s10.cariche.presidente?.conta === 'anna' && s10.cariche.presidente.pts_elezione === 30 + 25, `mandato 1 de anna: ${s10.cariche.presidente?.pts_elezione} (55 = casa+commento em dobro + missioni 15+5+5 sem dobro, sem prêmio)`);
+ok(s10.missioni.campione?.conta === 'anna' && s10.missioni.campione.punti === 900, `campione dos jogos: ${JSON.stringify(s10.missioni.campione)}`);
+ok(s10.missioni.serie.anna === 3 && s10.missioni.serie.bruno === undefined, `série: anna ${s10.missioni.serie.anna} (3), bruno ${s10.missioni.serie.bruno} (parou)`);
+ok(s10.missioni.classifica.length === 0 && s10.eventi.some(e => e.tipo === 'campione_giochi'), 'semana nova: classifica vazia, evento campione_giochi');
 console.log(falhas ? `\n${falhas} falha(s)` : '\ntodos os testes passaram');
 process.exit(falhas ? 1 : 0);

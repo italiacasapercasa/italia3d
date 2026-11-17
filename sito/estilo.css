@@ -335,3 +335,57 @@ button.decora-btn.rinnova.urgente { animation: decora-pulso 1.6s ease-in-out inf
   #schede button i { display: none; }
   #schede.fine { -webkit-mask-image: none; mask-image: none; }
 }
+
+/* ---------- giochi (missioni.js) ---------- */
+#schede button[hidden] { display: none; }
+#schede button.novita::after { content: 'NEW'; display: inline-block; margin-left: 4px; vertical-align: 1px; background: var(--rosso); color: #fff; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 99px; animation: pulsa 1.4s ease-in-out infinite; }
+.badge.ms { background: #D5F7EF; }
+.ms-io { margin: 10px 0 2px; font-weight: 800; font-size: 14px; }
+.link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 2px; cursor: pointer; }
+.ms-chi { margin: 12px 0 4px; }
+.ms-chi label { display: block; font-weight: 900; font-size: 14px; margin-bottom: 6px; }
+.ms-campo { display: flex; align-items: center; gap: 6px; border: 3px solid var(--inchiostro); border-radius: 14px; padding: 4px 10px; background: #fff; }
+.ms-campo span { font-weight: 900; color: var(--grigio); }
+.ms-campo input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-weight: 800; font-size: 17px; padding: 6px 0; background: none; }
+.ms-sug { margin-top: 6px; }
+.ms-sug button { display: block; width: 100%; text-align: left; background: var(--crema); border: 2px solid var(--inchiostro); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; font-weight: 900; font-size: 15px; }
+.ms-sug small { color: var(--grigio); font-weight: 700; margin-left: 4px; }
+.ms-sug .vuoto { color: var(--grigio); font-weight: 700; font-size: 13px; padding: 4px 2px; }
+.ms-card { display: flex; align-items: center; gap: 10px; border: 3px solid var(--inchiostro); border-radius: 18px; background: linear-gradient(135deg, #D5F7EF, #FFF6E6); padding: 12px; margin: 12px 0 8px; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
+.ms-ic { font-size: 34px; line-height: 1; }
+.ms-tx { flex: 1; min-width: 0; }
+.ms-tx b { display: block; font-size: 16px; font-weight: 900; }
+.ms-tx small { display: block; color: var(--grigio); font-weight: 700; font-size: 12px; line-height: 1.3; }
+.ms-card button, button.ms-invia { background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 8px 14px; font-weight: 900; font-size: 14px; white-space: nowrap; box-shadow: 0 2px 0 rgba(21,32,51,.25); }
+.ms-card button.sec { background: #fff; }
+.ms-card button:disabled, button.ms-invia:disabled { opacity: .45; }
+button.ms-invia { display: block; width: 100%; margin-top: 10px; font-size: 17px; padding: 11px; background: var(--verde); color: #fff; }
+.ms-codice, .ms-ok, .ms-avviso, .ms-serie { border-radius: 14px; padding: 9px 12px; margin: 8px 0; font-size: 13.5px; font-weight: 800; line-height: 1.35; }
+.ms-codice { background: #FFF1C9; border: 2px dashed var(--inchiostro); }
+.ms-codice .cod { background: #fff; border: 2px solid var(--inchiostro); border-radius: 8px; padding: 0 6px; font-size: 15px; letter-spacing: 1px; white-space: nowrap; }
+.ms-codice button { display: block; margin-top: 8px; background: #C13584; color: #fff; border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 7px 14px; font-weight: 900; font-size: 13.5px; }
+.ms-ok { background: #E8F6EC; border: 2px solid var(--verde); }
+.ms-avviso { background: #FFE5E2; border: 2px solid var(--rosso); }
+.ms-serie { background: #FFE9D6; border: 2px solid #F08A3E; }
+.ms-rank { list-style: none; margin: 6px 0 0; padding: 0; }
+.ms-rank li { display: flex; align-items: center; gap: 8px; padding: 7px 4px; border-bottom: 1.5px dashed var(--linea); font-weight: 800; font-size: 14px; }
+.ms-rank li.io { background: #FFF6CC; border-radius: 10px; }
+.ms-rank .pos { width: 28px; text-align: center; }
+.ms-rank .chi { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ms-camp { background: #D5F7EF; border: 2px solid #14B8A6; border-radius: 14px; padding: 8px 12px; font-weight: 800; font-size: 13.5px; margin-top: 10px; }
+.ms-regole { margin: 0; padding-left: 18px; font-size: 13.5px; font-weight: 700; line-height: 1.4; }
+.ms-regole li { margin-bottom: 5px; }
+.ms-tempo { display: inline-block; margin: 6px 0 4px; background: var(--crema); border: 2px solid var(--inchiostro); border-radius: 99px; padding: 2px 12px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.ms-indizi { list-style: none; margin: 8px 0; padding: 0; }
+.ms-indizi li { border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 8px 12px; margin-bottom: 8px; font-weight: 800; font-size: 15px; line-height: 1.35; animation: ms-entra .35s ease-out; }
+.ms-indizi li small { display: block; color: #0E7490; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+@keyframes ms-entra { from { opacity: 0; transform: translateY(6px); } }
+button.ms-altro { display: block; width: 100%; background: #fff; border: 2.5px dashed var(--inchiostro); border-radius: 14px; padding: 8px; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
+button.ms-altro small { color: var(--grigio); font-weight: 700; }
+.ms-esito { font-size: 17px; font-weight: 800; margin: 8px 0; }
+.ms-esito small { color: var(--grigio); font-weight: 700; font-size: 13px; }
+.ms-quadri { font-size: 30px; letter-spacing: 4px; margin: 4px 0; }
+.ms-pt { margin: 6px 0 10px; }
+.ms-pt b { font-size: 30px; font-weight: 900; }
+.ms-pt small { display: block; color: var(--grigio); font-weight: 800; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { #schede button.novita::after, .ms-indizi li { animation: none; } }

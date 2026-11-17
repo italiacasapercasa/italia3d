@@ -84,6 +84,7 @@ export class UI {
       else if ('condividi' in d) this.condividir(d.condividi);
       else if ('copia' in d) this.copiarConvite(t);
       else if (d.dp) this.decori?.azione(t);
+      else if (d.ms) this.missioni?.azione(t);
       else if (d.decora) this.decori?.apri(d.decora, d.modo);
       else if (d.ir) this.rota(d.ir);
     });
@@ -99,7 +100,7 @@ export class UI {
   }
 
   rota(r) {
-    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), decora: () => this.decori?.aperto && this.decori.home(), derby: () => this.derby(), meta: () => this.meta() };
+    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), decora: () => this.decori?.aperto && this.decori.home(), derby: () => this.derby(), meta: () => this.meta(), giochi: () => this.missioni?.home() };
     if (mapa[r]) mapa[r]();
   }
 
@@ -150,6 +151,7 @@ export class UI {
       const [a, b] = [...D.luoghi].sort((x, y) => y.case - x.case), s = sogliaDi(corsa), t = REGOLE.traguardi.find(x => x[0] === corsa);
       add('chip-corsa', `${t[2]} Primo ${esc(t[3].toLowerCase())} d’Italia: <b>${esc(a.nome)}</b> ${num(a.case)} · <b>${esc(b.nome)}</b> ${num(b.case)} / ${num(s)}`, () => this.luogo(a));
     }
+    if (REGOLE.missioni?.attive) add('chip-giochi', `🎮 <b>Nuovo gioco</b>: indovina il comune del giorno`, () => this.rota('giochi'));
     const meta = this.metaCase();
     add('chip-meta', `🎯 <b>${num(D.casas.length)}</b> / ${num(meta)} case`, () => this.meta());
     // celular: um chip por vez, em rodízio; tela larga: até 3 juntos (rodando os seguintes)
@@ -286,7 +288,7 @@ export class UI {
         ${(inaugurazioni(this.D).porEroe.get(c.conta) ?? []).map(f => `<span class="badge eroe">🏗️ Ha costruito ${esc(f.t.art)} di ${esc(f.l.nome)}</span>`).join('')}
         ${c.carica ? `<span class="badge car c-${c.carica.tipo}">🏛 ${esc(this.cargoTexto(c))}</span>` : ''}
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
-        ${this.decori?.badge(c) ?? ''}
+        ${this.decori?.badge(c) ?? ''}${this.missioni?.badge(c) ?? ''}
       </div>
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>

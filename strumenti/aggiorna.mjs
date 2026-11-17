@@ -20,6 +20,38 @@ export function contaProibida(conta, palavras) {
   return palavras.some(p => partes.includes(p) || (p.length >= 6 && junto.includes(p)));
 }
 
+// missioni (giochi do site): o ci.mjs baixa do servidor dati-grezzi/missioni/{giocate.jsonl, codici.json}.
+// Celular vinculado = a própria conta comentou o código CASA-1234 desse celular em qualquer post (em qualquer data).
+// Só contam partidas de celular vinculado, a primeira de cada conta por jogo e dia. Grava vincolati.json (o ci.mjs
+// devolve ao servidor, que mostra "telefono collegato").
+export const PASTA_MS = path.join(RAIZ, 'dati-grezzi', 'missioni');
+export function montarMissioni(comentarios, proprio = '', log = console.log) {
+  const codici = ler(path.join(PASTA_MS, 'codici.json'), {});
+  let linhas = [];
+  try { linhas = fs.readFileSync(path.join(PASTA_MS, 'giocate.jsonl'), 'utf8').split('\n').filter(Boolean); } catch { /* ainda sem partidas */ }
+  const comentados = new Set();   // "conta|CASA-1234"
+  for (const c of Object.values(comentarios)) {
+    if (!c.conta || c.conta === proprio) continue;
+    for (const m of String(c.testo ?? '').matchAll(/\bCASA[\s-]?(\d{4})\b/gi)) comentados.add(`${c.conta.toLowerCase()}|CASA-${m[1]}`);
+  }
+  const coppie = Object.entries(codici).filter(([k, cod]) => comentados.has(`${k.split('|')[0]}|${cod}`)).map(([k]) => k);
+  const ok = new Set(coppie), vistas = new Set(), saida = [];
+  let pendenti = 0;
+  for (const l of linhas) {
+    let g; try { g = JSON.parse(l); } catch { continue; }
+    if (!g.c || !g.d || !g.ts) continue;
+    if (!ok.has(`${g.c}|${g.v}`)) { pendenti++; continue; }
+    const k = `${g.c}|${g.g}|${g.d}`;
+    if (vistas.has(k)) continue;
+    vistas.add(k);
+    saida.push({ gioco: g.g, conta: g.c, giorno: g.d, ts: g.ts, ok: !!g.ok, p: Math.max(0, Math.min(400, +g.p || 0)) });
+  }
+  fs.mkdirSync(PASTA_MS, { recursive: true });
+  fs.writeFileSync(path.join(PASTA_MS, 'vincolati.json'), JSON.stringify({ aggiornato: new Date().toISOString(), coppie }));
+  if (linhas.length) log(`missioni: ${saida.length} partidas valendo · ${pendenti} de celular ainda não vinculado · ${coppie.length} celulares vinculados`);
+  return saida;
+}
+
 export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log = console.log }) {
   const risolutore = new Risolutore();
   const mod = ler(path.join(CFG, 'moderazione.json'), { bloccati: [], parole_vietate: [] });
@@ -36,6 +68,7 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
     .filter(d => d.conta && d.scade);
   const proprio = (cfg.username ?? '').toLowerCase();
   const bloccati = new Set(mod.bloccati.map(s => s.toLowerCase()));
+  const missioni = montarMissioni(comentarios, proprio, log);
 
   // só o que é do jogo: posts a partir de "inizio" (comentários de posts antigos podem estar no cache)
   const inizio = Date.parse(cfg.inizio), postsDoJogo = new Set(posts.map(p => p.id));
@@ -79,6 +112,7 @@ export function montarEventi({ posts, comentarios, storie, tags = [], cfg, log =
     speciali,
     commerci,
     decori,
+    missioni,
     post: tags.filter(t => t.ts >= inizio && t.conta !== proprio).map(t => ({ conta: t.conta, ts: t.ts })),
   };
 }

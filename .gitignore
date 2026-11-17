@@ -26,3 +26,6 @@ sito/data/loghi/
 
 # ferramentas locais de administração (mailer, lembretes): nunca vão para o GitHub
 locale/
+
+# respostas do Indovina del giorno: s? no servidor (privato/), nunca no GitHub
+privato/enigmi.json

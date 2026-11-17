@@ -3,7 +3,17 @@ export const REGOLE = {
   versao: 'regola-2.0',
   // mecenate/misura: quem compra um negócio no mapa; decoro: casa decorada (paga), só enquanto a decoração está ativa.
   // Os três só fazem a casa crescer, NÃO contam no mandato (eleições)
-  punti: { casa: 10, commento: 5, extra: 1, tag: 3, recluta: 25, voto: 5, storia: 20, post: 20, mecenate: 100, misura: 50, decoro: 50 },
+  punti: { casa: 10, commento: 5, extra: 1, tag: 3, recluta: 25, voto: 5, storia: 20, post: 20, mecenate: 100, misura: 50, decoro: 50, missione: 5 },
+  // missioni (giochi del sito, missioni.js + api/missioni.php): +missione por partida acertada; só os primeiros
+  // "tetto_mandato" pontos do dia contam nas eleições (o resto só faz a casa crescer). Ranking da semana (fecha com o
+  // mandato): top 3 ganham "premi" (só casa). Série de dias seguidos jogando: enfeites na casa enquanto dura.
+  missioni: {
+    attive: true,
+    tetto_mandato: 15,
+    premi: [50, 30, 15],
+    serie: [[7, 'bandierina', '🚩', 'Bandierina dei giochi'], [14, 'stella', '⭐', 'Stella d’oro'], [30, 'medaglia', '🏅', 'Medaglia d’oro']],
+    giochi: [['indovina', 'Indovina del giorno', '🗺️']],
+  },
   // extra e tag: por post; storia e post (no feed, marcando o perfil): por dia (fuso de Roma)
   limiti: { extra: 10, tag: 10, storia: 1, post: 1 },
   extra_attivo: true,          // false = comentar várias vezes no mesmo post não soma
@@ -110,6 +120,8 @@ export const FONTI = [
   ['post', 'Post con il nostro @', '#D94F8A'],
   ['mecenate', 'Attività sulla mappa', '#6C4FD3'],
   ['decoro', 'Casa decorata', '#FF5FC8'],
+  ['missione', 'Missioni (giochi)', '#14B8A6'],
+  ['missione_top', 'Premi dei giochi', '#0E7490'],
 ];
 
 export const COME_GUADAGNARE = p => [
@@ -122,6 +134,8 @@ export const COME_GUADAGNARE = p => [
   ['post', 'Post nel feed con il nostro @', `+${p.post} (1 al giorno): tagga @italiacasapercasa nella foto`],
   ['mecenate', 'Metti la tua attività sulla mappa', `+${p.mecenate} (+${p.misura} su misura) e badge Mecenate: fanno crescere la casa, ma non contano per le elezioni`],
   ['decoro', 'Decora la tua casa', `+${p.decoro} finché è decorata: la casa cresce, ma non contano per le elezioni`],
+  ['missione', 'Missioni: Indovina del giorno', `+${p.missione} se indovini (1 al giorno) · tocca 🎮 Giochi`],
+  ['missione_top', 'Classifica dei giochi', `top 3 della settimana: +${REGOLE.missioni.premi.join('/+')} e titolo di Campione`],
   ['casa', 'Avere una casa', `+${p.casa}, una volta`],
 ];
 

@@ -214,10 +214,39 @@ function fasci() {
   return g;
 }
 
+// ---------- prêmios dos giochi (não se compram: série de dias jogando e Campione da semana; motore.mjs) ----------
+// estrela dourada de 5 pontas (extrudada)
+function stella() {
+  const s = new THREE.Shape();
+  for (let i = 0; i < 10; i++) {
+    const r = i % 2 ? 0.065 : 0.15, a = Math.PI / 2 + i * Math.PI / 5;
+    if (i) s.lineTo(Math.cos(a) * r, Math.sin(a) * r); else s.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+  }
+  const geo = new THREE.ExtrudeGeometry(s, { depth: 0.04, bevelEnabled: false });
+  geo.translate(0, 0, -0.02);
+  const g = new THREE.Group(), m = new THREE.Mesh(geo, oroMat);
+  m.position.y = 0.24; g.add(m);
+  return g;
+}
+// medalha: disco dourado com fita verde-azul
+function medaglia() {
+  const g = new THREE.Group();
+  const disco = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.03, 20), oroMat);
+  disco.rotation.x = Math.PI / 2; disco.position.y = 0.1; g.add(disco);
+  const centro = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.034, 16), lambert('#E8B923'));
+  centro.rotation.x = Math.PI / 2; centro.position.y = 0.1; g.add(centro);
+  [['#14B8A6', -1], ['#3FA7F5', 1]].forEach(([cor, s]) => {
+    const f = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.16, 0.012), lambert(cor));
+    f.position.set(s * 0.04, 0.26, 0); f.rotation.z = s * 0.35; g.add(f);
+  });
+  return g;
+}
+
 // altura total com o que flutua e os fogos (em lotes; para enquadrar a câmera)
 const topoDi = (casa, sel) => {
   const ex = sel.extra, h = ALTURA_NIVEL[casa.livello];
-  const y = h + 0.25 + (ex.has('presidenza') ? 0.5 : 0) + (ex.has('corona') ? 0.35 : 0) + (ex.has('campione') ? 0.42 : 0);
+  const y = h + 0.25 + (ex.has('presidenza') ? 0.5 : 0) + (ex.has('corona') ? 0.35 : 0) + (ex.has('campione') ? 0.42 : 0)
+    + (ex.has('stella') ? 0.45 : 0) + (ex.has('medaglia') ? 0.4 : 0);
   return ex.has('fuochi') ? y + 0.9 : Math.max(y, ex.has('palloncini') ? h * 0.75 + 0.6 : 0);
 };
 
@@ -242,6 +271,16 @@ export function costruisci(D, citta, notte, casa, sel) {
   };
   if (squadra) { const b = bandiera([squadra.muro, squadra.tetto, squadra.muro, squadra.tetto]); pianta(b, -1); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.004) * 0.35; }); }
   if (ex.has('tricolore') || ex.has('fascia')) { const b = bandiera(['#2E9B55', '#FFFFFF', '#E0473C']); pianta(b, 1); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.004 + 1) * 0.35; }); }
+  // giochi: bandierina gialloblù atrás da casa (7 dias seguidos jogando); Campione da semana: aura verde-água pulsando
+  if (ex.has('bandierina')) {
+    const b = bandiera(['#FFC93C', '#3FA7F5', '#FFC93C']);
+    if (h > 1.5) { b.position.set(0, h - 0.05, -0.12); b.scale.setScalar(0.8); } else { b.position.set(-0.38, 0, -0.36); b.scale.setScalar(Math.max(1, h * 0.9)); }
+    g.add(b); anim.push(t => { b.userData.telo.rotation.y = Math.sin(t * 0.0045 + 2) * 0.35; });
+  }
+  if (ex.has('campione_g')) {
+    const au = alone('#2DE1C2'); au.scale.setScalar(1.2); g.add(au);
+    anim.push(t => { const k = 0.5 + 0.5 * Math.sin(t * 0.0035); au.material.opacity = 0.25 + 0.35 * k; au.scale.setScalar(1.1 + 0.25 * k); });
+  }
   if (oro) {
     const s = scintille(); g.add(s); g.add(alone('#FFC93C'));
     anim.push(t => {
@@ -275,6 +314,8 @@ export function costruisci(D, citta, notte, casa, sel) {
   // coisas que flutuam em cima da casa, uma acima da outra
   if (ex.has('corona')) { const c = corona(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003) * 0.04, 0); c.rotation.y = t * 0.0012; }); y += 0.35; }
   if (ex.has('campione')) { const c = trofeo(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003 + 1) * 0.04, 0); c.rotation.y = -t * 0.001; }); y += 0.42; }
+  if (ex.has('stella')) { const c = stella(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003 + 2) * 0.04, 0); c.rotation.y = t * 0.0016; }); y += 0.45; }
+  if (ex.has('medaglia')) { const c = medaglia(); g.add(c); const y0 = y; anim.push(t => { c.position.set(0, y0 + Math.sin(t * 0.003 + 3) * 0.04, 0); c.rotation.y = -t * 0.0012; }); y += 0.4; }
   if (ex.has('palloncini')) { const b = palloncini(h); g.add(b); anim.push(b.userData.anima); }
   if (ex.has('fuochi')) { const f = fuochi(y - 0.35); g.add(f); anim.push(f.userData.anima); }
   const anima = t => anim.forEach(f => f(t));
@@ -302,6 +343,18 @@ export class Decori {
     this.sindacoDi = new Map();   // id da cidade -> conta do sindaco (desenhado só quando a cidade chega perto)
     for (const s of Object.values(k.sindaci ?? {})) { const c = D.porConta.get(s.conta); if (c) this.sindacoDi.set(D.luoghi[c.luogo].id, s.conta); }
     this.sindaci = new Set(this.sindacoDi.values());
+    // giochi: Campione da semana (desenhado logo) e enfeites da série de dias (desenhados quando a cidade chega perto)
+    const ms = D.snap.missioni ?? {};
+    this.campioneMs = ms.campione && D.porConta.has(ms.campione.conta) ? ms.campione.conta : null;
+    this.premiMs = new Map();     // conta -> ['bandierina', 'stella', 'medaglia'] (os já conquistados na série atual)
+    this.premiDi = new Map();     // id da cidade -> [contas com enfeite]
+    for (const [conta, n] of Object.entries(ms.serie ?? {})) {
+      const c = D.porConta.get(conta), ids = (REGOLE.missioni?.serie ?? []).filter(([min]) => n >= min).map(x => x[1]);
+      if (!c || !ids.length) continue;
+      this.premiMs.set(conta, ids);
+      const id = D.luoghi[c.luogo].id;
+      (this.premiDi.get(id) ?? this.premiDi.set(id, []).get(id)).push(conta);
+    }
     this.desenhando = false;
     mappa.aoFrame.push(t => this.quadro(t));
     mappa.aoMover.push(() => this.visibili());
@@ -316,6 +369,7 @@ export class Decori {
     if (this.aperto) this.ligarPillola();
     await this.ricarica();
     if (this.presidente && !this.attive.has(this.presidente)) this.disegna(this.D.porConta.get(this.presidente), this.unisci(this.presidente, vuota()));
+    if (this.campioneMs && !this.attive.has(this.campioneMs)) this.disegna(this.D.porConta.get(this.campioneMs), this.unisci(this.campioneMs, vuota()));
     if (this.aperto && location.hash === '#decora') this.home();   // link da página do produto na Hotmart
     setInterval(() => this.ricarica(), 120e3);
     // voltou do pagamento: espera o webhook confirmar
@@ -362,11 +416,13 @@ export class Decori {
   // cargo da conta (presidente / sindaco / null) e a seleção com a decoração do cargo somada à comprada
   cargo(conta) { return conta === this.presidente ? 'presidente' : this.sindaci.has(conta) ? 'sindaco' : null; }
   unisci(conta, sel) {
-    const c = this.cargo(conta);
-    if (!c) return sel;
+    const c = this.cargo(conta), pr = this.premiMs.get(conta), camp = conta === this.campioneMs;
+    if (!c && !pr && !camp) return sel;
     const s = copia(sel);
-    s.extra.add('fascia');
+    if (c) s.extra.add('fascia');
     if (c === 'presidente') s.extra.add('presidenza');
+    pr?.forEach(x => s.extra.add(x));
+    if (camp) s.extra.add('campione_g');
     return s;
   }
 
@@ -395,10 +451,11 @@ export class Decori {
     if (!this.desenhando) {
       this.desenhando = true;
       for (const l of perto) {
-        const conta = this.sindacoDi.get(l.id);
-        if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) {
-          const p = this.pagata(conta);
-          this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+        for (const conta of [this.sindacoDi.get(l.id), ...(this.premiDi.get(l.id) ?? [])]) {
+          if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) {
+            const p = this.pagata(conta);
+            this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+          }
         }
       }
       this.desenhando = false;
@@ -421,6 +478,8 @@ export class Decori {
     const cg = this.cargo(casa.conta);
     if (cg === 'presidente') return { cls: 'et-casa vip', html: `👑 ${base}<small>PRESIDENTE DEL CONSIGLIO</small>`, y };
     if (cg === 'sindaco') return { cls: 'et-casa vip', html: `🏛️ ${base}<small>SINDACO DI ${esc(this.D.luoghi[casa.luogo].nome).toUpperCase()}</small>`, y };
+    if (casa.conta === this.campioneMs) return { cls: 'et-casa vip', html: `🏆 ${base}<small>CAMPIONE DEI GIOCHI</small>`, y };
+    if (!this.pagata(casa.conta) && this.premiMs.has(casa.conta)) return { cls: 'et-casa deco', html: `🎮 ${base}`, y };
     if (a.da) return { cls: `et-casa ${cornice ? 'vip' : 'regalo'}`, html: `${cornice ? '✨ ' : ''}${base}<small>🎁 da @${esc(a.da)}</small>`, y };
     if (cornice) return { cls: 'et-casa vip', html: `✨ ${base}<small>CASA SPECIALE</small>`, y };
     return { cls: 'et-casa deco', html: `✨ ${base}`, y };
