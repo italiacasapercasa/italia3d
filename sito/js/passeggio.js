@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { LOTE, RUA, QW, QH, posLote } from './citta.js';
 import { ALTURA_NIVEL } from './modelli.js';
+import { costruisci } from './personaggio.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -14,33 +15,6 @@ const CALCADA = 0.006;
 const H = LOTE * 0.3;                 // altura do bonequinho
 const VEL = LOTE * 1.7;               // km/s andando (correndo: x1,9)
 const CAM_DIST = LOTE * 1.8, CAM_ALT = LOTE * 0.7;
-const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
-const PELLE = ['#F2C9A0', '#E0AC7E', '#C68A5C', '#8D5A3B', '#F5D6B8'];
-const MAGLIE = ['#E0473C', '#3FA9F5', '#2E9B55', '#FFC93C', '#8B5CF6', '#F97316', '#14B8A6', '#EC4899'];
-const CAPELLI = ['#2B1B10', '#5A3A1E', '#8B5A2B', '#D9A441', '#1B1B1B', '#B84A2A'];
-
-// bonequinho low-poly (olha para +z); pernas e braços balançam ao andar
-function bonequinho(seme) {
-  const k = hash(seme || 'ospite'), cor = (arr, s) => arr[(k >> s) % arr.length];
-  const mat = c => new THREE.MeshLambertMaterial({ color: c });
-  const g = new THREE.Group();
-  const caixa = (w, h, d, c, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(c)); m.position.set(x, y, z); return m; };
-  const u = H;   // unidades relativas à altura
-  const perna = s => { const p = new THREE.Group(); p.position.set(s * 0.09 * u, 0.42 * u, 0); p.add(caixa(0.13 * u, 0.42 * u, 0.15 * u, '#2D3A55', 0, -0.21 * u, 0)); p.add(caixa(0.14 * u, 0.07 * u, 0.22 * u, '#1F2430', 0, -0.4 * u, 0.03 * u)); return p; };
-  const braco = s => { const b = new THREE.Group(); b.position.set(s * 0.22 * u, 0.78 * u, 0); b.add(caixa(0.09 * u, 0.34 * u, 0.11 * u, cor(MAGLIE, 3), 0, -0.15 * u, 0)); b.add(caixa(0.08 * u, 0.08 * u, 0.09 * u, cor(PELLE, 0), 0, -0.34 * u, 0)); return b; };
-  const pe = perna(-1), pd = perna(1), be = braco(-1), bd = braco(1);
-  g.add(pe, pd, be, bd);
-  g.add(caixa(0.36 * u, 0.4 * u, 0.2 * u, cor(MAGLIE, 3), 0, 0.62 * u, 0));                 // tronco
-  const testa = new THREE.Mesh(new THREE.SphereGeometry(0.15 * u, 14, 10), mat(cor(PELLE, 0))); testa.position.y = 0.97 * u; g.add(testa);
-  const cap = new THREE.Mesh(new THREE.SphereGeometry(0.155 * u, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.55), mat(cor(CAPELLI, 6))); cap.position.y = 0.99 * u; cap.rotation.x = -0.25; g.add(cap);
-  for (const s of [-1, 1]) { const o = new THREE.Mesh(new THREE.SphereGeometry(0.022 * u, 6, 4), mat('#152033')); o.position.set(s * 0.055 * u, 0.99 * u, 0.135 * u); g.add(o); }
-  // sombra redonda no chão
-  const sombra = new THREE.Mesh(new THREE.CircleGeometry(0.22 * u, 16), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: 0.22, depthWrite: false }));
-  sombra.rotation.x = -Math.PI / 2; sombra.position.y = 0.003 * u; g.add(sombra);
-  g.userData = { pe, pd, be, bd };
-  return g;
-}
-
 export class Passeggio {
   constructor(D, mappa, citta, ui) {
     this.D = D; this.mappa = mappa; this.citta = citta; this.ui = ui;
@@ -69,18 +43,31 @@ export class Passeggio {
       <div class="ps-joy"><i></i></div>
       <div class="ps-dica"></div>
       <div class="ps-bordo"></div>
-      <div class="ps-azioni"><button type="button" class="ps-casa" hidden>🏠 La mia casa</button></div>`;
+      <div class="ps-azioni"><button type="button" class="ps-pg">🧍 Personaggio</button><button type="button" class="ps-casa" hidden>🏠 La mia casa</button></div>`;
     document.body.appendChild(d);
     this.el = d;
     d.querySelector('.ps-esci').onclick = () => this.esci();
+    d.querySelector('.ps-pg').onclick = () => this.ui.conto?.editor.apri();
     d.querySelector('.ps-casa').onclick = () => { const c = this.D.porConta.get(this.ui.conto?.p?.conta); if (c) this.avvia(`casa:${c.conta}`); };
   }
 
-  // ---------- entrar / sair ----------
-  // alvo: "casa:<conta>" ou "luogo:<id>"
+  // (re)monta o bonequinho com o personagem salvo na conta
+  aggiornaOmino() {
+    const pg = this.ui.conto?.p?.pg, k = JSON.stringify(pg ?? null);
+    if (this.omino && this._pgk === k) { if (this.ativo) this.omino.visible = true; return; }
+    if (this.omino) { this.mappa.scene.remove(this.omino); this.omino.traverse(o => o.geometry?.dispose()); }
+    this._pgk = k;
+    this.omino = costruisci(pg, H);
+    this.omino.visible = this.ativo;
+    if (this.pos) { this.omino.position.copy(this.pos); this.omino.rotation.y = this.dir; }
+    this.mappa.scene.add(this.omino);
+  }
+
+  // ---------- entrar / sair ----------  // alvo: "casa:<conta>" ou "luogo:<id>"
   avvia(alvo) {
     const conto = this.ui.conto;
     if (!conto?.p) { this.ui.aviso('🚶 Entra nel tuo account (è gratis) per passeggiare nella città.'); conto?.apri(); return; }
+    if (!conto.p.pg) { conto.editor.apri(() => this.avvia(alvo)); return; }                // 1ª vez: escolhe o personagem
     const [tipo, v] = [alvo.slice(0, alvo.indexOf(':')), alvo.slice(alvo.indexOf(':') + 1)];
     let l, x, z, yaw;
     if (tipo === 'casa') {
@@ -99,8 +86,7 @@ export class Passeggio {
     this.hc = this.citta.dadosCidade(l).hc;
     this.pos = new THREE.Vector3(x, this.hc, z);
     this.yaw = yaw; this.pitch = 0.32; this.dir = this._dirIni; this.fase = 0; this.vel = 0;
-    if (!this.omino) { this.omino = bonequinho(conto.p.conta ?? conto.p.email); this.mappa.scene.add(this.omino); }
-    this.omino.visible = true;
+    this.aggiornaOmino();
     this.ui.fechar();
     if (!this.ativo) {
       this.ativo = true;
@@ -111,6 +97,7 @@ export class Passeggio {
       document.body.classList.add('passeggio');
       this.el.hidden = false;
     }
+    this.omino.visible = true;
     this.el.querySelector('.ps-titolo b').textContent = l.nome;
     const mia = this.D.porConta.get(conto.p.conta);
     this.el.querySelector('.ps-casa').hidden = !mia;

@@ -65,6 +65,7 @@ function profilo(array $u): array {
         'serie' => $viva,
         'premio_oggi' => ($serie['ultimo'] ?? '') === $oggi,
         'ultimi' => array_slice((array)($u['ultimi'] ?? []), 0, 10),
+        'pg' => $u['pg'] ?? null,
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
     ];
 }
@@ -150,6 +151,19 @@ if ($acao === 'collega') {
     $cod = conti_codice_collega($conta, $id);
     $u = conti_modifica($id, function (array &$u) use ($conta, $cod) { $u['attesa'] = ['conta' => $conta, 'codice' => $cod, 'em' => gmdate('c')]; return $u; });
     resposta(['profilo' => profilo(conferma_attesa($id) ?? $u)]);
+}
+
+// personagem da passeggiata (opções grátis iguais às de js/personaggio.js OPZ; itens pagos virão da loja, fase 3)
+if ($acao === 'personaggio') {
+    $p = is_array($d['pg'] ?? null) ? $d['pg'] : [];
+    $c = (string)($p['c'] ?? '');
+    $CAP = ['uomo' => ['corti', 'ciuffo', 'ricci', 'rasati', 'calvo'], 'donna' => ['lunghi', 'coda', 'caschetto', 'ricci', 'chignon']];
+    if (!isset($CAP[$c])) erro('Scegli Uomo o Donna.');
+    $n = fn($k, $max) => (is_int($p[$k] ?? null) && $p[$k] >= 0 && $p[$k] < $max) ? $p[$k] : 0;
+    $pg = ['c' => $c, 'pelle' => $n('pelle', 5), 'capelli' => in_array($p['capelli'] ?? '', $CAP[$c], true) ? $p['capelli'] : $CAP[$c][0],
+        'colCap' => $n('colCap', 6), 'maglia' => $n('maglia', 8), 'pant' => $n('pant', 8), 'gonna' => $c === 'donna' && !empty($p['gonna'])];
+    $u = conti_modifica($id, function (array &$u) use ($pg) { $u['pg'] = $pg; return $u; });
+    resposta(['profilo' => profilo($u)]);
 }
 
 if ($acao === 'scollega') {

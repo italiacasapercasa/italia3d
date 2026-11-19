@@ -12,6 +12,17 @@
     { "id": "p60", "prezzo": 59.99, "crediti": 7800, "bonus": 30, "hotmart": "", "checkout": "" },
     { "id": "p100", "prezzo": 99.99, "crediti": 15000, "bonus": 50, "etichetta": "miglior valore", "hotmart": "", "checkout": "" }
   ],
+  "personaggio": [
+    { "id": "cappello", "icona": "🧢", "nome": "Cappellino", "prezzo": 50 },
+    { "id": "borsalino", "icona": "🎩", "nome": "Cappello elegante", "prezzo": 90 },
+    { "id": "occhiali", "icona": "🕶️", "nome": "Occhiali da sole", "prezzo": 40 },
+    { "id": "tifoso", "icona": "⚽", "nome": "Maglia con i colori della squadra", "prezzo": 90 },
+    { "id": "elegante", "icona": "🤵", "nome": "Vestito elegante", "prezzo": 120 },
+    { "id": "carnevale", "icona": "🎭", "nome": "Costume di Carnevale", "prezzo": 150 },
+    { "id": "natale", "icona": "🎅", "nome": "Vestito di Natale", "prezzo": 120 },
+    { "id": "cane", "icona": "🐕", "nome": "Cagnolino che ti segue", "prezzo": 290 },
+    { "id": "aura", "icona": "✨", "nome": "Scia di stelline", "prezzo": 190 }
+  ],
   "catalogo": [
     { "id": "interni", "icona": "🔑", "nome": "Casa con interni", "prezzo": 990, "nota": "entra e arreda la tua casa · 5 mobili in regalo" },
     { "id": "decora", "icona": "✨", "nome": "Decorazione (30 giorni)", "prezzo": 490 },

@@ -2,6 +2,7 @@
 // CASA-1234, crediti 💰 do dia (pegos sozinhos ao abrir o site) e vitrine do que vai estar à venda.
 // Servidor: api/conto.php (sessão por cookie httpOnly). Preços e pacotes: data/crediti.json.
 import { PERFIL } from './storie.js';
+import { EditorPersonaggio } from './personaggio.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -18,6 +19,7 @@ export class Conto {
     this.cfg = null;            // data/crediti.json
     this.email = '';            // e-mail digitado (passo do código)
     this.passo = 'email';
+    this.editor = new EditorPersonaggio(ui, this);
     this.bt = $('#mio-conto');
     this.bt.onclick = () => this.apri();
     this.bt.classList.toggle('novita', ler('conto_visto') !== NOVITA);
@@ -117,7 +119,9 @@ export class Conto {
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? esc(m.tipo)}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
       <div class="ct-saldo"><b>${n(p.saldo)}</b><span>💰 crediti</span></div>
-      ${premio}${ig}${pacchi}
+      ${premio}${ig}
+      <div class="ms-card"><span class="ms-ic">🧍</span><div class="ms-tx"><b>Il tuo personaggio</b><small>${p.pg ? 'Cambia look quando vuoi: è gratis' : 'Crealo: è lui che passeggia per le città'}</small></div><button data-ct="personaggio">${p.pg ? 'Modifica' : 'Crea'}</button></div>
+      ${pacchi}
       <h3 class="ct-h">🛍️ Presto nel negozio</h3><p class="ct-mini">Metti da parte i crediti: le prime cose arrivano presto. 100 💰 = 1 €.</p>
       <div class="ct-cat">${cat}</div>
       ${mov ? `<h3 class="ct-h">📒 Movimenti</h3><ul class="ct-mov">${mov}</ul>` : ''}
@@ -158,6 +162,7 @@ export class Conto {
         try { await navigator.clipboard.writeText(this.p.attesa.codice); this.ui.aviso('Codice copiato!'); } catch { this.ui.aviso(this.p.attesa.codice); }
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
+      else if (a === 'personaggio') this.editor.apri();
       else if (a === 'ricarica') { const j = await this.api('ricarica', { pacco: t.dataset.pacco }); location.href = j.url; }
       else if (a === 'esci_tutti') {
         if (!confirm('Vuoi uscire dal tuo account su tutti i telefoni e computer? Per rientrare servirà un nuovo codice via email.')) return;

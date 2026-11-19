@@ -452,3 +452,16 @@ body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.
 .ps-tag.neg { background: #FFE3D6; }
 .ps-card { background: linear-gradient(135deg, #DCEBFF, #FFF6E6); }
 .ps-new { display: inline-block; vertical-align: 2px; background: var(--rosso); color: #fff; font-size: 10px; font-weight: 900; border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
+
+/* ---------- editor do personagem (js/personaggio.js) ---------- */
+.pg-anteprima { display: flex; justify-content: center; margin: 6px 0; }
+.pg-anteprima canvas { width: 180px; height: 195px; border: 3px solid var(--inchiostro); border-radius: 18px; background: radial-gradient(circle at 50% 40%, #FFFFFF, #DCEBFF); }
+.pg-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+.pg-seg button, .pg-opz button { border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 9px 8px; font: 900 14px 'Nunito', sans-serif; color: var(--inchiostro); }
+.pg-seg button.on, .pg-opz button.on { background: var(--giallo); box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.pg-opz { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+.pg-opz button { padding: 6px 12px; font-size: 13px; }
+.pg-sw { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 6px; }
+.pg-sw button { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--inchiostro); padding: 0; }
+.pg-sw button.on { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--inchiostro); }
+.pg-lock { opacity: .75; }
