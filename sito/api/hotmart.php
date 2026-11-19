@@ -2,7 +2,7 @@
 // Webhook da Hotmart (postback 2.0): marca o pedido como pago/reembolsado pelo "sck" do link de pagamento.
 // No painel da Hotmart: Ferramentas > Webhook > URL https://italiacasapercasa.com/api/hotmart.php ; copie o "hottok" para HOTMART_HOTTOK no config.php.
 declare(strict_types=1);
-require is_file(__DIR__ . '/../../privato/config.php') ? __DIR__ . '/../../privato/config.php' : __DIR__ . '/../privato/config.php';
+require_once is_file(__DIR__ . '/../../privato/config.php') ? __DIR__ . '/../../privato/config.php' : __DIR__ . '/../privato/config.php';
 
 // a Hotmart testa a URL ao cadastrar o webhook: responde 200 sempre, mas só processa com o hottok certo
 $valido = $_SERVER['REQUEST_METHOD'] === 'POST' && defined('HOTMART_HOTTOK') && HOTMART_HOTTOK
@@ -24,6 +24,17 @@ $registro = [
     'prodotto' => (string)($d['data']['product']['name'] ?? ''),
 ];
 file_put_contents("$pasta/pagamenti.jsonl", json_encode($registro, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+// recarga de créditos 💰 (produtos "… crediti" na Hotmart; sck = c<id da conta>, senão acha a conta pelo e-mail do comprador)
+if (preg_match('/^c[0-9a-f]{16}$/', $sck) || stripos($registro['prodotto'], 'crediti') !== false) {
+    require_once __DIR__ . '/_conti.php';
+    $st = in_array($evento, ['PURCHASE_APPROVED', 'PURCHASE_COMPLETE'], true) ? 'pagato' : (in_array($evento, ['PURCHASE_REFUNDED', 'PURCHASE_CHARGEBACK'], true) ? 'rimborsato' : '');
+    if ($st !== '' && $registro['transazione'] !== '') {
+        $esito = conti_ricarica((string)($d['data']['buyer']['email'] ?? ''), $sck, (string)($d['data']['product']['id'] ?? ''), $registro['prodotto'], $registro['transazione'], $st, $registro['valore']);
+        file_put_contents(conti_dir() . '/ricariche.log', gmdate('c') . " $evento {$registro['transazione']} $esito\n", FILE_APPEND | LOCK_EX);
+    }
+    http_response_code(200); echo 'ok'; exit;
+}
 
 // carrinho abandonado (o cliente abriu o pagamento e saiu): a Hotmart não manda o sck, então acha o pedido pelo e-mail
 if ($evento === 'PURCHASE_OUT_OF_SHOPPING_CART') {

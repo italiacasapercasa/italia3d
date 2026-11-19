@@ -395,3 +395,36 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 #schede button[data-aba="giochi"] { background: linear-gradient(180deg, #2DD4BF, #0F9F8F); }
 #schede button[data-aba="negozi"] { background: linear-gradient(180deg, #FF8A5C, #E8553A); }
 #schede button[data-aba="giochi"].attiva, #schede button[data-aba="negozi"].attiva { box-shadow: inset 0 0 0 3px var(--inchiostro); }
+
+/* ---------- conta + crediti (js/conto.js) ---------- */
+#mio-conto { position: absolute; left: 0; top: 0; height: 40px; border-radius: 99px; border: 3px solid var(--inchiostro); background: #fff; font: 900 14px 'Nunito', sans-serif; color: var(--inchiostro); padding: 0 12px; box-shadow: 0 3px 0 rgba(21,32,51,.25); white-space: nowrap; }
+#mio-conto b { font-weight: 900; }
+#mio-conto.dentro { background: var(--giallo); }
+#mio-conto.novita::after { content: 'NEW'; position: absolute; top: -9px; right: -10px; background: var(--rosso); color: #fff; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 99px; border: 2px solid var(--inchiostro); }
+.ct-vantaggi { border: 3px solid var(--inchiostro); border-radius: 16px; background: var(--crema); padding: 10px 12px; margin: 10px 0 12px; font-size: 14px; font-weight: 700; line-height: 1.5; }
+.ct-cod input { font-size: 26px !important; letter-spacing: 8px; text-align: center; }
+.ct-link { background: none; border: 0; padding: 0; font: inherit; font-weight: 900; color: var(--inchiostro); text-decoration: underline; cursor: pointer; }
+.ct-saldo { display: flex; align-items: baseline; justify-content: center; gap: 8px; border: 3px solid var(--inchiostro); border-radius: 18px; background: linear-gradient(135deg, #FFF1C9, #FFE08A); padding: 10px; margin: 10px 0; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
+.ct-saldo b { font-size: 40px; font-weight: 900; line-height: 1; }
+.ct-saldo span { font-weight: 900; font-size: 15px; color: var(--grigio); }
+.ct-h { margin: 16px 0 4px; font-size: 16px; font-weight: 900; }
+.ct-mini { display: block; color: var(--grigio); font-size: 12.5px; font-weight: 700; margin: 2px 0 6px; }
+.ct-cat { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.ct-item { border: 2px solid var(--inchiostro); border-radius: 12px; background: #fff; padding: 6px 8px; display: grid; grid-template-columns: auto 1fr; column-gap: 6px; align-items: center; opacity: .92; }
+.ct-item span { grid-row: span 2; font-size: 22px; }
+.ct-item b { font-size: 12.5px; font-weight: 900; line-height: 1.15; }
+.ct-item em { font-style: normal; font-size: 12px; font-weight: 900; color: #B7791F; }
+.ct-item small { grid-column: 1 / -1; color: var(--grigio); font-size: 10.5px; font-weight: 700; line-height: 1.2; margin-top: 2px; }
+.ct-pacchi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.ct-pacchi button { position: relative; border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 12px 4px 8px; font: inherit; text-align: center; }
+.ct-pacchi button b { display: block; font-size: 15px; font-weight: 900; }
+.ct-pacchi button span { display: block; font-size: 13px; font-weight: 800; color: var(--grigio); }
+.ct-pacchi button small { display: inline-block; margin-top: 3px; background: var(--verde); color: #fff; font-size: 11px; font-weight: 900; border-radius: 99px; padding: 0 6px; }
+.ct-pacchi button i { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-style: normal; background: var(--rosso); color: #fff; font-size: 10px; font-weight: 900; border-radius: 99px; padding: 1px 6px; border: 2px solid var(--inchiostro); }
+.ct-mov { list-style: none; margin: 4px 0 0; padding: 0; }
+.ct-mov li { display: flex; align-items: center; gap: 8px; padding: 6px 2px; border-bottom: 1.5px dashed var(--linea); font-size: 13.5px; font-weight: 800; }
+.ct-mov li span { flex: 1; min-width: 0; }
+.ct-mov li small { color: var(--grigio); font-weight: 700; }
+.ct-mov li b { min-width: 52px; text-align: right; color: var(--verde); }
+.ct-mov li b.neg { color: var(--rosso); }
+@media (max-width: 420px) { #mio-conto { height: 34px; font-size: 12.5px; padding: 0 9px; } }

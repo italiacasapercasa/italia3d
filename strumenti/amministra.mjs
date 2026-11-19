@@ -44,6 +44,7 @@ Comandos (depois de mudar algo, rode "node strumenti/aggiorna.mjs --senza-instag
 
   lista                                  inscritos na lista de espera do "Crea video così"
   visite [dias]                          visitas do site por dia (contador anônimo; padrão: 7 dias)
+  conti                                  contas do site e créditos 💰 (prêmios do dia, recargas, saldo total)
 `;
 
 function comune(arg) {
@@ -305,6 +306,24 @@ try {
           if (resto.length) console.log(`               outros: ${resto.map(k => `${k} ${s.canali[k]} (${u[k] ?? 0} pessoas)`).join(' · ')}`);
         }
       }
+      break;
+    }
+    case 'conti': {
+      // contas do site e créditos (privato/dati/conti no servidor): quantas contas, prêmios do dia, recargas
+      const { conectar } = await import('./pubblica.mjs');
+      const ftp = conectar(() => {}), local = path.join(RAIZ, 'dati-grezzi', 'conti');
+      fs.mkdirSync(local, { recursive: true });
+      const utenti = ftp.listar(`${ftp.priv}dati/conti/utenti/`).filter(n => n.endsWith('.json'));
+      const ok = ftp.baixar(`${ftp.priv}dati/conti/movimenti.jsonl`, path.join(local, 'movimenti.jsonl'));
+      const mov = ok ? fs.readFileSync(path.join(local, 'movimenti.jsonl'), 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l)) : [];
+      const dia = d => d.slice(0, 10), hoje = new Date().toISOString().slice(0, 10);
+      const porTipo = {}; for (const m of mov) { porTipo[m.tipo] ??= { n: 0, soma: 0 }; porTipo[m.tipo].n++; porTipo[m.tipo].soma += m.delta; }
+      const premiadas = new Set(mov.filter(m => ['giornaliero', 'serie'].includes(m.tipo)).map(m => m.id));
+      console.log(`${utenti.length} contas · ${premiadas.size} já pegaram crédito do dia (= @ ligado)`);
+      console.log(`hoje (UTC): ${mov.filter(m => dia(m.em) === hoje && ['giornaliero', 'serie'].includes(m.tipo)).length} prêmios do dia`);
+      for (const [t, v] of Object.entries(porTipo)) console.log(`  ${t.padEnd(12)} ${String(v.n).padStart(6)} movimentos · ${v.soma > 0 ? '+' : ''}${v.soma} 💰`);
+      const saldo = mov.reduce((s, m) => s + m.delta, 0);
+      console.log(`créditos em circulação: ${saldo} 💰 (= ${(saldo / 100).toFixed(2)} €)`);
       break;
     }
     case 'commerci': {

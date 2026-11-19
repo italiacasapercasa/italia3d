@@ -85,6 +85,7 @@ export class UI {
       else if ('copia' in d) this.copiarConvite(t);
       else if (d.dp) this.decori?.azione(t);
       else if (d.ms) this.missioni?.azione(t);
+      else if (d.ct) this.conto?.azione(t);
       else if (d.decora) this.decori?.apri(d.decora, d.modo);
       else if (d.ir) this.rota(d.ir);
     });
@@ -100,7 +101,7 @@ export class UI {
   }
 
   rota(r) {
-    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), decora: () => this.decori?.aperto && this.decori.home(), derby: () => this.derby(), meta: () => this.meta(), giochi: () => this.missioni?.home() };
+    const mapa = { palazzo: () => this.palazzo(), classifica: () => this.classifica(), tabellone: () => this.tabellone(), negozi: () => this.negozi(), senzapadrone: () => this.senzaPadrone(), fiamme: () => this.fiamme(), 'come-funziona': () => this.comeFunziona(), video: () => this.video(), decora: () => this.decori?.aperto && this.decori.home(), derby: () => this.derby(), meta: () => this.meta(), giochi: () => this.missioni?.home(), conto: () => this.conto?.apri() };
     if (mapa[r]) mapa[r]();
   }
 

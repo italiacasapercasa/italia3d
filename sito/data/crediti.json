@@ -1,0 +1,30 @@
+{
+  "euro": 100,
+  "giornaliero": { "base": 2, "serie": [[30, 100], [7, 20]] },
+  "ricarica_aperta": false,
+  "limite_mese_euro": 150,
+  "email_giorno_max": 400,
+  "pacchi": [
+    { "id": "p5", "prezzo": 4.99, "crediti": 500, "bonus": 0, "hotmart": "", "checkout": "" },
+    { "id": "p10", "prezzo": 9.99, "crediti": 1100, "bonus": 10, "etichetta": "più scelto", "hotmart": "", "checkout": "" },
+    { "id": "p20", "prezzo": 19.99, "crediti": 2400, "bonus": 20, "hotmart": "", "checkout": "" },
+    { "id": "p30", "prezzo": 29.99, "crediti": 3750, "bonus": 25, "hotmart": "", "checkout": "" },
+    { "id": "p60", "prezzo": 59.99, "crediti": 7800, "bonus": 30, "hotmart": "", "checkout": "" },
+    { "id": "p100", "prezzo": 99.99, "crediti": 15000, "bonus": 50, "etichetta": "miglior valore", "hotmart": "", "checkout": "" }
+  ],
+  "catalogo": [
+    { "id": "interni", "icona": "🔑", "nome": "Casa con interni", "prezzo": 990, "nota": "entra e arreda la tua casa · 5 mobili in regalo" },
+    { "id": "decora", "icona": "✨", "nome": "Decorazione (30 giorni)", "prezzo": 490 },
+    { "id": "villa", "icona": "🏡", "nome": "Villa", "prezzo": 2990, "nota": "una casa grande sulla mappa" },
+    { "id": "castello", "icona": "🏰", "nome": "Castello", "prezzo": 14990, "nota": "solo 1 per regione" },
+    { "id": "bici", "icona": "🚲", "nome": "Bici", "prezzo": 190 },
+    { "id": "vespa", "icona": "🛵", "nome": "Vespa", "prezzo": 490 },
+    { "id": "auto", "icona": "🚗", "nome": "Utilitaria", "prezzo": 990 },
+    { "id": "sportiva", "icona": "🏎️", "nome": "Sportiva rossa", "prezzo": 2990 },
+    { "id": "yacht", "icona": "🛥️", "nome": "Yacht", "prezzo": 4990, "nota": "solo nelle città di mare" },
+    { "id": "elicottero", "icona": "🚁", "nome": "Elicottero", "prezzo": 9990, "nota": "vola in qualsiasi città" },
+    { "id": "fuochi", "icona": "🎆", "nome": "Fuochi sulla casa (24 h)", "prezzo": 150 },
+    { "id": "festa", "icona": "🎉", "nome": "Festa in casa (24 h)", "prezzo": 190 },
+    { "id": "vetrina", "icona": "⭐", "nome": "Casa in vetrina (24 h)", "prezzo": 290 }
+  ]
+}

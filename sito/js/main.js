@@ -8,6 +8,7 @@ import { UI } from './ui.js';
 import { Festa } from './festa.js';
 import { Decori } from './decori.js';
 import { Missioni } from './missioni.js';
+import { Conto } from './conto.js';
 
 const VERSAO = document.querySelector('meta[name="versione"]')?.content ?? 'dev';
 const DEMO = new URLSearchParams(location.search).has('demo');   // ?demo=1: mapa de demonstração
@@ -47,6 +48,8 @@ async function iniciar() {
   decori.iniciar();
   ui.missioni = new Missioni(D, ui);
   if (location.hash === '#giochi') ui.missioni.home();   // link da bio / do "Sfida un amico"
+  if (!DEMO) ui.conto = new Conto(D, ui);                // conta + crediti (abre sozinha com #conto)
+  else document.getElementById('mio-conto').hidden = true;
   mappa.aoClique = (x, y) => {
     const rotulo = et.emPonto(x, y);   // toque em cima de um rótulo (@, cidade, região, presidente)
     if (rotulo) return abrirRotulo(rotulo);
