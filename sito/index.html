@@ -27,7 +27,16 @@
     }
     window.__relata = relata;
     // contador anônimo (sem cookies): uma visita por carregamento; main.js manda 'ok' quando a mapa abre
-    window.__conta = function (t) { try { navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: t, p: 'mappa', ref: document.referrer })); } catch (e) {} };
+    // ?da=bio (link da bio), ?da=gioco (botões de compartilhar)...: conta o canal e tira as etiquetas do endereço
+    var da = '';
+    try {
+      var u = new URL(location.href);
+      da = (u.searchParams.get('da') || '').toLowerCase().slice(0, 20);
+      var sujo = false;
+      ['da', 'fbclid', 'igshid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach(function (k) { if (u.searchParams.has(k)) { u.searchParams.delete(k); sujo = true; } });
+      if (sujo) history.replaceState(null, '', u.pathname + u.search + u.hash);
+    } catch (e) {}
+    window.__conta = function (t) { try { navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: t, p: 'mappa', ref: document.referrer, da: da })); } catch (e) {} };
     window.__conta('v');
     window.addEventListener('error', function (e) {
       // ruído do navegador do app do Instagram (scripts dele, iabjs://) e erros opacos: não são nossos

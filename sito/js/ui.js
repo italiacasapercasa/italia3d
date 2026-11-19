@@ -375,7 +375,7 @@ export class UI {
 
   // ---------- lote livre, outdoor e comércios ----------
   convite(l) {
-    const url = `${location.origin}${location.pathname}?luogo=${encodeURIComponent(l.nome)}`;
+    const url = `${location.origin}${location.pathname}?luogo=${encodeURIComponent(l.nome)}&da=invito`;
     return `Vieni a vivere a ${l.nome}! 🏠 Commenta «${l.nome}, ${l.regione.nome}» nell’ultimo post di @${PERFIL} e ricevi la tua casa con il tuo @ sulla mappa 3D dell’Italia: ${url}`;
   }
   lotto(a) {
@@ -757,10 +757,10 @@ export class UI {
   condividir(o) {
     if (o.startsWith('luogo:')) {
       const l = this.D.luoghi[+o.split(':')[1]];
-      return this.mostrarImagem(`Condividi ${l.nome}`, `citta-${l.nome}.png`, () => immagineCitta(this.fot, this.citta, this.D, l), `Guarda ${l.nome} su Italia Casa per Casa! @${PERFIL}`);
+      return this.mostrarImagem(`Condividi ${l.nome}`, `citta-${l.nome}.png`, () => immagineCitta(this.fot, this.citta, this.D, l), `Guarda ${l.nome} su Italia Casa per Casa! @${PERFIL} ${location.origin}${location.pathname}?da=citta`);
     }
     const url = location.origin + location.pathname;
-    const txt = o === 'tabellone' ? `Le città con più case di Italia Casa per Casa. E la tua? ${url}#tabellone` : `Guarda ${this.D.luoghi[+o.split(':')[1]].nome} su Italia Casa per Casa: ${url}`;
+    const txt = o === 'tabellone' ? `Le città con più case di Italia Casa per Casa. E la tua? ${url}?da=tabellone#tabellone` : `Guarda ${this.D.luoghi[+o.split(':')[1]].nome} su Italia Casa per Casa: ${url}?da=citta`;
     if (navigator.share) navigator.share({ text: txt }).catch(() => {});
     else navigator.clipboard?.writeText(txt).then(() => this.aviso('Link copiato!'), () => this.aviso(txt));
   }

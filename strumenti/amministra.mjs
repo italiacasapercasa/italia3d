@@ -294,6 +294,16 @@ try {
         const pico = Object.entries(s.ore ?? {}).sort((a, b) => b[1] - a[1])[0];
         console.log(`${n.slice(0, 10)}  ${String(s.visite).padStart(6)} visitas · ${String(s.unici).padStart(6)} únicos · mapa abriu em ${pct}% · pico ${pico ? `${pico[0]}h (${pico[1]})` : '—'}`);
         console.log(`            páginas: ${top(s.pagine)}\n            origem: ${top(s.fonti)}\n            aparelho: ${top(s.dispositivi)}`);
+        if (s.canali) {
+          // ?da= do link: bio = link da bio; compartilhado = botões de compartilhar do site (pessoas = únicas do dia)
+          const COMP = ['gioco', 'invito', 'citta', 'tabellone'];
+          const soma = (o, ks) => ks.reduce((t, k) => t + (o?.[k] ?? 0), 0);
+          const ks = Object.keys(s.canali), u = s.canali_unici ?? {};
+          const comp = ks.filter(k => COMP.includes(k));
+          console.log(`            🔗 bio: ${s.canali.bio ?? 0} visitas (${u.bio ?? 0} pessoas) · compartilhado: ${soma(s.canali, comp)} visitas (${soma(u, comp)} pessoas)${comp.length ? ` [${comp.map(k => `${k} ${u[k] ?? 0}`).join(' · ')}]` : ''}`);
+          const resto = ks.filter(k => k !== 'bio' && !COMP.includes(k));
+          if (resto.length) console.log(`               outros: ${resto.map(k => `${k} ${s.canali[k]} (${u[k] ?? 0} pessoas)`).join(' · ')}`);
+        }
       }
       break;
     }

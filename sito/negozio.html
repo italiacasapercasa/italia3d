@@ -80,7 +80,7 @@
   .guida img { display: block; width: 100%; height: auto; border-radius: 10px; border: 2px solid #D9DDE3; margin: 4px 0 10px; }
   .guida ol { margin: 0; padding-left: 22px; display: grid; gap: 7px; font-weight: 700; font-size: 14px; line-height: 1.4; }
 </style>
-<script>try { navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: 'v', p: 'negozio', ref: document.referrer })); } catch (e) {}</script>
+<script>try { var da = (new URLSearchParams(location.search).get('da') || '').toLowerCase().slice(0, 20); navigator.sendBeacon && navigator.sendBeacon('api/visita.php', JSON.stringify({ t: 'v', p: 'negozio', ref: document.referrer, da: da })); } catch (e) {}</script>
 </head>
 <body>
 <main>

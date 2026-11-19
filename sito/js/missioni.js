@@ -207,7 +207,7 @@ export class Missioni {
   async condividi() {
     const p = this.partita;
     const txt = `🗺️ Indovina del giorno #${p.numero}\n${p.ok ? `✅ in ${tempo(p.ms)}` : '❌'} ${this.quadri(p)}\nRiesci a fare meglio? 👇`;
-    const url = `${SITO}/#giochi`;
+    const url = `${SITO}/?da=gioco#giochi`;
     try {
       if (navigator.share) { await navigator.share({ text: txt, url }); return; }
     } catch (e) { if (e?.name === 'AbortError') return; }

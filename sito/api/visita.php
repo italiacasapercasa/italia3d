@@ -12,6 +12,8 @@ if ($ua === '' || preg_match('/bot|crawl|spider|slurp|preview|headless|lighthous
 $d = json_decode((string)file_get_contents('php://input', false, null, 0, 2000), true);
 if (!is_array($d)) exit;
 $tipo = ($d['t'] ?? '') === 'ok' ? 'ok' : 'v';
+// etiquetas ?da= aceitas: bio/storia/reel/post/dm = links que nós colocamos; gioco/invito/citta/tabellone = botões de compartilhar do site
+const CANALI = ['bio', 'storia', 'reel', 'post', 'dm', 'gioco', 'invito', 'citta', 'tabellone'];
 $pagina = preg_match('/^[a-z0-9_-]{1,30}$/', (string)($d['p'] ?? '')) ? $d['p'] : 'altro';
 
 $pasta = CARTELLA . '/visite';
@@ -44,12 +46,19 @@ if ($tipo === 'ok') {
     $fonte = preg_match('/Instagram/i', $ua) ? 'instagram-app' : (preg_match('/FBAN|FBAV/i', $ua) ? 'facebook-app'
         : ($ref !== '' && !str_contains($ref, 'italiacasapercasa') ? substr(preg_replace('/^www\./', '', $ref), 0, 40) : 'diretto'));
     $inc('fonti', $fonte);
+    // canal: etiqueta ?da= do link (bio do perfil, link compartilhado pelo site...). Sem etiqueta: app do IG ou o resto.
+    $da = (string)($d['da'] ?? '');
+    $canale = in_array($da, CANALI, true) ? $da : ($da !== '' ? 'altra-etichetta' : ($fonte === 'instagram-app' ? 'ig-senza-etichetta' : 'senza-etichetta'));
+    $inc('canali', $canale);
     $so = preg_match('/iPhone|iPad/i', $ua) ? 'ios' : (preg_match('/Android/i', $ua) ? 'android' : 'computer');
     $inc('dispositivi', $so);
     // único do dia
     $arqU = "$pasta/.unici-$dia";
     $vistos = is_file($arqU) ? (string)file_get_contents($arqU) : '';
-    if (!str_contains($vistos, $quem)) { file_put_contents($arqU, "$quem\n", FILE_APPEND | LOCK_EX); $s['unici']++; }
+    $novo = '';
+    if (!str_contains($vistos, "$quem\n")) { $novo .= "$quem\n"; $s['unici']++; }
+    if (!str_contains($vistos, "$canale:$quem\n")) { $novo .= "$canale:$quem\n"; $inc('canali_unici', $canale); }
+    if ($novo !== '') file_put_contents($arqU, $novo, FILE_APPEND | LOCK_EX);
 }
 ftruncate($f, 0); rewind($f);
 fwrite($f, json_encode($s, JSON_UNESCAPED_SLASHES));
