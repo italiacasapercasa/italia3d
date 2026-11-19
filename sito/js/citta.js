@@ -227,6 +227,8 @@ export class Citta {
     }
     return melhor;
   }
+  // quadras desenhadas da cidade, como [i, j] (passeggio.js: onde dá para andar)
+  quadreDi(l) { const u = this.ultimoBloco(l), out = []; for (let r = 0; r <= u; r++) out.push(ORDEM[r]); return out; }
   // última quadra desenhada: a das casas mais os lotes livres e o outdoor
   ultimoBloco(l) { return BLOCOS_CASAS[Math.floor(Math.max(0, l.lotti + extraLotti(l) - 1) / 8)]; }
   raioCidade(l) {

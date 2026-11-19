@@ -86,6 +86,7 @@ export class UI {
       else if (d.dp) this.decori?.azione(t);
       else if (d.ms) this.missioni?.azione(t);
       else if (d.ct) this.conto?.azione(t);
+      else if (d.passeggia) this.passeggio?.avvia(d.passeggia);
       else if (d.decora) this.decori?.apri(d.decora, d.modo);
       else if (d.ir) this.rota(d.ir);
     });
@@ -291,6 +292,7 @@ export class UI {
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
         ${this.decori?.badge(c) ?? ''}${this.missioni?.badge(c) ?? ''}
       </div>
+      ${this.cartaPasseggia(`casa:${c.conta}`, `Cammina per ${l.nome} partendo da questa casa`)}
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>
         <div class="scala">${niv.map((n, i) => `<div class="gradino ${i < c.livello ? 'passato' : i === c.livello ? 'attuale' : 'futuro'}">${iconaLivello(i)}<small>${esc(n.nome)}</small></div>`).join('')}</div>
@@ -313,6 +315,12 @@ export class UI {
       ${this.decori?.bottone(c, eMinha) ?? ''}`);
     this.selez = c;
     this.botaoCasa();
+  }
+  // cartão "🚶 Passeggia" (passeggio.js); grátis com conta
+  cartaPasseggia(alvo, txt) {
+    if (!this.passeggio) return '';
+    const dentro = !!this.conto?.p;
+    return `<div class="ms-card ps-card"><span class="ms-ic">🚶</span><div class="ms-tx"><b>Passeggia <span class="ps-new">NOVITÀ</span></b><small>${esc(txt)}${dentro ? '' : ' · serve l’account (gratis)'}</small></div><button data-passeggia="${esc(alvo)}">${this.passeggio.ativo ? 'Vai qui' : 'Inizia'}</button></div>`;
   }
   definirMinha(conta) {
     this.minha = conta || null;
@@ -342,6 +350,7 @@ export class UI {
     this.abrir(`
       <h2>⚑ ${esc(l.nome)}</h2>
       <div class="sub"><span data-regione="${l.regione.cod}" class="link">${esc(l.regione.nome)}</span> · ${num(l.case)} ${l.case === 1 ? 'casa' : 'case'} · ${num(l.comune.pop)} abitanti</div>
+      ${this.cartaPasseggia(`luogo:${l.id}`, `Cammina per le strade di ${l.nome}, tra case e negozi`)}
       <div class="carta fond" data-casa="${esc(l.fondatore)}">★ <b>Fondatore/Fondatrice: @${esc(l.fondatore)}</b><small>la prima casa di ${esc(l.nome)}, il ${dataBreve(l.fondatore_ts)} · per sempre</small></div>
       <h3>Governo di ${esc(l.nome)}</h3>
       <div class="linha"><span>Sindaco/a</span><span>${sindaco ? `<a data-casa="${esc(sindaco.conta)}">@${esc(sindaco.conta)}</a> · eletto/a domenica · ${num(sindaco.pts)} pt` : 'si elegge domenica alle 21'}</span></div>

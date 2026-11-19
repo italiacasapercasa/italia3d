@@ -80,7 +80,7 @@ export class Conto {
   }
 
   htmlEntra() {
-    const vantaggi = `<div class="ct-vantaggi"><div>💰 <b>Crediti gratis</b> ogni giorno che entri</div><div>🔥 <b>Bonus</b> se entri tutti i giorni (+20 al 7° giorno, +100 al 30°)</div><div>🔑 Presto: <b>entra nella tua casa</b> e arredala</div></div>`;
+    const vantaggi = `<div class="ct-vantaggi"><div>💰 <b>Crediti gratis</b> ogni giorno che entri</div><div>🔥 <b>Bonus</b> se entri tutti i giorni (+20 al 7° giorno, +100 al 30°)</div><div>🚶 <b>Passeggia</b> per le strade della tua città</div><div>🔑 Presto: <b>entra nella tua casa</b> e arredala</div></div>`;
     if (this.passo === 'codice') return `<h2>📩 Controlla l’email</h2>
       <div class="sub">Abbiamo mandato un codice di 6 cifre a <b>${esc(this.email)}</b></div>
       <div class="ms-campo ct-cod"><input id="ct-cod" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="123456" aria-label="Codice"></div>

@@ -292,6 +292,8 @@ export class Mappa {
       // t0 = hora real do toque (e.timeStamp): com o processador ocupado o evento chega atrasado
       arr = { ponto: this.pontoTerreno(e.clientX, e.clientY), x0: e.clientX, y0: e.clientY, t0: e.timeStamp ?? performance.now(), moveu: false, girar: e.button === 2 || e.shiftKey, az0: this.az };
     };
+    // passeggiata (passeggio.js): os controles do mapa param e os eventos vão para ela
+    for (const tipo of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) cv.addEventListener(tipo, e => { if (this.passeggio) { e.stopImmediatePropagation(); this.passeggio.evento(e); } });
     cv.addEventListener('pointerdown', e => {
       cv.setPointerCapture(e.pointerId);
       dedos.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -344,6 +346,7 @@ export class Mappa {
     cv.addEventListener('pointercancel', fim);
     cv.addEventListener('contextmenu', e => e.preventDefault());
     cv.addEventListener('wheel', e => {
+      if (this.passeggio) return this.passeggio.evento(e);
       e.preventDefault();
       this.voo = null;
       this.tocou = true;
@@ -354,6 +357,7 @@ export class Mappa {
   loop(agora) {
     if (this.gravacao) return;
     requestAnimationFrame(t => this.loop(t));
+    if (this.passeggio) { this.voo = null; this.passeggio.passo(agora); this.sujo = true; }
     if (this.voo) this.passoVoo(agora);
     if (!this.sujo && !this.animando && !this.animatori.size) return;
     // só animações de fundo (fogos): 30 quadros por segundo bastam e poupam bateria

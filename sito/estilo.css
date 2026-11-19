@@ -429,3 +429,26 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 .ct-mov li b.neg { color: var(--rosso); }
 @media (max-width: 420px) { #mio-conto { height: 34px; font-size: 12.5px; padding: 0 9px; } }
 .ct-sicuro { background: #E8F6EC; border: 2px solid var(--verde); border-radius: 14px; padding: 8px 12px; margin: 10px 0 4px; font-size: 13px; font-weight: 700; line-height: 1.4; }
+
+/* ---------- passeggiata (js/passeggio.js) ---------- */
+body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.passeggio #schede, body.passeggio #piede, body.passeggio #etichette, body.passeggio #avviso-demo { display: none !important; }
+#passeggio { position: fixed; inset: 0; pointer-events: none; z-index: 22; font-family: 'Nunito', sans-serif; }
+#passeggio button { pointer-events: auto; }
+.ps-topo { position: absolute; top: calc(var(--sat) + 10px); left: 10px; right: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ps-titolo { background: #fff; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 6px 14px; font-weight: 900; font-size: 15px; box-shadow: 0 3px 0 rgba(21,32,51,.25); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ps-esci { background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 7px 14px; font: 900 15px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ps-joy { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 3px solid rgba(255,255,255,.85); background: rgba(21,32,51,.18); opacity: 0; transition: opacity .15s; }
+.ps-joy.on { opacity: 1; }
+.ps-joy i { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: #fff; border: 3px solid var(--inchiostro); box-shadow: 0 3px 0 rgba(21,32,51,.3); }
+.ps-dica, .ps-bordo { position: absolute; left: 50%; transform: translate(-50%, 10px); max-width: calc(100% - 32px); text-align: center; background: var(--inchiostro); color: #fff; font-weight: 800; font-size: 14px; padding: 10px 16px; border-radius: 16px; opacity: 0; transition: .3s; }
+.ps-dica { bottom: calc(var(--sab) + 90px); }
+.ps-bordo { top: 40%; background: #fff; color: var(--inchiostro); border: 3px solid var(--inchiostro); font-size: 16px; }
+.ps-bordo small { font-size: 13px; color: var(--grigio); }
+.ps-dica.on, .ps-bordo.on { opacity: 1; transform: translate(-50%, 0); }
+.ps-azioni { position: absolute; right: 12px; bottom: calc(var(--sab) + 24px); display: flex; flex-direction: column; gap: 8px; }
+.ps-azioni button { background: #fff; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 9px 14px; font: 900 14px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ps-tag { position: absolute; transform: translate(-50%, -100%); background: #fff; border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 3px 10px; font: 900 13px 'Nunito', sans-serif; color: var(--inchiostro); white-space: nowrap; box-shadow: 0 2px 0 rgba(21,32,51,.25); }
+.ps-tag.mia { background: var(--giallo); }
+.ps-tag.neg { background: #FFE3D6; }
+.ps-card { background: linear-gradient(135deg, #DCEBFF, #FFF6E6); }
+.ps-new { display: inline-block; vertical-align: 2px; background: var(--rosso); color: #fff; font-size: 10px; font-weight: 900; border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
