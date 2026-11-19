@@ -428,3 +428,4 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 .ct-mov li b { min-width: 52px; text-align: right; color: var(--verde); }
 .ct-mov li b.neg { color: var(--rosso); }
 @media (max-width: 420px) { #mio-conto { height: 34px; font-size: 12.5px; padding: 0 9px; } }
+.ct-sicuro { background: #E8F6EC; border: 2px solid var(--verde); border-radius: 14px; padding: 8px 12px; margin: 10px 0 4px; font-size: 13px; font-weight: 700; line-height: 1.4; }

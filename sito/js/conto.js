@@ -91,6 +91,7 @@ export class Conto {
       ${vantaggi}
       <div class="ms-campo"><input id="ct-email" type="email" autocomplete="email" inputmode="email" placeholder="la.tua@email.it" value="${esc(this.email)}" aria-label="Email"></div>
       <div class="bottoni"><button data-ct="codice">📩 Mandami il codice</button></div>
+      <div class="ct-sicuro">🔒 <b>Accesso sicuro senza password:</b> nessuno può entrare senza il codice che arriva sulla tua email. Ti avvisiamo a ogni nuovo accesso.</div>
       <p class="nota">Usiamo l’email solo per farti entrare e per le ricevute. <a href="privacy.html#account" class="link">Privacy</a> · <a href="termini.html" class="link">Regole dei crediti</a></p>`;
   }
 
@@ -120,7 +121,8 @@ export class Conto {
       <h3 class="ct-h">🛍️ Presto nel negozio</h3><p class="ct-mini">Metti da parte i crediti: le prime cose arrivano presto. 100 💰 = 1 €.</p>
       <div class="ct-cat">${cat}</div>
       ${mov ? `<h3 class="ct-h">📒 Movimenti</h3><ul class="ct-mov">${mov}</ul>` : ''}
-      <div class="bottoni"><button class="sec" data-ct="esci">Esci</button></div>
+      <div class="ct-sicuro">🔒 Ti mandiamo un’email a ogni nuovo accesso e una ricevuta per ogni ricarica o acquisto.</div>
+      <div class="bottoni"><button class="sec" data-ct="esci">Esci</button><button class="sec" data-ct="esci_tutti">🔒 Esci da tutti i dispositivi</button></div>
       <p class="nota">I crediti non si possono comprare punti, voti o cariche. <a href="termini.html" class="link">Regole dei crediti</a></p>`;
   }
 
@@ -157,7 +159,10 @@ export class Conto {
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
       else if (a === 'ricarica') { const j = await this.api('ricarica', { pacco: t.dataset.pacco }); location.href = j.url; }
-      else if (a === 'esci') { await this.api('esci'); this.p = null; this.desenharBotao(); this.ui.fechar(); this.ui.aviso('Sei uscito dal tuo account.'); }
+      else if (a === 'esci_tutti') {
+        if (!confirm('Vuoi uscire dal tuo account su tutti i telefoni e computer? Per rientrare servirà un nuovo codice via email.')) return;
+        await this.api('esci_tutti'); this.p = null; this.desenharBotao(); this.ui.fechar(); this.ui.aviso('🔒 Uscito da tutti i dispositivi.');
+      } else if (a === 'esci') { await this.api('esci'); this.p = null; this.desenharBotao(); this.ui.fechar(); this.ui.aviso('Sei uscito dal tuo account.'); }
     } catch (e) { this.ui.aviso(e.message); }
   }
 }

@@ -86,12 +86,25 @@ function conti_https(): bool { return (($_SERVER['HTTPS'] ?? '') !== '' && $_SER
 function conti_cookie(string $valor, int $scade): void {
     setcookie(CONTI_COOKIE, $valor, ['expires' => $scade, 'path' => '/', 'secure' => conti_https(), 'httponly' => true, 'samesite' => 'Lax']);
 }
-function conti_sessione_crea(string $id): void {
+// cada sessão guarda a "geração" da conta; "esci da tutti i dispositivi" aumenta a geração e derruba todas
+function conti_sessione_crea(string $id, int $gen = 0): void {
     $tok = bin2hex(random_bytes(32));
     $scade = time() + CONTI_SESSIONE_GIORNI * 86400;
-    file_put_contents(conti_dir('sessioni') . '/' . substr(hash('sha256', $tok), 0, 40) . '.json', json_encode(['id' => $id, 'scade' => $scade, 'creata' => gmdate('c')]), LOCK_EX);
+    file_put_contents(conti_dir('sessioni') . '/' . substr(hash('sha256', $tok), 0, 40) . '.json', json_encode(['id' => $id, 'gen' => $gen, 'scade' => $scade, 'creata' => gmdate('c'), 'disp' => conti_dispositivo()]), LOCK_EX);
     conti_cookie($tok, $scade);
 }
+function conti_dispositivo(?string $ua = null): string {
+    $ua ??= (string)($_SERVER['HTTP_USER_AGENT'] ?? '');
+    $so = preg_match('/iPhone/i', $ua) ? 'iPhone' : (preg_match('/iPad/i', $ua) ? 'iPad' : (preg_match('/Android/i', $ua) ? 'Android' : (preg_match('/Windows/i', $ua) ? 'Windows' : (preg_match('/Macintosh|Mac OS/i', $ua) ? 'Mac' : (preg_match('/Linux/i', $ua) ? 'Linux' : 'dispositivo sconosciuto')))));
+    $nav = preg_match('/Instagram/i', $ua) ? 'app di Instagram' : (preg_match('/FBAN|FBAV/i', $ua) ? 'app di Facebook' : (preg_match('/SamsungBrowser/i', $ua) ? 'Samsung Internet' : (preg_match('/Edg\//i', $ua) ? 'Edge' : (preg_match('/Firefox|FxiOS/i', $ua) ? 'Firefox' : (preg_match('/Chrome|CriOS/i', $ua) ? 'Chrome' : (preg_match('/Safari/i', $ua) ? 'Safari' : 'browser'))))));
+    return "$so · $nav";
+}
+function conti_token_revoca(string $id, int $gen): string { return $id . '.' . substr(hash_hmac('sha256', "revoca|$id|$gen", APP_SECRET), 0, 24); }
+// derruba todas as sessões da conta (botão no site ou link do e-mail "Non sei stato tu?")
+function conti_revoca_tutti(string $id): void {
+    conti_modifica($id, function (array &$u) { $u['gen'] = (int)($u['gen'] ?? 0) + 1; });
+}
+function conti_ora_roma(): string { return (new DateTime('now', new DateTimeZone('Europe/Rome')))->format('d/m/Y \a\l\l\e H:i'); }
 function conti_sessione_arq(): ?string {
     $tok = (string)($_COOKIE[CONTI_COOKIE] ?? '');
     return preg_match('/^[0-9a-f]{64}$/', $tok) ? conti_dir('sessioni') . '/' . substr(hash('sha256', $tok), 0, 40) . '.json' : null;
@@ -101,6 +114,8 @@ function conti_sessione_id(): ?string {
     if (!$arq || !is_file($arq)) return null;
     $s = json_decode((string)file_get_contents($arq), true);
     if (!is_array($s) || (int)($s['scade'] ?? 0) < time()) { @unlink($arq); return null; }
+    $u = conti_leggi((string)$s['id']);
+    if (!$u || (int)($s['gen'] ?? 0) !== (int)($u['gen'] ?? 0)) { @unlink($arq); return null; }   // saiu de todos os dispositivos
     return (string)$s['id'];
 }
 function conti_sessione_chiudi(): void {
@@ -158,7 +173,12 @@ function conti_assegna_conta(string $conta, string $id): void {
 }
 
 // ---------- e-mail (SMTP da Hostinger, igual ao recupero.php) ----------
+// rodando no PC (linha de comando ou localhost): nenhum e-mail sai de verdade
+function conti_locale(): bool {
+    return PHP_SAPI === 'cli' || (in_array((string)($_SERVER['REMOTE_ADDR'] ?? ''), ['127.0.0.1', '::1'], true) && preg_match('/^localhost(:\d+)?$/', (string)($_SERVER['HTTP_HOST'] ?? '')));
+}
 function conti_smtp(string $para, string $assunto, string $corpo): array {
+    if (conti_locale()) { file_put_contents(conti_dir() . '/email-dev.log', "=== " . gmdate('c') . " para $para | $assunto\n$corpo\n\n", FILE_APPEND | LOCK_EX); return [true, 'dev']; }
     $de = 'privacy@italiacasapercasa.com';
     if (!defined('SMTP_PASSWORD') || SMTP_PASSWORD === '') return [false, 'sem SMTP_PASSWORD'];
     $s = @stream_socket_client('ssl://smtp.hostinger.com:465', $en, $es, 20);
@@ -208,21 +228,36 @@ function conti_ricarica(string $email, string $sck, string $prodId, string $nome
     if (!$f || !flock($f, LOCK_EX)) return 'lock';
     $T = json_decode((string)stream_get_contents($f), true) ?: [];
     $t = $T[$trans] ?? null;
-    $esito = 'nulla';
+    $esito = 'nulla'; $ricevuta = null;
     if ($stato === 'pagato' && !$t) {
-        $ok = conti_modifica($id, function (array &$u) use ($p, $trans) { conti_movimento($u, (int)$p['crediti'], 'ricarica', $trans); return true; }, conti_email_ok($email) ? $email : null);
-        if ($ok) {
+        $u = conti_modifica($id, function (array &$u) use ($p, $trans) { conti_movimento($u, (int)$p['crediti'], 'ricarica', $trans); return $u; }, conti_email_ok($email) ? $email : null);
+        if ($u) {
             $T[$trans] = ['id' => $id, 'crediti' => (int)$p['crediti'], 'euro' => $valore, 'stato' => 'accreditato', 'em' => gmdate('c')];
             $esito = 'accreditato';
+            $ricevuta = [$u, (int)$p['crediti'], 'Ricarica ricevuta, grazie! 🎉', $trans];
         } else $esito = 'conta inesistente';
     } elseif ($stato === 'rimborsato' && $t && $t['stato'] === 'accreditato') {
-        conti_modifica($t['id'], function (array &$u) use ($t, $trans) { conti_movimento($u, -(int)$t['crediti'], 'rimborso', $trans); });
+        $u = conti_modifica($t['id'], function (array &$u) use ($t, $trans) { conti_movimento($u, -(int)$t['crediti'], 'rimborso', $trans); return $u; });
         $T[$trans]['stato'] = 'stornato'; $T[$trans]['stornato_em'] = gmdate('c');
         $esito = 'stornato';
+        if ($u) $ricevuta = [$u, -(int)$t['crediti'], 'Il pagamento è stato rimborsato: abbiamo tolto i crediti di quella ricarica.', $trans];
     }
     ftruncate($f, 0); rewind($f); fwrite($f, json_encode($T, JSON_UNESCAPED_SLASHES));
     flock($f, LOCK_UN); fclose($f);
+    if ($ricevuta) conti_ricevuta(...$ricevuta);
     return $esito;
+}
+// recibo por e-mail de cada movimento pago (recarga, reembolso e, na fase 3, compras)
+function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = ''): array {
+    $fmt = fn(int $v) => ($v > 0 ? '+' : ($v < 0 ? '−' : '')) . number_format(abs($v), 0, ',', '.');
+    $corpo = "Ciao!\n\n$titolo\n\n"
+        . "• Crediti: " . $fmt($delta) . " 💰\n"
+        . "• Saldo attuale: " . number_format((int)$u['saldo'], 0, ',', '.') . " 💰\n"
+        . "• Quando: " . conti_ora_roma() . " (ora italiana)\n"
+        . ($rif !== '' ? "• Riferimento: $rif\n" : '')
+        . "\nTutti i movimenti sono nel tuo account: https://italiacasapercasa.com/#conto\n"
+        . "Domande su questo movimento? Rispondi a questa email.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
+    return conti_smtp((string)$u['email'], ($delta >= 0 ? 'Ricevuta: ' : 'Rimborso: ') . $fmt($delta) . ' crediti', $corpo);
 }
 // euros já recarregados nos últimos 30 dias (limite mensal, crediti.json limite_mese_euro)
 function conti_euro_mese(string $id): float {

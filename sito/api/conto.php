@@ -8,6 +8,8 @@
 //   scollega                 desiste do @ pendente
 //   ricarica {pacco}         link de pagamento do pacote (só com crediti.json ricarica_aperta e dentro do limite mensal)
 //   esci                     fecha a sessão
+//   esci_tutti               fecha TODAS as sessões da conta (também pelo link GET ?esci_tutti=<token> do e-mail de acesso novo)
+// Segurança: e-mail a cada acesso novo (conta já existente), recibo por e-mail a cada recarga/reembolso (_conti.php).
 declare(strict_types=1);
 require __DIR__ . '/_conti.php';
 
@@ -15,6 +17,32 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 function resposta(array $d, int $c = 200): void { http_response_code($c); echo json_encode(['ok' => true] + $d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); exit; }
 function erro(string $msg, int $c = 400, array $extra = []): void { http_response_code($c); echo json_encode(['ok' => false, 'erro' => $msg] + $extra, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); exit; }
+// responde já e só depois faz o trabalho lento (e-mail), para a pessoa não esperar o SMTP
+function resposta_e_poi(array $d, callable $dopo): void {
+    ignore_user_abort(true);
+    echo json_encode(['ok' => true] + $d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (function_exists('litespeed_finish_request')) litespeed_finish_request();
+    elseif (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+    else flush();
+    $dopo();
+    exit;
+}
+
+// link do e-mail «Non sei stato tu?»: sai de todos os dispositivos (GET, página simples)
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['esci_tutti'])) {
+    header('Content-Type: text/html; charset=utf-8');
+    $tok = (string)$_GET['esci_tutti'];
+    $id = substr($tok, 0, 16);
+    $u = preg_match('/^[0-9a-f]{16}\.[0-9a-f]{24}$/', $tok) ? conti_leggi($id) : null;
+    $ok = $u && hash_equals(conti_token_revoca($id, (int)($u['gen'] ?? 0)), $tok);
+    if ($ok) conti_revoca_tutti($id);
+    $msg = $ok ? '✅ Fatto: il tuo account è uscito da tutti i dispositivi.<br>Per rientrare serve un nuovo codice, che arriva solo sulla tua email.'
+               : 'Questo link è già stato usato o non è più valido: se l’hai già toccato, i dispositivi sono già stati disconnessi.';
+    echo '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Account · Italia Casa per Casa</title>'
+        . '<body style="margin:0;background:#8EBFD2;font-family:system-ui,sans-serif;color:#152033"><main style="max-width:480px;margin:40px auto;background:#fff;border:4px solid #152033;border-radius:24px;padding:24px;font-weight:700;line-height:1.5">'
+        . "<h1 style=\"font-size:22px\">🔒 Sicurezza dell’account</h1><p>$msg</p><p><a href=\"/#conto\" style=\"color:#152033\">Torna alla mappa</a></p></main>";
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !str_contains((string)($_SERVER['CONTENT_TYPE'] ?? ''), 'json')) erro('Metodo non valido.', 405);
 
 $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
@@ -63,7 +91,7 @@ if ($acao === 'codice') {
     file_put_contents(conti_dir('codici') . "/$id.json", json_encode(['h' => hash('sha256', $cod . '|' . $id . '|' . APP_SECRET), 'scade' => time() + 900, 'tent' => 0]), LOCK_EX);
     $corpo = "Ciao!\n\nIl tuo codice per entrare in Italia Casa per Casa è:\n\n    $cod\n\nVale 15 minuti. Se non l'hai chiesto tu, ignora questa email: nessuno può entrare senza il codice.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
     // no PC (localhost): nunca manda e-mail, devolve o código na resposta para testar
-    if (in_array($ip, ['127.0.0.1', '::1'], true) && preg_match('/^localhost(:\d+)?$/', (string)($_SERVER['HTTP_HOST'] ?? ''))) resposta(['inviato' => true, 'dev_codice' => $cod]);
+    if (conti_locale()) resposta(['inviato' => true, 'dev_codice' => $cod]);
     [$ok, $info] = conti_smtp($email, "Il tuo codice: $cod", $corpo);
     if (!$ok) { error_log("conto codice: $info"); erro('Non riusciamo a inviare l’email adesso. Riprova tra qualche minuto.', 503); }
     resposta(['inviato' => true]);
@@ -85,9 +113,20 @@ if ($acao === 'entra') {
     }
     @unlink($arq);
     $nuovo = !conti_leggi($id);
-    conti_modifica($id, function (array &$u) { $u['ultimo_accesso'] = gmdate('c'); }, $email);
-    conti_sessione_crea($id);
-    resposta(['nuovo' => $nuovo, 'profilo' => profilo(conferma_attesa($id))]);
+    $gen = conti_modifica($id, function (array &$u) { $u['ultimo_accesso'] = gmdate('c'); return (int)($u['gen'] ?? 0); }, $email);
+    conti_sessione_crea($id, $gen);
+    $prof = profilo(conferma_attesa($id));
+    if ($nuovo) resposta(['nuovo' => true, 'profilo' => $prof]);
+    // conta que já existia: avisa por e-mail do acesso novo, com o link para sair de todos os dispositivos
+    resposta_e_poi(['nuovo' => false, 'profilo' => $prof], function () use ($email, $id, $gen) {
+        $link = 'https://italiacasapercasa.com/api/conto.php?esci_tutti=' . conti_token_revoca($id, $gen);
+        $corpo = "Ciao!\n\nC'è stato un nuovo accesso al tuo account di Italia Casa per Casa:\n\n"
+            . "• Quando: " . conti_ora_roma() . " (ora italiana)\n• Dispositivo: " . conti_dispositivo() . "\n\n"
+            . "Se l'accesso è tuo, non devi fare niente.\n\n"
+            . "Non riconosci questo accesso? Tocca qui per uscire da tutti i dispositivi:\n$link\n\n"
+            . "Senza il codice che arriva su questa email nessuno può entrare nel tuo account.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
+        conti_smtp($email, 'Nuovo accesso al tuo account', $corpo);
+    });
 }
 
 // ---------- com sessão ----------
@@ -100,6 +139,8 @@ if (!$u) { conti_sessione_chiudi(); erro('Account non trovato. Entra di nuovo.',
 if ($acao === 'io') resposta(['profilo' => profilo($u)]);
 
 if ($acao === 'esci') { conti_sessione_chiudi(); resposta([]); }
+
+if ($acao === 'esci_tutti') { conti_revoca_tutti($id); conti_sessione_chiudi(); resposta([]); }
 
 if ($acao === 'collega') {
     $conta = strtolower(ltrim(trim((string)($d['conta'] ?? '')), '@'));
