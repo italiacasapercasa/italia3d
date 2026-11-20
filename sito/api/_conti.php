@@ -209,18 +209,50 @@ function conti_smtp(string $para, string $assunto, string $corpo): array {
     } finally { fclose($s); }
 }
 
+// ---------- loja: o que se compra com créditos (preços SÓ do data/crediti.json, nunca do navegador) ----------
+// à venda agora: "interni" (casa con interni) e "mob_<id>" (móveis pagos). Itens do personagem e veículos entram quando tiverem modelo.
+function conti_listino(): array {
+    $c = conti_cfg(); $out = [];
+    if (isset($c['interni']['prezzo'])) $out['interni'] = ['nome' => 'Casa con interni', 'prezzo' => (int)$c['interni']['prezzo']];
+    foreach ((array)($c['mobili'] ?? []) as $m) if ((int)$m['prezzo'] > 0) $out['mob_' . $m['id']] = ['nome' => (string)$m['nome'], 'prezzo' => (int)$m['prezzo'], 'serve' => 'interni'];
+    return $out;
+}
+// compra: tira os créditos, guarda o item na conta e manda o recibo. Devolve [conta atualizada, erro|null]
+function conti_compra(string $id, string $item): array {
+    $L = conti_listino();
+    if (!isset($L[$item])) return [null, 'Questo oggetto non è in vendita.'];
+    $x = $L[$item];
+    $err = null;
+    $u = conti_modifica($id, function (array &$u) use ($item, $x, &$err) {
+        $own = (array)($u['oggetti'] ?? []);
+        if (in_array($item, $own, true)) { $err = 'Ce l’hai già!'; return $u; }
+        if ($item === 'interni' && empty($u['conta'])) { $err = 'Collega prima il tuo Instagram: la casa con interni è quella del tuo @.'; return $u; }
+        if (!empty($x['serve']) && !in_array($x['serve'], $own, true)) { $err = 'Prima ti serve la casa con interni.'; return $u; }
+        if ((int)$u['saldo'] < $x['prezzo']) { $err = 'Crediti insufficienti: ti mancano ' . ($x['prezzo'] - (int)$u['saldo']) . ' 💰.'; return $u; }
+        conti_movimento($u, -$x['prezzo'], 'acquisto', $item);
+        $own[] = $item; $u['oggetti'] = $own;
+        return $u;
+    });
+    if (!$u) return [null, 'Account non trovato.'];
+    if ($err) return [null, $err];
+    conti_ricevuta($u, -$x['prezzo'], "Hai comprato: {$x['nome']}. Buon divertimento! 🎉", $item, "Ricevuta acquisto: {$x['nome']}");
+    return [$u, null];
+}
+
 // ---------- recargas da Hotmart (chamado por hotmart.php) ----------
 // acha o pacote pelo id do produto na Hotmart (crediti.json pacchi[].hotmart) ou pelo número de créditos no nome do produto
-function conti_pacco_di(string $prodId, string $nome): ?array {
+function conti_pacco_di(string $prodId, string $nome, string $offerta = ''): ?array {
     $pacchi = (array)(conti_cfg()['pacchi'] ?? []);
+    foreach ($pacchi as $p) if ($offerta !== '' && (string)($p['offerta'] ?? '') === $offerta) return $p;   // 1 produto, 6 ofertas (código off=...)
     foreach ($pacchi as $p) if ($prodId !== '' && (string)($p['hotmart'] ?? '') === $prodId) return $p;
     $n = preg_replace('/(\d)\.(\d{3})/', '$1$2', $nome);
     foreach ($pacchi as $p) if (preg_match('/\b' . (int)$p['crediti'] . '\b/', $n)) return $p;
     return null;
 }
 // $stato: 'pagato' credita (uma vez por transação) · 'rimborsato' tira de volta (saldo pode ficar negativo)
-function conti_ricarica(string $email, string $sck, string $prodId, string $nome, string $trans, string $stato, $valore): string {
-    $p = conti_pacco_di($prodId, $nome);
+function conti_ricarica(string $email, string $sck, string $prodId, string $nome, string $trans, string $stato, $valore, string $offerta = ''): string {
+    $p = conti_pacco_di($prodId, $nome, $offerta);
+    if (!$p && is_numeric($valore)) foreach ((array)(conti_cfg()['pacchi'] ?? []) as $x) if (abs((float)$valore - (float)$x['prezzo']) < 0.05) { $p = $x; break; }   // oferta padrão sem código: pelo valor pago
     if (!$p) return 'pacchetto sconosciuto';
     $id = preg_match('/^c([0-9a-f]{16})$/', $sck, $m) ? $m[1] : (conti_email_ok($email) ? conti_id($email) : '');
     if ($id === '') return 'conta sconosciuta';
@@ -248,7 +280,7 @@ function conti_ricarica(string $email, string $sck, string $prodId, string $nome
     return $esito;
 }
 // recibo por e-mail de cada movimento pago (recarga, reembolso e, na fase 3, compras)
-function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = ''): array {
+function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = '', ?string $assunto = null): array {
     $fmt = fn(int $v) => ($v > 0 ? '+' : ($v < 0 ? '−' : '')) . number_format(abs($v), 0, ',', '.');
     $corpo = "Ciao!\n\n$titolo\n\n"
         . "• Crediti: " . $fmt($delta) . " 💰\n"
@@ -257,7 +289,7 @@ function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = ''):
         . ($rif !== '' ? "• Riferimento: $rif\n" : '')
         . "\nTutti i movimenti sono nel tuo account: https://italiacasapercasa.com/#conto\n"
         . "Domande su questo movimento? Rispondi a questa email.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
-    return conti_smtp((string)$u['email'], ($delta >= 0 ? 'Ricevuta: ' : 'Rimborso: ') . $fmt($delta) . ' crediti', $corpo);
+    return conti_smtp((string)$u['email'], $assunto ?? (($delta >= 0 ? 'Ricevuta: ' : 'Rimborso: ') . $fmt($delta) . ' crediti'), $corpo);
 }
 // euros já recarregados nos últimos 30 dias (limite mensal, crediti.json limite_mese_euro)
 function conti_euro_mese(string $id): float {

@@ -30,7 +30,7 @@ if (preg_match('/^c[0-9a-f]{16}$/', $sck) || stripos($registro['prodotto'], 'cre
     require_once __DIR__ . '/_conti.php';
     $st = in_array($evento, ['PURCHASE_APPROVED', 'PURCHASE_COMPLETE'], true) ? 'pagato' : (in_array($evento, ['PURCHASE_REFUNDED', 'PURCHASE_CHARGEBACK'], true) ? 'rimborsato' : '');
     if ($st !== '' && $registro['transazione'] !== '') {
-        $esito = conti_ricarica((string)($d['data']['buyer']['email'] ?? ''), $sck, (string)($d['data']['product']['id'] ?? ''), $registro['prodotto'], $registro['transazione'], $st, $registro['valore']);
+        $esito = conti_ricarica((string)($d['data']['buyer']['email'] ?? ''), $sck, (string)($d['data']['product']['id'] ?? ''), $registro['prodotto'], $registro['transazione'], $st, $registro['valore'], (string)($compra['offer']['code'] ?? ''));
         file_put_contents(conti_dir() . '/ricariche.log', gmdate('c') . " $evento {$registro['transazione']} $esito\n", FILE_APPEND | LOCK_EX);
     }
     http_response_code(200); echo 'ok'; exit;

@@ -87,6 +87,7 @@ export class UI {
       else if (d.ms) this.missioni?.azione(t);
       else if (d.ct) this.conto?.azione(t);
       else if (d.passeggia) this.passeggio?.avvia(d.passeggia);
+      else if (d.interni) { const [a, conta] = [d.interni.slice(0, d.interni.indexOf(':')), d.interni.slice(d.interni.indexOf(':') + 1)]; if (a === 'compra') this.interni?.compraCasa(conta); else this.interni?.apri(conta); }
       else if (d.decora) this.decori?.apri(d.decora, d.modo);
       else if (d.ir) this.rota(d.ir);
     });
@@ -292,6 +293,7 @@ export class UI {
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
         ${this.decori?.badge(c) ?? ''}${this.missioni?.badge(c) ?? ''}
       </div>
+      ${this.cartaInterni(c)}
       ${this.cartaPasseggia(`casa:${c.conta}`, `Cammina per ${l.nome} partendo da questa casa`)}
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>
@@ -315,6 +317,17 @@ export class UI {
       ${this.decori?.bottone(c, eMinha) ?? ''}`);
     this.selez = c;
     this.botaoCasa();
+  }
+  // cartão da casa con interni (interni.js): o dono entra/compra, os outros visitam se já estiver arredata
+  cartaInterni(c) {
+    const it = this.interni; if (!it) return '';
+    const prezzo = this.conto?.cfg?.interni?.prezzo ?? 990;
+    const carta = (ic, tit, txt, bt, alvo, cls = '') => `<div class="ms-card in-card ${cls}"><span class="ms-ic">${ic}</span><div class="ms-tx"><b>${tit}</b><small>${txt}</small></div><button data-interni="${alvo}">${bt}</button></div>`;
+    if (it.mio(c.conta)) return it.possiede('interni')
+      ? carta('🔑', 'La tua casa con interni', 'Entra e arredala come vuoi', 'Entra', `entra:${c.conta}`)
+      : carta('🔑', `Casa con interni · ${num(prezzo)} 💰`, 'Entra nella tua casa e arredala: tutti potranno visitarla. 5 mobili in regalo.', 'Compra', `compra:${c.conta}`, 'nuova');
+    if (it.ha(c.conta)) return carta('👀', `Guarda dentro la casa di @${esc(c.conta)}`, 'È arredata: entra a vederla', 'Entra', `vedi:${c.conta}`);
+    return '';
   }
   // cartão "🚶 Passeggia" (passeggio.js); grátis com conta
   cartaPasseggia(alvo, txt) {

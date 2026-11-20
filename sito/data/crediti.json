@@ -1,16 +1,46 @@
 {
   "euro": 100,
   "giornaliero": { "base": 2, "serie": [[30, 100], [7, 20]] },
-  "ricarica_aperta": false,
+  "ricarica_aperta": true,
   "limite_mese_euro": 150,
   "email_giorno_max": 400,
   "pacchi": [
-    { "id": "p5", "prezzo": 4.99, "crediti": 500, "bonus": 0, "hotmart": "", "checkout": "" },
-    { "id": "p10", "prezzo": 9.99, "crediti": 1100, "bonus": 10, "etichetta": "più scelto", "hotmart": "", "checkout": "" },
-    { "id": "p20", "prezzo": 19.99, "crediti": 2400, "bonus": 20, "hotmart": "", "checkout": "" },
-    { "id": "p30", "prezzo": 29.99, "crediti": 3750, "bonus": 25, "hotmart": "", "checkout": "" },
-    { "id": "p60", "prezzo": 59.99, "crediti": 7800, "bonus": 30, "hotmart": "", "checkout": "" },
-    { "id": "p100", "prezzo": 99.99, "crediti": 15000, "bonus": 50, "etichetta": "miglior valore", "hotmart": "", "checkout": "" }
+    { "id": "p5", "prezzo": 4.99, "crediti": 500, "bonus": 0, "offerta": "obm1wba9", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=obm1wba9" },
+    { "id": "p10", "prezzo": 9.99, "crediti": 1100, "bonus": 10, "etichetta": "più scelto", "offerta": "uuxt7xyg", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=uuxt7xyg" },
+    { "id": "p20", "prezzo": 19.98, "crediti": 2400, "bonus": 20, "offerta": "jjfhe0iy", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=jjfhe0iy" },
+    { "id": "p30", "prezzo": 29.99, "crediti": 3750, "bonus": 25, "offerta": "tcdw9il6", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=tcdw9il6" },
+    { "id": "p60", "prezzo": 59.99, "crediti": 7800, "bonus": 30, "offerta": "acq18r02", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=acq18r02" },
+    { "id": "p100", "prezzo": 99.99, "crediti": 15000, "bonus": 50, "etichetta": "miglior valore", "offerta": "q50396w3", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=q50396w3" }
+  ],
+  "interni": {
+    "prezzo": 990,
+    "regalo": ["divano", "tavolo", "sedia", "letto", "pianta"],
+    "pavimenti": [["legno", "Legno", "#C8955C"], ["noce", "Noce", "#7B5233"], ["piastrelle", "Piastrelle", "#E8E2D6"], ["marmo", "Marmo", "#F3F1EC"], ["cotto", "Cotto", "#C9714A"], ["moquette", "Moquette", "#7C8DB5"]],
+    "pareti": ["#FFF6E6", "#F5DDAE", "#F2C27B", "#E8836B", "#9ED1F2", "#A7D98B", "#C9A7F2", "#FFFFFF"]
+  },
+  "mobili": [
+    { "id": "divano", "icona": "🛋️", "nome": "Divano", "prezzo": 0 },
+    { "id": "tavolo", "icona": "🍽️", "nome": "Tavolo", "prezzo": 0 },
+    { "id": "sedia", "icona": "🪑", "nome": "Sedia", "prezzo": 0 },
+    { "id": "letto", "icona": "🛏️", "nome": "Letto", "prezzo": 0 },
+    { "id": "pianta", "icona": "🪴", "nome": "Pianta", "prezzo": 0 },
+    { "id": "tappeto", "icona": "🟥", "nome": "Tappeto", "prezzo": 20 },
+    { "id": "comodino", "icona": "🗄️", "nome": "Comodino", "prezzo": 20 },
+    { "id": "quadro", "icona": "🖼️", "nome": "Quadro", "prezzo": 20 },
+    { "id": "lampada", "icona": "💡", "nome": "Lampada", "prezzo": 25 },
+    { "id": "tavolino", "icona": "☕", "nome": "Tavolino", "prezzo": 25 },
+    { "id": "poltrona", "icona": "💺", "nome": "Poltrona", "prezzo": 30 },
+    { "id": "orologio", "icona": "🕰️", "nome": "Orologio a pendolo", "prezzo": 30 },
+    { "id": "armadio", "icona": "🚪", "nome": "Armadio", "prezzo": 40 },
+    { "id": "libreria", "icona": "📚", "nome": "Libreria", "prezzo": 40 },
+    { "id": "scrivania", "icona": "🖥️", "nome": "Scrivania con PC", "prezzo": 60 },
+    { "id": "tv", "icona": "📺", "nome": "TV", "prezzo": 60 },
+    { "id": "frigo", "icona": "🧊", "nome": "Frigorifero", "prezzo": 50 },
+    { "id": "chitarra", "icona": "🎸", "nome": "Chitarra", "prezzo": 50 },
+    { "id": "cucina", "icona": "🍳", "nome": "Cucina", "prezzo": 90 },
+    { "id": "camino", "icona": "🔥", "nome": "Camino", "prezzo": 90 },
+    { "id": "acquario", "icona": "🐠", "nome": "Acquario", "prezzo": 120 },
+    { "id": "pianoforte", "icona": "🎹", "nome": "Pianoforte", "prezzo": 150 }
   ],
   "personaggio": [
     { "id": "cappello", "icona": "🧢", "nome": "Cappellino", "prezzo": 50 },

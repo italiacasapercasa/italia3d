@@ -114,7 +114,12 @@ export class Conto {
     else ig = `<div class="ms-chi"><label for="ct-conta">📸 Collega il tuo Instagram per ricevere i crediti ogni giorno</label>
         <div class="ms-campo"><span>@</span><input id="ct-conta" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="il_tuo_nome" value="${esc(this.ui.minha ?? '')}"></div>
         <div class="bottoni"><button data-ct="collega">Collega</button></div><small class="ct-mini">Serve una casa sulla mappa con quel nome.</small></div>`;
-    const cat = (this.cfg?.catalogo ?? []).map(x => `<div class="ct-item"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${n(x.prezzo)} 💰</em>${x.nota ? `<small>${esc(x.nota)}</small>` : ''}</div>`).join('');
+    // à venda agora: casa con interni (o resto aparece como "presto")
+    const VENDE = { interni: 'Compra dalla tua casa sulla mappa' };
+    const cat = (this.cfg?.catalogo ?? []).map(x => {
+      const tua = (p.oggetti ?? []).includes(x.id), ora = VENDE[x.id];
+      return `<div class="ct-item${ora ? ' ora' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tua ? '✅ Tua' : `${n(x.prezzo)} 💰${ora ? '' : ' · presto'}`}</em>${ora && !tua ? `<small>${esc(ora)}</small>` : x.nota ? `<small>${esc(x.nota)}</small>` : ''}</div>`;
+    }).join('');
     const pacchi = p.ricarica ? `<h3 class="ct-h">💳 Ricarica</h3><div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b><span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? esc(m.tipo)}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
@@ -122,7 +127,7 @@ export class Conto {
       ${premio}${ig}
       <div class="ms-card"><span class="ms-ic">🧍</span><div class="ms-tx"><b>Il tuo personaggio</b><small>${p.pg ? 'Cambia look quando vuoi: è gratis' : 'Crealo: è lui che passeggia per le città'}</small></div><button data-ct="personaggio">${p.pg ? 'Modifica' : 'Crea'}</button></div>
       ${pacchi}
-      <h3 class="ct-h">🛍️ Presto nel negozio</h3><p class="ct-mini">Metti da parte i crediti: le prime cose arrivano presto. 100 💰 = 1 €.</p>
+      <h3 class="ct-h">🛍️ Negozio</h3><p class="ct-mini">La casa con interni è già in vendita; le altre cose arrivano presto. 100 💰 = 1 €.</p>
       <div class="ct-cat">${cat}</div>
       ${mov ? `<h3 class="ct-h">📒 Movimenti</h3><ul class="ct-mov">${mov}</ul>` : ''}
       <div class="ct-sicuro">🔒 Ti mandiamo un’email a ogni nuovo accesso e una ricevuta per ogni ricarica o acquisto.</div>
@@ -163,7 +168,11 @@ export class Conto {
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
       else if (a === 'personaggio') this.editor.apri();
-      else if (a === 'ricarica') { const j = await this.api('ricarica', { pacco: t.dataset.pacco }); location.href = j.url; }
+      else if (a === 'ricarica') {
+        // consenso para entrega imediata (art. 59 Codice del Consumo): sem ele não abre o pagamento
+        if (!confirm('I crediti arrivano subito sul tuo account.\n\nProseguendo acconsenti all’esecuzione immediata e prendi atto che, ricevuti i crediti, perdi il diritto di recesso. In caso di rimborso i crediti vengono tolti.\n\nContinuare con il pagamento?')) return;
+        const j = await this.api('ricarica', { pacco: t.dataset.pacco }); location.href = j.url;
+      }
       else if (a === 'esci_tutti') {
         if (!confirm('Vuoi uscire dal tuo account su tutti i telefoni e computer? Per rientrare servirà un nuovo codice via email.')) return;
         await this.api('esci_tutti'); this.p = null; this.desenharBotao(); this.ui.fechar(); this.ui.aviso('🔒 Uscito da tutti i dispositivi.');

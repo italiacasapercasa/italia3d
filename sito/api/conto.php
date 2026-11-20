@@ -66,6 +66,7 @@ function profilo(array $u): array {
         'premio_oggi' => ($serie['ultimo'] ?? '') === $oggi,
         'ultimi' => array_slice((array)($u['ultimi'] ?? []), 0, 10),
         'pg' => $u['pg'] ?? null,
+        'oggetti' => array_values((array)($u['oggetti'] ?? [])),
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
     ];
 }
@@ -164,6 +165,14 @@ if ($acao === 'personaggio') {
         'colCap' => $n('colCap', 6), 'maglia' => $n('maglia', 8), 'pant' => $n('pant', 8), 'gonna' => $c === 'donna' && !empty($p['gonna'])];
     $u = conti_modifica($id, function (array &$u) use ($pg) { $u['pg'] = $pg; return $u; });
     resposta(['profilo' => profilo($u)]);
+}
+
+// loja: compra com créditos (preço do servidor, recibo por e-mail)
+if ($acao === 'compra') {
+    if ((int)$u['saldo'] < 0) erro('Il tuo saldo è negativo per un rimborso: ricarica per tornare a comprare.');
+    [$nuovo, $e] = conti_compra($id, (string)($d['item'] ?? ''));
+    if ($e) erro($e);
+    resposta(['profilo' => profilo($nuovo)]);
 }
 
 if ($acao === 'scollega') {
