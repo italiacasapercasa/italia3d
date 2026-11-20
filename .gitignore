@@ -29,3 +29,5 @@ locale/
 
 # respostas do Indovina del giorno: s? no servidor (privato/), nunca no GitHub
 privato/enigmi.json
+
+backup/

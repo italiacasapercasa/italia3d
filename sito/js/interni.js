@@ -97,7 +97,8 @@ export class Interni {
     return { pav: 'legno', par: 0, ogg: [['pianta', 0, 0, 0], ['letto', W - 2, 0, 0], ['divano', 0, 2, 1], ['tavolo', 2, D - 2, 0], ['sedia', 2, D - 1, 2]] };
   }
   chiudi(forza = false) {
-    if (this.sujo && this.edita && !forza && !confirm('Hai modifiche non salvate. Uscire lo stesso?')) return;
+    if (this.sujo && this.edita && !forza) this.salvaSubito();   // salva o que faltar antes de sair (não perde nada)
+    clearTimeout(this._auto);
     this.aperto = false;
     cancelAnimationFrame(this._raf);
     this.el.hidden = true;
@@ -121,6 +122,8 @@ export class Interni {
       d.querySelector('.in-barra').addEventListener('click', e => this.cliqueBarra(e));
       this.ligarPonteiro();
       addEventListener('resize', () => { if (this.aperto) this.redimensionar(); });
+      addEventListener('pagehide', () => { if (this.aperto) this.salvaSubito(); });
+      document.addEventListener('visibilitychange', () => { if (document.hidden && this.aperto) this.salvaSubito(); });
     }
     this.el.querySelector('.in-titolo').textContent = `🏠 Casa di @${this.conta}`;
     this.el.querySelector('.in-salva').hidden = !this.edita;
@@ -261,7 +264,22 @@ export class Interni {
       this.ui.aviso('Non c’è spazio per girarlo qui.');
     }
   }
-  modificato() { this.sujo = true; this.el.querySelector('.in-salva').classList.add('on'); }
+  // salvar sozinho: 2 s depois da última mudança (o botão 💾 continua para quem quiser)
+  modificato() {
+    this.sujo = true; this._ver = (this._ver ?? 0) + 1;
+    this.el.querySelector('.in-salva').classList.add('on');
+    clearTimeout(this._auto);
+    if (this.edita) this._auto = setTimeout(() => this.salva(true), 2000);
+  }
+  // fechando a aba/o site com mudança pendente: envia na hora (sendBeacon sobrevive ao fechamento)
+  salvaSubito() {
+    if (!this.edita || !this.sujo) return;
+    clearTimeout(this._auto);
+    this.dati.ogg = this.ogg.map(o => [o.t, o.x, o.z, o.r]);
+    const corpo = new Blob([JSON.stringify({ a: 'salva', interno: this.dati })], { type: 'application/json' });
+    if (navigator.sendBeacon?.('api/interni.php', corpo)) { this.sujo = false; this.elenco.add(this.conta); }
+    else this.salva(true);
+  }
 
   // ---------- barra de baixo: móveis e cores ----------
   desenharBarra() {
@@ -315,16 +333,25 @@ export class Interni {
     if (sel >= 0) this.seleziona(this.ogg[sel]);
     this.modificato(); this.desenharBarra();
   }
-  async salva() {
+  async salva(auto = false) {
+    clearTimeout(this._auto);
+    if (this._salvando) { this._dinovo = true; return; }   // já tem um salvamento a caminho: salva de novo no fim
+    this._salvando = true;
+    const v = this._ver, bt = this.el.querySelector('.in-salva'), prima = !this.elenco.has(this.conta);
     this.dati.ogg = this.ogg.map(o => [o.t, o.x, o.z, o.r]);
+    bt.textContent = '⏳ Salvo…';
     try {
       const r = await fetch('api/interni.php', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ a: 'salva', interno: this.dati }) });
       const j = await r.json();
       if (!j.ok) throw new Error(j.erro || 'Errore nel salvataggio.');
-      this.sujo = false; this.elenco.add(this.conta);
-      this.el.querySelector('.in-salva').classList.remove('on');
-      this.ui.aviso('💾 Casa salvata! Ora tutti possono visitarla.');
-    } catch (e) { this.ui.aviso(e.message || 'Connessione assente.'); }
+      if (this._ver === v) { this.sujo = false; bt.classList.remove('on'); }
+      this.elenco.add(this.conta);
+      bt.textContent = '✅ Salvata';
+      clearTimeout(this._bt); this._bt = setTimeout(() => { bt.textContent = '💾 Salva'; }, 1800);
+      if (!auto || prima) this.ui.aviso('💾 Casa salvata! Ora tutti possono visitarla.');
+    } catch (e) { bt.textContent = '💾 Salva'; this.ui.aviso(e.message || 'Connessione assente.'); }
+    this._salvando = false;
+    if (this._dinovo) { this._dinovo = false; if (this.sujo) this.salva(true); }
   }
 }
 const w0 = D => 0;   // centro do olhar (fica aqui para ajustar se o cômodo crescer para trás)
