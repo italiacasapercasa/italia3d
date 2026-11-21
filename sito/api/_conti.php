@@ -189,7 +189,15 @@ function conti_assegna_conta(string $conta, string $id): void {
 function conti_locale(): bool {
     return PHP_SAPI === 'cli' || (in_array((string)($_SERVER['REMOTE_ADDR'] ?? ''), ['127.0.0.1', '::1'], true) && preg_match('/^localhost(:\d+)?$/', (string)($_SERVER['HTTP_HOST'] ?? '')));
 }
+// registro de envios (diagnóstico, api/diag.php): hora, ok/erro, domínio do destino (sem o endereço)
 function conti_smtp(string $para, string $assunto, string $corpo): array {
+    $r = conti_smtp_invia($para, $assunto, $corpo);
+    $dom = strtolower(substr(strrchr($para, '@') ?: '@?', 1));
+    $tipo = str_starts_with($assunto, 'Il tuo codice') ? 'codice' : (str_starts_with($assunto, 'Nuovo accesso') ? 'accesso' : 'altro');
+    @file_put_contents(conti_dir() . '/email.log', gmdate('c') . " $tipo " . ($r[0] ? 'ok' : 'ERRO') . " $dom" . ($r[0] ? '' : ' ' . substr(str_replace(["\r", "\n"], ' ', (string)$r[1]), 0, 200)) . "\n", FILE_APPEND | LOCK_EX);
+    return $r;
+}
+function conti_smtp_invia(string $para, string $assunto, string $corpo): array {
     if (conti_locale()) { file_put_contents(conti_dir() . '/email-dev.log', "=== " . gmdate('c') . " para $para | $assunto\n$corpo\n\n", FILE_APPEND | LOCK_EX); return [true, 'dev']; }
     $de = 'privacy@italiacasapercasa.com';
     if (!defined('SMTP_PASSWORD') || SMTP_PASSWORD === '') return [false, 'sem SMTP_PASSWORD'];

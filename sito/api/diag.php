@@ -1,0 +1,51 @@
+<?php
+// Diagnóstico dos e-mails de login (só leitura). Protegido pela chave CHIAVE_DOWNLOAD (cabeçalho X-Chiave, como o backup.php).
+// Mostra: pedidos de código por hora (limite do dia), códigos pendentes e contas criadas por hora, teste de login no SMTP
+// (conecta e autentica, NÃO manda e-mail) e o fim do registro de envios (conti/email.log: hora, ok/erro, domínio do destino).
+declare(strict_types=1);
+require __DIR__ . '/_conti.php';
+$chave = (string)($_SERVER['HTTP_X_CHIAVE'] ?? '');
+if (!defined('CHIAVE_DOWNLOAD') || CHIAVE_DOWNLOAD === '' || !hash_equals(CHIAVE_DOWNLOAD, $chave)) { http_response_code(404); exit; }
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+$agora = time();
+$hora = fn(int $t) => gmdate('m-d H', $t) . 'h';
+$hist = function (array $ts, int $janela) use ($agora, $hora) { $h = []; foreach ($ts as $t) if ($t > $agora - $janela) { $k = $hora($t); $h[$k] = ($h[$k] ?? 0) + 1; } ksort($h); return $h; };
+
+// limite global de pedidos de código (mesmo arquivo do conti_limite('email-giorno'))
+$arqLim = conti_dir() . '/.limite-' . substr(hash('sha256', 'email-giorno' . APP_SECRET), 0, 20);
+$lim = array_map('intval', array_filter(explode("\n", (string)@file_get_contents($arqLim))));
+// códigos pendentes (criado = scade - 900)
+$cod = [];
+foreach (glob(conti_dir('codici') . '/*.json') ?: [] as $f) { $c = json_decode((string)@file_get_contents($f), true); if (isset($c['scade'])) $cod[] = (int)$c['scade'] - 900; }
+// contas criadas
+$cri = [];
+foreach (glob(conti_dir('utenti') . '/*.json') ?: [] as $f) { $u = json_decode((string)@file_get_contents($f), true); if (!empty($u['creato'])) $cri[] = strtotime((string)$u['creato']); }
+// login no SMTP sem enviar nada
+$smtp = 'não testado';
+if (defined('SMTP_PASSWORD') && SMTP_PASSWORD !== '') {
+    $s = @stream_socket_client('ssl://smtp.hostinger.com:465', $en, $es, 20);
+    if (!$s) $smtp = "conexão falhou: $es";
+    else {
+        stream_set_timeout($s, 20);
+        $ler = function () use ($s) { $r = ''; while (($l = fgets($s, 1024)) !== false) { $r .= $l; if (strlen($l) < 4 || $l[3] === ' ') break; } return trim($r); };
+        $passo = [];
+        $passo[] = $ler();
+        foreach (['EHLO italiacasapercasa.com', 'AUTH LOGIN', base64_encode('privacy@italiacasapercasa.com'), base64_encode(SMTP_PASSWORD)] as $i => $c) {
+            fwrite($s, "$c\r\n"); $r = $ler();
+            $passo[] = ($i === 3 ? '[senha] → ' : ($i === 2 ? '[usuário] → ' : "$c → ")) . substr(str_replace("\r\n", ' / ', $r), 0, 160);
+        }
+        fwrite($s, "QUIT\r\n"); fclose($s);
+        $smtp = $passo;
+    }
+}
+$log = array_slice(array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/email.log'))), -40);
+echo json_encode([
+    'agora' => gmdate('c'),
+    'pedidos_codigo_24h' => count(array_filter($lim, fn($t) => $t > $agora - 86400)),
+    'pedidos_por_hora' => $hist($lim, 86400),
+    'codigos_pendentes' => count($cod), 'pendentes_por_hora_48h' => $hist($cod, 172800),
+    'contas' => count($cri), 'contas_por_hora_48h' => $hist($cri, 172800),
+    'smtp_login' => $smtp,
+    'envios_recentes' => $log,
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
