@@ -88,9 +88,9 @@ function conferma_attesa(string $id): ?array {
 if ($acao === 'codice') {
     $email = strtolower(trim((string)($d['email'] ?? '')));
     if (!conti_email_ok($email)) erro('Scrivi un’email valida.');
+    if (conti_e_proprietario($email)) resposta(['inviato' => true]);   // dono: código fixo, nenhum e-mail (não gasta o limite do dia)
     if (!conti_limite("email|$email", 5, 3600) || !conti_limite("cod-ip|$ip", 15, 3600)) erro('Hai chiesto troppi codici. Riprova tra un’ora.', 429);
     if (!conti_limite('email-giorno', (int)($cfg['email_giorno_max'] ?? 400), 86400)) erro('Troppe richieste oggi. Riprova domani.', 503);
-    if (conti_e_proprietario($email)) resposta(['inviato' => true]);   // dono: código fixo, nenhum e-mail
     $id = conti_id($email);
     $cod = (string)random_int(100000, 999999);
     file_put_contents(conti_dir('codici') . "/$id.json", json_encode(['h' => hash('sha256', $cod . '|' . $id . '|' . APP_SECRET), 'scade' => time() + 900, 'tent' => 0]), LOCK_EX);
