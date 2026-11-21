@@ -105,7 +105,8 @@ export function pubblicare({ tutto = false, privato = false, config = false, log
     // dados por último: quem abrir o site no meio do envio não pega código novo com dado velho
     // fora do site no ar: gravador de vídeo e dados de demonstração (só para testes no PC);
     // data/decori.json é escrito no servidor pelo webhook da Hotmart: nunca sobrescrever com a cópia do PC
-    const todos = listarPasta(path.join(RAIZ, 'sito'), '', rel => rel.startsWith('video') || rel.startsWith('data/demo') || rel === 'data/decori.json').map(a => ({ local: path.join(RAIZ, 'sito', a.nome), remoto: ftp.web + a.nome }));
+    // data/proprieta.json (ville e castelli comprados com crediti) é escrito pelo api/conto.php: idem
+    const todos = listarPasta(path.join(RAIZ, 'sito'), '', rel => rel.startsWith('video') || rel.startsWith('data/demo') || rel === 'data/decori.json' || rel === 'data/proprieta.json').map(a => ({ local: path.join(RAIZ, 'sito', a.nome), remoto: ftp.web + a.nome }));
     arquivos = [...todos.filter(a => !a.remoto.includes('data/')), ...todos.filter(a => a.remoto.includes('data/') && !a.remoto.endsWith('versao.txt')), ...todos.filter(a => a.remoto.endsWith('versao.txt'))];
   } else {
     arquivos = ['data/snapshot.json', 'data/versao.txt'].map(n => ({ local: path.join(RAIZ, 'sito', n), remoto: ftp.web + n }));

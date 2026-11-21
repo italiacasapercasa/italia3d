@@ -68,6 +68,7 @@ function profilo(array $u): array {
         'pg' => $u['pg'] ?? null,
         'oggetti' => array_values((array)($u['oggetti'] ?? [])),
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
+        'tesori' => (($u['tesori']['giorno'] ?? '') === $oggi) ? array_values((array)$u['tesori']['presi']) : [],
     ];
 }
 // @ pendente já confirmado pelo robô? liga na conta
@@ -163,6 +164,13 @@ if ($acao === 'personaggio') {
     $n = fn($k, $max) => (is_int($p[$k] ?? null) && $p[$k] >= 0 && $p[$k] < $max) ? $p[$k] : 0;
     $pg = ['c' => $c, 'pelle' => $n('pelle', 5), 'capelli' => in_array($p['capelli'] ?? '', $CAP[$c], true) ? $p['capelli'] : $CAP[$c][0],
         'colCap' => $n('colCap', 6), 'maglia' => $n('maglia', 8), 'pant' => $n('pant', 8), 'gonna' => $c === 'donna' && !empty($p['gonna'])];
+    // itens pagos vestidos: só os que a conta comprou (pg_<id>); 1 chapéu e 1 roupa especial de cada vez
+    $own = (array)($u['oggetti'] ?? []);
+    $acc = array_values(array_filter(array_unique(array_map('strval', (array)($p['acc'] ?? []))), fn($a) => in_array("pg_$a", $own, true)));
+    $GRUPPI = [['cappello', 'borsalino', 'natale'], ['tifoso', 'elegante', 'carnevale', 'natale']];
+    foreach ($GRUPPI as $gr) { $dentro = array_values(array_intersect($acc, $gr)); if (count($dentro) > 1) $acc = array_values(array_diff($acc, array_slice($dentro, 1))); }
+    if ($acc) $pg['acc'] = array_slice($acc, 0, 6);
+    if (in_array('tifoso', $acc, true)) $pg['squadra'] = $n('squadra', 9);
     $u = conti_modifica($id, function (array &$u) use ($pg) { $u['pg'] = $pg; return $u; });
     resposta(['profilo' => profilo($u)]);
 }
@@ -208,6 +216,29 @@ if ($acao === 'premio') {
     flock($f, LOCK_UN); fclose($f);
     if (mt_rand(1, 20) === 1) foreach (glob(conti_dir() . '/premi-*.txt') ?: [] as $v) if (filemtime($v) < time() - 5 * 86400) @unlink($v);
     resposta(['premio' => $r, 'profilo' => profilo(conti_leggi($id))]);
+}
+
+// caccia al tesoro (passeggiata): 1 baú por cidade por dia + 1 na frente de cada loja; no máximo N por dia (crediti.json "tesori")
+if ($acao === 'tesoro') {
+    $conta = (string)($u['conta'] ?? '');
+    if ($conta === '') erro('Collega prima il tuo Instagram per raccogliere i tesori.');
+    if (!conti_limite("tesoro|$id", 30, 3600)) erro('Troppi tesori in poco tempo. Riprova più tardi.', 429);
+    $T = $cfg['tesori'] ?? ['citta' => 2, 'negozio' => 3, 'max' => 5];
+    $tipo = (string)($d['tipo'] ?? ''); $rif = (string)($d['id'] ?? '');
+    if ($tipo === 'citta' && preg_match('/^\d{1,6}$/', $rif)) $k = "c$rif";
+    elseif ($tipo === 'negozio' && preg_match('/^[a-z0-9-]{4,40}$/i', $rif)) $k = "n$rif";
+    else erro('Tesoro non valido.');
+    $val = (int)($T[$tipo] ?? 2); $max = (int)($T['max'] ?? 5); $oggi = conti_oggi();
+    $r = conti_modifica($id, function (array &$u) use ($k, $val, $max, $oggi) {
+        $t = $u['tesori'] ?? [];
+        if (($t['giorno'] ?? '') !== $oggi) $t = ['giorno' => $oggi, 'presi' => []];
+        if (in_array($k, $t['presi'], true)) return ['gia' => true, 'n' => count($t['presi'])];
+        if (count($t['presi']) >= $max) return ['pieno' => true, 'n' => count($t['presi'])];
+        $t['presi'][] = $k; $u['tesori'] = $t;
+        conti_movimento($u, $val, 'tesoro', "$k $oggi");
+        return ['crediti' => $val, 'n' => count($t['presi'])];
+    });
+    resposta(['tesoro' => $r + ['max' => $max], 'profilo' => profilo(conti_leggi($id))]);
 }
 
 if ($acao === 'ricarica') {

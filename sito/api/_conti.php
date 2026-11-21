@@ -210,32 +210,94 @@ function conti_smtp(string $para, string $assunto, string $corpo): array {
 }
 
 // ---------- loja: o que se compra com créditos (preços SÓ do data/crediti.json, nunca do navegador) ----------
-// à venda agora: "interni" (casa con interni) e "mob_<id>" (móveis pagos). Itens do personagem e veículos entram quando tiverem modelo.
+// à venda: "interni", "mob_<id>" (móveis), "pac_<id>" (pacote de móveis com desconto), "pg_<id>" (roupas/acessórios do boneco),
+// villa e castello (a casa do @ vira villa/castelo no mapa, para sempre; castelo: 1 por região) e veículos da passeggiata.
+// O que está em "catalogo" só entra aqui com "vendita": true.
 function conti_listino(): array {
     $c = conti_cfg(); $out = [];
-    if (isset($c['interni']['prezzo'])) $out['interni'] = ['nome' => 'Casa con interni', 'prezzo' => (int)$c['interni']['prezzo']];
+    if (isset($c['interni']['prezzo'])) $out['interni'] = ['nome' => 'Casa con interni', 'prezzo' => (int)$c['interni']['prezzo'], 'casa' => true];
     foreach ((array)($c['mobili'] ?? []) as $m) if ((int)$m['prezzo'] > 0) $out['mob_' . $m['id']] = ['nome' => (string)$m['nome'], 'prezzo' => (int)$m['prezzo'], 'serve' => 'interni'];
+    foreach ((array)($c['pacchetti'] ?? []) as $p) $out['pac_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo'], 'serve' => 'interni', 'mobili' => array_map(fn($m) => 'mob_' . $m, (array)$p['mobili'])];
+    foreach ((array)($c['personaggio'] ?? []) as $p) $out['pg_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo']];
+    foreach ((array)($c['catalogo'] ?? []) as $x) {
+        if (empty($x['vendita']) || isset($out[$x['id']])) continue;
+        $out[$x['id']] = ['nome' => (string)$x['nome'], 'prezzo' => (int)$x['prezzo']] + (in_array($x['id'], ['villa', 'castello'], true) ? ['casa' => true] : []);
+    }
     return $out;
 }
+
+// ---------- região da casa de um @ (castelo: 1 por região) ----------
+function conti_regione_di(string $conta): ?array {
+    $s = json_decode((string)@file_get_contents(__DIR__ . '/../data/snapshot.json'), true);
+    $com = json_decode((string)@file_get_contents(__DIR__ . '/../data/comuni.json'), true);
+    $geo = json_decode((string)@file_get_contents(__DIR__ . '/../data/geo.json'), true);
+    if (!$s || !$com || !$geo) return null;
+    $li = null;
+    foreach ((array)$s['case'] as $c) if ((string)$c[0] === $conta) { $li = (int)$c[1]; break; }
+    if ($li === null || !isset($s['luoghi'][$li])) return null;
+    $ci = (int)$s['luoghi'][$li][0];
+    $iR = array_search('regione', (array)$com['campi'], true);
+    $cod = (string)($com['dados'][$ci][$iR] ?? '');
+    foreach ((array)$geo['regioni'] as $r) if ((string)$r['cod'] === $cod) return ['cod' => $cod, 'nome' => explode('/', (string)$r['nome'])[0]];
+    return $cod !== '' ? ['cod' => $cod, 'nome' => $cod] : null;
+}
+// ville e castelli comprados: registro privado + cópia pública (só os @) em data/proprieta.json, lida pelo mapa (decori.js)
+function conti_proprieta_pubblica(array $reg): void {
+    $pub = ['ville' => array_keys((array)($reg['ville'] ?? [])), 'castelli' => []];
+    foreach ((array)($reg['castelli'] ?? []) as $cod => $x) $pub['castelli'][(string)$cod] = ['conta' => $x['conta'], 'regione' => $x['regione'] ?? ''];
+    $arq = __DIR__ . '/../data/proprieta.json';
+    file_put_contents("$arq.tmp", json_encode($pub, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    rename("$arq.tmp", $arq);
+}
+
 // compra: tira os créditos, guarda o item na conta e manda o recibo. Devolve [conta atualizada, erro|null]
 function conti_compra(string $id, string $item): array {
     $L = conti_listino();
     if (!isset($L[$item])) return [null, 'Questo oggetto non è in vendita.'];
     $x = $L[$item];
     $err = null;
-    $u = conti_modifica($id, function (array &$u) use ($item, $x, &$err) {
+    // villa/castello: o registro fica travado durante a compra (dois pedidos do mesmo castelo ao mesmo tempo: só o 1º leva)
+    $fr = null; $reg = null; $regione = null;
+    if (!empty($x['casa']) && $item !== 'interni') {
+        $fr = fopen(conti_dir() . '/proprieta.json', 'c+');
+        if (!$fr || !flock($fr, LOCK_EX)) return [null, 'Riprova tra un attimo.'];
+        $reg = json_decode((string)stream_get_contents($fr), true) ?: ['ville' => [], 'castelli' => []];
+    }
+    $u = conti_modifica($id, function (array &$u) use ($item, $x, &$err, &$reg, &$regione) {
         $own = (array)($u['oggetti'] ?? []);
+        $conta = (string)($u['conta'] ?? '');
         if (in_array($item, $own, true)) { $err = 'Ce l’hai già!'; return $u; }
-        if ($item === 'interni' && empty($u['conta'])) { $err = 'Collega prima il tuo Instagram: la casa con interni è quella del tuo @.'; return $u; }
+        if (!empty($x['casa']) && $conta === '') { $err = 'Collega prima il tuo Instagram: è la casa del tuo @ sulla mappa.'; return $u; }
+        if (!empty($x['casa']) && !conti_tem_casa($conta)) { $err = "@$conta non ha una casa sulla mappa."; return $u; }
         if (!empty($x['serve']) && !in_array($x['serve'], $own, true)) { $err = 'Prima ti serve la casa con interni.'; return $u; }
-        if ((int)$u['saldo'] < $x['prezzo']) { $err = 'Crediti insufficienti: ti mancano ' . ($x['prezzo'] - (int)$u['saldo']) . ' 💰.'; return $u; }
+        $nuovi = [$item];
+        if (!empty($x['mobili'])) {   // pacote: entram só os móveis que a pessoa ainda não tem
+            $nuovi = array_values(array_diff($x['mobili'], $own));
+            if (!$nuovi) { $err = 'Hai già tutti i mobili di questo pacchetto!'; return $u; }
+        }
+        if ($item === 'castello') {
+            $regione = conti_regione_di($conta);
+            if (!$regione) { $err = 'Non troviamo la regione della tua casa. Riprova più tardi.'; return $u; }
+            $chi = $reg['castelli'][$regione['cod']]['conta'] ?? null;
+            if ($chi) { $err = "Il castello della regione {$regione['nome']} è già di @$chi. Solo 1 per regione!"; return $u; }
+            foreach ((array)$reg['castelli'] as $c) if (($c['conta'] ?? '') === $conta) { $err = 'Hai già un castello!'; return $u; }
+        }
+        if ((int)$u['saldo'] < $x['prezzo']) { $err = 'Crediti insufficienti: ti mancano ' . number_format($x['prezzo'] - (int)$u['saldo'], 0, ',', '.') . ' 💰.'; return $u; }
         conti_movimento($u, -$x['prezzo'], 'acquisto', $item);
-        $own[] = $item; $u['oggetti'] = $own;
+        if (empty($x['mobili'])) $own[] = $item; else $own = array_merge($own, $nuovi);
+        $u['oggetti'] = array_values(array_unique($own));
+        if ($item === 'villa') $reg['ville'][$conta] = ['id' => $u['id'], 'em' => gmdate('c')];
+        if ($item === 'castello') $reg['castelli'][$regione['cod']] = ['conta' => $conta, 'id' => $u['id'], 'regione' => $regione['nome'], 'em' => gmdate('c')];
         return $u;
     });
+    if ($fr) {
+        if ($u && !$err) { ftruncate($fr, 0); rewind($fr); fwrite($fr, json_encode($reg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); conti_proprieta_pubblica($reg); }
+        flock($fr, LOCK_UN); fclose($fr);
+    }
     if (!$u) return [null, 'Account non trovato.'];
     if ($err) return [null, $err];
-    conti_ricevuta($u, -$x['prezzo'], "Hai comprato: {$x['nome']}. Buon divertimento! 🎉", $item, "Ricevuta acquisto: {$x['nome']}");
+    $nome = $item === 'castello' ? "Castello della regione {$regione['nome']}" : $x['nome'];
+    conti_ricevuta($u, -$x['prezzo'], "Hai comprato: $nome. Buon divertimento! 🎉", $item, "Ricevuta acquisto: $nome");
     return [$u, null];
 }
 

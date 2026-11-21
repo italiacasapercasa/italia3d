@@ -9,11 +9,11 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const n = v => Number(v).toLocaleString('it-IT');
 const LEGNO = '#9C6B3F', LEGNO2 = '#7B5233', BIANCO = '#F4F1EA', NERO = '#23262E', METAL = '#9AA3AE';
 // pegada na grade [largura, profundidade] com rotação 0; 'piano' = no chão por baixo de tudo; 'muro' = na parede do fundo
-const PEG = { divano: [2, 1], tavolo: [2, 1], sedia: [1, 1], letto: [2, 2], pianta: [1, 1], tappeto: [2, 2, 'piano'], comodino: [1, 1], quadro: [1, 1, 'muro'], lampada: [1, 1], tavolino: [1, 1], poltrona: [1, 1], orologio: [1, 1], armadio: [2, 1], libreria: [2, 1], scrivania: [2, 1], tv: [2, 1], frigo: [1, 1], chitarra: [1, 1], cucina: [3, 1], camino: [2, 1], acquario: [2, 1], pianoforte: [2, 2] };
+export const PEG = { divano: [2, 1], tavolo: [2, 1], sedia: [1, 1], letto: [2, 2], pianta: [1, 1], tappeto: [2, 2, 'piano'], comodino: [1, 1], quadro: [1, 1, 'muro'], lampada: [1, 1], tavolino: [1, 1], poltrona: [1, 1], orologio: [1, 1], armadio: [2, 1], libreria: [2, 1], scrivania: [2, 1], tv: [2, 1], frigo: [1, 1], chitarra: [1, 1], cucina: [3, 1], camino: [2, 1], acquario: [2, 1], pianoforte: [2, 2] };
 export const dimensioni = livello => (livello <= 3 ? [6, 5] : livello <= 8 ? [7, 6] : [8, 7]);
 
 // ---------- modelos (olham para +z, centro da pegada na origem, chão em y=0) ----------
-function modello(tipo) {
+export function modello(tipo) {
   const g = new THREE.Group(), mats = new Map();
   const mat = (c, em = null) => { const k = c + (em ?? ''); if (!mats.has(k)) mats.set(k, new THREE.MeshLambertMaterial({ color: c, ...(em ? { emissive: em, emissiveIntensity: 0.9 } : {}) })); return mats.get(k); };
   const B = (w, h, d, c, x = 0, y = 0, z = 0, em) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(c, em)); m.position.set(x, y + h / 2, z); g.add(m); return m; };
@@ -65,10 +65,7 @@ export class Interni {
   async compraCasa(conta) {
     const conto = this.ui.conto, prezzo = this.cfg.interni?.prezzo ?? 990;
     if (!conto?.p) { conto?.apri(); return; }
-    if ((conto.p.saldo ?? 0) < prezzo) { this.ui.aviso(`Ti mancano ${n(prezzo - conto.p.saldo)} 💰 per la casa con interni.`); conto.apri(); return; }
-    if (!confirm(`Comprare la casa con interni per ${n(prezzo)} 💰?\nPotrai arredarla e tutti potranno visitarla.`)) return;
-    try { conto.p = (await conto.api('compra', { item: 'interni' })).profilo; conto.desenharBotao(); this.ui.aviso('🔑 Casa con interni sbloccata!'); this.apri(conta); }
-    catch (e) { this.ui.aviso(e.message); }
+    if (await conto.compra('interni', 'la casa con interni', prezzo, 'Potrai arredarla e tutti potranno visitarla.')) this.apri(conta);
   }
 
   // ---------- abrir / fechar ----------
@@ -296,14 +293,20 @@ export class Interni {
     }).join('');
     const pav = (cfg.interni?.pavimenti ?? []).map(([id, nome, c]) => `<button type="button" class="in-sw${this.dati.pav === id ? ' on' : ''}" data-pav="${id}" style="background:${c}" title="${esc(nome)}"></button>`).join('');
     const par = (cfg.interni?.pareti ?? []).map((c, i) => `<button type="button" class="in-sw${this.dati.par === i ? ' on' : ''}" data-par="${i}" style="background:${c}"></button>`).join('');
-    b.innerHTML = `<div class="in-tabs"><button type="button" data-tab="mobili" class="${tab === 'mobili' ? 'on' : ''}">🛋️ Mobili</button><button type="button" data-tab="colori" class="${tab === 'colori' ? 'on' : ''}">🎨 Pavimento e pareti</button><span class="in-saldo">💰 ${n(this.ui.conto?.p?.saldo ?? 0)}</span></div>
-      ${tab === 'mobili' ? `<div class="in-lista">${mob}</div>` : `<div class="in-col"><small>Pavimento</small><div>${pav}</div><small>Pareti</small><div>${par}</div></div>`}`;
+    const pac = (cfg.pacchetti ?? []).map(x => {
+      const tutti = x.mobili.every(m => this.libero(m)), pieno = (cfg.mobili ?? []).filter(m => x.mobili.includes(m.id)).reduce((s, m) => s + m.prezzo, 0);
+      const ic = x.mobili.map(id => (cfg.mobili ?? []).find(m => m.id === id)?.icona ?? '').join('');
+      return `<button type="button" class="in-mob in-pac${tutti ? '' : ' lock'}" data-pac="${x.id}"${tutti ? ' disabled' : ''}><span>${x.icona}</span><b>${esc(x.nome.replace('Pacchetto ', ''))}</b><i>${ic}</i><em>${tutti ? '✅ Tuo' : `<s>${n(pieno)}</s> ${n(x.prezzo)} 💰`}</em></button>`;
+    }).join('');
+    b.innerHTML = `<div class="in-tabs"><button type="button" data-tab="mobili" class="${tab === 'mobili' ? 'on' : ''}">🛋️ Mobili</button><button type="button" data-tab="pacchetti" class="${tab === 'pacchetti' ? 'on' : ''}">📦 Pacchetti</button><button type="button" data-tab="colori" class="${tab === 'colori' ? 'on' : ''}">🎨 Colori</button><span class="in-saldo">💰 ${n(this.ui.conto?.p?.saldo ?? 0)}</span></div>
+      ${tab === 'mobili' ? `<div class="in-lista">${mob}</div>` : tab === 'pacchetti' ? `<div class="in-lista">${pac}</div>` : `<div class="in-col"><small>Pavimento</small><div>${pav}</div><small>Pareti</small><div>${par}</div></div>`}`;
   }
   async cliqueBarra(e) {
     const t = e.target.closest('button'); if (!t) return;
     const d = t.dataset;
     if (d.tab) { this.tab = d.tab; this.desenharBarra(); return; }
     if (d.in === 'miacasa') { const mia = this.ui.conto?.p?.conta; this.chiudi(true); if (mia) this.ui.casa(this.D.porConta.get(mia)); else this.ui.conto?.apri(); return; }
+    if (d.pac) return this.compraPacchetto(d.pac);
     if (d.pav) { this.dati.pav = d.pav; this.ricostruisci(); return; }
     if (d.par) { this.dati.par = +d.par; this.ricostruisci(); return; }
     if (d.mob) {
@@ -320,11 +323,11 @@ export class Interni {
     }
   }
   async compraMobile(m) {
-    const conto = this.ui.conto;
-    if ((conto.p.saldo ?? 0) < m.prezzo) return this.ui.aviso(`Ti mancano ${n(m.prezzo - conto.p.saldo)} 💰 per ${m.nome}.`);
-    if (!confirm(`Comprare ${m.nome} per ${n(m.prezzo)} 💰?`)) return;
-    try { conto.p = (await conto.api('compra', { item: `mob_${m.id}` })).profilo; conto.desenharBotao(); this.ui.aviso(`${m.icona} ${m.nome} è tuo!`); this.desenharBarra(); }
-    catch (e) { this.ui.aviso(e.message); }
+    if (await this.ui.conto.compra(`mob_${m.id}`, m.nome, m.prezzo)) this.desenharBarra();
+  }
+  async compraPacchetto(id) {
+    const x = (this.cfg.pacchetti ?? []).find(p => p.id === id);
+    if (x && await this.ui.conto.compra(`pac_${id}`, x.nome, x.prezzo, `${x.mobili.length} mobili per la tua casa.`)) this.desenharBarra();
   }
   ricostruisci() {
     this.dati.ogg = this.ogg.map(o => [o.t, o.x, o.z, o.r]);

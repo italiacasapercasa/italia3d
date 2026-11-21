@@ -447,6 +447,24 @@ body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.
 .ps-dica.on, .ps-bordo.on { opacity: 1; transform: translate(-50%, 0); }
 .ps-azioni { position: absolute; right: 12px; bottom: calc(var(--sab) + 24px); display: flex; flex-direction: column; gap: 8px; }
 .ps-azioni button { background: #fff; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 9px 14px; font: 900 14px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ps-menu { position: absolute; left: 50%; top: calc(var(--sat) + 96px); transform: translate(-50%, 10px); width: min(340px, calc(100% - 24px)); max-height: calc(100% - 200px); overflow: auto; background: #fff; border: 3px solid var(--inchiostro); border-radius: 20px; padding: 12px; box-shadow: 0 5px 0 rgba(21,32,51,.25); opacity: 0; pointer-events: none; transition: .25s; }
+.ps-bussola { position: absolute; left: 50%; top: calc(var(--sat) + 58px); transform: translateX(-50%); display: flex; align-items: center; gap: 6px; max-width: calc(100% - 24px); background: rgba(255,255,255,.95); border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 4px 12px 4px 6px; font: 800 13px 'Nunito', sans-serif; color: var(--inchiostro); white-space: nowrap; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
+.ps-bussola i { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--giallo); font-style: normal; font-size: 13px; transition: transform .2s; }
+.ps-bussola span { overflow: hidden; text-overflow: ellipsis; }
+#passeggio.viaggio .ps-bussola,
+#passeggio.viaggio .ps-azioni, #passeggio.viaggio .ps-joy, #passeggio.viaggio .ps-et { display: none; }
+.ps-menu.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.ps-menu.basso { top: auto; bottom: calc(var(--sab) + 24px); width: min(300px, calc(100% - 24px)); }
+.ps-menu h4 { margin: 0 30px 8px 2px; font-size: 17px; font-weight: 900; }
+.ps-menu p { margin: 8px 2px 0; font-size: 13px; font-weight: 700; color: var(--grigio); line-height: 1.35; }
+.ps-menu-x { position: absolute; right: 8px; top: 8px; width: 30px; height: 30px; border-radius: 50%; border: 2.5px solid var(--inchiostro); background: #fff; font: 900 14px 'Nunito', sans-serif; }
+.ps-opz { display: grid; grid-template-columns: 34px 1fr; grid-template-rows: auto auto; align-items: center; width: 100%; text-align: left; background: #F6F7FA; border: 2.5px solid var(--inchiostro); border-radius: 14px; padding: 6px 10px; margin-top: 6px; font-family: 'Nunito', sans-serif; color: var(--inchiostro); }
+.ps-opz span { grid-row: span 2; font-size: 24px; }
+.ps-opz b { font-size: 15px; font-weight: 900; }
+.ps-opz small { font-size: 12px; font-weight: 800; color: var(--grigio); }
+.ps-opz.on { background: var(--giallo); }
+.ps-opz:disabled { opacity: .55; }
+.ps-cta { width: 100%; margin-top: 10px; background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 9px; font: 900 15px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
 .ps-tag { position: absolute; transform: translate(-50%, -100%); background: #fff; border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 3px 10px; font: 900 13px 'Nunito', sans-serif; color: var(--inchiostro); white-space: nowrap; box-shadow: 0 2px 0 rgba(21,32,51,.25); }
 .ps-tag.mia { background: var(--giallo); }
 .ps-tag.neg { background: #FFE3D6; }

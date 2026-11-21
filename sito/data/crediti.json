@@ -1,6 +1,7 @@
 {
   "euro": 100,
   "giornaliero": { "base": 2, "serie": [[30, 100], [7, 20]] },
+  "tesori": { "citta": 2, "negozio": 3, "max": 5, "negozi": "tutti" },
   "ricarica_aperta": true,
   "limite_mese_euro": 150,
   "email_giorno_max": 400,
@@ -53,15 +54,22 @@
     { "id": "cane", "icona": "🐕", "nome": "Cagnolino che ti segue", "prezzo": 290 },
     { "id": "aura", "icona": "✨", "nome": "Scia di stelline", "prezzo": 190 }
   ],
+  "pacchetti": [
+    { "id": "soggiorno", "icona": "🛋️", "nome": "Pacchetto Soggiorno", "mobili": ["tappeto", "lampada", "tavolino", "poltrona", "tv", "quadro"], "prezzo": 139 },
+    { "id": "cucina", "icona": "🍳", "nome": "Pacchetto Cucina", "mobili": ["frigo", "cucina", "lampada"], "prezzo": 129 },
+    { "id": "camera", "icona": "🛏️", "nome": "Pacchetto Camera", "mobili": ["armadio", "comodino", "tappeto", "lampada", "quadro"], "prezzo": 99 },
+    { "id": "studio", "icona": "🖥️", "nome": "Pacchetto Studio", "mobili": ["scrivania", "libreria", "chitarra", "lampada"], "prezzo": 135 },
+    { "id": "lusso", "icona": "💎", "nome": "Pacchetto Lusso", "mobili": ["camino", "acquario", "pianoforte", "orologio"], "prezzo": 299 }
+  ],
   "catalogo": [
-    { "id": "interni", "icona": "🔑", "nome": "Casa con interni", "prezzo": 990, "nota": "entra e arreda la tua casa · 5 mobili in regalo" },
+    { "id": "interni", "icona": "🔑", "nome": "Casa con interni", "prezzo": 990, "nota": "entra e arreda la tua casa · 5 mobili in regalo", "vendita": true },
     { "id": "decora", "icona": "✨", "nome": "Decorazione (30 giorni)", "prezzo": 490 },
-    { "id": "villa", "icona": "🏡", "nome": "Villa", "prezzo": 2990, "nota": "una casa grande sulla mappa" },
-    { "id": "castello", "icona": "🏰", "nome": "Castello", "prezzo": 14990, "nota": "solo 1 per regione" },
-    { "id": "bici", "icona": "🚲", "nome": "Bici", "prezzo": 190 },
-    { "id": "vespa", "icona": "🛵", "nome": "Vespa", "prezzo": 490 },
-    { "id": "auto", "icona": "🚗", "nome": "Utilitaria", "prezzo": 990 },
-    { "id": "sportiva", "icona": "🏎️", "nome": "Sportiva rossa", "prezzo": 2990 },
+    { "id": "villa", "icona": "🏡", "nome": "Villa", "prezzo": 2990, "nota": "la tua casa diventa una villa con piscina, per sempre", "vendita": true },
+    { "id": "castello", "icona": "🏰", "nome": "Castello", "prezzo": 14990, "nota": "solo 1 per regione: chi arriva prima, per sempre", "vendita": true },
+    { "id": "bici", "icona": "🚲", "nome": "Bici", "prezzo": 190, "nota": "2× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 2 },
+    { "id": "vespa", "icona": "🛵", "nome": "Vespa", "prezzo": 490, "nota": "3× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 3 },
+    { "id": "auto", "icona": "🚗", "nome": "Utilitaria", "prezzo": 990, "nota": "3,5× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 3.5 },
+    { "id": "sportiva", "icona": "🏎️", "nome": "Sportiva rossa", "prezzo": 2990, "nota": "4× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 4 },
     { "id": "yacht", "icona": "🛥️", "nome": "Yacht", "prezzo": 4990, "nota": "solo nelle città di mare" },
     { "id": "elicottero", "icona": "🚁", "nome": "Elicottero", "prezzo": 9990, "nota": "vola in qualsiasi città" },
     { "id": "fuochi", "icona": "🎆", "nome": "Fuochi sulla casa (24 h)", "prezzo": 150 },

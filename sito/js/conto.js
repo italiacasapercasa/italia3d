@@ -10,7 +10,7 @@ const n = v => Number(v).toLocaleString('it-IT');
 const ler = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem storage */ } };
 const NOVITA = 'conto-v1';
-const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto' };
+const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto', tesoro: '🧭 Tesoro trovato' };
 
 export class Conto {
   constructor(D, ui) {
@@ -82,7 +82,7 @@ export class Conto {
   }
 
   htmlEntra() {
-    const vantaggi = `<div class="ct-vantaggi"><div>💰 <b>Crediti gratis</b> ogni giorno che entri</div><div>🔥 <b>Bonus</b> se entri tutti i giorni (+20 al 7° giorno, +100 al 30°)</div><div>🚶 <b>Passeggia</b> per le strade della tua città</div><div>🔑 Presto: <b>entra nella tua casa</b> e arredala</div></div>`;
+    const vantaggi = `<div class="ct-vantaggi"><div>💰 <b>Crediti gratis</b> ogni giorno che entri</div><div>🔥 <b>Bonus</b> se entri tutti i giorni (+20 al 7° giorno, +100 al 30°)</div><div>🚶 <b>Passeggia</b> per le strade della tua città</div><div>🔑 <b>Entra nella tua casa</b> e arredala</div><div>🏰 Ville, castelli, 🚲 bici, 🛵 Vespa e 🏎️ auto</div></div>`;
     if (this.passo === 'codice') return `<h2>📩 Controlla l’email</h2>
       <div class="sub">Abbiamo mandato un codice di 6 cifre a <b>${esc(this.email)}</b></div>
       <div class="ms-campo ct-cod"><input id="ct-cod" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="123456" aria-label="Codice"></div>
@@ -114,25 +114,71 @@ export class Conto {
     else ig = `<div class="ms-chi"><label for="ct-conta">📸 Collega il tuo Instagram per ricevere i crediti ogni giorno</label>
         <div class="ms-campo"><span>@</span><input id="ct-conta" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="il_tuo_nome" value="${esc(this.ui.minha ?? '')}"></div>
         <div class="bottoni"><button data-ct="collega">Collega</button></div><small class="ct-mini">Serve una casa sulla mappa con quel nome.</small></div>`;
-    // à venda agora: casa con interni (o resto aparece como "presto")
-    const VENDE = { interni: 'Compra dalla tua casa sulla mappa' };
-    const cat = (this.cfg?.catalogo ?? []).map(x => {
-      const tua = (p.oggetti ?? []).includes(x.id), ora = VENDE[x.id];
-      return `<div class="ct-item${ora ? ' ora' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tua ? '✅ Tua' : `${n(x.prezzo)} 💰${ora ? '' : ' · presto'}`}</em>${ora && !tua ? `<small>${esc(ora)}</small>` : x.nota ? `<small>${esc(x.nota)}</small>` : ''}</div>`;
+    // loja: o que tem "vendita" compra direto daqui; o resto aparece como "presto"
+    const own = new Set(p.oggetti ?? []);
+    const cast = this.castelloMio();
+    const cat = (this.cfg?.catalogo ?? []).filter(x => x.id !== 'decora').map(x => {
+      const tua = own.has(x.id), ora = !!x.vendita;
+      let nota = x.nota ? esc(x.nota) : '', bt = '';
+      if (x.id === 'castello' && ora && !tua) {
+        if (!p.conta) nota = 'Collega il tuo Instagram: il castello va sulla tua casa';
+        else if (cast?.chi) nota = `🔒 Il castello della regione ${esc(cast.regione)} è già di @${esc(cast.chi)}`;
+        else if (cast) nota = `🔓 Il castello della regione ${esc(cast.regione)} è ancora libero!`;
+      }
+      if (ora && !tua && !(x.id === 'castello' && cast?.chi)) bt = `<button data-ct="compra" data-item="${x.id}">Compra</button>`;
+      if (x.id === 'interni' && tua) bt = `<button class="sec" data-ct="miacasa">Entra</button>`;
+      return `<div class="ct-item${ora ? ' ora' : ''}${tua ? ' tua' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tua ? '✅ Tua' : `${n(x.prezzo)} 💰${ora ? '' : ' · presto'}`}</em>${nota ? `<small>${nota}</small>` : ''}${bt}</div>`;
     }).join('');
-    const pacchi = p.ricarica ? `<h3 class="ct-h">💳 Ricarica</h3><div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b><span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
+    const pac = (this.cfg?.pacchetti ?? []).map(x => {
+      const pieno = (this.cfg?.mobili ?? []).filter(m => x.mobili.includes(m.id)).reduce((s, m) => s + m.prezzo, 0), tutti = x.mobili.every(m => own.has(`mob_${m}`));
+      return `<div class="ct-item ora${tutti ? ' tua' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tutti ? '✅ Tuo' : `<s>${n(pieno)}</s> ${n(x.prezzo)} 💰`}</em><small>${x.mobili.length} mobili · per la casa con interni</small>${tutti ? '' : `<button data-ct="compra" data-item="pac_${x.id}">Compra</button>`}</div>`;
+    }).join('');
+    const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3><div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b><span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? esc(m.tipo)}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
       <div class="ct-saldo"><b>${n(p.saldo)}</b><span>💰 crediti</span></div>
       ${premio}${ig}
       <div class="ms-card"><span class="ms-ic">🧍</span><div class="ms-tx"><b>Il tuo personaggio</b><small>${p.pg ? 'Cambia look quando vuoi: è gratis' : 'Crealo: è lui che passeggia per le città'}</small></div><button data-ct="personaggio">${p.pg ? 'Modifica' : 'Crea'}</button></div>
       ${pacchi}
-      <h3 class="ct-h">🛍️ Negozio</h3><p class="ct-mini">La casa con interni è già in vendita; le altre cose arrivano presto. 100 💰 = 1 €.</p>
+      <h3 class="ct-h">🛍️ Negozio</h3><p class="ct-mini">Quello che compri è tuo per sempre. 100 💰 = 1 €. Vestiti e accessori: nel tuo personaggio.</p>
       <div class="ct-cat">${cat}</div>
+      ${pac ? `<h3 class="ct-h">📦 Pacchetti di mobili</h3><div class="ct-cat">${pac}</div>` : ''}
       ${mov ? `<h3 class="ct-h">📒 Movimenti</h3><ul class="ct-mov">${mov}</ul>` : ''}
       <div class="ct-sicuro">🔒 Ti mandiamo un’email a ogni nuovo accesso e una ricevuta per ogni ricarica o acquisto.</div>
       <div class="bottoni"><button class="sec" data-ct="esci">Esci</button><button class="sec" data-ct="esci_tutti">🔒 Esci da tutti i dispositivi</button></div>
       <p class="nota">I crediti non si possono comprare punti, voti o cariche. <a href="termini.html" class="link">Regole dei crediti</a></p>`;
+  }
+
+  // castelo da região da casa do @: { regione, chi } (chi = dono, se já for de outra pessoa)
+  castelloMio() {
+    const c = this.D.porConta.get(this.p?.conta); if (!c) return null;
+    const r = this.D.luoghi[c.luogo].regione, x = this.ui.decori?.prop?.castelli?.[r.cod];
+    return { regione: r.nome.split('/')[0], chi: x?.conta && x.conta !== this.p.conta ? x.conta : null };
+  }
+  // abre a conta já na parte da recarga (pílula do mapa, "ti mancano N 💰")
+  apriRicarica(msg = '') {
+    if (!this.p) { this.ui.aviso(msg || '💰 Entra nel tuo account per ricaricare i crediti.'); this.apri(); return; }
+    this.apri();
+    setTimeout(() => $('#ct-ricarica')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    if (msg) this.ui.aviso(msg);
+  }
+  // compra com créditos (todas as lojas passam por aqui): confirma, compra e, se faltar saldo, oferece a recarga. true = comprou
+  async compra(item, nome, prezzo, dopo = '') {
+    if (!this.p) { this.ui.aviso('Entra nel tuo account per comprare.'); this.apri(); return false; }
+    const manca = prezzo - (this.p.saldo ?? 0);
+    if (manca > 0) {
+      if (this.p.ricarica && confirm(`${nome} costa ${n(prezzo)} 💰: ti mancano ${n(manca)} 💰.\n\nVuoi ricaricare i crediti?`)) this.apriRicarica();
+      else if (!this.p.ricarica) this.ui.aviso(`Ti mancano ${n(manca)} 💰 per ${nome}.`);
+      return false;
+    }
+    if (!confirm(`Comprare ${nome} per ${n(prezzo)} 💰?${dopo ? `\n${dopo}` : ''}\n\nTi restano ${n(-manca)} 💰.`)) return false;
+    try {
+      this.p = (await this.api('compra', { item })).profilo;
+      this.desenharBotao();
+      this.ui.aviso(`🎉 ${nome}: è tuo!`);
+      if (item === 'villa' || item === 'castello') await this.ui.decori?.ricaricaProprieta();
+      return true;
+    } catch (e) { this.ui.aviso(e.message); return false; }
   }
 
   // ---------- ações (ui.js delega os cliques com data-ct) ----------
@@ -168,6 +214,20 @@ export class Conto {
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
       else if (a === 'personaggio') this.editor.apri();
+      else if (a === 'miacasa') { const c = this.D.porConta.get(this.p?.conta); if (c) this.ui.interni?.apri(c.conta); }
+      else if (a === 'compra') {
+        const id = t.dataset.item, pac = id.startsWith('pac_') ? (this.cfg?.pacchetti ?? []).find(x => `pac_${x.id}` === id) : null;
+        const x = pac ?? (this.cfg?.catalogo ?? []).find(i => i.id === id);
+        if (!x) return;
+        const DOPO = { villa: 'La tua casa sulla mappa diventa una villa con piscina, per sempre.', castello: 'La tua casa diventa il castello della tua regione, per sempre. Solo 1 per regione!',
+          interni: 'Potrai arredarla e tutti potranno visitarla.' };
+        const veic = x.velocita ? `Lo trovi nella passeggiata: ${String(x.velocita).replace('.', ',')}× più veloce e la strada per le città vicine.` : '';
+        const nome = id === 'castello' && this.castelloMio() ? `il Castello della regione ${this.castelloMio().regione}` : x.nome;
+        if (await this.compra(id, nome, x.prezzo, DOPO[id] ?? veic)) {
+          this.apri();
+          if (id === 'villa' || id === 'castello') { const c = this.D.porConta.get(this.p.conta); if (c) setTimeout(() => this.ui.casa(c), 600); }
+        }
+      }
       else if (a === 'ricarica') {
         // consenso para entrega imediata (art. 59 Codice del Consumo): sem ele não abre o pagamento
         if (!confirm('I crediti arrivano subito sul tuo account.\n\nProseguendo acconsenti all’esecuzione immediata e prendi atto che, ricevuti i crediti, perdi il diritto di recesso. In caso di rimborso i crediti vengono tolti.\n\nContinuare con il pagamento?')) return;

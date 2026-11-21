@@ -242,9 +242,61 @@ function medaglia() {
   return g;
 }
 
+// ---------- villa e castello (comprados com crediti, para sempre; data/proprieta.json) ----------
+// em unidades de lote (1 = um lote), frente para +z (a rua); devolvem { g, h } com h = altura do telhado
+const caixaM = (g, w, h, d, x, y, z, m) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y + h / 2, z); g.add(o); return o; };
+const telhado = (w, d, h, m) => { const o = new THREE.Mesh(new THREE.ConeGeometry(Math.SQRT1_2, 1, 4, 1), m); o.rotation.y = Math.PI / 4; o.scale.set(w, h, d); return o; };
+let MV = null;
+const matV = () => (MV ??= { muro: lambert('#F6EEDC'), muro2: lambert('#EFE2C6'), tetto: lambert('#C8643E'), bianco: lambert('#FFFFFF'), vetro: lambert('#5B7FA8'), porta: lambert('#6B4226'),
+  prato: lambert('#9BD37A'), acqua: new THREE.MeshLambertMaterial({ color: '#4FC3F7', emissive: '#0E5E80' }), bordo: lambert('#F1EEE6'), cipresso: lambert('#2F6B3A'), tronco: lambert('#6B4A2A'),
+  pietra: lambert('#E5D3AE'), pietra2: lambert('#C9B285'), rosso: lambert('#C8483A'), verde: lambert('#2E9B55'), legno: lambert('#5A3A22') });
+function villaModello() {
+  const g = new THREE.Group(), M = matV();
+  caixaM(g, 0.96, 0.02, 0.96, 0, 0, 0, M.prato);
+  caixaM(g, 0.64, 0.4, 0.44, -0.12, 0.02, -0.16, M.muro);                       // piano terra
+  caixaM(g, 0.5, 0.34, 0.38, -0.16, 0.42, -0.18, M.muro2);                      // primo piano
+  const t1 = telhado(0.72, 0.52, 0.16, M.tetto); t1.position.set(-0.12, 0.42 + 0.08, -0.16); g.add(t1);
+  const t2 = telhado(0.58, 0.46, 0.2, M.tetto); t2.position.set(-0.16, 0.76 + 0.1, -0.18); g.add(t2);
+  caixaM(g, 0.5, 0.03, 0.14, -0.12, 0.4, 0.13, M.bianco);                       // portico
+  for (const x of [-0.34, -0.2, -0.04, 0.1]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.026, 0.38, 8), M.bianco); c.position.set(x, 0.21, 0.18); g.add(c); }
+  caixaM(g, 0.1, 0.2, 0.01, -0.12, 0.02, 0.065, M.porta);
+  for (const x of [-0.36, 0.12]) caixaM(g, 0.09, 0.12, 0.01, x, 0.16, 0.065, M.vetro);
+  for (const x of [-0.34, -0.16, 0.02]) caixaM(g, 0.08, 0.11, 0.01, x, 0.54, 0.015, M.vetro);
+  caixaM(g, 0.4, 0.025, 0.3, 0.26, 0.02, 0.27, M.bordo);                        // piscina
+  caixaM(g, 0.34, 0.012, 0.24, 0.26, 0.035, 0.27, M.acqua);
+  for (const [x, z] of [[0.4, -0.38], [0.4, -0.1], [-0.42, 0.36]]) {          // cipressi
+    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.06, 6), M.tronco); tr.position.set(x, 0.05, z); g.add(tr);
+    const ch = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.36, 8), M.cipresso); ch.position.set(x, 0.26, z); g.add(ch);
+  }
+  return { g, h: 0.96 };
+}
+function castelloModello() {
+  const g = new THREE.Group(), M = matV();
+  caixaM(g, 0.96, 0.02, 0.96, 0, 0, 0, M.prato);
+  const muro = (w, d, x, z) => { caixaM(g, w, 0.42, d, x, 0.02, z, M.pietra); };
+  muro(0.8, 0.08, 0, 0.36); muro(0.8, 0.08, 0, -0.36); muro(0.08, 0.8, 0.36, 0); muro(0.08, 0.8, -0.36, 0);
+  for (let i = -3; i <= 3; i += 2) for (const [x, z, w, d] of [[i * 0.1, 0.36, 0.06, 0.09], [i * 0.1, -0.36, 0.06, 0.09], [0.36, i * 0.1, 0.09, 0.06], [-0.36, i * 0.1, 0.09, 0.06]]) caixaM(g, w, 0.07, d, x, 0.44, z, M.pietra);
+  caixaM(g, 0.16, 0.26, 0.02, 0, 0.02, 0.405, M.legno);                         // portone
+  for (const [x, z] of [[-0.38, -0.38], [0.38, -0.38], [-0.38, 0.38], [0.38, 0.38]]) {
+    const t = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.11, 0.72, 10), M.pietra2); t.position.set(x, 0.38, z); g.add(t);
+    const r = new THREE.Mesh(new THREE.ConeGeometry(0.135, 0.3, 10), M.rosso); r.position.set(x, 0.74 + 0.15, z); g.add(r);
+  }
+  caixaM(g, 0.36, 1.25, 0.36, 0, 0.02, -0.04, M.pietra);                       // mastio
+  for (const x of [-0.14, 0, 0.14]) for (const z of [-0.18, 0.1]) caixaM(g, 0.07, 0.08, 0.07, x, 1.27, z, M.pietra);
+  for (const x of [-0.14, 0.14]) caixaM(g, 0.07, 0.08, 0.07, x, 1.27, -0.04, M.pietra);
+  for (const y of [0.6, 0.95]) caixaM(g, 0.07, 0.11, 0.01, 0, y, 0.145, M.legno);
+  const asta = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.36, 4), M.legno); asta.position.set(0, 1.35 + 0.18, -0.04); g.add(asta);
+  const band = new THREE.Group(); band.position.set(0, 1.62, -0.04); g.add(band);
+  [M.verde, M.bianco, M.rosso].forEach((m, i) => { const f = new THREE.Mesh(new THREE.PlaneGeometry(0.07, 0.12), m.clone()); f.material.side = THREE.DoubleSide; f.position.set(0.035 + i * 0.07, 0, 0); band.add(f); });
+  g.userData.band = band;
+  return { g, h: 1.35 };
+}
+// altura do corpo (villa/castello mudam a altura da casa)
+const altCorpo = (casa, ex) => (ex.has('castello') ? 1.35 : ex.has('villa') ? Math.max(0.96, Math.min(ALTURA_NIVEL[casa.livello], 1.2)) : ALTURA_NIVEL[casa.livello]);
+
 // altura total com o que flutua e os fogos (em lotes; para enquadrar a câmera)
 const topoDi = (casa, sel) => {
-  const ex = sel.extra, h = ALTURA_NIVEL[casa.livello];
+  const ex = sel.extra, h = altCorpo(casa, ex) + (ex.has('castello') ? 0.35 : 0);
   const y = h + 0.25 + (ex.has('presidenza') ? 0.5 : 0) + (ex.has('corona') ? 0.35 : 0) + (ex.has('campione') ? 0.42 : 0)
     + (ex.has('stella') ? 0.45 : 0) + (ex.has('medaglia') ? 0.4 : 0);
   return ex.has('fuochi') ? y + 0.9 : Math.max(y, ex.has('palloncini') ? h * 0.75 + 0.6 : 0);
@@ -252,17 +304,26 @@ const topoDi = (casa, sel) => {
 
 // monta o grupo 3D da casa decorada: { g, anima, pilha } (pilha = topo do que flutua; o rótulo do @ fica acima)
 export function costruisci(D, citta, notte, casa, sel) {
-  const l = D.luoghi[casa.luogo], stile = stileRegione(l.regione.cod), h = ALTURA_NIVEL[casa.livello];
+  const l = D.luoghi[casa.luogo], stile = stileRegione(l.regione.cod);
   const g = new THREE.Group(), anim = [];
   const p = citta.posCasa(casa);
   g.position.set(p.x, p.y + 0.0009, p.z);
   g.rotation.y = posLote(casa.lote).rot;
   g.scale.setScalar(LOTE);
   const ex = sel.extra, oro = ex.has('oro'), squadra = SQUADRE.find(s => s.id === sel.squadra);
-  const base = geoCasa(casa.livello, variante(casa.conta), stile);
-  const pal = oro ? ORO : squadra;
-  const corpo = new THREE.Mesh(pal ? ricolora(base, pal) : base, oro ? matOro : citta.mat);
-  g.add(corpo);
+  const h = altCorpo(casa, ex);
+  let corpo;
+  if (ex.has('castello') || ex.has('villa')) {   // villa/castello no lugar da casa (as decorações ficam por cima)
+    const mod = ex.has('castello') ? castelloModello() : villaModello();
+    corpo = mod.g; g.add(corpo);
+    if (mod.g.userData.band) anim.push(t => { mod.g.userData.band.rotation.y = Math.sin(t * 0.004) * 0.35; });
+    const finto = new THREE.BoxGeometry(0.84, h, 0.84); finto.translate(0, h / 2, 0); corpo.geometry = finto;   // caixa para a faixa do sindaco
+  } else {
+    const base = geoCasa(casa.livello, variante(casa.conta), stile);
+    const pal = oro ? ORO : squadra;
+    corpo = new THREE.Mesh(pal ? ricolora(base, pal) : base, oro ? matOro : citta.mat);
+    g.add(corpo);
+  }
   // bandeira: num mastro ao lado da casa; nas torres (casa alta), no terraço
   const pianta = (b, lado) => {
     if (h > 1.5) { b.position.set(lado * 0.12, h - 0.05, 0); b.scale.setScalar(0.8); }
@@ -290,8 +351,7 @@ export function costruisci(D, citta, notte, casa, sel) {
   }
   if (ex.has('neon')) {
     const m = new THREE.MeshBasicMaterial({ color: '#00E5FF', side: THREE.BackSide });
-    const guscio = new THREE.Mesh(corpo.geometry, m);
-    guscio.scale.set(1.07, 1.035, 1.07); guscio.position.y = -0.01; g.add(guscio);
+    if (corpo.isMesh) { const guscio = new THREE.Mesh(corpo.geometry, m); guscio.scale.set(1.07, 1.035, 1.07); guscio.position.y = -0.01; g.add(guscio); }
     const a = alone('#00E5FF'); g.add(a);
     anim.push(t => { m.color.setHSL((t * 0.00012) % 1, 1, 0.55); a.material.color.copy(m.color); });
   }
@@ -355,6 +415,9 @@ export class Decori {
       const id = D.luoghi[c.luogo].id;
       (this.premiDi.get(id) ?? this.premiDi.set(id, []).get(id)).push(conta);
     }
+    // ville e castelli comprados (data/proprieta.json): desenhados quando a cidade chega perto
+    this.prop = { ville: new Set(), castelli: {}, castelloDi: new Map() };   // castelloDi: conta -> nome da região
+    this.propDi = new Map();      // id da cidade -> [contas com villa/castelo]
     this.desenhando = false;
     mappa.aoFrame.push(t => this.quadro(t));
     mappa.aoMover.push(() => this.visibili());
@@ -367,6 +430,7 @@ export class Decori {
   async iniciar() {
     try { Object.assign(this.cfg, (await (await fetch(`data/negozio.json?t=${Date.now()}`)).json()).decora ?? {}); } catch { /* sem config: fica desligado */ }
     if (this.aperto) this.ligarPillola();
+    await this.ricaricaProprieta();
     await this.ricarica();
     if (this.presidente && !this.attive.has(this.presidente)) this.disegna(this.D.porConta.get(this.presidente), this.unisci(this.presidente, vuota()));
     if (this.campioneMs && !this.attive.has(this.campioneMs)) this.disegna(this.D.porConta.get(this.campioneMs), this.unisci(this.campioneMs, vuota()));
@@ -400,6 +464,29 @@ export class Decori {
     const aberta = !this.ed && !this.ui.painel.hidden && $('#pannello h2.conta')?.textContent.slice(1);
     if (aberta && (vecchie.has(aberta) || novas.has(aberta))) this.ui.casa(this.D.porConta.get(aberta), false);
   }
+  // ---------- ville e castelli (data/proprieta.json, escrito pelo api/conto.php a cada compra) ----------
+  async ricaricaProprieta() {
+    let j = null;
+    try { const r = await fetch(`data/proprieta.json?t=${Date.now()}`, { cache: 'no-store' }); if (r.ok) j = await r.json(); } catch { /* ainda não existe */ }
+    const velhas = new Set([...this.prop.ville, ...this.prop.castelloDi.keys()]);
+    const ville = new Set((j?.ville ?? []).filter(c => this.D.porConta.has(c))), castelloDi = new Map();
+    for (const x of Object.values(j?.castelli ?? {})) if (this.D.porConta.has(x.conta)) castelloDi.set(x.conta, x.regione);
+    this.prop = { ville, castelli: j?.castelli ?? {}, castelloDi };
+    this.propDi = new Map();
+    for (const conta of new Set([...ville, ...castelloDi.keys()])) {
+      const id = this.D.luoghi[this.D.porConta.get(conta).luogo].id;
+      (this.propDi.get(id) ?? this.propDi.set(id, []).get(id)).push(conta);
+    }
+    // quem mudou e já está desenhado (ou acabou de comprar): redesenha
+    for (const conta of new Set([...velhas, ...ville, ...castelloDi.keys()])) {
+      const antes = velhas.has(conta), agora = ville.has(conta) || castelloDi.has(conta);
+      if (antes === agora && !this.attive.has(conta) && !this.citta.perto.includes(this.D.luoghi[this.D.porConta.get(conta)?.luogo])) continue;
+      if (this.ed?.casa.conta === conta) continue;
+      const p = this.pagata(conta);
+      this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+    }
+  }
+  forma(conta) { return this.prop.castelloDi.has(conta) ? 'castello' : this.prop.ville.has(conta) ? 'villa' : null; }
   pagata(conta) { const p = this.pagate.get(conta); return p && p.scade > Date.now() ? p : null; }
   // decoração da própria casa (não presente) que o dono pode renovar: ativa, ou vencida há menos de 14 dias
   // (a vencida some do data/decori.json: fica a última vista guardada no navegador)
@@ -416,9 +503,10 @@ export class Decori {
   // cargo da conta (presidente / sindaco / null) e a seleção com a decoração do cargo somada à comprada
   cargo(conta) { return conta === this.presidente ? 'presidente' : this.sindaci.has(conta) ? 'sindaco' : null; }
   unisci(conta, sel) {
-    const c = this.cargo(conta), pr = this.premiMs.get(conta), camp = conta === this.campioneMs;
-    if (!c && !pr && !camp) return sel;
+    const c = this.cargo(conta), pr = this.premiMs.get(conta), camp = conta === this.campioneMs, fo = this.forma(conta);
+    if (!c && !pr && !camp && !fo) return sel;
     const s = copia(sel);
+    if (fo) s.extra.add(fo);
     if (c) s.extra.add('fascia');
     if (c === 'presidente') s.extra.add('presidenza');
     pr?.forEach(x => s.extra.add(x));
@@ -451,7 +539,7 @@ export class Decori {
     if (!this.desenhando) {
       this.desenhando = true;
       for (const l of perto) {
-        for (const conta of [this.sindacoDi.get(l.id), ...(this.premiDi.get(l.id) ?? [])]) {
+        for (const conta of [this.sindacoDi.get(l.id), ...(this.premiDi.get(l.id) ?? []), ...(this.propDi.get(l.id) ?? [])]) {
           if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) {
             const p = this.pagata(conta);
             this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
@@ -478,7 +566,9 @@ export class Decori {
     const cg = this.cargo(casa.conta);
     if (cg === 'presidente') return { cls: 'et-casa vip', html: `👑 ${base}<small>PRESIDENTE DEL CONSIGLIO</small>`, y };
     if (cg === 'sindaco') return { cls: 'et-casa vip', html: `🏛️ ${base}<small>SINDACO DI ${esc(this.D.luoghi[casa.luogo].nome).toUpperCase()}</small>`, y };
+    if (this.prop.castelloDi.has(casa.conta)) return { cls: 'et-casa vip', html: `🏰 ${base}<small>CASTELLO · ${esc(String(this.prop.castelloDi.get(casa.conta)).toUpperCase())}</small>`, y };
     if (casa.conta === this.campioneMs) return { cls: 'et-casa vip', html: `🏆 ${base}<small>CAMPIONE DEI GIOCHI</small>`, y };
+    if (this.prop.ville.has(casa.conta) && !a.da && !this.pagata(casa.conta)) return { cls: 'et-casa vip', html: `🏡 ${base}<small>VILLA</small>`, y };
     if (!this.pagata(casa.conta) && this.premiMs.has(casa.conta)) return { cls: 'et-casa deco', html: `🎮 ${base}`, y };
     if (a.da) return { cls: `et-casa ${cornice ? 'vip' : 'regalo'}`, html: `${cornice ? '✨ ' : ''}${base}<small>🎁 da @${esc(a.da)}</small>`, y };
     if (cornice) return { cls: 'et-casa vip', html: `✨ ${base}<small>CASA SPECIALE</small>`, y };
@@ -558,17 +648,19 @@ export class Decori {
     if (!b) return;
     b.hidden = false;
     if (velho) velho.hidden = true;
-    const NOVITA_VER = 'v30-punti';
+    // 21/11: a pílula agora oferece a RECARGA de crediti (a decoração continua no cartão da casa)
+    const NOVITA_VER = 'v-ricarica';
     const testo = b.querySelector('.testo'), selo = b.querySelector('.novita');
     const vista = () => ler('decora_vista') === NOVITA_VER;
     if (selo) selo.hidden = vista();
+    testo.textContent = '💰 Ricarica crediti';
     const frasi = () => {
       const r = this.rinnovabile(this.ui?.minha);
-      // curtas (cabem numa linha ao lado de "il tuo negozio" no celular)
-      const base = ['✨ Decora la tua casa', `⭐ Casa +${this.punti} punti`, `📅 Ora ${this.cfg.giorni} giorni`, '🎁 Regala a un amico'];
+      // curtas (cabem numa linha no celular)
+      const base = ['💰 Ricarica crediti', '🏰 Castelli e ville', '🛵 Bici, Vespa e auto', '🎁 Fino a +50% crediti', '🔑 Arreda la tua casa'];
       return r && (!r.attiva || this.giorniA(r.scade) <= 5) ? ['🔄 Rinnova la casa', ...base] : base;
     };
-    const seli = ['NOVITÀ', `${this.cfg.giorni} GIORNI`, `+${this.punti} PUNTI`];
+    const seli = ['NOVITÀ', '+50%', '🏰 1 PER REGIONE'];
     let i = 0, k = 0;
     setInterval(() => {
       const f = frasi();
@@ -581,7 +673,11 @@ export class Decori {
     setTimeout(brilha, 2500);
     setInterval(() => { if (!vista() || Math.random() < 0.35) brilha(); }, 18000);
     b.addEventListener('animationend', e => { if (e.animationName === 'decora-brilha') b.classList.remove('brilha'); });
-    b.onclick = () => { gravar('decora_vista', NOVITA_VER); if (selo) selo.hidden = true; this.home(); };
+    b.onclick = () => {
+      gravar('decora_vista', NOVITA_VER); if (selo) selo.hidden = true;
+      if (testo.textContent.includes('Rinnova')) return this.home();
+      this.ui.conto?.apriRicarica();
+    };
   }
 
   // ---------- telas ----------
