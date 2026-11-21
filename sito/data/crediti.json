@@ -1,6 +1,7 @@
 {
   "euro": 100,
   "giornaliero": { "base": 2, "serie": [[30, 100], [7, 20]] },
+  "decora": { "regalo_con_casa": 490, "regalo": 990 },
   "tesori": { "citta": 2, "negozio": 3, "max": 5, "negozi": "tutti" },
   "ricarica_aperta": true,
   "limite_mese_euro": 150,
@@ -62,8 +63,7 @@
     { "id": "lusso", "icona": "💎", "nome": "Pacchetto Lusso", "mobili": ["camino", "acquario", "pianoforte", "orologio"], "prezzo": 299 }
   ],
   "catalogo": [
-    { "id": "interni", "icona": "🔑", "nome": "Casa con interni", "prezzo": 990, "nota": "entra e arreda la tua casa · 5 mobili in regalo", "vendita": true },
-    { "id": "decora", "icona": "✨", "nome": "Decorazione (30 giorni)", "prezzo": 490 },
+    { "id": "interni", "icona": "🏠", "nome": "La tua casa", "prezzo": 990, "nota": "decorala dentro e fuori, per sempre · 5 mobili in regalo", "vendita": true },
     { "id": "villa", "icona": "🏡", "nome": "Villa", "prezzo": 2990, "nota": "la tua casa diventa una villa con piscina, per sempre", "vendita": true },
     { "id": "castello", "icona": "🏰", "nome": "Castello", "prezzo": 14990, "nota": "solo 1 per regione: chi arriva prima, per sempre", "vendita": true },
     { "id": "bici", "icona": "🚲", "nome": "Bici", "prezzo": 190, "nota": "2× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 2 },

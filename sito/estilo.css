@@ -358,6 +358,11 @@ button.decora-btn.rinnova.urgente { animation: decora-pulso 1.6s ease-in-out inf
 .ms-tx small { display: block; color: var(--grigio); font-weight: 700; font-size: 12px; line-height: 1.3; }
 .ms-card button, button.ms-invia { background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 8px 14px; font-weight: 900; font-size: 14px; white-space: nowrap; box-shadow: 0 2px 0 rgba(21,32,51,.25); }
 .ms-card button.sec { background: #fff; }
+.casa-card { align-items: flex-start; }
+.casa-duo { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.casa-duo button { flex: 1 1 0; min-width: 0; }
+.casa-duo.piu button { font-size: 12.5px; padding: 6px 10px; }
+button.regalo-btn { display: block; width: 100%; margin: 4px 0 8px; background: #fff; border: 2.5px dashed var(--inchiostro); border-radius: 14px; padding: 9px; font: 900 14px 'Nunito', sans-serif; color: var(--inchiostro); }
 .ms-card button:disabled, button.ms-invia:disabled { opacity: .45; }
 button.ms-invia { display: block; width: 100%; margin-top: 10px; font-size: 17px; padding: 11px; background: var(--verde); color: #fff; }
 .ms-codice, .ms-ok, .ms-avviso, .ms-serie { border-radius: 14px; padding: 9px 12px; margin: 8px 0; font-size: 13.5px; font-weight: 800; line-height: 1.35; }

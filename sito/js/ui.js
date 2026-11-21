@@ -293,8 +293,7 @@ export class UI {
         ${fogo ? `<span class="badge fuoco">🔥 in fiamme fino alle ${ora(c.fiamme * 1000)}</span>` : ''}
         ${this.decori?.badge(c) ?? ''}${this.missioni?.badge(c) ?? ''}
       </div>
-      ${this.cartaInterni(c)}
-      ${this.cartaProprieta(c)}
+      ${this.cartaCasa(c)}
       ${this.cartaPasseggia(`casa:${c.conta}`, `Cammina per ${l.nome} partendo da questa casa`)}
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>
@@ -320,28 +319,30 @@ export class UI {
     this.botaoCasa();
   }
   // cartão da casa con interni (interni.js): o dono entra/compra, os outros visitam se já estiver arredata
-  cartaInterni(c) {
-    const it = this.interni; if (!it) return '';
-    const prezzo = this.conto?.cfg?.interni?.prezzo ?? 990;
-    const carta = (ic, tit, txt, bt, alvo, cls = '') => `<div class="ms-card in-card ${cls}"><span class="ms-ic">${ic}</span><div class="ms-tx"><b>${tit}</b><small>${txt}</small></div><button data-interni="${alvo}">${bt}</button></div>`;
-    // dono do jogo: qualquer casa vira "casa de prova" com um clique (o jogador não perde nada)
-    if (this.conto?.p?.proprietario && !it.mio(c.conta)) return `<div class="ms-card in-card nuova"><span class="ms-ic">🛠️</span><div class="ms-tx"><b>Prova questa casa</b><small>Solo per il proprietario: interni, mobili, villa e castello di prova. La casa di @${esc(c.conta)} non cambia.</small></div><button data-ct="prova" data-v="${esc(c.conta)}">Prova</button></div>`;
-    if (it.mio(c.conta)) return it.possiede('interni')
-      ? carta('🔑', 'La tua casa con interni', 'Entra e arredala come vuoi', 'Entra', `entra:${c.conta}`)
-      : carta('🔑', `Casa con interni · ${num(prezzo)} 💰`, 'Entra nella tua casa e arredala: tutti potranno visitarla. 5 mobili in regalo.', 'Compra', `compra:${c.conta}`, 'nuova');
-    if (it.ha(c.conta)) return carta('👀', `Guarda dentro la casa di @${esc(c.conta)}`, 'È arredata: entra a vederla', 'Entra', `vedi:${c.conta}`);
-    return '';
-  }
-  // villa / castello (comprados com crediti): oferta só para o dono da casa
-  cartaProprieta(c) {
-    const ct = this.conto; if (!ct?.p || ct.p.conta !== c.conta || !ct.cfg) return '';
-    const own = new Set(ct.p.oggetti ?? []), cat = id => ct.cfg.catalogo?.find(x => x.id === id && x.vendita);
-    const carta = (ic, tit, txt, item, cls = '') => `<div class="ms-card in-card ${cls}"><span class="ms-ic">${ic}</span><div class="ms-tx"><b>${tit}</b><small>${txt}</small></div><button data-ct="compra" data-item="${item}">Compra</button></div>`;
+  // cartão "La tua casa" (um só, limpo): a própria casa = 🎨 Fuori + 🛋️ Dentro (990 💰 uma vez, para sempre) e, discreto,
+  // villa/castelo; casa de outra pessoa = 👀 Guarda dentro (se arredata) + 🎁 Regala una decorazione (490/990 💰)
+  cartaCasa(c) {
+    const it = this.interni, ct = this.conto, dec = this.decori; if (!it) return '';
+    const p = ct?.p, cfg = ct?.cfg, mio = p?.conta === c.conta, haCasa = (p?.oggetti ?? []).includes('interni');
+    const k = esc(c.conta);
+    if (p?.proprietario && !mio) return `<div class="ms-card in-card nuova"><span class="ms-ic">🛠️</span><div class="ms-tx"><b>Prova questa casa</b><small>Solo per il proprietario: dentro, fuori, villa e castello di prova. La casa di @${k} non cambia.</small></div><button data-ct="prova" data-v="${k}">Prova</button></div>`;
+    if (mio || (!p && this.minha === c.conta)) {
+      const prezzo = num(cfg?.interni?.prezzo ?? 990);
+      const corpo = !p ? `<small>Decorala dentro e fuori · ${prezzo} 💰 · per sempre</small><div class="casa-duo"><button data-ct="accedi">👤 Accedi</button></div>`
+        : haCasa ? `<small>È tua per sempre: cambiala quando vuoi.</small><div class="casa-duo"><button data-dp="fuori" data-v="${k}">🎨 Fuori</button><button data-interni="entra:${k}">🛋️ Dentro</button></div>`
+        : `<small>Decorala dentro e fuori, per sempre · 5 mobili in regalo</small><div class="casa-duo"><button data-dp="fuori" data-v="${k}">🎨 Prova fuori</button><button data-interni="compra:${k}">🔑 ${prezzo} 💰</button></div>`;
+      let extra = '';
+      if (p && cfg) {
+        const own = new Set(p.oggetti ?? []), cat = id => cfg.catalogo?.find(x => x.id === id && x.vendita), cm = ct.castelloMio(), chip = [];
+        if (cat('villa') && !own.has('villa') && !own.has('castello')) chip.push(`<button class="sec" data-ct="compra" data-item="villa">🏡 Villa · ${num(cat('villa').prezzo)}</button>`);
+        if (cat('castello') && !own.has('castello') && cm && !cm.chi) chip.push(`<button class="sec" data-ct="compra" data-item="castello">🏰 Castello · libero!</button>`);
+        if (chip.length) extra = `<div class="casa-duo piu">${chip.join('')}</div>`;
+      }
+      return `<div class="ms-card in-card casa-card"><span class="ms-ic">🏠</span><div class="ms-tx"><b>La tua casa</b>${corpo}${extra}</div></div>`;
+    }
     let out = '';
-    const ca = cat('castello'), cm = ct.castelloMio();
-    if (ca && !own.has('castello') && cm && !cm.chi) out += carta('🏰', `Castello della regione ${esc(cm.regione)} · ${num(ca.prezzo)} 💰`, `🔓 Ancora libero! Solo 1 per regione: la tua casa diventa il castello, per sempre.`, 'castello', 'nuova');
-    const vi = cat('villa');
-    if (vi && !own.has('villa') && !own.has('castello')) out += carta('🏡', `Trasformala in villa · ${num(vi.prezzo)} 💰`, 'Una villa con piscina e cipressi al posto della casa, per sempre.', 'villa');
+    if (it.ha(c.conta)) out += `<div class="ms-card in-card"><span class="ms-ic">👀</span><div class="ms-tx"><b>Guarda dentro</b><small>La casa di @${k} è arredata</small></div><button data-interni="vedi:${k}">Entra</button></div>`;
+    if (dec && !dec.prop.case.has(c.conta)) out += `<button class="regalo-btn" data-decora="${k}">🎁 Regala una decorazione · ${num(dec.prezzoRegalo())} 💰</button>`;
     return out;
   }
   // cartão "🚶 Passeggia" (passeggio.js); grátis com conta

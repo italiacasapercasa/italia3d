@@ -227,7 +227,7 @@ function conti_smtp(string $para, string $assunto, string $corpo): array {
 // O que está em "catalogo" só entra aqui com "vendita": true.
 function conti_listino(): array {
     $c = conti_cfg(); $out = [];
-    if (isset($c['interni']['prezzo'])) $out['interni'] = ['nome' => 'Casa con interni', 'prezzo' => (int)$c['interni']['prezzo'], 'casa' => true];
+    if (isset($c['interni']['prezzo'])) $out['interni'] = ['nome' => 'La tua casa (dentro e fuori)', 'prezzo' => (int)$c['interni']['prezzo'], 'casa' => true];
     foreach ((array)($c['mobili'] ?? []) as $m) if ((int)$m['prezzo'] > 0) $out['mob_' . $m['id']] = ['nome' => (string)$m['nome'], 'prezzo' => (int)$m['prezzo'], 'serve' => 'interni'];
     foreach ((array)($c['pacchetti'] ?? []) as $p) $out['pac_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo'], 'serve' => 'interni', 'mobili' => array_map(fn($m) => 'mob_' . $m, (array)$p['mobili'])];
     foreach ((array)($c['personaggio'] ?? []) as $p) $out['pg_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo']];
@@ -255,11 +255,50 @@ function conti_regione_di(string $conta): ?array {
 }
 // ville e castelli comprados: registro privado + cópia pública (só os @) em data/proprieta.json, lida pelo mapa (decori.js)
 function conti_proprieta_pubblica(array $reg): void {
-    $pub = ['ville' => array_keys((array)($reg['ville'] ?? [])), 'castelli' => []];
+    $pub = ['ville' => array_keys((array)($reg['ville'] ?? [])), 'castelli' => [], 'case' => array_keys((array)($reg['case'] ?? [])), 'decori' => []];
     foreach ((array)($reg['castelli'] ?? []) as $cod => $x) $pub['castelli'][(string)$cod] = ['conta' => $x['conta'], 'regione' => $x['regione'] ?? ''];
+    foreach ((array)($reg['decori'] ?? []) as $conta => $x) $pub['decori'][(string)$conta] = ['squadra' => $x['squadra'] ?? '', 'extra' => array_values((array)($x['extra'] ?? [])), 'da' => $x['da'] ?? ''];
     $arq = __DIR__ . '/../data/proprieta.json';
     file_put_contents("$arq.tmp", json_encode($pub, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
     rename("$arq.tmp", $arq);
+}
+
+// ---------- decoração de fora (para sempre, só visual: NÃO dá pontos) ----------
+// a própria casa: grátis para quem tem "la tua casa" (item interni); presente para a casa de outra pessoa:
+// 490 💰 para quem tem a casa, 990 💰 para quem não tem (crediti.json "decora"). Casa que já é "la tua casa" de alguém
+// não recebe presente (o dono decora). Dono do jogo: tudo de prova (u.deco_prova), fora do registro público.
+const CONTI_SQUADRE = ['bianconero', 'nerazzurro', 'rossonero', 'azzurro', 'giallorosso', 'biancoceleste', 'viola', 'granata', 'rossoblu'];
+function conti_decora(string $id, string $conta, string $squadra, array $extra): array {
+    $u0 = conti_leggi($id);
+    if (!$u0) return [null, 'Account non trovato.'];
+    if (!preg_match('/^[a-z0-9._]{1,30}$/', $conta) || !conti_tem_casa($conta)) return [null, "@$conta non ha una casa sulla mappa."];
+    $mio = ($u0['conta'] ?? '') === $conta; $prop = !empty($u0['proprietario']);
+    $haCasa = in_array('interni', (array)($u0['oggetti'] ?? []), true);
+    $extra = array_values(array_unique(array_map('strval', $extra)));
+    $EFF = $mio ? ['oro', 'neon', 'corona', 'fuochi', 'campione', 'tricolore', 'cornice'] : ['oro', 'neon', 'corona', 'fuochi', 'campione', 'palloncini', 'cornice'];
+    if ($squadra !== '' && (!$mio || !in_array($squadra, CONTI_SQUADRE, true))) return [null, 'Colori non validi.'];
+    if (array_diff($extra, $EFF)) return [null, 'Effetto non valido.'];
+    if (in_array('oro', $extra, true) && $squadra !== '') return [null, 'Scegli la casa d’oro o i colori della squadra, non tutti e due.'];
+    if ($mio && !$haCasa) return [null, 'Prima sblocca la tua casa: poi la decori dentro e fuori quando vuoi, per sempre.'];
+    $cd = conti_cfg()['decora'] ?? ['regalo_con_casa' => 490, 'regalo' => 990];
+    $prezzo = $mio ? 0 : (int)($haCasa ? $cd['regalo_con_casa'] : $cd['regalo']);
+    $sel = ['squadra' => $squadra, 'extra' => $extra, 'da' => $mio ? '' : (string)($u0['conta'] ?? ''), 'em' => gmdate('c')];
+    if ($prop) return [conti_modifica($id, function (array &$u) use ($conta, $sel) { $u['deco_prova'][$conta] = $sel; return $u; }), null];
+    $fr = fopen(conti_dir() . '/proprieta.json', 'c+');
+    if (!$fr || !flock($fr, LOCK_EX)) return [null, 'Riprova tra un attimo.'];
+    $reg = json_decode((string)stream_get_contents($fr), true) ?: [];
+    $err = null; $u = null;
+    if (!$mio && isset($reg['case'][$conta])) $err = "@$conta ha già la sua casa: la decora da solo/a.";
+    if (!$err) $u = conti_modifica($id, function (array &$u) use ($prezzo, $conta, &$err) {
+        if ($prezzo && (int)$u['saldo'] < $prezzo) { $err = 'Crediti insufficienti: ti mancano ' . number_format($prezzo - (int)$u['saldo'], 0, ',', '.') . ' 💰.'; return $u; }
+        if ($prezzo) conti_movimento($u, -$prezzo, 'regalo_deco', $conta);
+        return $u;
+    });
+    if (!$err) { $reg['decori'][$conta] = $sel; ftruncate($fr, 0); rewind($fr); fwrite($fr, json_encode($reg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); conti_proprieta_pubblica($reg); }
+    flock($fr, LOCK_UN); fclose($fr);
+    if ($err) return [null, $err];
+    if ($prezzo) conti_ricevuta($u, -$prezzo, "Hai regalato una decorazione alla casa di @$conta, per sempre. 🎁", "deco $conta", "Ricevuta regalo per @$conta");
+    return [$u, null];
 }
 
 // compra: tira os créditos, guarda o item na conta e manda o recibo. Devolve [conta atualizada, erro|null]
@@ -271,7 +310,7 @@ function conti_compra(string $id, string $item): array {
     // villa/castello: o registro fica travado durante a compra (dois pedidos do mesmo castelo ao mesmo tempo: só o 1º leva)
     $fr = null; $reg = null; $regione = null;
     $prop = !empty(conti_leggi($id)['proprietario']);   // dono: villa/castello só de prova (fora do registro público)
-    if (!empty($x['casa']) && $item !== 'interni' && !$prop) {
+    if (!empty($x['casa']) && !$prop) {
         $fr = fopen(conti_dir() . '/proprieta.json', 'c+');
         if (!$fr || !flock($fr, LOCK_EX)) return [null, 'Riprova tra un attimo.'];
         $reg = json_decode((string)stream_get_contents($fr), true) ?: ['ville' => [], 'castelli' => []];
@@ -302,6 +341,7 @@ function conti_compra(string $id, string $item): array {
         if (empty($x['mobili'])) $own[] = $item; else $own = array_merge($own, $nuovi);
         $u['oggetti'] = array_values(array_unique($own));
         if ($item === 'villa' && !$prop) $reg['ville'][$conta] = ['id' => $u['id'], 'em' => gmdate('c')];
+        if ($item === 'interni' && !$prop) $reg['case'][$conta] = ['id' => $u['id'], 'em' => gmdate('c')];   // "la tua casa": decora dentro e fuori
         if ($item === 'castello' && !$prop) $reg['castelli'][$regione['cod']] = ['conta' => $conta, 'id' => $u['id'], 'regione' => $regione['nome'], 'em' => gmdate('c')];
         return $u;
     });

@@ -13,7 +13,8 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
 const variante = s => hash(s) % 3;   // mesma variante de cor que citta.js usa
-const eur = cent => `€${(cent / 100).toFixed(2).replace('.', ',')}`;
+const num = v => Number(v).toLocaleString('it-IT');
+const eur = cent =>`€${(cent / 100).toFixed(2).replace('.', ',')}`;
 const ler = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
 const gravar = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch { /* sem storage */ } };
 const dataCurta = ms => new Date(ms).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', timeZone: 'Europe/Rome' });
@@ -416,7 +417,7 @@ export class Decori {
       (this.premiDi.get(id) ?? this.premiDi.set(id, []).get(id)).push(conta);
     }
     // ville e castelli comprados (data/proprieta.json): desenhados quando a cidade chega perto
-    this.prop = { ville: new Set(), castelli: {}, castelloDi: new Map() };   // castelloDi: conta -> nome da região
+    this.prop = { ville: new Set(), castelli: {}, castelloDi: new Map(), decori: new Map(), case: new Set() };   // castelloDi: conta -> região; decori: conta -> {sel, da}; case: quem tem "la tua casa"
     this.propDi = new Map();      // id da cidade -> [contas com villa/castelo]
     this.desenhando = false;
     mappa.aoFrame.push(t => this.quadro(t));
@@ -432,8 +433,8 @@ export class Decori {
     if (this.aperto) this.ligarPillola();
     await this.ricaricaProprieta();
     await this.ricarica();
-    if (this.presidente && !this.attive.has(this.presidente)) this.disegna(this.D.porConta.get(this.presidente), this.unisci(this.presidente, vuota()));
-    if (this.campioneMs && !this.attive.has(this.campioneMs)) this.disegna(this.D.porConta.get(this.campioneMs), this.unisci(this.campioneMs, vuota()));
+    if (this.presidente && !this.attive.has(this.presidente)) this.ridisegna(this.presidente);
+    if (this.campioneMs && !this.attive.has(this.campioneMs)) this.ridisegna(this.campioneMs);
     if (this.aperto && location.hash === '#decora') this.home();   // link da página do produto na Hotmart
     setInterval(() => this.ricarica(), 120e3);
     // voltou do pagamento: espera o webhook confirmar
@@ -457,8 +458,7 @@ export class Decori {
     this.pagate = novas;
     for (const conta of new Set([...vecchie.keys(), ...novas.keys()])) {
       if (this.ed?.casa.conta === conta) continue;   // prévia aberta: não mexe
-      const p = novas.get(conta);
-      this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+      this.ridisegna(conta);
     }
     // painel dessa casa aberto (ex.: ?casa= no carregamento): refaz para mostrar o selo
     const aberta = !this.ed && !this.ui.painel.hidden && $('#pannello h2.conta')?.textContent.slice(1);
@@ -468,31 +468,43 @@ export class Decori {
   async ricaricaProprieta() {
     let j = null;
     try { const r = await fetch(`data/proprieta.json?t=${Date.now()}`, { cache: 'no-store' }); if (r.ok) j = await r.json(); } catch { /* ainda não existe */ }
-    const velhas = new Set([...this.prop.ville, ...this.prop.castelloDi.keys()]);
-    const ville = new Set((j?.ville ?? []).filter(c => this.D.porConta.has(c))), castelloDi = new Map();
+    const firma = conta => JSON.stringify([this.prop.ville.has(conta), this.prop.castelloDi.get(conta) ?? null, this.prop.decori.get(conta)?.k ?? null]);
+    const velhas = new Map([...new Set([...this.prop.ville, ...this.prop.castelloDi.keys(), ...this.prop.decori.keys()])].map(c => [c, firma(c)]));
+    const ville = new Set((j?.ville ?? []).filter(c => this.D.porConta.has(c))), castelloDi = new Map(), decori = new Map();
     for (const x of Object.values(j?.castelli ?? {})) if (this.D.porConta.has(x.conta)) castelloDi.set(x.conta, x.regione);
-    // dono do jogo testando: villa/castello de prova aparecem só no navegador dele, na casa que estiver usando
+    const deco = (conta, x) => { if (this.D.porConta.has(conta)) decori.set(conta, { sel: { squadra: x.squadra || null, extra: new Set(x.extra ?? []) }, da: x.da || null, k: JSON.stringify(x) }); };
+    for (const [conta, x] of Object.entries(j?.decori ?? {})) deco(conta, x);
+    // dono do jogo testando: villa/castello/decoração de prova aparecem só no navegador dele
     const pr = this.ui?.conto?.p;
-    if (pr?.proprietario && this.D.porConta.has(pr.conta)) {
-      const ow = pr.oggetti ?? [], c = this.D.porConta.get(pr.conta);
-      if (ow.includes('castello')) castelloDi.set(pr.conta, `${this.D.luoghi[c.luogo].regione.nome.split('/')[0]} (prova)`);
-      else if (ow.includes('villa')) ville.add(pr.conta);
+    if (pr?.proprietario) {
+      for (const [conta, x] of Object.entries(pr.deco_prova ?? {})) deco(conta, x);
+      if (this.D.porConta.has(pr.conta)) {
+        const ow = pr.oggetti ?? [], c = this.D.porConta.get(pr.conta);
+        if (ow.includes('castello')) castelloDi.set(pr.conta, `${this.D.luoghi[c.luogo].regione.nome.split('/')[0]} (prova)`);
+        else if (ow.includes('villa')) ville.add(pr.conta);
+      }
     }
-    this.prop = { ville, castelli: j?.castelli ?? {}, castelloDi };
+    this.prop = { ville, castelli: j?.castelli ?? {}, castelloDi, decori, case: new Set(j?.case ?? []) };
     this.propDi = new Map();
-    for (const conta of new Set([...ville, ...castelloDi.keys()])) {
+    for (const conta of new Set([...ville, ...castelloDi.keys(), ...decori.keys()])) {
       const id = this.D.luoghi[this.D.porConta.get(conta).luogo].id;
       (this.propDi.get(id) ?? this.propDi.set(id, []).get(id)).push(conta);
     }
-    // quem mudou e já está desenhado (ou acabou de comprar): redesenha
-    for (const conta of new Set([...velhas, ...ville, ...castelloDi.keys()])) {
-      const antes = velhas.has(conta), agora = ville.has(conta) || castelloDi.has(conta);
-      if (antes === agora && !this.attive.has(conta) && !this.citta.perto.includes(this.D.luoghi[this.D.porConta.get(conta)?.luogo])) continue;
-      if (this.ed?.casa.conta === conta) continue;
-      const p = this.pagata(conta);
-      this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
+    // quem mudou: redesenha
+    for (const conta of new Set([...velhas.keys(), ...ville, ...castelloDi.keys(), ...decori.keys()])) {
+      if (velhas.get(conta) === firma(conta) && !this.citta.perto.includes(this.D.luoghi[this.D.porConta.get(conta)?.luogo])) continue;
+      if (this.ed?.casa.conta === conta || !this.D.porConta.has(conta)) continue;
+      this.ridisegna(conta);
     }
   }
+  // seleção base da casa: decoração para sempre (crediti) > decoração paga em euro (antigas, até vencer) > nada
+  base(conta) {
+    const d = this.prop.decori.get(conta);
+    if (d) return { sel: copia(d.sel), da: d.da };
+    const p = this.pagata(conta);
+    return p ? { sel: copia(p.sel), da: p.da } : { sel: vuota(), da: null };
+  }
+  ridisegna(conta) { const b = this.base(conta); this.disegna(this.D.porConta.get(conta), this.unisci(conta, b.sel), b.da); }
   forma(conta) { return this.prop.castelloDi.has(conta) ? 'castello' : this.prop.ville.has(conta) ? 'villa' : null; }
   pagata(conta) { const p = this.pagate.get(conta); return p && p.scade > Date.now() ? p : null; }
   // decoração da própria casa (não presente) que o dono pode renovar: ativa, ou vencida há menos de 14 dias
@@ -547,10 +559,7 @@ export class Decori {
       this.desenhando = true;
       for (const l of perto) {
         for (const conta of [this.sindacoDi.get(l.id), ...(this.premiDi.get(l.id) ?? []), ...(this.propDi.get(l.id) ?? [])]) {
-          if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) {
-            const p = this.pagata(conta);
-            this.disegna(this.D.porConta.get(conta), this.unisci(conta, p ? p.sel : vuota()), p?.da);
-          }
+          if (conta && !this.attive.has(conta) && this.ed?.casa.conta !== conta) this.ridisegna(conta);
         }
       }
       this.desenhando = false;
@@ -589,13 +598,17 @@ export class Decori {
 
   // ---------- painel da casa (ui.js) ----------
   badge(casa) {
+    const d = this.prop.decori.get(casa.conta);
+    if (d) return d.da ? `<span class="badge regalo">🎁 Regalo da @${esc(d.da)} · per sempre</span>` : '<span class="badge regalo">✨ Decorata · per sempre</span>';
     const p = this.pagata(casa.conta);
     if (!p) return '';
     const pts = `+${this.punti} punti`;
     return p.da ? `<span class="badge regalo">🎁 Regalo da @${esc(p.da)} · ${pts} · fino al ${dataCurta(p.scade)}</span>` : `<span class="badge regalo">✨ Casa speciale · ${pts} · fino al ${dataCurta(p.scade)}</span>`;
   }
   get punti() { return REGOLE.punti.decoro; }
-  bottone(casa, eMinha) {
+  // 21/11: decoração agora é com crediti e para sempre (cartão "La tua casa" em ui.js): os botões antigos em euro saem
+  bottone() { return ''; }
+  bottoneEuro(casa, eMinha) {
     if (!this.aperto) return '';
     const r = eMinha && this.rinnovabile(casa.conta);
     if (r) {
@@ -642,9 +655,9 @@ export class Decori {
   }
   annulla() {
     if (!this.ed) return;
-    const casa = this.ed.casa, p = this.pagata(casa.conta);
+    const casa = this.ed.casa;
     this.ed = null;
-    this.disegna(casa, p ? copia(p.sel) : vuota(), p?.da);
+    this.ridisegna(casa.conta);
   }
 
   // ---------- pílula ----------
@@ -664,7 +677,7 @@ export class Decori {
     const frasi = () => {
       const r = this.rinnovabile(this.ui?.minha);
       // curtas (cabem numa linha no celular)
-      const base = ['💰 Ricarica crediti', '🏰 Castelli e ville', '🛵 Bici, Vespa e auto', '🎁 Fino a +50% crediti', '🔑 Arreda la tua casa'];
+      const base = ['💰 Ricarica crediti', '🎨 Casa dentro e fuori', '🏰 Castelli e ville', '🛵 Bici, Vespa e auto', '🎁 Fino a +50% crediti'];
       return r && (!r.attiva || this.giorniA(r.scade) <= 5) ? ['🔄 Rinnova la casa', ...base] : base;
     };
     const seli = ['NOVITÀ', '+50%', '🏰 1 PER REGIONE'];
@@ -691,13 +704,15 @@ export class Decori {
   azione(t) {
     const d = t.dataset, v = d.v, ed = this.ed;
     ({
-      mia: () => (this.ui.minha && this.D.porConta.get(this.ui.minha) ? this.editor('mia', this.D.porConta.get(this.ui.minha)) : this.scegli('mia')),
+      mia: () => { const c = this.D.porConta.get(this.ui.conto?.p?.conta); if (c) return this.editor('mia', c); this.ui.aviso('Entra e collega il tuo Instagram: poi decori la tua casa.'); this.ui.conto?.apri(); },
       regalo: () => this.scegli('regalo'),
       scelto: () => this.editor(d.modo, this.D.porConta.get(v)),
       squadra: () => { ed.sel.squadra = ed.sel.squadra === v ? null : v; if (ed.sel.squadra) ed.sel.extra.delete('oro'); this.aggiorna(); },
       eff: () => { const s = ed.sel.extra; s.has(v) ? s.delete(v) : s.add(v); if (v === 'oro' && s.has('oro')) ed.sel.squadra = null; this.aggiorna(); },
       notte: () => { this.mappa.definirNotte(v === '1'); if (this.festa?.luci) this.festa.luci.visible = v === '1'; },
       checkout: () => this.checkout(),
+      salva: () => (this.ui.conto?.p ? this.salva(t) : (this.ui.aviso('Entra nel tuo account per decorare.'), this.ui.conto?.apri())),
+      fuori: () => { const ps = this.ui.passeggio; if (ps?.ativo) { ps.esci(); setTimeout(() => this.apri(v), 1000); } else this.apri(v); },
       rinnova: () => this.rinnova(v),
       paga: () => this.paga(t),
       indietro: () => this.editor(ed.modo, ed.casa, true),
@@ -707,17 +722,14 @@ export class Decori {
 
   home() {
     this.annulla(); this.ferma(); document.body.classList.remove('decora-edit');
-    const mia = this.ui.minha, r = this.rinnovabile(mia);
     this.ui.abrir(`
       <h2>Rendi speciale una casa ✨</h2>
-      <div class="sub">Provala <b>gratis</b> qui sulla mappa. Paghi solo se ti piace: <b>${eur(this.cfg.prezzo)}</b>, tutto incluso, per ${this.cfg.giorni} giorni.</div>
-      <div class="vantaggio-dec">⭐ <b>+${this.punti} punti</b> alla casa decorata, per tutti i ${this.cfg.giorni} giorni: sale di livello e si vede di più sulla mappa.</div>
-      ${r ? `<button class="decora-btn rinnova urgente" data-dp="rinnova" data-v="${esc(mia)}">🔄 Rinnova la tua casa · +${this.cfg.giorni} giorni<small>${r.attiva ? `scade il ${dataCurta(r.scade)}: i nuovi giorni si sommano` : 'scaduta: riaccendila con gli stessi effetti'}</small></button>` : ''}
+      <div class="sub">Provala <b>gratis</b> qui sulla mappa. Con i crediti è <b>per sempre</b>: la tua casa ${num(this.ui.conto?.cfg?.interni?.prezzo ?? 990)} 💰 (dentro e fuori), un regalo ${num(this.prezzoRegalo())} 💰.</div>
       <div class="scelta2">
         <button data-dp="mia"><span class="em">🏠</span><span><b>La mia casa</b><small>Colori della tua squadra, casa d’oro, neon, corona…</small></span></button>
         <button data-dp="regalo"><span class="em">🎁</span><span><b>Regala a un amico</b><small>Una sorpresa sulla sua casa, con il tuo nome sopra</small></span></button>
       </div>
-      <div class="regola">✅ I +${this.punti} punti fanno crescere la casa, ma non contano per le elezioni: Presidente e Sindaci li sceglie sempre chi gioca.</div>`);
+      <div class="regola">✅ Solo estetica: le decorazioni non danno punti. Presidente e Sindaci li sceglie sempre chi gioca.</div>`);
   }
   // renovação (só o dono): mesmos efeitos, direto para o pagamento; os dias novos somam ao fim da atual (hotmart.php)
   rinnova(conta) {
@@ -732,7 +744,35 @@ export class Decori {
   // botão do painel da casa: casa de outra pessoa = presente; a sua = decorar
   apri(conta, modo) {
     const casa = this.D.porConta.get(conta);
-    if (casa) this.editor(modo === 'mia' || this.ui.minha === conta ? 'mia' : 'regalo', casa);
+    if (casa) this.editor(this.ui.conto?.p?.conta === conta ? 'mia' : 'regalo', casa);
+  }
+  // preço do presente: 490 💰 para quem tem "la tua casa", 990 💰 para quem não tem
+  prezzoRegalo() { const c = this.ui.conto, d = c?.cfg?.decora ?? { regalo_con_casa: 490, regalo: 990 }; return (c?.p?.oggetti ?? []).includes('interni') ? d.regalo_con_casa : d.regalo; }
+  // salva a decoração (própria: grátis com a casa; presente: 490/990 💰). Para sempre, sem pontos.
+  async salva(botao) {
+    const ed = this.ed, conto = this.ui.conto;
+    if (!conto?.p) { this.ui.aviso('Entra nel tuo account per decorare.'); return conto?.apri(); }
+    const mia = ed.modo === 'mia', haCasa = (conto.p.oggetti ?? []).includes('interni');
+    if (mia && !haCasa) {   // ainda não tem a casa: compra (990) e já salva
+      const prezzo = conto.cfg?.interni?.prezzo ?? 990;
+      if (!(await conto.compra('interni', 'la tua casa (dentro e fuori)', prezzo, 'La decori dentro e fuori quando vuoi, per sempre. 5 mobili in regalo.'))) return;
+    } else if (!mia) {
+      const pr = this.prezzoRegalo(), manca = pr - (conto.p.saldo ?? 0);
+      if (manca > 0) { if (confirm(`Il regalo costa ${pr.toLocaleString('it-IT')} 💰: ti mancano ${manca.toLocaleString('it-IT')} 💰.\n\nVuoi ricaricare i crediti?`)) conto.apriRicarica(); return; }
+      if (!confirm(`Regalare questa decorazione a @${ed.casa.conta} per ${pr.toLocaleString('it-IT')} 💰?\nResta sulla sua casa per sempre${conto.p.conta ? `, con «🎁 da @${conto.p.conta}»` : ''}.`)) return;
+    }
+    botao.disabled = true;
+    try {
+      conto.p = (await conto.api('decora', { conta: ed.casa.conta, squadra: ed.sel.squadra ?? '', extra: [...ed.sel.extra] })).profilo;
+      conto.desenharBotao();
+      const casa = ed.casa;
+      this.ed = null;
+      await this.ricaricaProprieta();
+      this.ridisegna(casa.conta);
+      this.coriandoli();
+      this.ui.aviso(mia ? '✨ La tua casa è decorata, per sempre!' : `🎁 Regalo consegnato a @${casa.conta}!`);
+      this.ui.casa(casa, false);
+    } catch (e) { botao.disabled = false; this.ui.aviso(e.message); }
   }
 
   scegli(modo) {
@@ -758,45 +798,43 @@ export class Decori {
     if (!casa) return;
     if (!manter || !this.ed) {
       this.annulla();
-      const p = this.pagata(casa.conta);
-      this.ed = { modo, casa, sel: p && !p.da && modo === 'mia' ? copia(p.sel) : vuota(), da: modo === 'regalo' ? (this.ui.minha ?? '') : null };
+      const b = this.base(casa.conta), sua = modo === 'mia' && !b.da;
+      this.ed = { modo, casa, sel: sua ? b.sel : vuota(), da: modo === 'regalo' ? (this.ui.conto?.p?.conta ?? null) : null };
     }
     const ed = this.ed;
     this.vaiACasa(casa);
     const l = this.D.luoghi[casa.luogo], regalo = modo === 'regalo';
-    const eff = EFFETTI.filter(e => (regalo ? e.regalo : e.mia)), p = this.pagata(casa.conta);
+    const eff = EFFETTI.filter(e => (regalo ? e.regalo : e.mia)), d = this.prop.decori.get(casa.conta);
     this.ui.abrir(`
       <div class="tag-luogo">📍 ${esc(l.nome)}</div>
-      <h2 class="conta">${regalo ? '🎁 ' : ''}@${esc(casa.conta)}</h2>
-      <div class="sub">${regalo ? 'Tocca un regalo: lo vedi subito sulla sua casa.' : 'Tocca e guarda la tua casa cambiare. È solo un’anteprima.'}</div>
-      ${p ? `<div class="regola">${p.da ? `🎁 Ha già un regalo da @${esc(p.da)}` : '✨ È già decorata'} fino al ${dataCurta(p.scade)}: un nuovo acquisto cambia gli effetti e aggiunge ${this.cfg.giorni} giorni.</div>` : ''}
-      ${regalo ? `<div class="cerca-dec"><span>da @</span><input id="dec-da" placeholder="il_tuo_account" value="${esc(ed.da ?? '')}" autocomplete="off" autocapitalize="off" spellcheck="false"></div><div class="nota" id="dec-da-nota" style="margin-top:4px"></div>` : ''}
+      <h2 class="conta">${regalo ? '🎁 ' : '🎨 '}@${esc(casa.conta)}</h2>
+      <div class="sub">${regalo ? 'Tocca un regalo: lo vedi subito sulla sua casa. Resta per sempre.' : 'Tocca e guarda la tua casa cambiare. Puoi cambiarla quando vuoi.'}</div>
+      ${regalo && d?.da ? `<div class="regola">🎁 Ha già un regalo da @${esc(d.da)}: il tuo lo sostituisce.</div>` : ''}
       ${regalo ? '' : `<div class="gruppo-dec">⚽ Colori della tua squadra</div>
       <div class="griglia-dec">${SQUADRE.map(s => `<button data-dp="squadra" data-v="${s.id}"><span class="sw" style="background:linear-gradient(90deg,${s.muro} 0 25%,${s.tetto} 25% 50%,${s.muro} 50% 75%,${s.tetto} 75%)"></span><b>${s.nome}</b></button>`).join('')}</div>`}
       <div class="gruppo-dec">${regalo ? '🎁 Scegli il regalo' : '✨ Effetti'} <small>· scegli quanti vuoi</small></div>
       <div class="griglia-dec">${eff.map(e => `<button data-dp="eff" data-v="${e.id}"><span class="em">${e.em}</span><b>${e.nome}</b></button>`).join('')}</div>
       <div class="riga-vista"><button data-dp="notte" data-v="0">☀️ Di giorno</button><button data-dp="notte" data-v="1">🌙 Di notte</button></div>
       <div class="conto-dec" id="dec-conto"></div>`);
-    $('#dec-da')?.addEventListener('input', e => { ed.da = e.target.value.trim().replace(/^@/, '').toLowerCase(); this.aggiorna(false); });
     this.aggiorna();
   }
 
-  okDa() { const e = this.ed; return e.modo !== 'regalo' || (!!e.da && this.D.porConta.has(e.da) && e.da !== e.casa.conta); }
   aggiorna(ridisegna = true) {
     const ed = this.ed;
     if (!ed) return;
     const painel = $('#pannello-contenuto');
     painel.querySelectorAll('[data-dp="squadra"]').forEach(b => b.classList.toggle('on', ed.sel.squadra === b.dataset.v));
     painel.querySelectorAll('[data-dp="eff"]').forEach(b => b.classList.toggle('on', ed.sel.extra.has(b.dataset.v)));
-    const regalo = ed.modo === 'regalo', okDa = this.okDa();
-    if (ridisegna) this.disegna(ed.casa, ed.sel, regalo ? (ed.da || '…') : null);
-    else { const a = this.attive.get(ed.casa.conta); if (a) a.da = ed.da || '…'; }
-    const nota = $('#dec-da-nota');
-    if (nota) nota.textContent = !ed.da ? 'Il tuo @ apparirà sopra la casa: deve avere una casa sulla mappa.' : okDa ? `✓ Apparirà «🎁 da @${ed.da}»` : ed.da === ed.casa.conta ? 'Non puoi regalarlo a te stesso: usa «La mia casa».' : 'Questo @ non ha ancora una casa sulla mappa.';
-    const n = quanti(ed.sel);
-    $('#dec-conto').innerHTML = `
-      <button class="paga-dec" data-dp="checkout" ${n && okDa ? '' : 'disabled'}>${n ? `${regalo ? '🎁 Regala' : '✨ Mostra a tutti'} · ${eur(this.cfg.prezzo)}` : 'Scegli almeno un effetto'}
-        <small>${n && !okDa ? 'scrivi il tuo @ qui sopra' : `tutto incluso · visibile a tutti per ${this.cfg.giorni} giorni`}</small></button>`;
+    const regalo = ed.modo === 'regalo', conto = this.ui.conto, haCasa = (conto?.p?.oggetti ?? []).includes('interni');
+    if (ridisegna) this.disegna(ed.casa, this.unisci(ed.casa.conta, ed.sel), regalo ? (ed.da || '…') : null);
+    const n = quanti(ed.sel), num = v => Number(v).toLocaleString('it-IT');
+    let tit, sub;
+    if (!conto?.p) { tit = '👤 Entra per decorare'; sub = 'serve l’account (gratis)'; }
+    else if (regalo) { tit = `🎁 Regala · ${num(this.prezzoRegalo())} 💰`; sub = `per sempre${haCasa ? ' · prezzo speciale: hai già la tua casa' : ' · 490 💰 se hai già la tua casa'}`; }
+    else if (haCasa) { tit = '✅ Salva · è tua per sempre'; sub = 'puoi cambiarla quando vuoi, gratis'; }
+    else { tit = `🏠 Sblocca la tua casa · ${num(conto.cfg?.interni?.prezzo ?? 990)} 💰`; sub = 'decorala dentro e fuori, per sempre'; }
+    $('#dec-conto').innerHTML = `<button class="paga-dec" data-dp="salva" ${n || (!regalo && haCasa) ? '' : 'disabled'}>${n || (!regalo && haCasa) ? tit : 'Scegli almeno un effetto'}<small>${sub}</small></button>
+      <p class="nota" style="text-align:center;margin-top:6px">Solo estetica: la decorazione non dà punti.</p>`;
   }
 
   checkout() {

@@ -65,7 +65,7 @@ export class Interni {
   async compraCasa(conta) {
     const conto = this.ui.conto, prezzo = this.cfg.interni?.prezzo ?? 990;
     if (!conto?.p) { conto?.apri(); return; }
-    if (await conto.compra('interni', 'la casa con interni', prezzo, 'Potrai arredarla e tutti potranno visitarla.')) this.apri(conta);
+    if (await conto.compra('interni', 'la tua casa (dentro e fuori)', prezzo, 'La decori dentro e fuori quando vuoi, per sempre. Tutti potranno visitarla.')) this.apri(conta);
   }
 
   // ---------- abrir / fechar ----------

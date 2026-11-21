@@ -10,7 +10,7 @@ const n = v => Number(v).toLocaleString('it-IT');
 const ler = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem storage */ } };
 const NOVITA = 'conto-v1';
-const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto', tesoro: '🧭 Tesoro trovato' };
+const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto', tesoro: '🧭 Tesoro trovato', regalo_deco: '🎁 Decorazione regalata' };
 
 export class Conto {
   constructor(D, ui) {
@@ -221,6 +221,7 @@ export class Conto {
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
       else if (a === 'personaggio') this.editor.apri();
+      else if (a === 'accedi') this.apri();
       else if (a === 'prova' && this.p?.proprietario) {
         this.p = (await this.api('collega', { conta: t.dataset.v })).profilo;
         this.desenharBotao();

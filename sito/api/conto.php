@@ -69,6 +69,7 @@ function profilo(array $u): array {
         'oggetti' => array_values((array)($u['oggetti'] ?? [])),
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
         'proprietario' => !empty($u['proprietario']),
+        'deco_prova' => !empty($u['proprietario']) ? (object)($u['deco_prova'] ?? []) : null,
         'tesori' => (($u['tesori']['giorno'] ?? '') === $oggi) ? array_values((array)$u['tesori']['presi']) : [],
     ];
 }
@@ -194,6 +195,15 @@ if ($acao === 'personaggio') {
 if ($acao === 'compra') {
     if ((int)$u['saldo'] < 0) erro('Il tuo saldo è negativo per un rimborso: ricarica per tornare a comprare.');
     [$nuovo, $e] = conti_compra($id, (string)($d['item'] ?? ''));
+    if ($e) erro($e);
+    resposta(['profilo' => profilo($nuovo)]);
+}
+
+// decoração de fora (própria casa grátis com "la tua casa"; presente 490/990 💰), para sempre, sem pontos
+if ($acao === 'decora') {
+    if ((int)$u['saldo'] < 0) erro('Il tuo saldo è negativo per un rimborso: ricarica per tornare a comprare.');
+    if (!conti_limite("decora|$id", 40, 3600)) erro('Troppe modifiche. Riprova tra un po’.', 429);
+    [$nuovo, $e] = conti_decora($id, strtolower(ltrim(trim((string)($d['conta'] ?? '')), '@')), (string)($d['squadra'] ?? ''), (array)($d['extra'] ?? []));
     if ($e) erro($e);
     resposta(['profilo' => profilo($nuovo)]);
 }
