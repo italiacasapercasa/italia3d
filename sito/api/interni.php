@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         header('Cache-Control: no-store');
         $sid = conti_sessione_id(); $su = $sid ? conti_leggi($sid) : null;
         if (!empty($su['proprietario']) && is_file("$pasta/_prova/$conta.json")) resposta(['conta' => $conta, 'interno' => json_decode((string)file_get_contents("$pasta/_prova/$conta.json"), true)]);
-        if (!empty($su['proprietario'])) erro('Questa casa non è ancora arredata.', 404);
+        // sem versão de prova ainda: começa do interior real do jogador (só leitura), se existir
     }
     if (!$valida($conta) || !is_file("$pasta/$conta.json")) erro('Questa casa non è ancora arredata.', 404);
     resposta(['conta' => $conta, 'interno' => json_decode((string)file_get_contents("$pasta/$conta.json"), true)]);
