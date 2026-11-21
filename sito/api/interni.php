@@ -16,6 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Cache-Control: public, max-age=60');
     if (isset($_GET['elenco'])) resposta(['conte' => array_values(json_decode((string)@file_get_contents("$pasta/_elenco.json"), true) ?: [])]);
     $conta = strtolower((string)($_GET['conta'] ?? ''));
+    // dono do jogo testando: lê a versão de prova dele (a casa do jogador fica intacta)
+    if ($valida($conta) && isset($_GET['prova'])) {
+        header('Cache-Control: no-store');
+        $sid = conti_sessione_id(); $su = $sid ? conti_leggi($sid) : null;
+        if (!empty($su['proprietario']) && is_file("$pasta/_prova/$conta.json")) resposta(['conta' => $conta, 'interno' => json_decode((string)file_get_contents("$pasta/_prova/$conta.json"), true)]);
+        if (!empty($su['proprietario'])) erro('Questa casa non è ancora arredata.', 404);
+    }
     if (!$valida($conta) || !is_file("$pasta/$conta.json")) erro('Questa casa non è ancora arredata.', 404);
     resposta(['conta' => $conta, 'interno' => json_decode((string)file_get_contents("$pasta/$conta.json"), true)]);
 }
@@ -47,6 +54,11 @@ foreach (array_slice((array)($i['ogg'] ?? []), 0, 80) as $o) {
     $ogg[] = [$t, $x, $z, $r];
 }
 $interno = ['pav' => in_array($i['pav'] ?? '', $pav, true) ? $i['pav'] : ($pav[0] ?? 'legno'), 'par' => (is_int($i['par'] ?? null) && $i['par'] >= 0 && $i['par'] < 8) ? $i['par'] : 0, 'ogg' => $ogg, 'agg' => gmdate('c')];
+if (!empty($u['proprietario'])) {   // dono testando: pasta de prova, fora da lista pública
+    if (!is_dir("$pasta/_prova")) mkdir("$pasta/_prova", 0750, true);
+    file_put_contents("$pasta/_prova/$conta.json", json_encode($interno, JSON_UNESCAPED_SLASHES), LOCK_EX);
+    resposta(['interno' => $interno]);
+}
 file_put_contents("$pasta/$conta.json", json_encode($interno, JSON_UNESCAPED_SLASHES), LOCK_EX);
 // lista dos @ arredati
 $f = fopen("$pasta/_elenco.json", 'c+');

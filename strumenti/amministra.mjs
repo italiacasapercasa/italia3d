@@ -315,7 +315,8 @@ try {
       fs.mkdirSync(local, { recursive: true });
       const utenti = ftp.listar(`${ftp.priv}dati/conti/utenti/`).filter(n => n.endsWith('.json'));
       const ok = ftp.baixar(`${ftp.priv}dati/conti/movimenti.jsonl`, path.join(local, 'movimenti.jsonl'));
-      const mov = ok ? fs.readFileSync(path.join(local, 'movimenti.jsonl'), 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l)) : [];
+      // movimentos "prova_*" = conta do dono testando: fora das contas
+      const mov = ok ? fs.readFileSync(path.join(local, 'movimenti.jsonl'), 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l)).filter(m => !String(m.tipo).startsWith('prova_')) : [];
       const dia = d => d.slice(0, 10), hoje = new Date().toISOString().slice(0, 10);
       const porTipo = {}; for (const m of mov) { porTipo[m.tipo] ??= { n: 0, soma: 0 }; porTipo[m.tipo].n++; porTipo[m.tipo].soma += m.delta; }
       const premiadas = new Set(mov.filter(m => ['giornaliero', 'serie'].includes(m.tipo)).map(m => m.id));

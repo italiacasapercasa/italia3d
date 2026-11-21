@@ -68,6 +68,7 @@ function profilo(array $u): array {
         'pg' => $u['pg'] ?? null,
         'oggetti' => array_values((array)($u['oggetti'] ?? [])),
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
+        'proprietario' => !empty($u['proprietario']),
         'tesori' => (($u['tesori']['giorno'] ?? '') === $oggi) ? array_values((array)$u['tesori']['presi']) : [],
     ];
 }
@@ -89,6 +90,7 @@ if ($acao === 'codice') {
     if (!conti_email_ok($email)) erro('Scrivi un’email valida.');
     if (!conti_limite("email|$email", 5, 3600) || !conti_limite("cod-ip|$ip", 15, 3600)) erro('Hai chiesto troppi codici. Riprova tra un’ora.', 429);
     if (!conti_limite('email-giorno', (int)($cfg['email_giorno_max'] ?? 400), 86400)) erro('Troppe richieste oggi. Riprova domani.', 503);
+    if (conti_e_proprietario($email)) resposta(['inviato' => true]);   // dono: código fixo, nenhum e-mail
     $id = conti_id($email);
     $cod = (string)random_int(100000, 999999);
     file_put_contents(conti_dir('codici') . "/$id.json", json_encode(['h' => hash('sha256', $cod . '|' . $id . '|' . APP_SECRET), 'scade' => time() + 900, 'tent' => 0]), LOCK_EX);
@@ -105,6 +107,17 @@ if ($acao === 'entra') {
     $cod = preg_replace('/\D/', '', (string)($d['codice'] ?? ''));
     if (!conti_email_ok($email) || strlen($cod) !== 6) erro('Codice non valido.');
     $id = conti_id($email);
+    if (conti_e_proprietario($email)) {
+        if (!conti_limite("prop-ip|$ip", 10, 3600) || !conti_limite('prop', 40, 3600)) erro('Troppi tentativi. Riprova tra un’ora.', 429);
+        if (!password_verify($cod, conti_proprietario()['hash'])) erro('Codice sbagliato. Controlla l’email e riprova.');
+        $gen = conti_modifica($id, function (array &$u) {
+            $u['proprietario'] = true; $u['ultimo_accesso'] = gmdate('c');
+            if ((int)($u['saldo'] ?? 0) < 500000) conti_movimento($u, 1000000 - (int)($u['saldo'] ?? 0), 'regalo', 'crediti di prova del proprietario');
+            return (int)($u['gen'] ?? 0);
+        }, $email);
+        conti_sessione_crea($id, $gen);
+        resposta(['nuovo' => false, 'profilo' => profilo(conti_leggi($id))]);
+    }
     $arq = conti_dir('codici') . "/$id.json";
     $c = json_decode((string)@file_get_contents($arq), true);
     if (!is_array($c) || $c['scade'] < time()) { @unlink($arq); erro('Il codice è scaduto. Chiedine uno nuovo.'); }
@@ -150,6 +163,8 @@ if ($acao === 'collega') {
     if (!preg_match('/^[a-z0-9._]{1,30}$/', $conta)) erro('Scrivi il tuo nome Instagram, senza spazi.');
     if (!conti_tem_casa($conta)) erro("@$conta non ha ancora una casa sulla mappa. Commenta la tua città sotto un nostro post per averla, poi torna qui.");
     if (($u['conta'] ?? null) === $conta) resposta(['profilo' => profilo($u)]);
+    // dono: usa qualquer casa para testar, na hora, SEM tirar o @ do jogador (não mexe em conte.json)
+    if (!empty($u['proprietario'])) resposta(['profilo' => profilo(conti_modifica($id, function (array &$u) use ($conta) { $u['conta'] = $conta; unset($u['attesa']); return $u; }))]);
     $cod = conti_codice_collega($conta, $id);
     $u = conti_modifica($id, function (array &$u) use ($conta, $cod) { $u['attesa'] = ['conta' => $conta, 'codice' => $cod, 'em' => gmdate('c')]; return $u; });
     resposta(['profilo' => profilo(conferma_attesa($id) ?? $u)]);
@@ -189,6 +204,7 @@ if ($acao === 'scollega') {
 }
 
 if ($acao === 'premio') {
+    if (!empty($u['proprietario'])) erro('Account del proprietario: il premio del giorno resta ai giocatori.');
     $conta = (string)($u['conta'] ?? '');
     if ($conta === '') erro('Collega prima il tuo Instagram per ricevere i crediti del giorno.');
     if (!conti_tem_casa($conta)) erro("@$conta non ha più una casa sulla mappa.");

@@ -48,6 +48,7 @@ export class Conto {
   // entrou (ou abriu o site já logado): pega os créditos do dia sozinho e ajuda os jogos com o @
   async depoisDeEntrar(abrir) {
     this.desenharBotao();
+    if (this.p?.proprietario) { await this.ui.decori?.ricaricaProprieta(); if (abrir) this.apri(); return; }   // dono: sem prêmio e sem @ automático nos jogos
     if (this.p?.conta && this.ui.missioni && !this.ui.missioni.conta && this.D.porConta.has(this.p.conta)) this.ui.missioni.conta = this.p.conta;
     if (this.p?.conta && !this.p.premio_oggi) await this.premio(true);
     if (abrir) this.apri();
@@ -102,11 +103,17 @@ export class Conto {
     // próximo bônus de série
     const prox = (g.serie ?? []).map(([ogni, extra]) => ({ giorno: Math.ceil((p.serie + 1) / ogni) * ogni, extra })).sort((a, b) => a.giorno - b.giorno)[0];
     let premio;
-    if (!p.conta) premio = '';
+    if (!p.conta || p.proprietario) premio = '';
     else if (p.premio_oggi) premio = `<div class="ms-serie">✅ Crediti di oggi presi · 🔥 <b>${p.serie} ${p.serie === 1 ? 'giorno' : 'giorni di fila'}</b>${prox ? `<br><small>Torna domani: al ${prox.giorno}° giorno di fila ricevi <b>+${prox.extra} 💰</b> in più.</small>` : ''}</div>`;
     else premio = `<div class="ms-card"><span class="ms-ic">🎁</span><div class="ms-tx"><b>Crediti di oggi</b><small>+${g.base} 💰 ogni giorno che entri</small></div><button data-ct="premio">Prendi</button></div>`;
     let ig;
-    if (p.conta) ig = `<div class="ms-ok">📸 Instagram collegato: <b>@${esc(p.conta)}</b></div>`;
+    if (p.proprietario) ig = `<div class="ms-codice">🛠️ <b>Account del proprietario</b> (prova): crediti di prova, niente email, niente premio del giorno.
+        Villa, castello e casa con interni restano solo tuoi: non occupano il castello della regione e non toccano la casa del giocatore.
+        <br>Casa in prova: <b>${p.conta ? `@${esc(p.conta)}` : 'nessuna'}</b></div>
+        <div class="ms-chi"><label for="ct-conta">Prova con la casa di qualsiasi @ (il giocatore non perde niente)</label>
+        <div class="ms-campo"><span>@</span><input id="ct-conta" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="nome_instagram" value=""></div>
+        <div class="bottoni"><button data-ct="collega">Usa questa casa</button></div></div>`;
+    else if (p.conta) ig = `<div class="ms-ok">📸 Instagram collegato: <b>@${esc(p.conta)}</b></div>`;
     else if (p.attesa) ig = `<div class="ms-codice">📸 Per collegare <b>@${esc(p.attesa.conta)}</b> commenta questo codice sotto un nostro post su Instagram:<br>
         <span class="cod">${esc(p.attesa.codice)}</span><br><small>Entro circa 30 minuti il tuo account si collega da solo e ricevi i crediti del giorno.</small>
         <button data-ct="copia">📋 Copia il codice e apri Instagram</button></div>
@@ -125,7 +132,7 @@ export class Conto {
         else if (cast?.chi) nota = `🔒 Il castello della regione ${esc(cast.regione)} è già di @${esc(cast.chi)}`;
         else if (cast) nota = `🔓 Il castello della regione ${esc(cast.regione)} è ancora libero!`;
       }
-      if (ora && !tua && !(x.id === 'castello' && cast?.chi)) bt = `<button data-ct="compra" data-item="${x.id}">Compra</button>`;
+      if (ora && !tua && (!(x.id === 'castello' && cast?.chi) || p.proprietario)) bt = `<button data-ct="compra" data-item="${x.id}">Compra</button>`;
       if (x.id === 'interni' && tua) bt = `<button class="sec" data-ct="miacasa">Entra</button>`;
       return `<div class="ct-item${ora ? ' ora' : ''}${tua ? ' tua' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tua ? '✅ Tua' : `${n(x.prezzo)} 💰${ora ? '' : ' · presto'}`}</em>${nota ? `<small>${nota}</small>` : ''}${bt}</div>`;
     }).join('');
@@ -134,7 +141,7 @@ export class Conto {
       return `<div class="ct-item ora${tutti ? ' tua' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tutti ? '✅ Tuo' : `<s>${n(pieno)}</s> ${n(x.prezzo)} 💰`}</em><small>${x.mobili.length} mobili · per la casa con interni</small>${tutti ? '' : `<button data-ct="compra" data-item="pac_${x.id}">Compra</button>`}</div>`;
     }).join('');
     const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3><div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b><span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
-    const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? esc(m.tipo)}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
+    const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? (TIPI[String(m.tipo).replace('prova_', '')] ? `🛠️ ${TIPI[m.tipo.replace('prova_', '')]}` : esc(m.tipo))}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
       <div class="ct-saldo"><b>${n(p.saldo)}</b><span>💰 crediti</span></div>
       ${premio}${ig}

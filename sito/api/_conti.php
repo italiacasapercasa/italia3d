@@ -74,12 +74,24 @@ function conti_modifica(string $id, callable $fn, ?string $cria = null) {
 }
 // todo crédito entra e sai por aqui (dentro de conti_modifica): saldo + histórico curto + livro-caixa
 function conti_movimento(array &$u, int $delta, string $tipo, string $rif = ''): void {
+    if (!empty($u['proprietario']) && !str_starts_with($tipo, 'prova_')) $tipo = "prova_$tipo";   // conta do dono: fora das estatísticas
     $u['saldo'] = (int)($u['saldo'] ?? 0) + $delta;
     $m = ['em' => gmdate('c'), 'tipo' => $tipo, 'delta' => $delta, 'saldo' => $u['saldo']] + ($rif !== '' ? ['rif' => $rif] : []);
     array_unshift($u['ultimi'], $m);
     $u['ultimi'] = array_slice($u['ultimi'], 0, 20);
     file_put_contents(conti_dir() . '/movimenti.jsonl', json_encode(['id' => $u['id']] + $m, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n", FILE_APPEND | LOCK_EX);
 }
+
+// ---------- conta do dono do jogo (testar tudo) ----------
+// privato/proprietario.json = {email, hash} (hash = password_hash do código fixo; nunca no site nem no git).
+// Entra com esse e-mail + código fixo; crediti de prova; liga qualquer @ sem tirar do jogador; villa/castello e interior
+// ficam só para ele (não ocupam o castelo da região nem mexem na casa do jogador); sem prêmio do dia, sem e-mails.
+function conti_proprietario(): ?array {
+    static $p = false;
+    if ($p === false) { $p = json_decode((string)@file_get_contents(dirname(CARTELLA) . '/proprietario.json'), true); if (!is_array($p) || empty($p['email']) || empty($p['hash'])) $p = null; }
+    return $p;
+}
+function conti_e_proprietario(string $email): bool { $p = conti_proprietario(); return $p && strtolower(trim($email)) === strtolower($p['email']); }
 
 // ---------- sessão ----------
 function conti_https(): bool { return (($_SERVER['HTTPS'] ?? '') !== '' && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https'); }
@@ -258,12 +270,13 @@ function conti_compra(string $id, string $item): array {
     $err = null;
     // villa/castello: o registro fica travado durante a compra (dois pedidos do mesmo castelo ao mesmo tempo: só o 1º leva)
     $fr = null; $reg = null; $regione = null;
-    if (!empty($x['casa']) && $item !== 'interni') {
+    $prop = !empty(conti_leggi($id)['proprietario']);   // dono: villa/castello só de prova (fora do registro público)
+    if (!empty($x['casa']) && $item !== 'interni' && !$prop) {
         $fr = fopen(conti_dir() . '/proprieta.json', 'c+');
         if (!$fr || !flock($fr, LOCK_EX)) return [null, 'Riprova tra un attimo.'];
         $reg = json_decode((string)stream_get_contents($fr), true) ?: ['ville' => [], 'castelli' => []];
     }
-    $u = conti_modifica($id, function (array &$u) use ($item, $x, &$err, &$reg, &$regione) {
+    $u = conti_modifica($id, function (array &$u) use ($item, $x, &$err, &$reg, &$regione, $prop) {
         $own = (array)($u['oggetti'] ?? []);
         $conta = (string)($u['conta'] ?? '');
         if (in_array($item, $own, true)) { $err = 'Ce l’hai già!'; return $u; }
@@ -278,6 +291,8 @@ function conti_compra(string $id, string $item): array {
         if ($item === 'castello') {
             $regione = conti_regione_di($conta);
             if (!$regione) { $err = 'Non troviamo la regione della tua casa. Riprova più tardi.'; return $u; }
+        }
+        if ($item === 'castello' && !$prop) {
             $chi = $reg['castelli'][$regione['cod']]['conta'] ?? null;
             if ($chi) { $err = "Il castello della regione {$regione['nome']} è già di @$chi. Solo 1 per regione!"; return $u; }
             foreach ((array)$reg['castelli'] as $c) if (($c['conta'] ?? '') === $conta) { $err = 'Hai già un castello!'; return $u; }
@@ -286,8 +301,8 @@ function conti_compra(string $id, string $item): array {
         conti_movimento($u, -$x['prezzo'], 'acquisto', $item);
         if (empty($x['mobili'])) $own[] = $item; else $own = array_merge($own, $nuovi);
         $u['oggetti'] = array_values(array_unique($own));
-        if ($item === 'villa') $reg['ville'][$conta] = ['id' => $u['id'], 'em' => gmdate('c')];
-        if ($item === 'castello') $reg['castelli'][$regione['cod']] = ['conta' => $conta, 'id' => $u['id'], 'regione' => $regione['nome'], 'em' => gmdate('c')];
+        if ($item === 'villa' && !$prop) $reg['ville'][$conta] = ['id' => $u['id'], 'em' => gmdate('c')];
+        if ($item === 'castello' && !$prop) $reg['castelli'][$regione['cod']] = ['conta' => $conta, 'id' => $u['id'], 'regione' => $regione['nome'], 'em' => gmdate('c')];
         return $u;
     });
     if ($fr) {
@@ -343,6 +358,7 @@ function conti_ricarica(string $email, string $sck, string $prodId, string $nome
 }
 // recibo por e-mail de cada movimento pago (recarga, reembolso e, na fase 3, compras)
 function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = '', ?string $assunto = null): array {
+    if (!empty($u['proprietario'])) return [true, 'conta do dono: sem e-mail'];
     $fmt = fn(int $v) => ($v > 0 ? '+' : ($v < 0 ? '−' : '')) . number_format(abs($v), 0, ',', '.');
     $corpo = "Ciao!\n\n$titolo\n\n"
         . "• Crediti: " . $fmt($delta) . " 💰\n"

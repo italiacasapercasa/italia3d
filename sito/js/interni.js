@@ -74,7 +74,8 @@ export class Interni {
     this.conta = conta; this.edita = this.mio(conta) && this.possiede('interni');
     [this.W, this.Dd] = dimensioni(casa.livello);
     let dati = null;
-    try { const j = await (await fetch(`api/interni.php?conta=${encodeURIComponent(conta)}&t=${Date.now()}`)).json(); if (j.ok) dati = j.interno; } catch { /* offline */ }
+    const prova = this.edita && this.ui.conto?.p?.proprietario ? '&prova=1' : '';   // dono testando: interior de prova
+    try { const j = await (await fetch(`api/interni.php?conta=${encodeURIComponent(conta)}${prova}&t=${Date.now()}`, { credentials: 'same-origin' })).json(); if (j.ok) dati = j.interno; } catch { /* offline */ }
     if (!dati && !this.edita) { this.ui.aviso('Questa casa non è ancora arredata.'); return; }
     this.dati = dati ?? this.primaVolta();
     this.sujo = !dati;   // casa nova: já tem móveis de presente para salvar

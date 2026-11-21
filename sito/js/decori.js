@@ -471,6 +471,13 @@ export class Decori {
     const velhas = new Set([...this.prop.ville, ...this.prop.castelloDi.keys()]);
     const ville = new Set((j?.ville ?? []).filter(c => this.D.porConta.has(c))), castelloDi = new Map();
     for (const x of Object.values(j?.castelli ?? {})) if (this.D.porConta.has(x.conta)) castelloDi.set(x.conta, x.regione);
+    // dono do jogo testando: villa/castello de prova aparecem só no navegador dele, na casa que estiver usando
+    const pr = this.ui?.conto?.p;
+    if (pr?.proprietario && this.D.porConta.has(pr.conta)) {
+      const ow = pr.oggetti ?? [], c = this.D.porConta.get(pr.conta);
+      if (ow.includes('castello')) castelloDi.set(pr.conta, `${this.D.luoghi[c.luogo].regione.nome.split('/')[0]} (prova)`);
+      else if (ow.includes('villa')) ville.add(pr.conta);
+    }
     this.prop = { ville, castelli: j?.castelli ?? {}, castelloDi };
     this.propDi = new Map();
     for (const conta of new Set([...ville, ...castelloDi.keys()])) {
