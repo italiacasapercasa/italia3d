@@ -221,6 +221,14 @@ export class Conto {
         setTimeout(() => { location.href = `https://www.instagram.com/${PERFIL}/`; }, 900);
       } else if (a === 'premio') await this.premio(false);
       else if (a === 'personaggio') this.editor.apri();
+      else if (a === 'prova' && this.p?.proprietario) {
+        this.p = (await this.api('collega', { conta: t.dataset.v })).profilo;
+        this.desenharBotao();
+        await this.ui.decori?.ricaricaProprieta();
+        const c = this.D.porConta.get(this.p.conta);
+        if (c) this.ui.casa(c, false);
+        this.ui.aviso(`🛠️ Ora provi la casa di @${this.p.conta}`);
+      }
       else if (a === 'miacasa') { const c = this.D.porConta.get(this.p?.conta); if (c) this.ui.interni?.apri(c.conta); }
       else if (a === 'compra') {
         const id = t.dataset.item, pac = id.startsWith('pac_') ? (this.cfg?.pacchetti ?? []).find(x => `pac_${x.id}` === id) : null;

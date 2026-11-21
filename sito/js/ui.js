@@ -324,6 +324,8 @@ export class UI {
     const it = this.interni; if (!it) return '';
     const prezzo = this.conto?.cfg?.interni?.prezzo ?? 990;
     const carta = (ic, tit, txt, bt, alvo, cls = '') => `<div class="ms-card in-card ${cls}"><span class="ms-ic">${ic}</span><div class="ms-tx"><b>${tit}</b><small>${txt}</small></div><button data-interni="${alvo}">${bt}</button></div>`;
+    // dono do jogo: qualquer casa vira "casa de prova" com um clique (o jogador não perde nada)
+    if (this.conto?.p?.proprietario && !it.mio(c.conta)) return `<div class="ms-card in-card nuova"><span class="ms-ic">🛠️</span><div class="ms-tx"><b>Prova questa casa</b><small>Solo per il proprietario: interni, mobili, villa e castello di prova. La casa di @${esc(c.conta)} non cambia.</small></div><button data-ct="prova" data-v="${esc(c.conta)}">Prova</button></div>`;
     if (it.mio(c.conta)) return it.possiede('interni')
       ? carta('🔑', 'La tua casa con interni', 'Entra e arredala come vuoi', 'Entra', `entra:${c.conta}`)
       : carta('🔑', `Casa con interni · ${num(prezzo)} 💰`, 'Entra nella tua casa e arredala: tutti potranno visitarla. 5 mobili in regalo.', 'Compra', `compra:${c.conta}`, 'nuova');
