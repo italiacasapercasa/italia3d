@@ -90,16 +90,31 @@ if ($acao === 'codice') {
     $email = strtolower(trim((string)($d['email'] ?? '')));
     if (!conti_email_ok($email)) erro('Scrivi un’email valida.');
     if (conti_e_proprietario($email)) resposta(['inviato' => true]);   // dono: código fixo, nenhum e-mail (não gasta o limite do dia)
-    if (!conti_limite("email|$email", 5, 3600) || !conti_limite("cod-ip|$ip", 15, 3600)) erro('Hai chiesto troppi codici. Riprova tra un’ora.', 429);
-    if (!conti_limite('email-giorno', (int)($cfg['email_giorno_max'] ?? 400), 86400)) erro('Troppe richieste oggi. Riprova domani.', 503);
+    // 21/11: nos picos dos reels o e-mail atrasa; a pessoa pedia de novo e o código novo ANULAVA o anterior.
+    // Agora: até 3 códigos valem juntos por 30 min; pedir de novo em menos de 60 s não manda outro e-mail.
     $id = conti_id($email);
+    $arq = conti_dir('codici') . "/$id.json";
+    $c = json_decode((string)@file_get_contents($arq), true) ?: [];
+    $lista = array_values(array_filter((array)($c['codici'] ?? []), fn($x) => (int)($x['scade'] ?? 0) > time()));
+    if (isset($c['h']) && (int)($c['scade'] ?? 0) > time()) $lista[] = ['h' => $c['h'], 'scade' => (int)$c['scade']];   // formato antigo
+    if ($lista && time() - (int)($c['ultimo'] ?? 0) < 60) resposta(['inviato' => true, 'gia' => true]);
+    // limites por pessoa e por conexão (no celular muita gente divide o mesmo IP); o do dia só segura abuso grande
+    if (!conti_limite("email|$email", 6, 3600) || !conti_limite("cod-ip|$ip", 60, 3600)) erro('Hai chiesto troppi codici. Riprova tra un’ora.', 429);
+    if (!conti_limite('email-giorno', (int)($cfg['email_giorno_max'] ?? 3000), 86400)) erro('Troppe richieste in questo momento. Riprova tra qualche ora.', 503);
     $cod = (string)random_int(100000, 999999);
-    file_put_contents(conti_dir('codici') . "/$id.json", json_encode(['h' => hash('sha256', $cod . '|' . $id . '|' . APP_SECRET), 'scade' => time() + 900, 'tent' => 0]), LOCK_EX);
-    $corpo = "Ciao!\n\nIl tuo codice per entrare in Italia Casa per Casa è:\n\n    $cod\n\nVale 15 minuti. Se non l'hai chiesto tu, ignora questa email: nessuno può entrare senza il codice.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
+    $lista[] = ['h' => hash('sha256', $cod . '|' . $id . '|' . APP_SECRET), 'scade' => time() + 1800];
+    $novo = ['codici' => array_slice($lista, -3), 'ultimo' => time(), 'tent' => (int)($c['tent'] ?? 0)];
+    file_put_contents($arq, json_encode($novo), LOCK_EX);
+    $corpo = "Ciao!\n\nIl tuo codice per entrare in Italia Casa per Casa è:\n\n    $cod\n\nVale 30 minuti. Se non l'hai chiesto tu, ignora questa email: nessuno può entrare senza il codice.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
     // no PC (localhost): nunca manda e-mail, devolve o código na resposta para testar
     if (conti_locale()) resposta(['inviato' => true, 'dev_codice' => $cod]);
     [$ok, $info] = conti_smtp($email, "Il tuo codice: $cod", $corpo);
-    if (!$ok) { error_log("conto codice: $info"); erro('Non riusciamo a inviare l’email adesso. Riprova tra qualche minuto.', 503); }
+    if (!$ok) {
+        error_log("conto codice: $info");
+        $novo['codici'] = array_slice($novo['codici'], 0, -1); $novo['ultimo'] = 0;   // não ficou valendo: pode pedir de novo já
+        file_put_contents($arq, json_encode($novo), LOCK_EX);
+        erro('Non riusciamo a inviare l’email adesso. Riprova tra un minuto.', 503);
+    }
     resposta(['inviato' => true]);
 }
 
@@ -121,19 +136,26 @@ if ($acao === 'entra') {
     }
     $arq = conti_dir('codici') . "/$id.json";
     $c = json_decode((string)@file_get_contents($arq), true);
-    if (!is_array($c) || $c['scade'] < time()) { @unlink($arq); erro('Il codice è scaduto. Chiedine uno nuovo.'); }
-    if (!hash_equals($c['h'], hash('sha256', $cod . '|' . $id . '|' . APP_SECRET))) {
-        $c['tent']++;
-        if ($c['tent'] >= 5) { @unlink($arq); erro('Troppi tentativi. Chiedi un nuovo codice.'); }
+    $lista = is_array($c) ? array_values(array_filter((array)($c['codici'] ?? []), fn($x) => (int)($x['scade'] ?? 0) > time())) : [];
+    if (is_array($c) && isset($c['h']) && (int)($c['scade'] ?? 0) > time()) $lista[] = ['h' => $c['h'], 'scade' => (int)$c['scade']];
+    if (!$lista) { @unlink($arq); erro('Il codice è scaduto. Chiedine uno nuovo.'); }
+    $hc = hash('sha256', $cod . '|' . $id . '|' . APP_SECRET);
+    $certo = false; foreach ($lista as $x) if (hash_equals((string)$x['h'], $hc)) $certo = true;   // vale qualquer um dos últimos códigos
+    if (!$certo) {
+        $c['tent'] = (int)($c['tent'] ?? 0) + 1;
+        if ($c['tent'] >= 8) { @unlink($arq); erro('Troppi tentativi. Chiedi un nuovo codice.'); }
         file_put_contents($arq, json_encode($c), LOCK_EX);
-        erro('Codice sbagliato. Controlla l’email e riprova.');
+        erro('Codice sbagliato. Usa il codice dell’ultima email e riprova.');
     }
     @unlink($arq);
     $nuovo = !conti_leggi($id);
     $gen = conti_modifica($id, function (array &$u) { $u['ultimo_accesso'] = gmdate('c'); return (int)($u['gen'] ?? 0); }, $email);
     conti_sessione_crea($id, $gen);
-    $prof = profilo(conferma_attesa($id));
+    $uu = conferma_attesa($id);
+    $prof = profilo($uu);
     if ($nuovo) resposta(['nuovo' => true, 'profilo' => $prof]);
+    // aviso de acesso novo só para contas com algo a proteger (compras ou crediti): nos picos, metade dos e-mails era este
+    if (empty($uu['oggetti']) && (int)($uu['saldo'] ?? 0) < 100) resposta(['nuovo' => false, 'profilo' => $prof]);
     // conta que já existia: avisa por e-mail do acesso novo, com o link para sair de todos os dispositivos
     resposta_e_poi(['nuovo' => false, 'profilo' => $prof], function () use ($email, $id, $gen) {
         $link = 'https://italiacasapercasa.com/api/conto.php?esci_tutti=' . conti_token_revoca($id, $gen);

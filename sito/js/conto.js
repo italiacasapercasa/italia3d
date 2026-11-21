@@ -88,7 +88,8 @@ export class Conto {
       <div class="sub">Abbiamo mandato un codice di 6 cifre a <b>${esc(this.email)}</b></div>
       <div class="ms-campo ct-cod"><input id="ct-cod" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="123456" aria-label="Codice"></div>
       <div class="bottoni"><button data-ct="entra">✅ Entra</button><button class="sec" data-ct="indietro">✏️ Cambia email</button></div>
-      <p class="nota">Non arriva? Guarda nella cartella spam o promozioni. <button class="ct-link" data-ct="codice">Mandamelo di nuovo</button></p>`;
+      <div class="ct-sicuro">⏳ Può arrivare dopo <b>1–2 minuti</b>. Guarda anche in <b>Spam</b> e <b>Promozioni</b>. Il codice vale 30 minuti: se ne arrivano due, funzionano tutti e due.</div>
+      <p class="nota">Non arriva ancora? <button class="ct-link" data-ct="codice" id="ct-rimanda">Mandamelo di nuovo</button></p>`;
     return `<h2>👤 Il tuo account</h2>
       <div class="sub">Entra con la tua email: ti mandiamo un codice. Niente password da ricordare.</div>
       ${vantaggi}
@@ -195,12 +196,21 @@ export class Conto {
       if (a === 'codice') {
         const e = ($('#ct-email')?.value ?? this.email).trim();
         if (!e) return this.ui.aviso('Scrivi la tua email.');
+        if (this.passo === 'codice' && this._attesa && Date.now() < this._attesa) return this.ui.aviso(`⏳ Aspetta ancora ${Math.ceil((this._attesa - Date.now()) / 1000)} secondi e guarda anche nello spam.`);
         this.email = e;
         const j = await this.api('codice', { email: e });
         this.passo = 'codice';
+        this._attesa = Date.now() + 60000;
         this.apri();
         if (j.dev_codice) { $('#ct-cod').value = j.dev_codice; console.log('codice di prova', j.dev_codice); }
-        else this.ui.aviso('📩 Codice inviato!');
+        else this.ui.aviso(j.gia ? '📩 Ti abbiamo appena mandato il codice: aspetta un minuto e guarda anche nello spam.' : '📩 Codice inviato! Guarda anche nello spam.');
+        // conta 60 s no botão "Mandamelo di nuovo"
+        clearInterval(this._timer);
+        this._timer = setInterval(() => {
+          const b = $('#ct-rimanda'), s = Math.ceil((this._attesa - Date.now()) / 1000);
+          if (!b) return clearInterval(this._timer);
+          if (s > 0) { b.disabled = true; b.textContent = `Mandamelo di nuovo (${s})`; } else { b.disabled = false; b.textContent = 'Mandamelo di nuovo'; clearInterval(this._timer); }
+        }, 1000);
       } else if (a === 'indietro') { this.passo = 'email'; this.apri(); }
       else if (a === 'entra') {
         const c = ($('#ct-cod')?.value ?? '').replace(/\D/g, '');

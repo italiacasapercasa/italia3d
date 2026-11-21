@@ -5,7 +5,7 @@
   "tesori": { "citta": 2, "negozio": 3, "max": 5, "negozi": "tutti" },
   "ricarica_aperta": true,
   "limite_mese_euro": 150,
-  "email_giorno_max": 400,
+  "email_giorno_max": 3000,
   "pacchi": [
     { "id": "p5", "prezzo": 4.99, "crediti": 500, "bonus": 0, "offerta": "obm1wba9", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=obm1wba9" },
     { "id": "p10", "prezzo": 9.99, "crediti": 1100, "bonus": 10, "etichetta": "più scelto", "offerta": "uuxt7xyg", "hotmart": "", "checkout": "https://pay.hotmart.com/C108588956T?off=uuxt7xyg" },
