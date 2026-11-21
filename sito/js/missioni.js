@@ -4,6 +4,7 @@
 // CASA-1234 num post (uma vez por celular); até lá as partidas ficam "in attesa" e contam depois, retroativamente.
 import { REGOLE, num, ora } from './regole.js';
 import { PERFIL } from './storie.js';
+import { GiocoPisa, PISA_PIANI } from './pisa.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -30,6 +31,7 @@ export class Missioni {
     this.stato = null;            // última resposta de "stato" (código, vínculo, partida de hoje)
     this.tela = null;             // 'home' | 'gioco' | 'esito'
     this.idxComuni = D.comuni.map(c => [norm(c.nome), c]).sort((a, b) => b[1].pop - a[1].pop);
+    this.pisa = new GiocoPisa(ui, this);
     // selo NOVITÀ na aba até a pessoa abrir uma vez
     const aba = $('#schede [data-aba="giochi"]');
     if (aba) { aba.hidden = !this.cfg?.attive; aba.classList.toggle('novita', ler('ms_vista') !== NOVITA); }
@@ -105,6 +107,9 @@ export class Missioni {
       <div class="sub">Gioca ogni giorno e fai crescere la tua casa</div>
       ${quem}
       <div class="ms-card"><span class="ms-ic">🗺️</span><div class="ms-tx"><b>Indovina del giorno</b><small>${s?.numero ? `#${s.numero} · ` : ''}3 indizi · 1 tentativo al giorno · +${REGOLE.punti.missione} punti se indovini</small></div>${btn}</div>
+      <div class="ms-card"><span class="ms-ic">🏛️</span><div class="ms-tx"><b>Torre di Pisa <span class="ps-new">NUOVO</span></b><small>Impila i piani: supera i ${PISA_PIANI} della Torre vera e +${REGOLE.punti.missione} punti · la 1ª partita di oggi vale</small></div>${!this.conta ? '<button disabled>Gioca</button>'
+        : s?.pisa?.fine ? `<button class="sec" data-ms="pisa">${s.pisa.piani >= PISA_PIANI ? '🏆' : '🧱'} ${s.pisa.piani} piani</button>` : `<button data-ms="pisa"${s?.avviso ? ' disabled' : ''}>▶ Gioca</button>`}</div>
+      <div class="ms-card"><span class="ms-ic">🧭</span><div class="ms-tx"><b>Caccia al tesoro</b><small>Passeggia nelle città con il tuo personaggio: ogni giorno un tesoro per città e uno davanti a ogni negozio. Crediti 💰 in regalo!</small></div><button data-ms="tesoro">🚶 Vai</button></div>
       ${stato}${serie}
       <h3>🏆 Classifica della settimana</h3>
       <p class="nota">Chiude ${ora(fim) === '21:00' ? 'domenica alle 21' : `il ${new Date(fim).toLocaleDateString('it-IT', { timeZone: 'Europe/Rome', day: 'numeric', month: 'long' })}`} · top 3: ${premi} punti alla casa, il 1° diventa <b>Campione dei giochi</b> per una settimana.</p>
@@ -117,6 +122,7 @@ export class Missioni {
         <li>Meno indizi usi e più sei veloce, più punti fai in classifica (fino a 400).</li>
         <li>Se indovini: <b>+${REGOLE.punti.missione} punti</b> alla tua casa. Per le elezioni contano al massimo ${c.tetto_mandato} punti al giorno dai giochi.</li>
         <li>Gioca tutti i giorni: ${c.serie.map(([d, , em, nome]) => `${d} giorni = ${em} ${esc(nome)}`).join(', ')} sulla tua casa (finché non salti un giorno).</li>
+        <li>🏛️ Torre di Pisa: la prima partita di oggi vale. Superi i ${PISA_PIANI} piani della Torre vera: <b>+${REGOLE.punti.missione} punti</b>; ogni piano vale 12 punti in classifica.</li>
         <li>I punti arrivano sulla mappa entro un'ora.</li>
       </ul>`;
   }
@@ -253,6 +259,14 @@ export class Missioni {
       return;
     }
     if (d.ms === 'condividi') return this.condividi();
+    if (d.ms === 'pisa') { t.disabled = true; return this.pisa.apri(false); }
+    if (d.ms === 'pisa_treno') return this.pisa.apri(true);
+    if (d.ms === 'pisa_condividi') return this.pisa.condividi();
+    if (d.ms === 'tesoro') {
+      const conto = this.ui.conto, mia = this.D.porConta.get(conto?.p?.conta) ?? this.D.porConta.get(this.conta);
+      if (!conto?.p) { this.ui.aviso('🧭 Entra nel tuo account (è gratis) per la caccia al tesoro.'); return conto?.apri(); }
+      return this.ui.passeggio?.avvia(mia ? `casa:${mia.conta}` : `luogo:0`);
+    }
     if (d.ms === 'copia') {
       try { await navigator.clipboard.writeText(v); } catch { /* sem permissão: a pessoa copia à mão */ }
       this.ui.aviso(`Copiato ${v}: incollalo in un commento`);

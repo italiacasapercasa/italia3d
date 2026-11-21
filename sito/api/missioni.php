@@ -101,6 +101,8 @@ $vista = function (?array $p) use ($enigma, $numero) {
     else $v['trascorsi'] = (int)round(microtime(true) * 1000) - $p['t0'];
     return $v;
 };
+// Torre di Pisa: a 1ª partida do dia vale; o servidor mede o tempo e não aceita mais andares do que dá para empilhar
+$vistaPisa = fn(?array $p) => $p ? ['fine' => (bool)($p['fine'] ?? false), 'piani' => (int)($p['piani'] ?? 0), 'punteggio' => (int)($p['pt'] ?? 0)] : null;
 $minha = function () use (&$G, $conta, $devh) {
     $p = $G['p'][$conta] ?? null;
     if ($p && $p['v'] !== $devh) { return 'altro_tel'; }
@@ -110,7 +112,8 @@ $minha = function () use (&$G, $conta, $devh) {
 if ($acao === 'stato') {
     $p = $minha();
     $outra = $G['d'][$devh] ?? null;
-    $r = ['ok' => true, 'numero' => $numero, 'codice' => codice($pasta, $conta, $devh), 'vincolato' => vincolato($pasta, $conta, $devh), 'partita' => is_array($p) ? $vista($p) : null];
+    $r = ['ok' => true, 'numero' => $numero, 'codice' => codice($pasta, $conta, $devh), 'vincolato' => vincolato($pasta, $conta, $devh), 'partita' => is_array($p) ? $vista($p) : null,
+        'pisa' => $vistaPisa($G['pisa'][$conta] ?? null)];
     if ($p === 'altro_tel') $r['avviso'] = "Oggi @$conta ha già giocato da un altro telefono.";
     elseif ($outra && $outra !== $conta) $r['avviso'] = "Da questo telefono oggi ha già giocato @$outra.";
     $salvar();
@@ -159,6 +162,31 @@ if ($acao === 'rispondi') {
     }
     $salvar();
     resposta(200, ['ok' => true, 'partita' => $vista($p)]);
+}
+
+if ($acao === 'pisa_inizia' || $acao === 'pisa_fine') {
+    $P = $G['pisa'][$conta] ?? null;
+    if ($P && $P['v'] !== $devh) { $salvar(); erro("Oggi @$conta ha già giocato alla Torre da un altro telefono."); }
+    $outra = $G['d'][$devh] ?? null;
+    if (!$P && $outra && $outra !== $conta) { $salvar(); erro("Da questo telefono oggi ha già giocato @$outra. Una partita al giorno per telefono."); }
+    if ($acao === 'pisa_inizia') {
+        if (!$P) { $G['pisa'][$conta] = $P = ['v' => $devh, 't0' => $agora]; $G['d'][$devh] = $conta; $mudou = true; }
+        $salvar();
+        resposta(200, ['ok' => true, 'pisa' => $vistaPisa($P)]);
+    }
+    if (!$P) { $salvar(); erro('Nessuna partita in corso.'); }
+    if (!($P['fine'] ?? false)) {
+        $ms = max(0, $agora - $P['t0']);
+        $piani = max(0, min(80, (int)($d['piani'] ?? 0), intdiv($ms, 450) + 1));   // ~0,45 s por andar no mínimo
+        $ok = $piani >= 8;
+        $pt = min(400, $piani * 12);
+        $P = $G['pisa'][$conta] = $P + ['fine' => true, 'piani' => $piani, 'pt' => $pt, 'ms' => $ms];
+        $mudou = true;
+        $linha = ['g' => 'pisa', 'd' => $oggi, 'c' => $conta, 'v' => $devh, 'ok' => $ok, 'p' => $pt, 'n' => $piani, 'ms' => $ms, 'ts' => $agora];
+        file_put_contents("$pasta/giocate.jsonl", json_encode($linha, JSON_UNESCAPED_SLASHES) . "\n", FILE_APPEND | LOCK_EX);
+    }
+    $salvar();
+    resposta(200, ['ok' => true, 'pisa' => $vistaPisa($P)]);
 }
 
 $salvar();

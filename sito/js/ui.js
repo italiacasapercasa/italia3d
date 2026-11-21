@@ -294,6 +294,7 @@ export class UI {
         ${this.decori?.badge(c) ?? ''}${this.missioni?.badge(c) ?? ''}
       </div>
       ${this.cartaInterni(c)}
+      ${this.cartaProprieta(c)}
       ${this.cartaPasseggia(`casa:${c.conta}`, `Cammina per ${l.nome} partendo da questa casa`)}
       <div class="cresce">
         <div class="cresce-topo"><b>La tua casa · livello ${c.livello + 1} di ${niv.length}</b><span>${esc(niv[c.livello].nome)}</span></div>
@@ -328,6 +329,18 @@ export class UI {
       : carta('🔑', `Casa con interni · ${num(prezzo)} 💰`, 'Entra nella tua casa e arredala: tutti potranno visitarla. 5 mobili in regalo.', 'Compra', `compra:${c.conta}`, 'nuova');
     if (it.ha(c.conta)) return carta('👀', `Guarda dentro la casa di @${esc(c.conta)}`, 'È arredata: entra a vederla', 'Entra', `vedi:${c.conta}`);
     return '';
+  }
+  // villa / castello (comprados com crediti): oferta só para o dono da casa
+  cartaProprieta(c) {
+    const ct = this.conto; if (!ct?.p || ct.p.conta !== c.conta || !ct.cfg) return '';
+    const own = new Set(ct.p.oggetti ?? []), cat = id => ct.cfg.catalogo?.find(x => x.id === id && x.vendita);
+    const carta = (ic, tit, txt, item, cls = '') => `<div class="ms-card in-card ${cls}"><span class="ms-ic">${ic}</span><div class="ms-tx"><b>${tit}</b><small>${txt}</small></div><button data-ct="compra" data-item="${item}">Compra</button></div>`;
+    let out = '';
+    const ca = cat('castello'), cm = ct.castelloMio();
+    if (ca && !own.has('castello') && cm && !cm.chi) out += carta('🏰', `Castello della regione ${esc(cm.regione)} · ${num(ca.prezzo)} 💰`, `🔓 Ancora libero! Solo 1 per regione: la tua casa diventa il castello, per sempre.`, 'castello', 'nuova');
+    const vi = cat('villa');
+    if (vi && !own.has('villa') && !own.has('castello')) out += carta('🏡', `Trasformala in villa · ${num(vi.prezzo)} 💰`, 'Una villa con piscina e cipressi al posto della casa, per sempre.', 'villa');
+    return out;
   }
   // cartão "🚶 Passeggia" (passeggio.js); grátis com conta
   cartaPasseggia(alvo, txt) {
