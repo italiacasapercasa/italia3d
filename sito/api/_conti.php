@@ -420,11 +420,20 @@ function conti_ricarica(string $email, string $sck, string $prodId, string $nome
     $t = $T[$trans] ?? null;
     $esito = 'nulla'; $ricevuta = null;
     if ($stato === 'pagato' && !$t) {
-        $u = conti_modifica($id, function (array &$u) use ($p, $trans) { conti_movimento($u, (int)$p['crediti'], 'ricarica', $trans); return $u; }, conti_email_ok($email) ? $email : null);
+        // 22/11: primeira recarga da conta = crediti em dobro (crediti.json prima_ricarica: bonus %, teto em 💰)
+        $pr = (array)(conti_cfg()['prima_ricarica'] ?? []);
+        $base = (int)$p['crediti'];
+        $prima = !empty($pr['bonus']) && !array_filter($T, fn($x) => ($x['id'] ?? '') === $id);
+        $bonus = $prima ? min((int)($pr['max'] ?? PHP_INT_MAX), (int)round($base * (int)$pr['bonus'] / 100)) : 0;
+        $u = conti_modifica($id, function (array &$u) use ($base, $bonus, $trans) {
+            conti_movimento($u, $base, 'ricarica', $trans);
+            if ($bonus > 0) conti_movimento($u, $bonus, 'bonus_ricarica', $trans);
+            return $u;
+        }, conti_email_ok($email) ? $email : null);
         if ($u) {
-            $T[$trans] = ['id' => $id, 'crediti' => (int)$p['crediti'], 'euro' => $valore, 'stato' => 'accreditato', 'em' => gmdate('c')];
-            $esito = 'accreditato';
-            $ricevuta = [$u, (int)$p['crediti'], 'Ricarica ricevuta, grazie! 🎉', $trans];
+            $T[$trans] = ['id' => $id, 'crediti' => $base + $bonus, 'bonus' => $bonus, 'euro' => $valore, 'stato' => 'accreditato', 'em' => gmdate('c')];
+            $esito = 'accreditato' . ($bonus ? " +$bonus bonus" : '');
+            $ricevuta = [$u, $base + $bonus, 'Ricarica ricevuta, grazie! 🎉' . ($bonus ? "\n🎁 Prima ricarica: +" . number_format($bonus, 0, ',', '.') . ' crediti in regalo (crediti doppi).' : ''), $trans];
         } else $esito = 'conta inesistente';
     } elseif ($stato === 'rimborsato' && $t && $t['stato'] === 'accreditato') {
         $u = conti_modifica($t['id'], function (array &$u) use ($t, $trans) { conti_movimento($u, -(int)$t['crediti'], 'rimborso', $trans); return $u; });
@@ -449,6 +458,18 @@ function conti_ricevuta(array $u, int $delta, string $titolo, string $rif = '', 
         . "\nTutti i movimenti sono nel tuo account: https://italiacasapercasa.com/#conto\n"
         . "Domande su questo movimento? Rispondi a questa email.\n\nItalia Casa per Casa\nhttps://italiacasapercasa.com";
     return conti_smtp((string)$u['email'], $assunto ?? (($delta >= 0 ? 'Ricevuta: ' : 'Rimborso: ') . $fmt($delta) . ' crediti'), $corpo);
+}
+// a conta ainda não recarregou nunca? (bônus da primeira recarga)
+function conti_prima_ricarica(string $id): bool {
+    if (empty(conti_cfg()['prima_ricarica']['bonus'])) return false;
+    $T = json_decode((string)@file_get_contents(conti_dir() . '/transazioni.json'), true) ?: [];
+    foreach ($T as $t) if (($t['id'] ?? '') === $id) return false;
+    return true;
+}
+// contador do funil da recarga (sem e-mail): conti/ricarica.log = hora evento pacote origem conta-curta
+function conti_traccia(string $ev, string $pacco, string $da, string $id): void {
+    $limpa = fn(string $s, int $n) => substr(preg_replace('/[^a-z0-9_]/', '', strtolower($s)), 0, $n) ?: '-';
+    @file_put_contents(conti_dir() . '/ricarica.log', gmdate('c') . ' ' . $limpa($ev, 12) . ' ' . $limpa($pacco, 6) . ' ' . $limpa($da, 14) . ' ' . ($id !== '' ? substr($id, 0, 8) : '-') . "\n", FILE_APPEND | LOCK_EX);
 }
 // euros já recarregados nos últimos 30 dias (limite mensal, crediti.json limite_mese_euro)
 function conti_euro_mese(string $id): float {

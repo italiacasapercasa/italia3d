@@ -68,6 +68,7 @@ function profilo(array $u): array {
         'pg' => $u['pg'] ?? null,
         'oggetti' => array_values((array)($u['oggetti'] ?? [])),
         'ricarica' => (bool)($cfg['ricarica_aperta'] ?? false),
+        'prima_ricarica' => !empty($cfg['ricarica_aperta']) && empty($u['proprietario']) && conti_prima_ricarica(conti_id((string)$u['email'])),
         'proprietario' => !empty($u['proprietario']),
         'deco_prova' => !empty($u['proprietario']) ? (object)($u['deco_prova'] ?? []) : null,
         'tesori' => (($u['tesori']['giorno'] ?? '') === $oggi) ? array_values((array)$u['tesori']['presi']) : [],
@@ -86,6 +87,13 @@ function conferma_attesa(string $id): ?array {
 }
 
 // ---------- sem sessão ----------
+// contador do funil da recarga: apre (abriu a recarga; da = de onde) · pacco (tocou num pacote) · annulla (desistiu no aviso)
+if ($acao === 'traccia') {
+    if (!conti_limite("traccia|$ip", 120, 3600)) resposta(['ok' => true]);
+    $ev = (string)($d['ev'] ?? '');
+    if (in_array($ev, ['apre', 'pacco', 'annulla'], true)) conti_traccia($ev, (string)($d['pacco'] ?? ''), (string)($d['da'] ?? ''), conti_sessione_id() ?? '');
+    resposta(['ok' => true]);
+}
 if ($acao === 'codice') {
     $email = strtolower(trim((string)($d['email'] ?? '')));
     if (!conti_email_ok($email)) erro('Scrivi un’email valida.');
@@ -297,6 +305,7 @@ if ($acao === 'ricarica') {
     $lim = (float)($cfg['limite_mese_euro'] ?? 150);
     if (conti_euro_mese($id) + (float)$p['prezzo'] > $lim) erro("Puoi ricaricare al massimo " . number_format($lim, 0, ',', '.') . " € ogni 30 giorni.");
     $url = $p['checkout'] . (str_contains($p['checkout'], '?') ? '&' : '?') . 'sck=c' . $id . '&email=' . rawurlencode((string)$u['email']);
+    conti_traccia('checkout', (string)$p['id'], (string)($d['da'] ?? ''), $id);   // foi para a Hotmart
     resposta(['url' => $url]);
 }
 

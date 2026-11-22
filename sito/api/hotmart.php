@@ -32,6 +32,8 @@ if (preg_match('/^c[0-9a-f]{16}$/', $sck) || stripos($registro['prodotto'], 'cre
     if ($st !== '' && $registro['transazione'] !== '') {
         $esito = conti_ricarica((string)($d['data']['buyer']['email'] ?? ''), $sck, (string)($d['data']['product']['id'] ?? ''), $registro['prodotto'], $registro['transazione'], $st, $registro['valore'], (string)($compra['offer']['code'] ?? ''));
         file_put_contents(conti_dir() . '/ricariche.log', gmdate('c') . " $evento {$registro['transazione']} $esito\n", FILE_APPEND | LOCK_EX);
+    } elseif ($evento !== '') {   // carrinho abandonado, boleto/pendente etc.: só registra (funil da recarga)
+        file_put_contents(conti_dir() . '/ricariche.log', gmdate('c') . " $evento {$registro['transazione']} {$registro['valore']}\n", FILE_APPEND | LOCK_EX);
     }
     http_response_code(200); echo 'ok'; exit;
 }

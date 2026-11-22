@@ -60,6 +60,20 @@ foreach ($todas as $l) {
 }
 $total = [];
 foreach ($porHora as $x) foreach ($x as $k => $n) $total[$k] = ($total[$k] ?? 0) + $n;
+// funil da recarga por dia (UTC): apre (de onde) → pacco → annulla / checkout (foi para a Hotmart); pessoas = contas diferentes
+$funil = [];
+foreach (array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/ricarica.log'))) as $l) {
+    [$em, $ev, $pac, $da, $chi] = array_pad(explode(' ', $l), 5, '-');
+    $g = substr($em, 0, 10); $f = &$funil[$g];
+    $f[$ev]['n'] = ($f[$ev]['n'] ?? 0) + 1;
+    if ($chi !== '-') $f[$ev]['pessoas'][$chi] = 1;
+    if ($ev === 'apre') $f[$ev]['da'][$da] = ($f[$ev]['da'][$da] ?? 0) + 1;
+    if ($pac !== '-') $f[$ev]['pacchi'][$pac] = ($f[$ev]['pacchi'][$pac] ?? 0) + 1;
+    unset($f);
+}
+foreach ($funil as &$f) foreach ($f as &$e) if (isset($e['pessoas'])) $e['pessoas'] = count($e['pessoas']);
+unset($f, $e);
+$hot = array_slice(array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/ricariche.log'))), -15);
 echo json_encode([
     'agora' => gmdate('c'),
     'pedidos_codigo_24h' => count(array_filter($lim, fn($t) => $t > $agora - 86400)),
@@ -70,5 +84,6 @@ echo json_encode([
     'brevo_configurado' => defined('BREVO_API_KEY') && BREVO_API_KEY !== '',
     'hostinger_pausado_ate' => ($pz = (int)@file_get_contents(conti_dir() . '/smtp-pausa')) > $agora ? gmdate('c', $pz) : null,
     'envios_48h' => $total, 'envios_por_hora_48h' => $porHora,
+    'ricarica_funil' => $funil, 'hotmart_crediti' => $hot,
     'envios_recentes' => $log,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);

@@ -4,6 +4,7 @@
   "decora": { "regalo_con_casa": 490, "regalo": 990 },
   "tesori": { "citta": 2, "negozio": 3, "max": 5, "negozi": "tutti" },
   "ricarica_aperta": true,
+  "prima_ricarica": { "bonus": 100, "max": 1100 },
   "limite_mese_euro": 150,
   "email_giorno_max": 3000,
   "pacchi": [

@@ -10,7 +10,7 @@ const n = v => Number(v).toLocaleString('it-IT');
 const ler = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem storage */ } };
 const NOVITA = 'conto-v1';
-const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto', tesoro: '🧭 Tesoro trovato', regalo_deco: '🎁 Decorazione regalata' };
+const TIPI = { giornaliero: '🎁 Crediti del giorno', serie: '🔥 Bonus giorni di fila', ricarica: '💳 Ricarica', bonus_ricarica: '🎁 Bonus prima ricarica', rimborso: '↩️ Rimborso', regalo: '🎁 Regalo', acquisto: '🛍️ Acquisto', tesoro: '🧭 Tesoro trovato', regalo_deco: '🎁 Decorazione regalata' };
 
 export class Conto {
   constructor(D, ui) {
@@ -141,7 +141,10 @@ export class Conto {
       const pieno = (this.cfg?.mobili ?? []).filter(m => x.mobili.includes(m.id)).reduce((s, m) => s + m.prezzo, 0), tutti = x.mobili.every(m => own.has(`mob_${m}`));
       return `<div class="ct-item ora${tutti ? ' tua' : ''}"><span>${x.icona}</span><b>${esc(x.nome)}</b><em>${tutti ? '✅ Tuo' : `<s>${n(pieno)}</s> ${n(x.prezzo)} 💰`}</em><small>${x.mobili.length} mobili · per la casa con interni</small>${tutti ? '' : `<button data-ct="compra" data-item="pac_${x.id}">Compra</button>`}</div>`;
     }).join('');
-    const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3><div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b><span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
+    // primeira recarga: crediti em dobro (até o teto) — mostra quanto vem de presente em cada pacote
+    const pr = p.prima_ricarica ? this.cfg?.prima_ricarica : null, regalo = x => (pr ? Math.min(pr.max ?? Infinity, Math.round(x.crediti * pr.bonus / 100)) : 0);
+    const banner = pr ? `<div class="ct-prima">🎁 <b>Prima ricarica: crediti DOPPI</b><small>Solo la prima volta · fino a +${n(pr.max)} 💰 in regalo</small></div>` : '';
+    const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3>${banner}<div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b>${regalo(x) ? `<em class="dono">+${n(regalo(x))} 🎁</em>` : ''}<span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? (TIPI[String(m.tipo).replace('prova_', '')] ? `🛠️ ${TIPI[m.tipo.replace('prova_', '')]}` : esc(m.tipo))}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
       <div class="ct-saldo"><b>${n(p.saldo)}</b><span>💰 crediti</span></div>
@@ -164,18 +167,23 @@ export class Conto {
     return { regione: r.nome.split('/')[0], chi: x?.conta && x.conta !== this.p.conta ? x.conta : null };
   }
   // abre a conta já na parte da recarga (pílula do mapa, "ti mancano N 💰")
-  apriRicarica(msg = '') {
+  apriRicarica(msg = '', da = 'altro') {
+    this._da = da; this.traccia('apre', '', da);
     if (!this.p) { this.ui.aviso(msg || '💰 Entra nel tuo account per ricaricare i crediti.'); this.apri(); return; }
     this.apri();
     setTimeout(() => $('#ct-ricarica')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
     if (msg) this.ui.aviso(msg);
+  }
+  // contador do funil da recarga (api/conto.php "traccia"): nunca atrapalha o jogo se falhar
+  traccia(ev, pacco = '', da = '') {
+    try { fetch('api/conto.php', { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ a: 'traccia', ev, pacco, da }) }).catch(() => {}); } catch { /* sem rede */ }
   }
   // compra com créditos (todas as lojas passam por aqui): confirma, compra e, se faltar saldo, oferece a recarga. true = comprou
   async compra(item, nome, prezzo, dopo = '') {
     if (!this.p) { this.ui.aviso('Entra nel tuo account per comprare.'); this.apri(); return false; }
     const manca = prezzo - (this.p.saldo ?? 0);
     if (manca > 0) {
-      if (this.p.ricarica && confirm(`${nome} costa ${n(prezzo)} 💰: ti mancano ${n(manca)} 💰.\n\nVuoi ricaricare i crediti?`)) this.apriRicarica();
+      if (this.p.ricarica && confirm(`${nome} costa ${n(prezzo)} 💰: ti mancano ${n(manca)} 💰.\n\nVuoi ricaricare i crediti?`)) this.apriRicarica('', `manca_${String(item).slice(0, 8)}`);
       else if (!this.p.ricarica) this.ui.aviso(`Ti mancano ${n(manca)} 💰 per ${nome}.`);
       return false;
     }
@@ -255,9 +263,11 @@ export class Conto {
         }
       }
       else if (a === 'ricarica') {
+        const pacco = t.dataset.pacco, da = this._da ?? 'conto';
+        this.traccia('pacco', pacco, da);
         // consenso para entrega imediata (art. 59 Codice del Consumo): sem ele não abre o pagamento
-        if (!confirm('I crediti arrivano subito sul tuo account.\n\nProseguendo acconsenti all’esecuzione immediata e prendi atto che, ricevuti i crediti, perdi il diritto di recesso. In caso di rimborso i crediti vengono tolti.\n\nContinuare con il pagamento?')) return;
-        const j = await this.api('ricarica', { pacco: t.dataset.pacco }); location.href = j.url;
+        if (!confirm('I crediti arrivano subito sul tuo account.\n\nProseguendo acconsenti all’esecuzione immediata e prendi atto che, ricevuti i crediti, perdi il diritto di recesso. In caso di rimborso i crediti vengono tolti.\n\nContinuare con il pagamento?')) { this.traccia('annulla', pacco, da); return; }
+        const j = await this.api('ricarica', { pacco, da }); location.href = j.url;
       }
       else if (a === 'esci_tutti') {
         if (!confirm('Vuoi uscire dal tuo account su tutti i telefoni e computer? Per rientrare servirà un nuovo codice via email.')) return;

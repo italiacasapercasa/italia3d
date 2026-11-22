@@ -696,7 +696,7 @@ export class Decori {
     b.onclick = () => {
       gravar('decora_vista', NOVITA_VER); if (selo) selo.hidden = true;
       if (testo.textContent.includes('Rinnova')) return this.home();
-      this.ui.conto?.apriRicarica();
+      this.ui.conto?.apriRicarica('', 'pillola');
     };
   }
 
@@ -758,7 +758,7 @@ export class Decori {
       if (!(await conto.compra('interni', 'la tua casa (dentro e fuori)', prezzo, 'La decori dentro e fuori quando vuoi, per sempre. 5 mobili in regalo.'))) return;
     } else if (!mia) {
       const pr = this.prezzoRegalo(), manca = pr - (conto.p.saldo ?? 0);
-      if (manca > 0) { if (confirm(`Il regalo costa ${pr.toLocaleString('it-IT')} 💰: ti mancano ${manca.toLocaleString('it-IT')} 💰.\n\nVuoi ricaricare i crediti?`)) conto.apriRicarica(); return; }
+      if (manca > 0) { if (confirm(`Il regalo costa ${pr.toLocaleString('it-IT')} 💰: ti mancano ${manca.toLocaleString('it-IT')} 💰.\n\nVuoi ricaricare i crediti?`)) conto.apriRicarica('', 'regalo'); return; }
       if (!confirm(`Regalare questa decorazione a @${ed.casa.conta} per ${pr.toLocaleString('it-IT')} 💰?\nResta sulla sua casa per sempre${conto.p.conta ? `, con «🎁 da @${conto.p.conta}»` : ''}.`)) return;
     }
     botao.disabled = true;
