@@ -190,12 +190,45 @@ function conti_locale(): bool {
     return PHP_SAPI === 'cli' || (in_array((string)($_SERVER['REMOTE_ADDR'] ?? ''), ['127.0.0.1', '::1'], true) && preg_match('/^localhost(:\d+)?$/', (string)($_SERVER['HTTP_HOST'] ?? '')));
 }
 // registro de envios (diagnóstico, api/diag.php): hora, ok/erro, domínio do destino (sem o endereço)
+// 21/11: nos picos o Hostinger devolve "451 Ratelimit hostinger_out_ratelimit". Reserva: Brevo (API HTTP, grátis 300/dia,
+// chave BREVO_API_KEY no privato/config.php). Hostinger bloqueou → 10 min direto no Brevo (não perde tempo tentando).
 function conti_smtp(string $para, string $assunto, string $corpo): array {
-    $r = conti_smtp_invia($para, $assunto, $corpo);
+    $pausa = conti_dir() . '/smtp-pausa';
+    $brevo = defined('BREVO_API_KEY') && BREVO_API_KEY !== '';
+    $via = 'ok';
+    if ($brevo && (int)@file_get_contents($pausa) > time()) { $r = [false, 'hostinger em pausa']; }
+    else {
+        $r = conti_smtp_invia($para, $assunto, $corpo);
+        if (!$r[0] && stripos((string)$r[1], 'ratelimit') !== false) @file_put_contents($pausa, (string)(time() + 600), LOCK_EX);
+    }
+    if (!$r[0] && $brevo && !conti_locale()) {
+        $erroH = $r[1];
+        $r = conti_brevo_invia($para, $assunto, $corpo);
+        $via = 'ok-brevo';
+        if (!$r[0]) $r[1] = "brevo: {$r[1]} | hostinger: $erroH";
+    }
     $dom = strtolower(substr(strrchr($para, '@') ?: '@?', 1));
     $tipo = str_starts_with($assunto, 'Il tuo codice') ? 'codice' : (str_starts_with($assunto, 'Nuovo accesso') ? 'accesso' : 'altro');
-    @file_put_contents(conti_dir() . '/email.log', gmdate('c') . " $tipo " . ($r[0] ? 'ok' : 'ERRO') . " $dom" . ($r[0] ? '' : ' ' . substr(str_replace(["\r", "\n"], ' ', (string)$r[1]), 0, 200)) . "\n", FILE_APPEND | LOCK_EX);
+    @file_put_contents(conti_dir() . '/email.log', gmdate('c') . " $tipo " . ($r[0] ? $via : 'ERRO') . " $dom" . ($r[0] ? '' : ' ' . substr(str_replace(["\r", "\n"], ' ', (string)$r[1]), 0, 200)) . "\n", FILE_APPEND | LOCK_EX);
     return $r;
+}
+function conti_brevo_invia(string $para, string $assunto, string $corpo): array {
+    $json = json_encode([
+        'sender' => ['name' => 'Italia Casa per Casa', 'email' => 'privacy@italiacasapercasa.com'],
+        'to' => [['email' => $para]], 'subject' => $assunto, 'textContent' => $corpo,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $cab = ['Content-Type: application/json', 'Accept: application/json', 'api-key: ' . BREVO_API_KEY];
+    if (function_exists('curl_init')) {
+        $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+        curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => $json, CURLOPT_HTTPHEADER => $cab, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 20]);
+        $resp = (string)curl_exec($ch); $st = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE); $ce = curl_error($ch); curl_close($ch);
+        if ($st === 0) return [false, "conexão: $ce"];
+    } else {
+        $resp = (string)@file_get_contents('https://api.brevo.com/v3/smtp/email', false, stream_context_create(['http' => ['method' => 'POST', 'header' => implode("\r\n", $cab), 'content' => $json, 'timeout' => 20, 'ignore_errors' => true]]));
+        $st = preg_match('#^HTTP/\S+ (\d+)#', (string)($http_response_header[0] ?? ''), $m) ? (int)$m[1] : 0;
+        if ($st === 0) return [false, 'conexão falhou'];
+    }
+    return $st >= 200 && $st < 300 ? [true, $resp] : [false, "$st " . substr($resp, 0, 150)];
 }
 function conti_smtp_invia(string $para, string $assunto, string $corpo): array {
     if (conti_locale()) { file_put_contents(conti_dir() . '/email-dev.log', "=== " . gmdate('c') . " para $para | $assunto\n$corpo\n\n", FILE_APPEND | LOCK_EX); return [true, 'dev']; }

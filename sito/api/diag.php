@@ -9,6 +9,15 @@ if (!defined('CHIAVE_DOWNLOAD') || CHIAVE_DOWNLOAD === '' || !hash_equals(CHIAVE
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 $agora = time();
+// teste da reserva: X-Teste-Brevo: <email> → manda 1 e-mail só pelo Brevo e mostra a resposta
+$tb = strtolower(trim((string)($_SERVER['HTTP_X_TESTE_BREVO'] ?? '')));
+if ($tb !== '') {
+    if (!conti_email_ok($tb)) { echo json_encode(['brevo_teste' => 'email inválido']); exit; }
+    if (!defined('BREVO_API_KEY') || BREVO_API_KEY === '') { echo json_encode(['brevo_teste' => 'BREVO_API_KEY não está no config.php']); exit; }
+    $r = conti_brevo_invia($tb, 'Prova Brevo · Italia Casa per Casa', "Ciao!\n\nQuesta è una prova del sistema di riserva delle email.\n\nItalia Casa per Casa");
+    echo json_encode(['brevo_teste' => $r[0] ? 'ok' : 'erro', 'resposta' => $r[1]], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    exit;
+}
 $hora = fn(int $t) => gmdate('m-d H', $t) . 'h';
 $hist = function (array $ts, int $janela) use ($agora, $hora) { $h = []; foreach ($ts as $t) if ($t > $agora - $janela) { $k = $hora($t); $h[$k] = ($h[$k] ?? 0) + 1; } ksort($h); return $h; };
 
@@ -39,7 +48,18 @@ if (defined('SMTP_PASSWORD') && SMTP_PASSWORD !== '') {
         $smtp = $passo;
     }
 }
-$log = array_slice(array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/email.log'))), -40);
+$todas = array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/email.log')));
+$log = array_slice($todas, -40);
+// envios por hora (48 h): ok = Hostinger, ok-brevo = reserva, ERRO = não saiu
+$porHora = [];
+foreach ($todas as $l) {
+    $p = explode(' ', $l, 4);
+    if (count($p) < 3 || strtotime($p[0]) < $agora - 172800) continue;
+    $h = gmdate('m-d H', strtotime($p[0])) . 'h';
+    $porHora[$h][$p[2]] = ($porHora[$h][$p[2]] ?? 0) + 1;
+}
+$total = [];
+foreach ($porHora as $x) foreach ($x as $k => $n) $total[$k] = ($total[$k] ?? 0) + $n;
 echo json_encode([
     'agora' => gmdate('c'),
     'pedidos_codigo_24h' => count(array_filter($lim, fn($t) => $t > $agora - 86400)),
@@ -47,5 +67,8 @@ echo json_encode([
     'codigos_pendentes' => count($cod), 'pendentes_por_hora_48h' => $hist($cod, 172800),
     'contas' => count($cri), 'contas_por_hora_48h' => $hist($cri, 172800),
     'smtp_login' => $smtp,
+    'brevo_configurado' => defined('BREVO_API_KEY') && BREVO_API_KEY !== '',
+    'hostinger_pausado_ate' => ($pz = (int)@file_get_contents(conti_dir() . '/smtp-pausa')) > $agora ? gmdate('c', $pz) : null,
+    'envios_48h' => $total, 'envios_por_hora_48h' => $porHora,
     'envios_recentes' => $log,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
