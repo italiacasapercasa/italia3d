@@ -3,7 +3,8 @@
 //   GET  ?elenco=1           lista dos @ com casa arredata (botão «👀 Guarda dentro» nos cartões)
 //   GET  ?conta=<@>          o interior de uma casa (público: qualquer um pode visitar)
 //   POST {a:'salva', interno} salva o interior da PRÓPRIA casa (sessão; precisa ter comprado "interni" e saldo >= 0)
-// interno = {pav: id do piso, par: índice da cor das paredes, ogg: [[tipo, x, z, rot], ...]} (x/z em casas da grade, rot 0..3)
+// interno = {v: 2, pav, par, stanze: {cômodo: {pav, par}}, ogg: [[tipo, x, z, rot], ...]} (x/z em casas da grade, rot 0..3;
+// decoração de parede: rot = lado da célula onde está a parede). Formato antigo (sem v) = 1 cômodo: o js converte ao abrir.
 declare(strict_types=1);
 require __DIR__ . '/_conti.php';
 header('Content-Type: application/json; charset=utf-8');
@@ -46,14 +47,22 @@ $pav = array_column((array)($cfg['interni']['pavimenti'] ?? []), 0);
 $mob = [];
 foreach ((array)($cfg['mobili'] ?? []) as $m) $mob[$m['id']] = (int)$m['prezzo'] === 0 || in_array('mob_' . $m['id'], $own, true);
 $i = is_array($d['interno'] ?? null) ? $d['interno'] : [];
+// v2 (22/11): casa inteira 14 x 10 com 5 cômodos; piso e paredes por cômodo (a geometria fica em js/interni.js)
 $ogg = [];
-foreach (array_slice((array)($i['ogg'] ?? []), 0, 80) as $o) {
+foreach (array_slice((array)($i['ogg'] ?? []), 0, 160) as $o) {
     if (!is_array($o) || count($o) < 4) continue;
     [$t, $x, $z, $r] = $o;
-    if (!is_string($t) || empty($mob[$t]) || !is_int($x) || !is_int($z) || !is_int($r) || $x < 0 || $x > 9 || $z < 0 || $z > 9 || $r < 0 || $r > 3) continue;
+    if (!is_string($t) || empty($mob[$t]) || !is_int($x) || !is_int($z) || !is_int($r) || $x < 0 || $x > 13 || $z < 0 || $z > 9 || $r < 0 || $r > 3) continue;
     $ogg[] = [$t, $x, $z, $r];
 }
-$interno = ['pav' => in_array($i['pav'] ?? '', $pav, true) ? $i['pav'] : ($pav[0] ?? 'legno'), 'par' => (is_int($i['par'] ?? null) && $i['par'] >= 0 && $i['par'] < 8) ? $i['par'] : 0, 'ogg' => $ogg, 'agg' => gmdate('c')];
+$okPav = fn($p) => in_array($p, $pav, true);
+$okPar = fn($p) => is_int($p) && $p >= 0 && $p < 8;
+$stanze = [];
+foreach (['camera', 'bagno', 'studio', 'soggiorno', 'cucina'] as $s) {
+    $x = (array)($i['stanze'][$s] ?? []);
+    if ($okPav($x['pav'] ?? null) && $okPar($x['par'] ?? null)) $stanze[$s] = ['pav' => $x['pav'], 'par' => $x['par']];
+}
+$interno = ['v' => 2, 'pav' => $okPav($i['pav'] ?? null) ? $i['pav'] : ($pav[0] ?? 'legno'), 'par' => $okPar($i['par'] ?? null) ? $i['par'] : 0, 'stanze' => (object)$stanze, 'ogg' => $ogg, 'agg' => gmdate('c')];
 if (!empty($u['proprietario'])) {   // dono testando: pasta de prova, fora da lista pública
     if (!is_dir("$pasta/_prova")) mkdir("$pasta/_prova", 0750, true);
     file_put_contents("$pasta/_prova/$conta.json", json_encode($interno, JSON_UNESCAPED_SLASHES), LOCK_EX);

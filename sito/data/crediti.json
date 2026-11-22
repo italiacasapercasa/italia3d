@@ -16,7 +16,7 @@
   ],
   "interni": {
     "prezzo": 990,
-    "regalo": ["divano", "tavolo", "sedia", "letto", "pianta"],
+    "regalo": ["divano", "tavolo", "sedia", "letto", "pianta", "wc", "lavandino"],
     "pavimenti": [["legno", "Legno", "#C8955C"], ["noce", "Noce", "#7B5233"], ["piastrelle", "Piastrelle", "#E8E2D6"], ["marmo", "Marmo", "#F3F1EC"], ["cotto", "Cotto", "#C9714A"], ["moquette", "Moquette", "#7C8DB5"]],
     "pareti": ["#FFF6E6", "#F5DDAE", "#F2C27B", "#E8836B", "#9ED1F2", "#A7D98B", "#C9A7F2", "#FFFFFF"]
   },
@@ -26,6 +26,10 @@
     { "id": "sedia", "icona": "🪑", "nome": "Sedia", "prezzo": 0 },
     { "id": "letto", "icona": "🛏️", "nome": "Letto", "prezzo": 0 },
     { "id": "pianta", "icona": "🪴", "nome": "Pianta", "prezzo": 0 },
+    { "id": "wc", "icona": "🚽", "nome": "WC", "prezzo": 0 },
+    { "id": "lavandino", "icona": "🚰", "nome": "Lavandino", "prezzo": 0 },
+    { "id": "mensola", "icona": "📚", "nome": "Mensola a parete", "prezzo": 20 },
+    { "id": "specchio", "icona": "🪞", "nome": "Specchio a parete", "prezzo": 25 },
     { "id": "tappeto", "icona": "🟥", "nome": "Tappeto", "prezzo": 20 },
     { "id": "comodino", "icona": "🗄️", "nome": "Comodino", "prezzo": 20 },
     { "id": "quadro", "icona": "🖼️", "nome": "Quadro", "prezzo": 20 },
@@ -39,6 +43,8 @@
     { "id": "tv", "icona": "📺", "nome": "TV", "prezzo": 60 },
     { "id": "frigo", "icona": "🧊", "nome": "Frigorifero", "prezzo": 50 },
     { "id": "chitarra", "icona": "🎸", "nome": "Chitarra", "prezzo": 50 },
+    { "id": "doccia", "icona": "🚿", "nome": "Doccia", "prezzo": 50 },
+    { "id": "vasca", "icona": "🛁", "nome": "Vasca da bagno", "prezzo": 60 },
     { "id": "cucina", "icona": "🍳", "nome": "Cucina", "prezzo": 90 },
     { "id": "camino", "icona": "🔥", "nome": "Camino", "prezzo": 90 },
     { "id": "acquario", "icona": "🐠", "nome": "Acquario", "prezzo": 120 },
@@ -60,10 +66,11 @@
     { "id": "cucina", "icona": "🍳", "nome": "Pacchetto Cucina", "mobili": ["frigo", "cucina", "lampada"], "prezzo": 129 },
     { "id": "camera", "icona": "🛏️", "nome": "Pacchetto Camera", "mobili": ["armadio", "comodino", "tappeto", "lampada", "quadro"], "prezzo": 99 },
     { "id": "studio", "icona": "🖥️", "nome": "Pacchetto Studio", "mobili": ["scrivania", "libreria", "chitarra", "lampada"], "prezzo": 135 },
-    { "id": "lusso", "icona": "💎", "nome": "Pacchetto Lusso", "mobili": ["camino", "acquario", "pianoforte", "orologio"], "prezzo": 299 }
+    { "id": "lusso", "icona": "💎", "nome": "Pacchetto Lusso", "mobili": ["camino", "acquario", "pianoforte", "orologio"], "prezzo": 299 },
+    { "id": "bagno", "icona": "🛁", "nome": "Pacchetto Bagno", "mobili": ["vasca", "doccia", "specchio", "mensola"], "prezzo": 119 }
   ],
   "catalogo": [
-    { "id": "interni", "icona": "🏠", "nome": "La tua casa", "prezzo": 990, "nota": "decorala dentro e fuori, per sempre · 5 mobili in regalo", "vendita": true },
+    { "id": "interni", "icona": "🏠", "nome": "La tua casa", "prezzo": 990, "nota": "5 stanze da arredare dentro e la facciata fuori, per sempre · 10 mobili in regalo", "vendita": true },
     { "id": "villa", "icona": "🏡", "nome": "Villa", "prezzo": 2990, "nota": "la tua casa diventa una villa con piscina, per sempre", "vendita": true },
     { "id": "castello", "icona": "🏰", "nome": "Castello", "prezzo": 14990, "nota": "solo 1 per regione: chi arriva prima, per sempre", "vendita": true },
     { "id": "bici", "icona": "🚲", "nome": "Bici", "prezzo": 190, "nota": "2× più veloce · prende la strada per le città vicine", "vendita": true, "velocita": 2 },

@@ -502,8 +502,18 @@ body.interni-on #pannello { z-index: 45; }
 .in-topo button { background: #fff; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 7px 14px; font: 900 15px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
 .in-salva.on { background: var(--giallo); }
 .in-sel { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--sab) + 190px); display: flex; gap: 8px; }
+.in-sel[hidden] { display: none; }
 .in-sel button { background: #fff; border: 3px solid var(--inchiostro); border-radius: 99px; padding: 8px 14px; font: 900 14px 'Nunito', sans-serif; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
-.in-dica { position: absolute; top: calc(var(--sat) + 62px); left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); text-align: center; color: var(--inchiostro); font-weight: 800; font-size: 12.5px; background: rgba(255,255,255,.8); border-radius: 99px; padding: 4px 12px; }
+.in-stanze { position: absolute; top: calc(var(--sat) + 58px); left: 10px; right: 10px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; }
+.in-stanze::-webkit-scrollbar { display: none; }
+.in-stanze button { flex: none; background: #fff; border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 5px 11px; font: 900 13px 'Nunito', sans-serif; box-shadow: 0 2px 0 rgba(21,32,51,.25); }
+.in-stanze button.on { background: var(--giallo); }
+.in-ctrl { position: absolute; right: 10px; top: calc(var(--sat) + 146px); display: flex; flex-direction: column; gap: 8px; }
+.in-ctrl button { width: 46px; height: 46px; border-radius: 50%; background: #fff; border: 3px solid var(--inchiostro); font-size: 21px; box-shadow: 0 3px 0 rgba(21,32,51,.25); padding: 0; }
+.in-ctrl button[hidden] { display: none; }
+.in-dove { display: block; font-weight: 800; font-size: 12px; color: var(--grigio); margin: 0 2px 5px; }
+.in-mob em.pa { color: var(--grigio); }
+.in-dica { position: absolute; top: calc(var(--sat) + 104px); left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); text-align: center; color: var(--inchiostro); font-weight: 800; font-size: 12.5px; background: rgba(255,255,255,.8); border-radius: 99px; padding: 4px 12px; }
 .in-barra { position: absolute; left: 8px; right: 8px; bottom: calc(var(--sab) + 10px); background: #fff; border: 4px solid var(--inchiostro); border-radius: 22px; padding: 8px; box-shadow: 0 5px 0 rgba(21,32,51,.25); }
 .in-tabs { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
 .in-tabs button { border: 2.5px solid var(--inchiostro); border-radius: 99px; background: #fff; padding: 5px 10px; font: 900 13px 'Nunito', sans-serif; }
