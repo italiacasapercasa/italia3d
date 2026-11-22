@@ -1,6 +1,6 @@
 // Captura quadro a quadro uma página de vídeo (video/registra.html) no Chrome headless e monta o MP4 com ffmpeg.
 // A página expõe window.preparar(roteiro) -> { durata, fps } e window.quadro(t) -> Promise (desenha o instante t em segundos).
-// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5] [--pagina video/presidente.html] [--suoni efeitos.json]
+// Uso: node strumenti/cattura.mjs <roteiro.json> <saida.mp4> [--audio voz.mp3] [--fps 30] [--ate 5] [--pagina video/presidente.html] [--suoni efeitos.json] [--gpu]
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,13 +13,16 @@ const [roteiroArq, saida] = args;
 const audio = opt('--audio'), fps = +opt('--fps', 30), ate = opt('--ate') ? +opt('--ate') : null;
 const CHROME = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const FFMPEG = path.join(RAIZ, '.tools', 'ffmpeg', 'bin', 'ffmpeg.exe');
-const PORTA = 9334, W = 1080, H = 1920;
+const PORTA = +opt('--porta', 9334), W = 1080, H = 1920;
 const espera = ms => new Promise(ok => setTimeout(ok, ms));
 
+// --gpu: o Chrome desenha na placa de vídeo (ANGLE D3D11) e o ffmpeg codifica com Intel QuickSync (h264_qsv); sem a opção: CPU (SwiftShader + libx264)
+const GPU = args.includes('--gpu');
 const perfil = fs.mkdtempSync(path.join(os.tmpdir(), 'cattura-'));
 const pasta = fs.mkdtempSync(path.join(os.tmpdir(), 'quadri-'));
+const gl = GPU ? ['--use-gl=angle', '--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] : ['--enable-unsafe-swiftshader', '--use-angle=swiftshader'];
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${PORTA}`, `--user-data-dir=${perfil}`, `--window-size=${W},${H}`,
-  '--hide-scrollbars', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--force-device-scale-factor=1', 'about:blank'], { stdio: 'ignore' });
+  '--hide-scrollbars', ...gl, '--force-device-scale-factor=1', 'about:blank'], { stdio: 'ignore' });
 
 let ws, id = 0;
 const pend = new Map();
@@ -76,8 +79,9 @@ try {
   const ff = ['-y', '-framerate', String(fps), '-i', path.join(pasta, 'q%05d.jpg')];
   if (audio) ff.push('-i', audio);
   // JPG vem em faixa "de foto" (full range): converte para o padrão de vídeo, senão o Instagram desbota as cores
-  ff.push('-vf', 'scale=out_range=tv,format=yuv420p', '-color_range', 'tv', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709');
-  ff.push('-c:v', 'libx264', '-profile:v', 'high', '-crf', '18', '-preset', 'medium', '-movflags', '+faststart');
+  ff.push('-vf', `scale=out_range=tv,format=${GPU ? 'nv12' : 'yuv420p'}`, '-color_range', 'tv', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709');
+  if (GPU) ff.push('-c:v', 'h264_qsv', '-profile:v', 'high', '-global_quality', '18', '-preset', 'slow', '-movflags', '+faststart');
+  else ff.push('-c:v', 'libx264', '-profile:v', 'high', '-crf', '18', '-preset', 'medium', '-movflags', '+faststart');
   // áudio completado com silêncio até o fim do vídeo
   if (audio) ff.push('-af', 'apad', '-c:a', 'aac', '-b:a', '192k');
   ff.push('-t', durata.toFixed(3), saida);

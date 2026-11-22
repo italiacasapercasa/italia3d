@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 const oggi = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date());
 const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
 
-function forziere() {
+export function forziere() {
   const g = new THREE.Group(), L = c => new THREE.MeshLambertMaterial({ color: c, flatShading: true });
   const legno = L('#8B5A2B'), oro = new THREE.MeshLambertMaterial({ color: '#FFC93C', emissive: '#6B4E00' });
   const base = new THREE.Mesh(new THREE.BoxGeometry(0.62 * H, 0.36 * H, 0.42 * H), legno); base.position.y = 0.18 * H; g.add(base);
