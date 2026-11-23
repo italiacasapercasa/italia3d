@@ -144,7 +144,21 @@ export class Conto {
     // primeira recarga: crediti em dobro (até o teto) — mostra quanto vem de presente em cada pacote
     const pr = p.prima_ricarica ? this.cfg?.prima_ricarica : null, regalo = x => (pr ? Math.min(pr.max ?? Infinity, Math.round(x.crediti * pr.bonus / 100)) : 0);
     const banner = pr ? `<div class="ct-prima">🎁 <b>Prima ricarica: crediti DOPPI</b><small>Solo la prima volta · fino a +${n(pr.max)} 💰 in regalo</small></div>` : '';
-    const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3>${banner}<div class="ct-pacchi">${(this.cfg?.pacchi ?? []).filter(x => x.checkout).map(x => `<button data-ct="ricarica" data-pacco="${x.id}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b>${regalo(x) ? `<em class="dono">+${n(regalo(x))} 🎁</em>` : ''}<span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}</button>`).join('')}</div>` : '';
+    // o que cada pacote compra (com o bônus): até 3 coisas que a pessoa ainda não tem, das mais caras para as mais baratas
+    const VALE = [['castello', '🏰', 'Castello'], ['villa', '🏡', 'Villa'], ['interni', '🏠', 'La tua casa'], ['sportiva', '🏎️', 'Sportiva'], ['auto', '🚗', 'Auto'], ['vespa', '🛵', 'Vespa'], ['bici', '🚲', 'Bici']];
+    const prezzoDi = id => this.cfg?.catalogo?.find(c => c.id === id)?.prezzo ?? Infinity;
+    const vale = tot => { const out = []; let resto = tot + (p.saldo ?? 0); for (const [id, ic, nome] of VALE) { if (own.has(id) || out.length >= 3) continue; const pz = prezzoDi(id); if (pz <= resto) { out.push(`${ic} ${nome}`); resto -= pz; } } return out.join(' + '); };
+    // veio de "ti mancano X 💰": destaca o menor pacote que resolve aquela compra
+    const serve = this._serve, pacchiOk = (this.cfg?.pacchi ?? []).filter(x => x.checkout);
+    const giusto = serve ? pacchiOk.find(x => x.crediti + regalo(x) >= serve.manca) : null;
+    const tastoPacco = x => {
+      const tot = x.crediti + regalo(x), cosa = giusto === x ? `✅ Basta per: ${esc(serve.nome)}` : vale(tot);
+      return `<button data-ct="ricarica" data-pacco="${x.id}" class="${giusto === x ? 'giusto' : ''}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b>${regalo(x) ? `<em class="dono">+${n(regalo(x))} 🎁</em>` : ''}<span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}${cosa ? `<u>= ${cosa}</u>` : ''}</button>`;
+    };
+    const fiducia = `<div class="ct-fiducia">🔒 Pagamento sicuro con Hotmart · 💳 Carta, PayPal, Klarna, SEPA<br>⚡ I crediti arrivano subito · 🧾 Ricevuta via email</div>
+      ${p.conta ? `<label class="ct-grazie"><input type="checkbox" id="ct-grazie"${this._grazie ? ' checked' : ''}> 🙏 Ringraziami nelle storie con il mio @${esc(p.conta)}</label>` : ''}
+      <p class="ct-mini">Minorenne? Chiedi prima a un genitore. I crediti non comprano punti, voti o cariche.</p>`;
+    const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3>${banner}${giusto ? `<div class="ct-serve">Ti mancano <b>${n(serve.manca)} 💰</b> per ${esc(serve.nome)}</div>` : ''}<div class="ct-pacchi">${pacchiOk.map(tastoPacco).join('')}</div>${fiducia}` : '';
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? (TIPI[String(m.tipo).replace('prova_', '')] ? `🛠️ ${TIPI[m.tipo.replace('prova_', '')]}` : esc(m.tipo))}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
     return `<h2>💰 Il tuo account</h2><div class="sub">${esc(p.email)}</div>
       <div class="ct-saldo"><b>${n(p.saldo)}</b><span>💰 crediti</span></div>
@@ -167,8 +181,8 @@ export class Conto {
     return { regione: r.nome.split('/')[0], chi: x?.conta && x.conta !== this.p.conta ? x.conta : null };
   }
   // abre a conta já na parte da recarga (pílula do mapa, "ti mancano N 💰")
-  apriRicarica(msg = '', da = 'altro') {
-    this._da = da; this.traccia('apre', '', da);
+  apriRicarica(msg = '', da = 'altro', serve = null) {
+    this._da = da; this._serve = serve; this.traccia('apre', '', da);
     if (!this.p) { this.ui.aviso(msg || '💰 Entra nel tuo account per ricaricare i crediti.'); this.apri(); return; }
     this.apri();
     setTimeout(() => $('#ct-ricarica')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
@@ -183,7 +197,7 @@ export class Conto {
     if (!this.p) { this.ui.aviso('Entra nel tuo account per comprare.'); this.apri(); return false; }
     const manca = prezzo - (this.p.saldo ?? 0);
     if (manca > 0) {
-      if (this.p.ricarica && confirm(`${nome} costa ${n(prezzo)} 💰: ti mancano ${n(manca)} 💰.\n\nVuoi ricaricare i crediti?`)) this.apriRicarica('', `manca_${String(item).slice(0, 8)}`);
+      if (this.p.ricarica && confirm(`${nome} costa ${n(prezzo)} 💰: ti mancano ${n(manca)} 💰.\n\nVuoi ricaricare i crediti?`)) this.apriRicarica('', `manca_${String(item).slice(0, 8)}`, { nome, manca });
       else if (!this.p.ricarica) this.ui.aviso(`Ti mancano ${n(manca)} 💰 per ${nome}.`);
       return false;
     }
@@ -267,7 +281,8 @@ export class Conto {
         this.traccia('pacco', pacco, da);
         // consenso para entrega imediata (art. 59 Codice del Consumo): sem ele não abre o pagamento
         if (!confirm('I crediti arrivano subito sul tuo account.\n\nProseguendo acconsenti all’esecuzione immediata e prendi atto che, ricevuti i crediti, perdi il diritto di recesso. In caso di rimborso i crediti vengono tolti.\n\nContinuare con il pagamento?')) { this.traccia('annulla', pacco, da); return; }
-        const j = await this.api('ricarica', { pacco, da }); location.href = j.url;
+        const grazie = !!$('#ct-grazie')?.checked; this._grazie = grazie;
+        const j = await this.api('ricarica', { pacco, da, grazie }); location.href = j.url;
       }
       else if (a === 'esci_tutti') {
         if (!confirm('Vuoi uscire dal tuo account su tutti i telefoni e computer? Per rientrare servirà un nuovo codice via email.')) return;

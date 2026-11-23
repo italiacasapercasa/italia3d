@@ -306,6 +306,9 @@ if ($acao === 'ricarica') {
     if (conti_euro_mese($id) + (float)$p['prezzo'] > $lim) erro("Puoi ricaricare al massimo " . number_format($lim, 0, ',', '.') . " € ogni 30 giorni.");
     $url = $p['checkout'] . (str_contains($p['checkout'], '?') ? '&' : '?') . 'sck=c' . $id . '&email=' . rawurlencode((string)$u['email']);
     conti_traccia('checkout', (string)$p['id'], (string)($d['da'] ?? ''), $id);   // foi para a Hotmart
+    // consentimento para o agradecimento nas stories (só com o quadradinho marcado; nunca marcado por padrão)
+    $gr = !empty($d['grazie']);
+    conti_modifica($id, function (array &$u) use ($gr, $p) { if ($gr) $u['grazie'] = ['em' => gmdate('c'), 'pacco' => (string)$p['id']]; else unset($u['grazie']); return $u; });
     resposta(['url' => $url]);
 }
 

@@ -425,6 +425,12 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 .ct-pacchi button b { display: block; font-size: 15px; font-weight: 900; }
 .ct-pacchi button span { display: block; font-size: 13px; font-weight: 800; color: var(--grigio); }
 .ct-pacchi button small { display: inline-block; margin-top: 3px; background: var(--verde); color: #fff; font-size: 11px; font-weight: 900; border-radius: 99px; padding: 0 6px; }
+.ct-pacchi button u { display: block; text-decoration: none; font-size: 10.5px; font-weight: 900; color: var(--inchiostro); line-height: 1.2; margin-top: 4px; }
+.ct-pacchi button.giusto { box-shadow: 0 0 0 4px var(--verde); background: #EAF7EE; }
+.ct-serve { text-align: center; font-weight: 800; font-size: 14px; margin: -4px 0 10px; }
+.ct-fiducia { margin-top: 10px; text-align: center; font-size: 12px; font-weight: 800; color: var(--inchiostro); background: #F1F6FB; border: 2px dashed #9AA9BC; border-radius: 12px; padding: 6px 8px; line-height: 1.45; }
+.ct-grazie { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; font-weight: 800; font-size: 13px; }
+.ct-grazie input { width: 20px; height: 20px; accent-color: var(--verde); }
 .ct-pacchi button em.dono { display: block; font-style: normal; font-size: 12.5px; font-weight: 900; color: #fff; background: var(--rosso); border-radius: 99px; margin: 2px auto 3px; padding: 1px 6px; width: fit-content; }
 .ct-prima { display: flex; flex-direction: column; align-items: center; text-align: center; background: linear-gradient(135deg, #FFE38A, #FFC93C); border: 3px solid var(--inchiostro); border-radius: 16px; padding: 8px 10px; margin: 0 0 12px; font-size: 15px; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
 .ct-prima b { font-weight: 900; } .ct-prima small { font-weight: 800; font-size: 12px; color: var(--inchiostro); }

@@ -73,6 +73,16 @@ foreach (array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/r
 }
 foreach ($funil as &$f) foreach ($f as &$e) if (isset($e['pessoas'])) $e['pessoas'] = count($e['pessoas']);
 unset($f, $e);
+// recargas de hoje (hora de Roma) e quem aceitou ser agradecido nas stories (@ só com consentimento)
+$oggiR = conti_oggi(); $grazie = []; $ricOggi = 0;
+foreach ((json_decode((string)@file_get_contents(conti_dir() . '/transazioni.json'), true) ?: []) as $t) {
+    if (($t['stato'] ?? '') !== 'accreditato') continue;
+    $dt = (new DateTime((string)$t['em']))->setTimezone(new DateTimeZone('Europe/Rome'))->format('Y-m-d');
+    if ($dt !== $oggiR) continue;
+    $ricOggi++;
+    $u = conti_leggi((string)$t['id']);
+    if ($u && !empty($u['grazie']) && !empty($u['conta'])) $grazie[] = ['conta' => $u['conta'], 'crediti' => $t['crediti'], 'euro' => $t['euro']];
+}
 $hot = array_slice(array_filter(explode("\n", (string)@file_get_contents(conti_dir() . '/ricariche.log'))), -15);
 echo json_encode([
     'agora' => gmdate('c'),
@@ -84,6 +94,6 @@ echo json_encode([
     'brevo_configurado' => defined('BREVO_API_KEY') && BREVO_API_KEY !== '',
     'hostinger_pausado_ate' => ($pz = (int)@file_get_contents(conti_dir() . '/smtp-pausa')) > $agora ? gmdate('c', $pz) : null,
     'envios_48h' => $total, 'envios_por_hora_48h' => $porHora,
-    'ricarica_funil' => $funil, 'hotmart_crediti' => $hot,
+    'ricarica_funil' => $funil, 'hotmart_crediti' => $hot, 'ricariche_oggi' => $ricOggi, 'grazie_storie_oggi' => $grazie,
     'envios_recentes' => $log,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
