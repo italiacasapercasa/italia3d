@@ -156,7 +156,7 @@ export class Conto {
       return `<button data-ct="ricarica" data-pacco="${x.id}" class="${giusto === x ? 'giusto' : ''}">${x.etichetta ? `<i>${esc(x.etichetta)}</i>` : ''}<b>${n(x.crediti)} 💰</b>${regalo(x) ? `<em class="dono">+${n(regalo(x))} 🎁</em>` : ''}<span>${String(x.prezzo).replace('.', ',')} €</span>${x.bonus ? `<small>+${x.bonus}%</small>` : ''}${cosa ? `<u>= ${cosa}</u>` : ''}</button>`;
     };
     const fiducia = `<div class="ct-fiducia">🔒 Pagamento sicuro con Hotmart · 💳 Carta, PayPal, Klarna, SEPA<br>⚡ I crediti arrivano subito · 🧾 Ricevuta via email</div>
-      ${p.conta ? `<label class="ct-grazie"><input type="checkbox" id="ct-grazie"${this._grazie ? ' checked' : ''}> 🙏 Ringraziami nelle storie con il mio @${esc(p.conta)}</label>` : ''}
+      ${p.conta ? `<label class="ct-grazie"><input type="checkbox" id="ct-grazie"${this._grazie ? ' checked' : ''}> 🙏 Ringraziami nel nostro reel con il mio @${esc(p.conta)}</label>` : ''}
       <p class="ct-mini">Minorenne? Chiedi prima a un genitore. I crediti non comprano punti, voti o cariche.</p>`;
     const pacchi = p.ricarica ? `<h3 class="ct-h" id="ct-ricarica">💳 Ricarica crediti</h3>${banner}${giusto ? `<div class="ct-serve">Ti mancano <b>${n(serve.manca)} 💰</b> per ${esc(serve.nome)}</div>` : ''}<div class="ct-pacchi">${pacchiOk.map(tastoPacco).join('')}</div>${fiducia}` : '';
     const mov = (p.ultimi ?? []).map(m => `<li><span>${TIPI[m.tipo] ?? (TIPI[String(m.tipo).replace('prova_', '')] ? `🛠️ ${TIPI[m.tipo.replace('prova_', '')]}` : esc(m.tipo))}</span><small>${new Date(m.em).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}</small><b class="${m.delta < 0 ? 'neg' : ''}">${m.delta > 0 ? '+' : ''}${n(m.delta)}</b></li>`).join('');
