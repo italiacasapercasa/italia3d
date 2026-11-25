@@ -53,10 +53,12 @@ foreach (array_slice((array)($i['ogg'] ?? []), 0, 160) as $o) {
     if (!is_array($o) || count($o) < 4) continue;
     [$t, $x, $z, $r] = $o;
     if (!is_string($t) || empty($mob[$t]) || !is_int($x) || !is_int($z) || !is_int($r) || $x < 0 || $x > 13 || $z < 0 || $z > 9 || $r < 0 || $r > 3) continue;
-    $ogg[] = [$t, $x, $z, $r];
+    $c = $o[4] ?? 0;   // 25/11: variante de cor do móvel (opcional)
+    $ogg[] = is_int($c) && $c > 0 && $c < 16 ? [$t, $x, $z, $r, $c] : [$t, $x, $z, $r];
 }
 $okPav = fn($p) => in_array($p, $pav, true);
-$okPar = fn($p) => is_int($p) && $p >= 0 && $p < 8;
+$nPar = max(8, count((array)($cfg['interni']['pareti'] ?? [])));
+$okPar = fn($p) => is_int($p) && $p >= 0 && $p < $nPar;
 $stanze = [];
 foreach (['camera', 'bagno', 'studio', 'soggiorno', 'cucina'] as $s) {
     $x = (array)($i['stanze'][$s] ?? []);

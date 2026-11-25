@@ -1,18 +1,22 @@
-// Passeggiata: andar a pé pela cidade, na própria cena do mapa (mesmas casas, lojas, outdoors e decorações).
-// Câmera em 3ª pessoa atrás de um bonequinho; anda só nas ruas e calçadas (o miolo das quadras é bloqueado, a piazza é livre).
+// Passeggiata: andar a pé pela Itália inteira, na própria cena do mapa (mesmas casas, lojas, outdoors e decorações).
+// Câmera em 3ª pessoa atrás de um bonequinho; anda em qualquer lugar de terra: ruas, piazza, prados, morros e nas
+// estradas que ligam cada cidade às vizinhas (js/strade.js). Bloqueia só o miolo das quadras (casas) e o mar.
 // Celular: metade esquerda = joystick (aparece onde o dedo toca), metade direita = arrastar gira a câmera, toque abre o cartão.
 // PC: WASD/setas andam (Shift corre), arrastar o mouse gira, clique abre o cartão, Esc sai.
 // Grátis para quem tem conta (js/conto.js). Ligado em mappa.js (mappa.passeggio recebe os eventos e o passo de cada quadro).
 import * as THREE from 'three';
-import { LOTE, RUA, QW, QH, posLote } from './citta.js';
+import { LOTE, RUA, QW, QH, posLote, larguraScarpata, SCARPATA_MIN } from './citta.js';
 import { ALTURA_NIVEL } from './modelli.js';
 import { costruisci, animaAcc } from './personaggio.js';
 import { VEICOLI, SEDUTO, costruisciVeicolo } from './veicoli.js';
 import { Tesori } from './tesori.js';
+import { Strade } from './strade.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const km = d => (d < 10 ? d.toFixed(1).replace('.', ',') : String(Math.round(d)));
+const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const CALCADA = 0.006;
 const H = LOTE * 0.3;                 // altura do bonequinho
 const VEL = LOTE * 1.7;               // km/s andando (correndo: x1,9)
@@ -24,6 +28,7 @@ export class Passeggio {
     this.teclas = new Set();
     this.joy = { id: null, x0: 0, y0: 0, x: 0, y: 0 };
     this.giro = null;            // dedo/mouse girando a câmera
+    this.strade = new Strade(D, mappa, citta);
     this.montarUI();
     this.tesori = new Tesori(this);
     addEventListener('keydown', e => {
@@ -41,8 +46,10 @@ export class Passeggio {
     d.id = 'passeggio';
     d.hidden = true;
     d.innerHTML = `
+      <div class="ps-flash"></div>
       <div class="ps-topo"><span class="ps-titolo">🚶 <b></b></span><button type="button" class="ps-esci" aria-label="Esci dalla passeggiata">✕ Esci</button></div>
       <div class="ps-et"></div>
+      <div class="ps-bussola ps-meta" hidden><i>⬆</i><span></span><button type="button" class="ps-meta-x" aria-label="Annulla percorso">✕</button></div>
       <div class="ps-joy"><i></i></div>
       <div class="ps-dica"></div>
       <div class="ps-bordo"></div>
@@ -54,6 +61,8 @@ export class Passeggio {
     d.querySelector('.ps-mezzo').onclick = () => this.menuMezzi();
     d.querySelector('.ps-strada').onclick = () => this.menuStrade();
     d.querySelector('.ps-menu').onclick = e => this.cliqueMenu(e);
+    d.querySelector('.ps-menu').oninput = e => { if (e.target.classList.contains('ps-cerca')) this.cerca(e.target.value); };
+    d.querySelector('.ps-meta-x').onclick = () => { this.meta = null; this.el.querySelector('.ps-meta').hidden = true; };
     d.querySelector('.ps-pg').onclick = () => this.ui.conto?.editor.apri();
     d.querySelector('.ps-casa').onclick = () => { const c = this.D.porConta.get(this.ui.conto?.p?.conta); if (c) this.avvia(`casa:${c.conta}`); };
   }
@@ -90,7 +99,7 @@ export class Passeggio {
     try { localStorage.setItem('ps_mezzo', id || ''); } catch { /* sem storage */ }
     this.aggiornaMezzo();
     this.chiudiMenu();
-    if (id) this.dica(`${this.infoMezzo(id).icona} ${String(this.velocita()).replace('.', ',')}× più veloce · 🛣️ Strada per andare nelle città vicine`, 4000);
+    if (id) this.dica(`${this.infoMezzo(id).icona} ${String(this.velocita()).replace('.', ',')}× più veloce · 🛣️ Strada ti porta da solo in qualsiasi città`, 4000);
   }
   menu(html) { const m = this.el.querySelector('.ps-menu'); m.innerHTML = `<button type="button" class="ps-menu-x" data-m="chiudi">✕</button>${html}`; m.classList.add('on'); }
   chiudiMenu() { this.el.querySelector('.ps-menu').classList.remove('on'); }
@@ -102,124 +111,140 @@ export class Passeggio {
       return `<button type="button" class="ps-opz${this.mezzoId === id ? ' on' : ''}" data-m="${ho ? 'usa' : 'compra'}" data-v="${id}"><span>${x.icona}</span><b>${x.nome}</b><small>${String(x.velocita).replace('.', ',')}× · ${ho ? (this.mezzoId === id ? '✅ in uso' : 'tuo') : `${n(x.prezzo)} 💰`}</small></button>`;
     }).join('');
     this.menu(`<h4>Come ti muovi?</h4><button type="button" class="ps-opz${!this.mezzoId ? ' on' : ''}" data-m="usa" data-v=""><span>🚶</span><b>A piedi</b><small>gratis</small></button>${righe}
-      <p>Con un veicolo vai più veloce e prendi la 🛣️ strada per le città vicine. Comprato una volta, è tuo per sempre.</p>`);
+      <p>Con un veicolo vai più veloce e con la 🛣️ strada ti porta da solo in qualsiasi città. Comprato una volta, è tuo per sempre.</p>`);
   }
   async cliqueMenu(e) {
     const b = e.target.closest('button'); if (!b) return;
     const { m, v } = b.dataset;
     if (m === 'chiudi') return this.chiudiMenu();
     if (m === 'usa') return this.scegliMezzo(v);
-    if (m === 'compra') { const x = this.infoMezzo(v); if (await this.ui.conto.compra(v, x.nome, x.prezzo, `${String(x.velocita).replace('.', ',')}× più veloce e la strada per le città vicine.`)) this.scegliMezzo(v); return; }
+    if (m === 'compra') { const x = this.infoMezzo(v); if (await this.ui.conto.compra(v, x.nome, x.prezzo, `${String(x.velocita).replace('.', ',')}× più veloce e il pilota automatico sulle strade.`)) this.scegliMezzo(v); return; }
     if (m === 'vai') { const l = this.D.luoghi[+v]; if (l) this.parti(l); return; }
-    if (m === 'salta' && this.viaggio) { this.viaggio.t0 -= this.viaggio.dur * 1000; return; }
+    if (m === 'guida') { const l = this.D.luoghi[+v]; if (l) this.guida(l); return; }
+    if (m === 'salta' && this.viaggio) { this.viaggio.salta = true; return; }
     if (m === 'mezzi') return this.menuMezzi();
   }
 
-  // ---------- estradas para as cidades vizinhas ----------
-  vicine(l, max = 5) {
-    const mp = this.mappa, out = [];
-    for (const o of this.D.luoghi) {
-      if (o === l) continue;
-      const d = Math.hypot(o.x - l.x, o.z - l.z);
-      if (d < 0.8 || d > 45) continue;
-      out.push([d, o]);
-    }
-    out.sort((a, b) => a[0] - b[0]);
-    const ok = [];
-    for (const [d, o] of out) {   // sem atravessar o mar
-      let mar = 0;
-      for (let k = 1; k < 12; k++) { const t = k / 12; if (mp.altura(l.x + (o.x - l.x) * t, l.z + (o.z - l.z) * t) < 0.002) mar++; }
-      if (mar <= 1) ok.push([d, o]);
-      if (ok.length >= max) break;
-    }
-    return ok;
+  // ---------- estradas: cidades vizinhas, busca de qualquer cidade, guia a pé ou pilota automático ----------
+  rigaCitta(o, d) {
+    const auto = !!this.mezzoId;
+    return `<button type="button" class="ps-opz" data-m="${auto ? 'vai' : 'guida'}" data-v="${o.id}"><span>${auto ? this.infoMezzo(this.mezzoId)?.icona ?? '🚗' : '🧭'}</span><b>${esc(o.nome)}</b><small>${d != null ? `${km(d)} km · ` : ''}${o.case} ${o.case === 1 ? 'casa' : 'case'}</small></button>`;
   }
   menuStrade() {
     if (this.viaggio) return;
-    const v = this.vicine(this.l);
-    if (!v.length) return this.menu(`<h4>🛣️ Strade</h4><p>Da ${esc(this.l.nome)} non ci sono città vicine raggiungibili in strada.</p>`);
-    const lista = v.map(([d, o]) => `<button type="button" class="ps-opz" data-m="vai" data-v="${o.id}"><span>🏘️</span><b>${esc(o.nome)}</b><small>${d < 10 ? d.toFixed(1).replace('.', ',') : Math.round(d)} km · ${o.case} ${o.case === 1 ? 'casa' : 'case'}</small></button>`).join('');
-    if (!this.mezzoId) return this.menu(`<h4>🛣️ Strade da ${esc(this.l.nome)}</h4>${lista.replace(/data-m="vai"/g, 'data-m="mezzi" disabled')}
-      <p>🚲 Per prendere la strada ti serve un veicolo (la bici costa ${this.infoMezzo('bici')?.prezzo ?? 190} 💰).</p><button type="button" class="ps-cta" data-m="mezzi">🚲 Scegli un veicolo</button>`);
-    this.menu(`<h4>🛣️ Strade da ${esc(this.l.nome)}</h4>${lista}`);
+    const l = this.l, v = this.strade.archi(l);
+    const lista = v.map(([d, o]) => this.rigaCitta(o, d)).join('');
+    const nota = this.mezzoId
+      ? `<p>${this.infoMezzo(this.mezzoId)?.icona ?? '🚗'} Pilota automatico: ti porto io, anche dall'altra parte dell'Italia.</p>`
+      : `<p>🧭 A piedi ti indico la strada (seguila o taglia per i prati). Con un veicolo il viaggio è automatico.</p><button type="button" class="ps-cta" data-m="mezzi">🚲 Scegli un veicolo</button>`;
+    this.menu(`<h4>🛣️ Dove vuoi andare?</h4><input class="ps-cerca" type="search" placeholder="Cerca una città…" autocomplete="off"><div class="ps-trovate"></div>
+      ${v.length ? `<p style="margin-top:4px">Città vicine a ${esc(l.nome)}</p>${lista}` : `<p>Da ${esc(l.nome)} non partono strade (isola?).</p>`}${nota}`);
   }
+  cerca(q) {
+    const box = this.el.querySelector('.ps-trovate'); if (!box) return;
+    const t = norm(q.trim());
+    if (t.length < 2) { box.innerHTML = ''; return; }
+    const out = this.D.luoghi.filter(o => o !== this.l && norm(o.nome).startsWith(t)).sort((a, b) => b.case - a.case).slice(0, 6);
+    box.innerHTML = out.map(o => this.rigaCitta(o, Math.hypot(o.x - this.pos.x, o.z - this.pos.z))).join('') || '<p>Nessuna città con case.</p>';
+  }
+  // percurso pela rede; null se não há estrada (ilha)
+  rota(dest) {
+    const r = this.strade.percorso(this.l, dest);
+    if (!r) this.menu(`<h4>🌊 ${esc(dest.nome)}</h4><p>Non c'è una strada da ${esc(this.l.nome)} a ${esc(dest.nome)} (c'è il mare in mezzo).</p>`);
+    return r;
+  }
+  // a pé: bússola até a próxima cidade da rota
+  guida(dest) {
+    const r = this.rota(dest); if (!r) return;
+    this.meta = { rota: r, i: 1 };
+    this.chiudiMenu();
+    this.el.querySelector('.ps-meta').hidden = false;
+    this.dica(`🧭 Segui la freccia in alto: ${km(Math.hypot(dest.x - this.pos.x, dest.z - this.pos.z))} km fino a ${dest.nome}`, 4500);
+  }
+  aggiornaMeta() {
+    const m = this.meta; if (!m) return;
+    let alvo = m.rota[m.i];
+    while (alvo && m.i < m.rota.length - 1 && Math.hypot(alvo.x - this.pos.x, alvo.z - this.pos.z) < this.citta.raioCidade(alvo) + 0.05) alvo = m.rota[++m.i];
+    const fim = m.rota[m.rota.length - 1], dFim = Math.hypot(fim.x - this.pos.x, fim.z - this.pos.z);
+    if (dFim < this.citta.raioCidade(fim) * 0.7) { this.meta = null; this.el.querySelector('.ps-meta').hidden = true; this.ui.aviso(`🏁 Sei arrivato a ${fim.nome}!`); return; }
+    // segue a estrada: aponta para o portão da cidade de destino do trecho, não para o centro
+    const da = m.rota[m.i - 1], s = this.strade.strada(da, alvo), g = s.A === alvo ? s.gA : s.gB;
+    const tx = g.x - this.pos.x, tz = g.z - this.pos.z, sy = Math.sin(this.yaw), cy = Math.cos(this.yaw);
+    const f = -sy * tx - cy * tz, r = cy * tx - sy * tz, ang = Math.atan2(r, f);
+    const el = this.el.querySelector('.ps-meta');
+    el.querySelector('i').style.transform = `rotate(${ang.toFixed(2)}rad)`;
+    el.querySelector('span').textContent = `${fim.nome} · ${km(dFim)} km${alvo !== fim ? ` · via ${alvo.nome}` : ''}`;
+  }
+
+  // com veículo: pilota automático pela rede, trecho por trecho
   parti(dest) {
-    const A = this.l, mp = this.mappa, dx = dest.x - A.x, dz = dest.z - A.z, D = Math.hypot(dx, dz), ux = dx / D, uz = dz / D;
-    const rA = this.citta.raioCidade(A), rB = this.citta.raioCidade(dest), hA = this.hc, hB = this.citta.dadosCidade(dest).hc;
-    const p0 = { x: A.x + ux * rA * 0.9, z: A.z + uz * rA * 0.9 }, p1 = { x: dest.x - ux * rB * 0.9, z: dest.z - uz * rB * 0.9 };
-    const L = Math.max(0.2, Math.hypot(p1.x - p0.x, p1.z - p0.z)), N = Math.max(24, Math.ceil(L / 0.03));
-    const ys = [];
-    for (let i = 0; i <= N; i++) {
-      const t = i / N, x = p0.x + (p1.x - p0.x) * t, z = p0.z + (p1.z - p0.z) * t, h = mp.altura(x, z);
-      const wA = clamp(1 - t * L / 0.7, 0, 1), wB = clamp(1 - (1 - t) * L / 0.7, 0, 1);
-      ys.push(Math.max(h, h + (hA - h) * wA + (hB - h) * wB) + 0.0012);
-    }
-    // nastro della strada (asfalto + linea tratteggiata)
-    const px = -uz, pz = ux, w = RUA * 0.42, pos = [], col = [], c1 = new THREE.Color('#7E8794'), c2 = new THREE.Color('#FFFFFF');
-    const quad = (i, a, b, c, dy) => { const t0 = i / N, t1 = (i + 1) / N; const P = (t, s, y) => [p0.x + (p1.x - p0.x) * t + px * s, y + dy, p0.z + (p1.z - p0.z) * t + pz * s];
-      const v = [P(t0, -a, ys[i]), P(t0, a, ys[i]), P(t1, a, ys[i + 1]), P(t0, -a, ys[i]), P(t1, a, ys[i + 1]), P(t1, -a, ys[i + 1])];
-      for (const q of v) { pos.push(...q); col.push(c.r, c.g, c.b); } };
-    for (let i = 0; i < N; i++) { quad(i, w, 0, c1, 0); if (i % 2 === 0) quad(i, w * 0.06, 0, c2, 0.0004); }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pos), 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(col), 3));
-    geo.computeVertexNormals();
-    const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }));
-    // alberi e cipressi lungo la strada (sempre uguali per la stessa strada)
-    let seme = Math.abs(Math.round(A.x * 1000 + dest.z * 777)) || 1;
-    const rnd = () => { seme = (seme * 16807) % 2147483647; return seme / 2147483647; };
-    const geoC = new THREE.ConeGeometry(LOTE * 0.16, LOTE * 0.75, 7); geoC.translate(0, LOTE * 0.375 + LOTE * 0.05, 0);
-    const geoT = new THREE.CylinderGeometry(LOTE * 0.03, LOTE * 0.03, LOTE * 0.1, 5); geoT.translate(0, LOTE * 0.05, 0);
-    const geoO = new THREE.IcosahedronGeometry(LOTE * 0.22, 0); geoO.translate(0, LOTE * 0.3, 0);
-    const M = Math.min(900, Math.ceil(L / 0.025));
-    const ic = new THREE.InstancedMesh(geoC, new THREE.MeshLambertMaterial({ color: '#2F6B3A', flatShading: true }), M);
-    const io = new THREE.InstancedMesh(geoO, new THREE.MeshLambertMaterial({ color: '#7A9A4A', flatShading: true }), M);
-    const it = new THREE.InstancedMesh(geoT, new THREE.MeshLambertMaterial({ color: '#6B4A2A' }), M * 2);
-    const mt = new THREE.Matrix4(); let nc = 0, no = 0, nt = 0;
-    for (let k = 0; k < M; k++) {
-      const t = (k + rnd()) / M, lato = rnd() < 0.5 ? -1 : 1, off = lato * (RUA * 0.9 + rnd() * LOTE * 3);
-      const x = p0.x + (p1.x - p0.x) * t + px * off, z = p0.z + (p1.z - p0.z) * t + pz * off, h = mp.altura(x, z);
-      if (h < 0.002 || t * L < 0.4 || (1 - t) * L < 0.4) continue;
-      const s = 0.8 + rnd() * 0.6; mt.makeScale(s, s, s).setPosition(x, Math.max(h, ys[Math.round(t * N)] - 0.0015), z);
-      if (rnd() < 0.55) ic.setMatrixAt(nc++, mt); else io.setMatrixAt(no++, mt);
-      it.setMatrixAt(nt++, mt);
-    }
-    ic.count = nc; io.count = no; it.count = nt;
-    for (const x of [ic, io, it]) { x.frustumCulled = false; mesh.add(x); }
-    mp.scene.add(mesh);
-    const vel = VEL * this.velocita() * 3.2;   // na estrada vai mais rápido que na cidade
-    this.viaggio = { p0, p1, ys, N, L, ux, uz, dest, mesh, t0: performance.now(), dur: clamp(L / vel, 6, 22), fatto: 0 };
-    this.dir = Math.atan2(ux, uz); this.yaw = this.dir + Math.PI;
-    this.menu(`<h4>🛣️ Verso ${esc(dest.nome)}</h4><p>${L < 10 ? L.toFixed(1).replace('.', ',') : Math.round(L)} km in ${this.infoMezzo(this.mezzoId).icona}</p><button type="button" class="ps-cta" data-m="salta">⏩ Arriva subito</button>`);
-    this.el.querySelector('.ps-menu').classList.add('basso');
+    const r = this.rota(dest); if (!r) return;
+    this.meta = null; this.el.querySelector('.ps-meta').hidden = true;
+    const tratti = [];
+    for (let i = 0; i < r.length - 1; i++) tratti.push([r[i], r[i + 1]]);
+    this.viaggio = { tratti, n: 0, dest };
+    this.iniziaTratto();
     this.el.classList.add('viaggio');
-    this.el.querySelector('.ps-titolo b').textContent = `${A.nome} → ${dest.nome}`;
+    this.el.querySelector('.ps-menu').classList.add('basso');
+    this.menu(`<h4>🛣️ Verso ${esc(dest.nome)}</h4><p>${tratti.length > 1 ? `${tratti.length} strade · ` : ''}${this.infoMezzo(this.mezzoId)?.icona ?? '🚗'} pilota automatico</p><button type="button" class="ps-cta" data-m="salta">⏩ Arriva subito</button>`);
   }
+  iniziaTratto() {
+    const v = this.viaggio, [a, b] = v.tratti[v.n], s = this.strade.strada(a, b);
+    this.strade.aggiorna(a.x, a.z); this.strade.aggiorna((a.x + b.x) / 2, (a.z + b.z) / 2, Math.hypot(a.x - b.x, a.z - b.z) / 2 + 3);
+    const P = s.A === a ? s.P : s.P.slice().reverse().map(p => ({ ...p, s: s.tot - p.s, px: -p.px, pz: -p.pz, tx: -p.tx, tz: -p.tz }));
+    const vel = VEL * this.velocita() * 3.2;   // na estrada vai mais rápido que na cidade
+    Object.assign(v, { P, tot: s.tot, t0: performance.now(), dur: clamp(s.tot / vel, 5, 20), i: 0 });
+    this.el.querySelector('.ps-titolo b').textContent = `${a.nome} → ${b.nome}`;
+    if (v.n > 0) this.flash();
+  }
+  flash() { const f = this.el.querySelector('.ps-flash'); f.classList.add('on'); requestAnimationFrame(() => requestAnimationFrame(() => f.classList.remove('on'))); }
   passoViaggio(agora) {
-    const v = this.viaggio, k = clamp((agora - v.t0) / 1000 / v.dur, 0, 1), s = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-    const f = s * v.N, i = Math.min(v.N - 1, Math.floor(f)), y = v.ys[i] + (v.ys[i + 1] - v.ys[i]) * (f - i);
-    const p = this.pos, px = p.x, pz = p.z;
-    p.set(v.p0.x + (v.p1.x - v.p0.x) * s + -v.uz * RUA * 0.18, y, v.p0.z + (v.p1.z - v.p0.z) * s + v.ux * RUA * 0.18);   // corsia di destra
-    this.hcViaggio = y;
-    const passo = Math.hypot(p.x - px, p.z - pz);
+    const v = this.viaggio, primo = v.n === 0, ultimo = v.n === v.tratti.length - 1;
+    let k = clamp((agora - v.t0) / 1000 / v.dur, 0, 1);
+    if (v.salta) k = 1;
+    // acelera no começo do primeiro trecho e freia no fim do último
+    const inn = x => 2 * x * x - x * x * x, out = x => 1 - inn(1 - x);
+    const e = primo && ultimo ? (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2) : primo ? inn(k) : ultimo ? out(k) : k;
+    const alvo = clamp(e, 0, 1) * v.tot, P = v.P;
+    while (v.i < P.length - 2 && P[v.i + 1].s < alvo) v.i++;
+    const p = P[v.i], q = P[v.i + 1], t = clamp((alvo - p.s) / ((q.s - p.s) || 1), 0, 1);
+    const pos = this.pos, px0 = pos.x, pz0 = pos.z, off = RUA * 0.18;   // corsia di destra
+    const tx = q.x - p.x, tz = q.z - p.z, tl = Math.hypot(tx, tz) || 1, ux = tx / tl, uz = tz / tl;
+    const y = p.y + (q.y - p.y) * t;
+    pos.set(p.x + tx * t - uz * off, y, p.z + tz * t + ux * off);
+    this.y = y;
+    const passo = Math.hypot(pos.x - px0, pos.z - pz0);
     this.fase += passo / (H * 0.55);
     this.vel = 1;
+    // corpo vira suave (curvas da estrada)
+    const alvoDir = Math.atan2(ux, uz);
+    this.dir += ((((alvoDir - this.dir) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI) * 0.2;
+    this.yaw = this.dir + Math.PI;
     this.disegnaCorpo(passo);
     // câmera: atrás e um pouco mais alta para ver a paisagem
-    const c = this.mappa.camera, sy = -v.ux, cy = -v.uz, d = LOTE * 3.2;
-    c.fov = 58; c.position.set(p.x + sy * d, y + LOTE * 1.4, p.z + cy * d);
-    c.lookAt(p.x - sy * LOTE * 2, y + H * 0.5, p.z - cy * LOTE * 2);
+    const c = this.mappa.camera, sy = Math.sin(this.yaw), cy = Math.cos(this.yaw), d = LOTE * 3.2;
+    const camY = Math.max(y + LOTE * 1.4, this.mappa.altura(pos.x + sy * d, pos.z + cy * d) + LOTE * 0.6);
+    c.fov = 58; c.position.set(pos.x + sy * d, camY, pos.z + cy * d);
+    c.lookAt(pos.x - sy * LOTE * 2, y + H * 0.5, pos.z - cy * LOTE * 2);
     c.near = 0.0015; c.far = 12; c.updateProjectionMatrix(); c.updateMatrixWorld(true);
     this.mappa.scene.fog.near = 0.8; this.mappa.scene.fog.far = 4.5;
     this.aggiornaCitta();
     this.el.querySelector('.ps-et').innerHTML = '';
-    if (k >= 1) {
-      this.mappa.scene.remove(v.mesh); v.mesh.traverse(o => o.geometry?.dispose());
-      this.viaggio = null; this.hcViaggio = null; this.el.classList.remove('viaggio');
-      this.el.querySelector('.ps-menu').classList.remove('basso'); this.chiudiMenu();
-      this.avvia(`luogo:${v.dest.id}`);
-      this.ui.aviso(`🏘️ Benvenuto a ${v.dest.nome}!`);
-    }
+    if (k < 1) return;
+    if (!v.salta && v.n < v.tratti.length - 1) { v.n++; this.iniziaTratto(); return; }
+    // chegou: fica no portão da cidade, já em cima da rua (sem pular para a piazza)
+    const dest = v.dest, s = this.strade.strada(v.tratti[v.tratti.length - 1][0], dest), g = s.A === dest ? s.gA : s.gB;
+    this.viaggio = null;
+    this.el.classList.remove('viaggio');
+    this.el.querySelector('.ps-menu').classList.remove('basso'); this.chiudiMenu();
+    if (v.salta) this.flash();
+    this.pos.set(g.x - g.dx * 0.02, 0, g.z - g.dz * 0.02);
+    this.dir = Math.atan2(-g.dx, -g.dz); this.yaw = this.dir + Math.PI;
+    this._cp = null;
+    this.y = this.chao(this.pos.x, this.pos.z).y;
+    this.entraCitta(dest);
+    this.aggiornaCitta(true);
+    this.ui.aviso(`🏘️ Benvenuto a ${dest.nome}!`);
   }
 
   // ---------- entrar / sair ----------  // alvo: "casa:<conta>" ou "luogo:<id>"
@@ -240,10 +265,12 @@ export class Passeggio {
       this.citta.dadosCidade(l);
       x = l.x; z = l.z - QH / 2; yaw = Math.PI / 2 + 0.45; this._dirIni = Math.PI;        // na rua da piazza
     }
-    this.l = l;
-    this.cel = this.celle(l);
-    this.hc = this.citta.dadosCidade(l).hc;
-    this.pos = new THREE.Vector3(x, this.hc, z);
+    if (this.viaggio) { this.viaggio = null; this.el.classList.remove('viaggio'); this.el.querySelector('.ps-menu').classList.remove('basso'); }
+    this.pos = new THREE.Vector3(x, 0, z);
+    this._cp = null; this.l = null;
+    this.entraCitta(l);
+    this.y = this.citta.dadosCidade(l).hc;
+    this.pos.y = this.y;
     this.yaw = yaw; this.pitch = 0.32; this.dir = this._dirIni; this.fase = 0; this.vel = 0;
     this.aggiornaOmino();
     this.ui.fechar();
@@ -255,15 +282,21 @@ export class Passeggio {
       this.mappa.mar.visible = false;   // o plano gigante do mar perde precisão de perto e cobre a rua (o fundo já tem a cor do mar)
       document.body.classList.add('passeggio');
       this.el.hidden = false;
+      this.strade.grupo.visible = true;
     }
     this.omino.visible = true;
-    this.el.querySelector('.ps-titolo b').textContent = l.nome;
     const mia = this.D.porConta.get(conto.p.conta);
     this.el.querySelector('.ps-casa').hidden = !mia;
     const toque = matchMedia('(pointer: coarse)').matches;
-    this.dica(toque ? '👈 Trascina a sinistra per camminare · 👉 a destra per girarti · tocca una casa per vederla' : '⌨️ WASD o frecce per camminare (Shift corre) · trascina per girarti · clicca una casa', 6000);
+    this.dica(toque ? '👈 Trascina a sinistra per camminare · 👉 a destra per girarti · vai dove vuoi: prati, strade, altre città' : '⌨️ WASD o frecce per camminare (Shift corre) · trascina per girarti · vai dove vuoi: prati, strade, altre città', 6000);
     this.ultimoAgg = null;
     this.aggiornaCitta(true);
+  }
+  // cidade onde o bonequinho está agora (título, tesouros, rótulos das casas)
+  entraCitta(l) {
+    if (this.l === l) return;
+    this.l = l;
+    this.el.querySelector('.ps-titolo b').textContent = l.nome;
     this.tesori.entra(l);
   }
   esci() {
@@ -272,32 +305,70 @@ export class Passeggio {
     this.mappa.passeggio = null;
     this.omino.visible = false;
     if (this.mezzo) this.mezzo.visible = false;
-    if (this.viaggio) { this.mappa.scene.remove(this.viaggio.mesh); this.viaggio = null; this.hcViaggio = null; this.el.querySelector('.ps-menu').classList.remove('basso'); this.el.classList.remove('viaggio'); }
+    if (this.viaggio) { this.viaggio = null; this.el.querySelector('.ps-menu').classList.remove('basso'); this.el.classList.remove('viaggio'); }
+    this.meta = null; this.el.querySelector('.ps-meta').hidden = true;
     this.chiudiMenu();
     this.tesori?.esci();
+    this.strade.grupo.visible = false;
     document.body.classList.remove('passeggio');
     this.el.hidden = true;
     this.teclas.clear(); this.joy.id = null; this.giro = null;
     const m = this.mappa;
     m.mar.visible = true;
     m.camera.fov = this.camVecchia.fov;
-    m.alvo.set(this.pos.x, this.hc, this.pos.z);
+    m.alvo.set(this.pos.x, this.y, this.pos.z);
     m.az = this.yaw;
     m.dist = 0.5;
     m.atualizarCamera();
     m.voar({ x: this.pos.x, z: this.pos.z, dist: 1.4, az: this.yaw }, 900);
   }
 
-  // ---------- onde se pode andar ----------
-  // quadras da cidade (igual citta.js: ruas entre as quadras, meia rua de cada lado)
-  celle(l) {
-    const s = new Set();
-    for (const [i, j] of this.citta.quadreDi(l)) s.add(`${i},${j}`);
-    return s;
+  // ---------- chão e onde se pode andar ----------
+  // cidades a até 3 km (refeito quando o bonequinho anda 300 m)
+  cidadesPerto() {
+    const p = this.pos;
+    if (!this._cp || Math.hypot(this._cp.x - p.x, this._cp.z - p.z) > 0.3) {
+      const v = this.strade.perto(p.x, p.z, 3.5).map(([, l]) => l);
+      for (const l of v) this.citta.dadosCidade(l);
+      this._cp = { x: p.x, z: p.z, v };
+    }
+    return this._cp.v;
+  }
+  naCitta(x, z) {
+    for (const l of this.cidadesPerto()) {
+      if (Math.abs(x - l.x) > (l._raio ?? 9) + QW || Math.abs(z - l.z) > (l._raio ?? 9) + QW) continue;
+      if (this.strade.cel(l).has(`${Math.round((x - l.x) / QW)},${Math.round((z - l.z) / QH)}`)) return l;
+    }
+    return null;
+  }
+  // altura do chão em x,z: platô da cidade, estrada (asfalto e aterro), barranco das cidades em encosta ou terreno
+  chao(x, z) {
+    const l = this.naCitta(x, z);
+    if (l) return { y: this.citta.dadosCidade(l).hc, l };
+    const mp = this.mappa;
+    let y = mp.altura(x, z);
+    for (const o of this.cidadesPerto()) {
+      const c = this.citta.dadosCidade(o), queda = c.hc - y;
+      if (queda <= 0 || Math.hypot(x - o.x, z - o.z) > c.raio + 1) continue;
+      const w = queda > SCARPATA_MIN ? larguraScarpata(queda) : 0.006;
+      let fora = Infinity;
+      for (const k of this.strade.cel(o)) {
+        const [i, j] = k.split(',').map(Number);
+        fora = Math.min(fora, Math.hypot(Math.max(0, Math.abs(x - o.x - i * QW) - QW / 2), Math.max(0, Math.abs(z - o.z - j * QH) - QH / 2)));
+        if (fora === 0) break;
+      }
+      if (fora < w) y = Math.max(y, c.hc - queda * fora / w);
+    }
+    const r = this.strade.altura(x, z);
+    if (r) y = r.asfalto ? r.y : Math.max(y, r.y);
+    return { y, strada: r, mar: !r && y < 0.002 };
   }
   livre(x, z) {
-    const l = this.l, i = Math.round((x - l.x) / QW), j = Math.round((z - l.z) / QH);
-    if (!this.cel.has(`${i},${j}`)) return false;                                  // fora da cidade
+    const b = this.mappa.geo.bbox;
+    if (x < b.x0 || x > b.x1 || z < b.z0 || z > b.z1) return false;
+    const l = this.naCitta(x, z);
+    if (!l) return !this.chao(x, z).mar;                                            // prado, morro, estrada: livre; mar não
+    const i = Math.round((x - l.x) / QW), j = Math.round((z - l.z) / QH);
     if (i === 0 && j === 0) return true;                                           // piazza
     const dx = Math.abs(x - l.x - i * QW), dz = Math.abs(z - l.z - j * QH);
     const mx = (QW - RUA) / 2 - CALCADA * 0.2, mz = (QH - RUA) / 2 - CALCADA * 0.2;
@@ -355,14 +426,15 @@ export class Passeggio {
     clearTimeout(this._dica); this._dica = setTimeout(() => d.classList.remove('on'), ms);
   }
 
-  // cidade e decorações carregam pelo alvo/dist do mapa: acompanha o bonequinho
+  // cidade, decorações e estradas carregam pelo alvo/dist do mapa: acompanha o bonequinho
   aggiornaCitta(forza = false) {
     const m = this.mappa, u = this.ultimoAgg;
     if (!forza && u && Math.hypot(u.x - this.pos.x, u.z - this.pos.z) < 0.25) return;
     this.ultimoAgg = { x: this.pos.x, z: this.pos.z };
-    m.alvo.set(this.pos.x, this.hcViaggio ?? this.hc, this.pos.z);
+    m.alvo.set(this.pos.x, this.y, this.pos.z);
     m.dist = 0.45;
     for (const f of m.aoMover) f();
+    if (!this.viaggio) this.strade.aggiorna(this.pos.x, this.pos.z);
   }
 
   // ---------- cada quadro (mappa.loop) ----------
@@ -398,32 +470,48 @@ export class Passeggio {
       if (ok(p.x + mx, p.z + mz)) { p.x += mx; p.z += mz; }
       else if (ok(p.x + mx, p.z)) p.x += mx;
       else if (ok(p.x, p.z + mz)) p.z += mz;
-      else if (!this.cel.has(`${Math.round((p.x + mx * 8 - this.l.x) / QW)},${Math.round((p.z + mz * 8 - this.l.z) / QH)}`) && !this._avvBordo) {
-        this._avvBordo = true; this.mostraBordo();
-      }
+      else if (this.chao(p.x + mx * 8, p.z + mz * 8).mar && !this._avvBordo) { this._avvBordo = true; this.mostraBordo(); }
       this.fase += Math.hypot(mx, mz) / (H * 0.55) / (this.mezzoId ? this.velocita() * 0.6 : 1);
+    }
+    // chão: sobe/desce suave (degrau do platô, rampa da estrada, morro)
+    const ch = this.chao(p.x, p.z);
+    this.y = this.y == null ? ch.y : this.y + (ch.y - this.y) * Math.min(1, dt * 18);
+    if (this.y < ch.y - 0.004) this.y = ch.y - 0.004;
+    p.y = this.y;
+    const lAqui = ch.l ?? null;
+    if (lAqui) this.entraCitta(lAqui);
+    if ((this._q ?? 0) % 15 === 0) {   // título: cidade, estrada ou campo (com a cidade mais perto)
+      const tit = lAqui ? lAqui.nome : `${ch.strada ? '🛣️ Strada' : '🌾 Campagna'} · ${this.vicina().nome}`, b = this.el.querySelector('.ps-titolo b');
+      if (b.textContent !== tit) b.textContent = tit;
     }
     this.vel += ((mag > 0.08 ? 1 : 0) - this.vel) * Math.min(1, dt * 10);
     this.disegnaCorpo(Math.hypot(p.x - x0, p.z - z0));
     this.tesori?.passo(p, agora);
-    // câmera atrás, encolhendo se o ponto cair dentro de uma casa
-    const m = this.mappa, c = m.camera, km = carro ? 1.55 : this.mezzoId ? 1.2 : 1;
-    const alt = CAM_ALT * km + this.pitch * CAM_DIST * km;
-    let d = CAM_DIST * km;
-    for (let k = 0; k < 8; k++) { if (this.alturaEm(p.x + sy * d, p.z + cy * d) < alt - LOTE * 0.08) break; d *= 0.8; }   // só prédio mais alto que a câmera empurra
+    // câmera atrás, encolhendo se o ponto cair dentro de uma casa; nunca dentro do morro
+    const m = this.mappa, c = m.camera, kc = carro ? 1.55 : this.mezzoId ? 1.2 : 1;
+    const alt = CAM_ALT * kc + this.pitch * CAM_DIST * kc;
+    let d = CAM_DIST * kc;
+    for (let k = 0; k < 8; k++) { if (this.topoEm(p.x + sy * d, p.z + cy * d) < this.y + alt - LOTE * 0.08) break; d *= 0.8; }   // só prédio mais alto que a câmera empurra
+    const camX = p.x + sy * d, camZ = p.z + cy * d, camY = Math.max(this.y + alt, this.chao(camX, camZ).y + LOTE * 0.25);
     c.fov = 58;
-    c.position.set(p.x + sy * d, this.hc + alt, p.z + cy * d);
-    c.lookAt(p.x - sy * LOTE * 0.45, this.hc + H * 0.6, p.z - cy * LOTE * 0.45);
+    c.position.set(camX, camY, camZ);
+    c.lookAt(p.x - sy * LOTE * 0.45, this.y + H * 0.6, p.z - cy * LOTE * 0.45);
     c.near = 0.0015; c.far = 9;
     c.updateProjectionMatrix(); c.updateMatrixWorld(true);
-    m.scene.fog.near = 0.35; m.scene.fog.far = 2.6;
+    m.scene.fog.near = lAqui ? 0.35 : 0.6; m.scene.fog.far = lAqui ? 2.6 : 3.4;
     this.aggiornaCitta();
     this.etichette();
+    if ((this._q ?? 0) % 3 === 0) this.aggiornaMeta();
+  }
+  vicina() {
+    let best = this.l, bd = Infinity;
+    for (const l of this.cidadesPerto()) { const d = Math.hypot(l.x - this.pos.x, l.z - this.pos.z); if (d < bd) { bd = d; best = l; } }
+    return best;
   }
 
   // boneco a pé, na bici/Vespa (sentado) ou carro (o boneco some)
   disegnaCorpo(andou) {
-    const p = this.pos, o = this.omino, a = o.userData, hc = this.hcViaggio ?? this.hc, mz = this.mezzo, id = this.mezzoId;
+    const p = this.pos, o = this.omino, a = o.userData, hc = this.y, mz = this.mezzo, id = this.mezzoId;
     o.rotation.y = this.dir;
     if (!mz) {
       const sw = Math.sin(this.fase * Math.PI) * 0.7 * this.vel;
@@ -446,22 +534,24 @@ export class Passeggio {
 
   mostraBordo() {
     const b = this.el.querySelector('.ps-bordo');
-    b.innerHTML = this.mezzoId ? '🚧 Qui finisce la città.<br><small>Tocca 🛣️ Strada per andare in una città vicina</small>'
-      : '🚧 Qui finisce la città.<br><small>Con la bici, la Vespa o l’auto prendi la 🛣️ strada per le città vicine</small>';
+    b.innerHTML = '🌊 Qui c’è il mare.<br><small>Tocca 🛣️ Strada per scegliere dove andare</small>';
     b.classList.add('on');
     clearTimeout(this._bordo); this._bordo = setTimeout(() => { b.classList.remove('on'); this._avvBordo = false; }, 3200);
   }
 
-  // altura (acima do chão da cidade) do que estiver em x,z: casa, loja ou outdoor; 0 na rua
-  alturaEm(x, z) {
+  // altura absoluta do topo do que estiver em x,z (casa, loja, outdoor) ou do chão da cidade
+  topoEm(x, z) {
     const m = LOTE * 0.5;
     if (!this._vicine || Math.hypot(this._vicine.x - this.pos.x, this._vicine.z - this.pos.z) > LOTE) {
       const v = [];
-      for (const ci of this.l.casas) { const c = this.D.casas[ci]; if (Math.abs(c.x - this.pos.x) < LOTE * 4 && Math.abs(c.z - this.pos.z) < LOTE * 4) v.push([c.x, c.z, ((this.ui.decori?.attive.get(c.conta)?.pilha) ?? ALTURA_NIVEL[c.livello]) * LOTE]); }
-      for (const cm of this.l.commerci ?? []) if (Math.abs(cm.x - this.pos.x) < LOTE * 4 && Math.abs(cm.z - this.pos.z) < LOTE * 4) v.push([cm.x, cm.z, LOTE * (cm.prodotto === 'cartellone' ? 0.95 : 0.7)]);
+      for (const l of this.cidadesPerto()) {
+        if (Math.hypot(l.x - this.pos.x, l.z - this.pos.z) > (l._raio ?? 1) + LOTE * 5) continue;
+        for (const ci of l.casas) { const c = this.D.casas[ci]; if (Math.abs(c.x - this.pos.x) < LOTE * 4 && Math.abs(c.z - this.pos.z) < LOTE * 4) v.push([c.x, c.z, c.y + ((this.ui.decori?.attive.get(c.conta)?.pilha) ?? ALTURA_NIVEL[c.livello]) * LOTE]); }
+        for (const cm of l.commerci ?? []) if (Math.abs(cm.x - this.pos.x) < LOTE * 4 && Math.abs(cm.z - this.pos.z) < LOTE * 4) v.push([cm.x, cm.z, cm.y + LOTE * (cm.prodotto === 'cartellone' ? 0.95 : 0.7)]);
+      }
       this._vicine = { x: this.pos.x, z: this.pos.z, v };
     }
-    let h = 0;
+    let h = -Infinity;
     for (const [cx, cz, ch] of this._vicine.v) if (Math.abs(x - cx) < m && Math.abs(z - cz) < m) h = Math.max(h, ch);
     return h;
   }
@@ -473,7 +563,7 @@ export class Passeggio {
     for (const [, c, cm] of lista) {
       const o = c ?? cm; if (o === eu) continue;
       const h = c ? ALTURA_NIVEL[c.livello] * LOTE : LOTE * 0.66;
-      caixa.min.set(o.x - m, this.hc, o.z - m); caixa.max.set(o.x + m, this.hc + h, o.z + m);
+      caixa.min.set(o.x - m, o.y, o.z - m); caixa.max.set(o.x + m, o.y + h, o.z + m);
       if (ray.intersectBox(caixa, hit) && cam.distanceTo(hit) < d - LOTE * 0.3) return true;
     }
     return false;
@@ -483,16 +573,18 @@ export class Passeggio {
   etichette() {
     if ((this._q = (this._q ?? 0) + 1) % 3) return;   // a cada 3 quadros basta
     const p = this.pos, cam = this.mappa.camera, v = new THREE.Vector3(), lista = [];
-    for (const ci of this.l.casas) {
-      const c = this.D.casas[ci], d = Math.hypot(c.x - p.x, c.z - p.z);
-      if (d < LOTE * 3.2) lista.push([d, c]);
+    if (this.l && Math.hypot(this.l.x - p.x, this.l.z - p.z) < this.citta.raioCidade(this.l) + LOTE * 4) {
+      for (const ci of this.l.casas) {
+        const c = this.D.casas[ci], d = Math.hypot(c.x - p.x, c.z - p.z);
+        if (d < LOTE * 3.2) lista.push([d, c]);
+      }
+      for (const cm of this.l.commerci ?? []) { const d = Math.hypot(cm.x - p.x, cm.z - p.z); if (d < LOTE * 3.2) lista.push([d, null, cm]); }
     }
-    for (const cm of this.l.commerci ?? []) { const d = Math.hypot(cm.x - p.x, cm.z - p.z); if (d < LOTE * 3.2) lista.push([d, null, cm]); }
     lista.sort((a, b) => a[0] - b[0]);
     const out = [], usati = [];
     for (const [, c, cm] of lista.slice(0, 10)) {
       const x = c ? c.x : cm.x, z = c ? c.z : cm.z;
-      const y = this.hc + LOTE * (c ? (this.ui.decori?.attive.get(c.conta)?.pilha ?? ALTURA_NIVEL[c.livello]) + 0.12 : 0.85);   // no topo da casa
+      const y = (c ?? cm).y + LOTE * (c ? (this.ui.decori?.attive.get(c.conta)?.pilha ?? ALTURA_NIVEL[c.livello]) + 0.12 : 0.85);   // no topo da casa
       v.set(x, y, z).project(cam);
       if (v.z > 1 || v.z < -1 || Math.abs(v.x) > 1.05 || v.y > 0.95 || v.y < -0.7) continue;
       const sx = (v.x + 1) / 2 * innerWidth, sy = (1 - v.y) / 2 * innerHeight;

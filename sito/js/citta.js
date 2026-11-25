@@ -96,8 +96,8 @@ function geometriaBorda() {
 }
 
 // largura do barranco para uma queda d (km): rampa de ~25°, no máximo 900 m
-const larguraScarpata = d => Math.min(0.9, Math.max(0, d) * 2.2);
-const SCARPATA_MIN = 0.015;   // queda abaixo disso (≈5 m reais): sem barranco, a borda baixa basta
+export const larguraScarpata = d => Math.min(0.9, Math.max(0, d) * 2.2);
+export const SCARPATA_MIN = 0.015;   // queda abaixo disso (≈5 m reais): sem barranco, a borda baixa basta
 
 // InstancedMesh que cresce sob demanda
 class Camada {

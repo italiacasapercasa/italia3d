@@ -428,6 +428,19 @@ button.ms-altro small { color: var(--grigio); font-weight: 700; }
 .ct-pacchi button u { display: block; text-decoration: none; font-size: 10.5px; font-weight: 900; color: var(--inchiostro); line-height: 1.2; margin-top: 4px; }
 .ct-pacchi button.giusto { box-shadow: 0 0 0 4px var(--verde); background: #EAF7EE; }
 .ct-serve { text-align: center; font-weight: 800; font-size: 14px; margin: -4px 0 10px; }
+/* 24/11: resumo do pacote escolhido + quadradinho do consenso (art. 59 Codice del Consumo) + botão de pagar, no lugar do confirm() do navegador */
+.ct-pacchi button.scelto { box-shadow: 0 0 0 4px var(--giallo); background: #FFF6CC; }
+.ct-paga { margin-top: 12px; border: 3px solid var(--inchiostro); border-radius: 16px; background: #FFFBEA; padding: 10px 12px 12px; text-align: center; }
+.ct-paga[hidden] { display: none; }
+.ct-paga-tit { font-size: 17px; font-weight: 800; }
+.ct-paga-tit b { font-weight: 900; }
+.ct-paga-tit em.dono { font-style: normal; font-size: 13px; font-weight: 900; color: #fff; background: var(--rosso); border-radius: 99px; padding: 1px 7px; }
+.ct-subito { display: flex; align-items: flex-start; gap: 8px; margin: 10px 0; text-align: left; font-size: 12.5px; font-weight: 700; line-height: 1.35; }
+.ct-subito input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--verde); }
+.ct-paga .ct-paga-btn { width: 100%; margin: 0; border: 3px solid var(--inchiostro); border-radius: 14px; background: var(--verde); color: #fff; font: inherit; font-size: 17px; font-weight: 900; padding: 11px 8px; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ct-paga.avviso .ct-subito { animation: ct-scuoti .45s; color: var(--rosso); }
+.ct-paga.avviso .ct-subito:has(input:checked) { color: inherit; }
+@keyframes ct-scuoti { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 .ct-fiducia { margin-top: 10px; text-align: center; font-size: 12px; font-weight: 800; color: var(--inchiostro); background: #F1F6FB; border: 2px dashed #9AA9BC; border-radius: 12px; padding: 6px 8px; line-height: 1.45; }
 .ct-grazie { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; font-weight: 800; font-size: 13px; }
 .ct-grazie input { width: 20px; height: 20px; accent-color: var(--verde); }
@@ -469,7 +482,14 @@ body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.
 .ps-bussola { position: absolute; left: 50%; top: calc(var(--sat) + 58px); transform: translateX(-50%); display: flex; align-items: center; gap: 6px; max-width: calc(100% - 24px); background: rgba(255,255,255,.95); border: 2.5px solid var(--inchiostro); border-radius: 99px; padding: 4px 12px 4px 6px; font: 800 13px 'Nunito', sans-serif; color: var(--inchiostro); white-space: nowrap; box-shadow: 0 3px 0 rgba(21,32,51,.2); }
 .ps-bussola i { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--giallo); font-style: normal; font-size: 13px; transition: transform .2s; }
 .ps-bussola span { overflow: hidden; text-overflow: ellipsis; }
-#passeggio.viaggio .ps-bussola,
+.ps-meta { top: calc(var(--sat) + 94px); background: #FFF6D6; }
+.ps-meta[hidden] { display: none; }
+.ps-meta .ps-meta-x { pointer-events: auto; border: 0; background: none; font: 900 14px 'Nunito', sans-serif; padding: 0 0 0 4px; color: var(--grigio); }
+.ps-cerca { width: 100%; box-sizing: border-box; margin: 2px 0 4px; border: 2.5px solid var(--inchiostro); border-radius: 12px; padding: 8px 10px; font: 800 15px 'Nunito', sans-serif; pointer-events: auto; }
+.ps-menu input { pointer-events: auto; }
+.ps-flash { position: absolute; inset: 0; background: #fff; opacity: 0; transition: opacity .25s; }
+.ps-flash.on { opacity: .85; transition: none; }
+#passeggio.viaggio .ps-bussola, #passeggio.viaggio .ps-meta,
 #passeggio.viaggio .ps-azioni, #passeggio.viaggio .ps-joy, #passeggio.viaggio .ps-et { display: none; }
 .ps-menu.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
 .ps-menu.basso { top: auto; bottom: calc(var(--sab) + 24px); width: min(300px, calc(100% - 24px)); }
@@ -501,6 +521,38 @@ body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.
 .pg-sw button { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--inchiostro); padding: 0; }
 .pg-sw button.on { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--inchiostro); }
 .pg-lock { opacity: .75; }
+/* editor do personagem v2 (25/11): abas, rostos, loja com provador */
+.pg-anteprima canvas { width: 210px; height: 240px; cursor: grab; }
+.pg-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 8px 0 4px; }
+.pg-tabs::-webkit-scrollbar { display: none; }
+.pg-tabs button { flex: none; position: relative; border: 2.5px solid var(--inchiostro); border-radius: 99px; background: #fff; padding: 6px 12px; font: 900 13.5px 'Nunito', sans-serif; color: var(--inchiostro); }
+.pg-tabs button.on { background: var(--inchiostro); color: #fff; }
+.pg-facce { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 4px 0 6px; }
+.pg-facce button { border: 3px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 3px; }
+.pg-facce button.on { background: var(--giallo); box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.pg-facce img { width: 100%; display: block; }
+.pg-cats { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0 8px; }
+.pg-cats::-webkit-scrollbar { display: none; }
+.pg-cats button { flex: none; border: 2px solid var(--inchiostro); border-radius: 99px; background: #fff; padding: 4px 10px; font: 900 12.5px 'Nunito', sans-serif; color: var(--inchiostro); }
+.pg-cats button.on { background: var(--giallo); }
+.pg-griglia { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.pg-card { display: flex; flex-direction: column; align-items: center; gap: 2px; border: 2.5px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 8px 4px 6px; font-family: 'Nunito', sans-serif; color: var(--inchiostro); text-align: center; box-shadow: 0 2px 0 rgba(21,32,51,.18); }
+.pg-card span { font-size: 28px; line-height: 1.1; }
+.pg-card b { font-size: 11.5px; font-weight: 900; line-height: 1.15; min-height: 2.3em; display: flex; align-items: center; }
+.pg-card i { font-style: normal; font-size: 12px; letter-spacing: -1px; }
+.pg-card em { font-style: normal; font-size: 11px; font-weight: 900; color: #B7791F; }
+.pg-card em u { text-decoration: none; background: var(--rosso); color: #fff; border-radius: 99px; padding: 0 5px; font-size: 9px; }
+.pg-card em s { color: var(--grigio); font-weight: 700; }
+.pg-card.mio em { color: var(--verde); }
+.pg-card.on { background: #E8F6EC; border-color: var(--verde); }
+.pg-card.prova { background: #FFF6CC; box-shadow: 0 0 0 3px var(--giallo); }
+.pg-outfit { grid-column: span 3; flex-direction: row; justify-content: flex-start; gap: 8px; padding: 8px 10px; text-align: left; }
+.pg-outfit b { flex: 1; min-height: 0; font-size: 13.5px; }
+.pg-outfit i { font-size: 14px; }
+.pg-prova { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 6px; background: #FFF6CC; border: 2.5px solid var(--inchiostro); border-radius: 14px; padding: 6px 8px; margin: 2px 0 6px; font-weight: 800; font-size: 13px; }
+.pg-prova span { flex: 1; min-width: 0; }
+.pg-prova button { border: 2.5px solid var(--inchiostro); border-radius: 99px; background: var(--giallo); padding: 5px 12px; font: 900 13px 'Nunito', sans-serif; }
+.pg-prova button.sec { background: #fff; padding: 5px 9px; }
 
 /* ---------- casa con interni (js/interni.js) ---------- */
 #interni { position: fixed; inset: 0; z-index: 40; background: #DCEBFF; font-family: 'Nunito', sans-serif; }
@@ -540,6 +592,44 @@ body.interni-on #pannello { z-index: 45; }
 .in-sw.on { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--inchiostro); }
 .in-visita { font-weight: 800; font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: center; text-align: center; }
 .in-visita button { background: var(--giallo); border: 3px solid var(--inchiostro); border-radius: 99px; padding: 7px 14px; font: 900 13.5px 'Nunito', sans-serif; }
+/* catálogo de móveis (25/11): busca, categorias, miniaturas 3D; no PC vira barra lateral */
+.in-corpo { max-height: 36vh; overflow-y: auto; overscroll-behavior: contain; }
+.in-barra.ridotta .in-corpo { display: none; }
+.in-barra.ridotta .in-tabs { margin-bottom: 0; }
+.in-riduci { margin-left: 4px; width: 34px; height: 30px; border: 2.5px solid var(--inchiostro); border-radius: 99px; background: #fff; font: 900 14px 'Nunito', sans-serif; padding: 0; }
+.in-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.in-tabs button { flex: none; }
+.in-cerca-riga { margin: 0 0 6px; }
+.in-cerca { width: 100%; box-sizing: border-box; border: 2.5px solid var(--inchiostro); border-radius: 12px; padding: 8px 12px; font: 800 14px 'Nunito', sans-serif; background: #F6F7FA; }
+.in-cats { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 0 0 6px; }
+.in-cats::-webkit-scrollbar { display: none; }
+.in-cats button { flex: none; border: 2px solid var(--inchiostro); border-radius: 99px; background: #fff; padding: 4px 10px; font: 900 12.5px 'Nunito', sans-serif; }
+.in-cats button.on { background: var(--inchiostro); color: #fff; }
+.in-griglia { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; padding-bottom: 4px; }
+.in-art { position: relative; display: flex; flex-direction: column; align-items: center; border: 2.5px solid var(--inchiostro); border-radius: 14px; background: #fff; padding: 4px 4px 6px; font-family: 'Nunito', sans-serif; color: var(--inchiostro); text-align: center; box-shadow: 0 2px 0 rgba(21,32,51,.18); }
+.in-art:active { transform: translateY(1px); box-shadow: none; }
+.in-art img { width: 100%; aspect-ratio: 1; border-radius: 10px; background: radial-gradient(circle at 50% 40%, #FFFFFF, #ECE6DA); display: block; object-fit: contain; }
+.in-art b { font-size: 11.5px; font-weight: 900; line-height: 1.15; margin-top: 4px; min-height: 2.3em; display: flex; align-items: center; }
+.in-art em { font-style: normal; font-size: 11px; font-weight: 900; color: var(--verde); }
+.in-art.lock em { color: #B7791F; }
+.in-art.lock img { filter: saturate(.9) brightness(.97); }
+.in-nuovo { position: absolute; top: 6px; left: 6px; background: var(--rosso); color: #fff; font-style: normal; font-size: 9.5px; font-weight: 900; border-radius: 99px; padding: 1px 6px; }
+.in-art small { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,.9); border-radius: 99px; padding: 0 5px; font-size: 10px; font-weight: 900; }
+.in-vuoto { grid-column: 1 / -1; text-align: center; font-weight: 800; color: var(--grigio); }
+.in-sel { flex-wrap: wrap; justify-content: center; max-width: calc(100% - 20px); top: calc(var(--sat) + 100px); bottom: auto; }
+.in-sel-nome { flex-basis: 100%; text-align: center; font-weight: 900; font-size: 13px; background: rgba(255,255,255,.92); border-radius: 99px; padding: 3px 10px; justify-self: center; }
+.in-sel button[hidden] { display: none; }
+#interni.con-sel .in-dica { display: none; }
+.in-ctrl button:disabled { opacity: .35; }
+@media (min-width: 900px) and (min-height: 560px) {
+  .in-barra { left: 10px; right: auto; width: 370px; top: calc(var(--sat) + 104px); bottom: calc(var(--sab) + 10px); display: flex; flex-direction: column; }
+  .in-barra.ridotta { bottom: auto; }
+  .in-barra.visita { top: auto; left: 50%; transform: translateX(-50%); width: auto; display: block; }
+  .in-corpo { max-height: none; flex: 1; }
+  .in-griglia { grid-template-columns: repeat(3, 1fr); }
+  .in-sel { left: calc(50% + 190px); }
+  .in-dica { left: calc(50% + 190px); }
+}
 .in-card { background: linear-gradient(135deg, #FFF1C9, #FFF6E6); }
 .in-card.nuova { box-shadow: 0 0 0 3px var(--giallo), 0 3px 0 rgba(21,32,51,.2); }
 .ct-item.ora { opacity: 1; background: #FFF6CC; box-shadow: 0 0 0 2px var(--giallo); }

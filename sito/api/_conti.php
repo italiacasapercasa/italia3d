@@ -272,6 +272,8 @@ function conti_listino(): array {
     foreach ((array)($c['mobili'] ?? []) as $m) if ((int)$m['prezzo'] > 0) $out['mob_' . $m['id']] = ['nome' => (string)$m['nome'], 'prezzo' => (int)$m['prezzo'], 'serve' => 'interni'];
     foreach ((array)($c['pacchetti'] ?? []) as $p) $out['pac_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo'], 'serve' => 'interni', 'mobili' => array_map(fn($m) => 'mob_' . $m, (array)$p['mobili'])];
     foreach ((array)($c['personaggio'] ?? []) as $p) $out['pg_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo']];
+    // outfit: vários itens do personagem juntos com desconto (entram só os que a pessoa ainda não tem)
+    foreach ((array)($c['outfit'] ?? []) as $p) $out['pgo_' . $p['id']] = ['nome' => (string)$p['nome'], 'prezzo' => (int)$p['prezzo'], 'mobili' => array_map(fn($m) => 'pg_' . $m, (array)$p['items'])];
     foreach ((array)($c['catalogo'] ?? []) as $x) {
         if (empty($x['vendita']) || isset($out[$x['id']])) continue;
         $out[$x['id']] = ['nome' => (string)$x['nome'], 'prezzo' => (int)$x['prezzo']] + (in_array($x['id'], ['villa', 'castello'], true) ? ['casa' => true] : []);
@@ -366,7 +368,7 @@ function conti_compra(string $id, string $item): array {
         $nuovi = [$item];
         if (!empty($x['mobili'])) {   // pacote: entram só os móveis que a pessoa ainda não tem
             $nuovi = array_values(array_diff($x['mobili'], $own));
-            if (!$nuovi) { $err = 'Hai già tutti i mobili di questo pacchetto!'; return $u; }
+            if (!$nuovi) { $err = str_starts_with($item, 'pgo_') ? 'Hai già tutti i capi di questo outfit!' : 'Hai già tutti i mobili di questo pacchetto!'; return $u; }
         }
         if ($item === 'castello') {
             $regione = conti_regione_di($conta);
