@@ -241,6 +241,11 @@ export class Passeggio {
     this.pos.set(g.x - g.dx * 0.02, 0, g.z - g.dz * 0.02);
     this.dir = Math.atan2(-g.dx, -g.dz); this.yaw = this.dir + Math.PI;
     this._cp = null;
+    // a rua da chegada pode ter quadra de um lado só: puxa para o lado que é da cidade
+    if (this.naCitta(this.pos.x, this.pos.z) !== dest) for (const k of [0.25, -0.25, 0.45, -0.45]) {
+      const x = this.pos.x + g.dz * k * QH, z = this.pos.z + g.dx * k * QW;
+      if (this.naCitta(x, z) === dest) { this.pos.set(x, 0, z); break; }
+    }
     this.y = this.chao(this.pos.x, this.pos.z).y;
     this.entraCitta(dest);
     this.aggiornaCitta(true);
