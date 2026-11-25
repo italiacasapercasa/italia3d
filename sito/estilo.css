@@ -631,5 +631,8 @@ body.interni-on #pannello { z-index: 45; }
   .in-dica { left: calc(50% + 190px); }
 }
 .in-card { background: linear-gradient(135deg, #FFF1C9, #FFF6E6); }
+/* Vetrina: Mercatino di Natale (patrocínio de Natal, data/natale.json) */
+.ranking.natale li { background: linear-gradient(90deg, #FFF1F1, #F1FFF4); }
+.ranking.natale .avv { background: var(--rosso); color: #fff; font-size: 11px; font-weight: 900; border-radius: 99px; padding: 2px 8px; margin-right: 6px; white-space: nowrap; }
 .in-card.nuova { box-shadow: 0 0 0 3px var(--giallo), 0 3px 0 rgba(21,32,51,.2); }
 .ct-item.ora { opacity: 1; background: #FFF6CC; box-shadow: 0 0 0 2px var(--giallo); }

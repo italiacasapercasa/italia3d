@@ -100,7 +100,7 @@ export class Tesori {
       const r = j.tesoro;
       if (r.pieno) { this.ps.dica(`🧭 Hai già trovato ${r.max} tesori oggi: torna domani!`, 4000); setTimeout(() => { t.chiesto = false; }, 15000); return; }
       t.preso = true; t.aprendo = performance.now();
-      if (r.crediti) this.ps.ui.aviso(`🧭 Tesoro trovato! +${r.crediti} 💰 · ${r.n}/${r.max} oggi${t.tipo === 'negozio' ? ` · offerto da ${t.nome}` : ''}`);
+      if (r.crediti) this.ps.ui.aviso(`${r.avvento ? '🎁 Tesoro dell’Avvento' : '🧭 Tesoro trovato'}! +${r.crediti} 💰 · ${r.n}/${r.max} oggi${t.tipo === 'negozio' ? ` · offerto da ${t.nome}` : ''}`);
       this.aggiornaBussola();
     } catch (e) { this.ps.dica(e.message, 3500); setTimeout(() => { t.chiesto = false; }, 8000); }
   }

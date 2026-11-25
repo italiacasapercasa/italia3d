@@ -292,6 +292,12 @@ if ($acao === 'tesoro') {
     elseif ($tipo === 'negozio' && preg_match('/^[a-z0-9-]{4,40}$/i', $rif)) $k = "n$rif";
     else erro('Tesoro non valido.');
     $val = (int)($T[$tipo] ?? 2); $max = (int)($T['max'] ?? 5); $oggi = conti_oggi();
+    // Avvento (patrocínio de Natal, data/natale.json): o baú da loja do dia vale "bonus" vezes mais
+    $avv = false;
+    if ($tipo === 'negozio') {
+        $nat = json_decode((string)@file_get_contents(__DIR__ . '/../data/natale.json'), true) ?: [];
+        if (($nat['avvento'][$oggi] ?? '') === $rif) { $avv = true; $val *= max(1, min(5, (int)($nat['bonus'] ?? 2))); }
+    }
     $r = conti_modifica($id, function (array &$u) use ($k, $val, $max, $oggi) {
         $t = $u['tesori'] ?? [];
         if (($t['giorno'] ?? '') !== $oggi) $t = ['giorno' => $oggi, 'presi' => []];
@@ -301,7 +307,7 @@ if ($acao === 'tesoro') {
         conti_movimento($u, $val, 'tesoro', "$k $oggi");
         return ['crediti' => $val, 'n' => count($t['presi'])];
     });
-    resposta(['tesoro' => $r + ['max' => $max], 'profilo' => profilo(conti_leggi($id))]);
+    resposta(['tesoro' => $r + ['max' => $max, 'avvento' => $avv], 'profilo' => profilo(conti_leggi($id))]);
 }
 
 if ($acao === 'ricarica') {

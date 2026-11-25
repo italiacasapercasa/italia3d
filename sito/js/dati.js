@@ -25,13 +25,15 @@ const imagem = (src, t = 1) => new Promise((ok, erro) => {
 
 export async function carregar(versao, demo = false) {
   const v = `?v=${versao}`;
-  const [geo, comuniJ, snap, ril, img] = await Promise.all([
+  const [geo, comuniJ, snap, ril, img, natale] = await Promise.all([
     baixar(`data/geo.json${v}`, 'json', 'geo'),
     baixar(`data/comuni.json${v}`, 'json', 'comuni'),
     // ?demo=1: dados fictícios (nomes com hífen, que não existem no Instagram)
     baixar(`data/${demo ? 'demo/' : ''}snapshot.json?t=${Date.now()}`, 'json', 'snapshot'),
     baixar(`data/rilievo.bin${v}`, 'arrayBuffer', 'rilievo'),
     imagem(`data/terreno.png${v}`),
+    // patrocínios de Natal (opcional): { sponsor: {id}, negozi: [id], avvento: {"AAAA-MM-DD": id}, bonus }
+    fetch(`data/natale.json?t=${Date.now()}`).then(r => (r.ok ? r.json() : {})).catch(() => ({})),
   ]);
 
   const regioni = geo.regioni.map(r => ({ ...r, case: 0, luoghi: 0, carica: snap.cariche.regioni[r.cod] }));
@@ -56,8 +58,10 @@ export async function carregar(versao, demo = false) {
   const porConta = new Map(casas.map(c => [c.conta, c]));
 
   // comércios e outdoors aprovados, no lote que o motor reservou
+  const natNeg = new Set(natale.negozi ?? []), natAvv = new Set(Object.values(natale.avvento ?? {}));
   const commerci = (snap.commerci ?? []).filter(cm => luoghi[cm.li]).map(cm => {
-    const x = { ...cm, luogo: luoghi[cm.li] };
+    // loja de Natal (decorada) também vale para quem comprou um dia do Avvento ou o patrocínio oficial
+    const x = { ...cm, luogo: luoghi[cm.li], natale: natNeg.has(cm.id) || natAvv.has(cm.id) || natale.sponsor?.id === cm.id };
     (x.luogo.commerci ??= []).push(x);
     return x;
   });
@@ -78,5 +82,5 @@ export async function carregar(versao, demo = false) {
   const ranking = [...casas].sort((a, b) => b.sett - a.sett || a.ts - b.ts);
   ranking.forEach((c, i) => { c.pos = i + 1; });
 
-  return { geo, snap, regioni, regPorCod, comuni, comunePorIstat, luoghi, casas, porConta, ranking, commerci, rilievo: new Uint16Array(ril), imagem: img };
+  return { geo, snap, regioni, regPorCod, comuni, comunePorIstat, luoghi, casas, porConta, ranking, commerci, natale, rilievo: new Uint16Array(ril), imagem: img };
 }

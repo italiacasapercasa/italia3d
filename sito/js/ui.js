@@ -1,5 +1,5 @@
 // Interface: busca, abas, painéis (casa, cidade, região, Palazzo, classifica, tabellone, senza padrone, come funziona).
-import { REGOLE, NOMI_CARICHE, DESCR_CARICHE, FONTI, COME_GUADAGNARE, num, punti, dataBreve, dataLunga, ora } from './regole.js';
+import { REGOLE, NOMI_CARICHE, DESCR_CARICHE, FONTI, COME_GUADAGNARE, num, punti, dataBreve, dataLunga, ora, nataleAttivo } from './regole.js';
 import { iconaLivello } from './icone.js';
 import { Fotografo } from './foto.js';
 import { immagineCasa, immagineFondazione, immagineCitta, PERFIL } from './storie.js';
@@ -137,6 +137,12 @@ export class UI {
       if (f.patronoOggi && txt.includes(f.patronoOggi.nome)) return f.patronoOggi.luogo ? this.luogo(f.patronoOggi.luogo) : this.comuneVuoto(f.patronoOggi);
       this.mappa.verPais();
     });
+    // patrocínios de Natal (data/natale.json): o dia do Avvento e o sponsor oficial
+    const nat = D.natale ?? {}, oggiRoma = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' });
+    const avv = D.commerci.find(cm => cm.id === nat.avvento?.[oggiRoma]);
+    if (avv && nataleAttivo()) add('chip-avvento', `🎁 <b>Avvento ${Number(oggiRoma.slice(8))}/${Number(oggiRoma.slice(5, 7))}</b>: oggi è offerto da <b>${esc(avv.nome)}</b> · ${esc(avv.luogo.nome)} · tesoro ×${nat.bonus ?? 2}`, () => this.commercio(avv));
+    const spo = D.commerci.find(cm => cm.id === nat.sponsor?.id);
+    if (spo && nataleAttivo()) add('chip-sponsor', `🎄 Il Natale sulla mappa è offerto da <b>${esc(spo.nome)}</b>`, () => this.commercio(spo));
     this.doppio = (D.snap.doppi ?? []).find(d => agora >= Date.parse(d.da) && agora < Date.parse(d.a)) ?? null;
     if (this.doppio) add('chip-doppi', `⚡ <b>Punti doppi</b> ${this.doppio.tipi.includes('storia') ? 'nelle storie ' : ''}fino alle ${ora(Date.parse(this.doppio.a))}`, () => this.comeFunziona());
     this.speciale = (D.snap.speciali ?? []).find(s => agora >= Date.parse(s.da) && agora < Date.parse(s.a)) ?? null;
@@ -474,7 +480,10 @@ export class UI {
     const n = norm(busca);
     if (n) lista = lista.filter(cm => norm(`${cm.nome} ${cm.luogo.nome} ${tipoDi(cm.tipo)[2]}`).includes(n));
     const evidenza = filtro === 'tutti' && !n ? lista.filter(cartellone) : [];
-    const resto = lista.filter(cm => !evidenza.includes(cm));
+    // Natale: "Mercatino di Natale" no topo (lojas com patrocínio de Natal; a do Avvento de hoje primeiro)
+    const oggiRoma = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Rome' }), avvId = D.natale?.avvento?.[oggiRoma];
+    const mercatino = filtro === 'tutti' && !n && nataleAttivo() ? lista.filter(cm => cm.natale && !cartellone(cm)).sort((a, b) => (b.id === avvId) - (a.id === avvId)) : [];
+    const resto = lista.filter(cm => !evidenza.includes(cm) && !mercatino.includes(cm));
     const mini = (cm, e) => `<span class="mini">${cm.logo ? `<img src="${esc(cm.logo)}" alt="" loading="lazy">` : e}</span>`;
     const carta = cm => {
       const [, e, t] = tipoDi(cm.tipo);
@@ -492,6 +501,7 @@ export class UI {
       <div class="filtri">${filtri.map(([k, r]) => `<button data-filtro="${k}" class="${filtro === k ? 'on' : ''}">${r}</button>`).join('')}</div>
       ${filtro === 'vicino' && !base ? '<p class="nota">Per vedere i negozi vicini, cerca la tua casa e tocca «è la mia casa».</p>' : ''}
       <input class="cerca-negozi" type="search" placeholder="cerca negozio, città o tipo" value="${esc(busca)}">
+      ${mercatino.length ? `<h3 class="tit-evidenza">🎄 Mercatino di Natale</h3><ol class="ranking negozi natale">${mercatino.map(cm => riga(cm).replace('<span class="visita">', cm.id === avvId ? '<span class="avv">🎁 oggi</span><span class="visita">' : '<span class="visita">')).join('')}</ol>` : ''}
       ${evidenza.length ? `<h3 class="tit-evidenza">📣 In evidenza</h3><div class="evidenza">${evidenza.map(carta).join('')}<a class="botao tratteggiato" href="negozio.html?prodotto=cartellone">＋ il tuo cartellone qui</a></div>` : ''}
       ${resto.length ? `${evidenza.length ? '<h3 class="tit-evidenza">🏪 Negozi</h3>' : ''}<ol class="ranking negozi">${resto.map(riga).join('')}</ol>` : evidenza.length ? '' : `<p class="nota">${D.commerci.length ? (filtro === 'cartelloni' && !n ? 'Ancora nessun cartellone: il primo si vede di più!' : 'Nessuna attività con questo nome.') : 'Ancora nessun negozio: il primo si vede di più!'}</p>`}
       <a class="botao tratteggiato" href="negozio.html">＋ metti la tua attività sulla mappa</a>
