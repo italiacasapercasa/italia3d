@@ -77,6 +77,8 @@ a { color: inherit; }
 
 /* ---------- controles ---------- */
 #controlli { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 15; }
+#controlli .solo-pc { display: none; }
+@media (hover: hover) and (pointer: fine) { #controlli .solo-pc { display: block; } }
 #controlli button { width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--inchiostro); background: #fff; font-size: 24px; font-weight: 900; line-height: 1; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
 
 /* ---------- pílulas, abas, rodapé ---------- */
@@ -559,6 +561,32 @@ body.passeggio #testa, body.passeggio #controlli, body.passeggio #pillole, body.
 .ps-tag.mia { background: var(--giallo); }
 .ps-tag.neg { background: #FFE3D6; }
 .ps-card { background: linear-gradient(135deg, #DCEBFF, #FFF6E6); }
+/* minimapa (js/minimappa.js): círculo no canto, gira com a câmera; toque abre o mapa grande */
+.ps-mini { position: absolute; left: 14px; bottom: calc(var(--sab) + 22px); width: 150px; height: 150px; padding: 0; border-radius: 50%; border: 4px solid var(--inchiostro); background: #A9D18E; overflow: hidden; box-shadow: 0 4px 0 rgba(21,32,51,.3); cursor: pointer; }
+.ps-mini canvas { display: block; width: 100%; height: 100%; }
+.ps-mini-n { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; border-radius: 50%; background: var(--rosso); color: #fff; font: 900 11px/18px 'Nunito', sans-serif; text-align: center; border: 2px solid var(--inchiostro); box-sizing: content-box; margin: -11px 0 0 -11px; }
+.ps-mappa { position: absolute; inset: 0; background: #A9D18E; pointer-events: auto; z-index: 5; touch-action: none; }
+.ps-mappa[hidden] { display: none; }
+.ps-mappa canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+.ps-mappa-topo { position: absolute; top: calc(var(--sat) + 10px); left: 10px; right: 10px; display: flex; align-items: center; gap: 10px; background: #fff; border: 3px solid var(--inchiostro); border-radius: 18px; padding: 8px 8px 8px 14px; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ps-mappa-topo b { font-size: 17px; font-weight: 900; white-space: nowrap; }
+.ps-mappa-topo span { flex: 1; font-size: 13px; font-weight: 800; color: var(--grigio); line-height: 1.2; }
+.ps-mappa-topo button, .ps-mappa-zoom button { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--inchiostro); background: var(--giallo); font: 900 18px 'Nunito', sans-serif; flex: none; }
+.ps-mappa-zoom { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; }
+.ps-mappa-zoom button { background: #fff; font-size: 22px; box-shadow: 0 3px 0 rgba(21,32,51,.25); }
+.ps-mappa-meta { position: absolute; left: 50%; bottom: calc(var(--sab) + 18px); transform: translateX(-50%); width: min(420px, calc(100% - 24px)); box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #fff; border: 3px solid var(--inchiostro); border-radius: 18px; padding: 10px 12px; box-shadow: 0 4px 0 rgba(21,32,51,.25); }
+.ps-mappa-meta[hidden] { display: none; }
+.ps-mappa-meta div { flex: 1 1 calc(100% - 50px); min-width: 0; display: flex; flex-direction: column; }
+.ps-mappa-meta b { font-size: 15px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ps-mappa-meta small { font-size: 12.5px; font-weight: 800; color: var(--grigio); }
+.ps-mappa-meta [data-a="via"] { width: 34px; height: 34px; border-radius: 50%; border: 2.5px solid var(--inchiostro); background: #fff; font: 900 14px 'Nunito', sans-serif; }
+.ps-mappa-meta .ps-cta { width: auto; flex: 1 1 140px; margin: 0; }
+#passeggio.viaggio .ps-mini { display: block; }
+@media (max-width: 600px) {
+  .ps-mini { width: 112px; height: 112px; left: 10px; }
+  #passeggio.viaggio .ps-mini { display: none; }
+  .ps-mappa-topo span { font-size: 12px; }
+}
 .ps-new { display: inline-block; vertical-align: 2px; background: var(--rosso); color: #fff; font-size: 10px; font-weight: 900; border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
 
 /* ---------- editor do personagem (js/personaggio.js) ---------- */

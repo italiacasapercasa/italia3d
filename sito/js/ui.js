@@ -179,6 +179,16 @@ export class UI {
     $('#zoom-piu').onclick = () => this.mappa.zoom(0.45);
     $('#zoom-meno').onclick = () => this.mappa.zoom(2.2);
     $('#vedi-paese').onclick = () => { this.mappa.verPais(); };
+    // girar a câmera no PC (no celular: dois dedos): botões ⟲ ⟳, teclas Q/E; botão direito ou Shift + arrastar também gira
+    const ruota = s => { const m = this.mappa; m.voar({ x: m.alvo.x, z: m.alvo.z, dist: m.dist, az: m.az + s * Math.PI / 6 }, 450); };
+    $('#ruota-sx').onclick = () => ruota(-1);
+    $('#ruota-dx').onclick = () => ruota(1);
+    addEventListener('keydown', e => {
+      if (this.mappa.passeggio || /input|textarea|select/i.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey) return;
+      const k = e.key.toLowerCase();
+      if (k === 'q') ruota(-1);
+      else if (k === 'e') ruota(1);
+    });
     // 🏠: volta à casa selecionada (qualquer uma); sem seleção, à minha casa
     $('#vai-casa').onclick = () => {
       if (this.selez) { const p = this.citta.posCasa(this.selez); this.focar(p.x, p.z, 0.6, 0.62); }

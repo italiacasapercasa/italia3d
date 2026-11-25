@@ -11,6 +11,7 @@ import { costruisci, animaAcc } from './personaggio.js';
 import { VEICOLI, SEDUTO, costruisciVeicolo } from './veicoli.js';
 import { Tesori } from './tesori.js';
 import { Strade } from './strade.js';
+import { Minimappa, distTxt } from './minimappa.js';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -31,14 +32,33 @@ export class Passeggio {
     this.strade = new Strade(D, mappa, citta);
     this.montarUI();
     this.tesori = new Tesori(this);
+    this.mini = new Minimappa(this);
     addEventListener('keydown', e => {
       if (!this.ativo || /input|textarea/i.test(e.target.tagName)) return;
       const k = e.key.toLowerCase();
-      if (k === 'escape') return this.esci();
-      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'shift'].includes(k)) { this.teclas.add(k); e.preventDefault(); }
+      if (k === 'escape') {
+        if (this.mini.aperta()) return this.mini.chiudi();
+        // Esc que só soltou o mouse preso não sai da passeggiata
+        if (document.pointerLockElement || performance.now() - (this._sblocco ?? 0) < 600) return;
+        return this.esci();
+      }
+      if (k === 'm') return this.mini.aperta() ? this.mini.chiudi() : this.mini.apri();
+      if (this.mini.aperta()) return;
+      if (['w', 'a', 's', 'd', 'q', 'e', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'shift'].includes(k)) { this.teclas.add(k); e.preventDefault(); }
     });
     addEventListener('keyup', e => this.teclas.delete(e.key.toLowerCase()));
     addEventListener('blur', () => this.teclas.clear());
+    // PC: clique na cena prende o mouse (como nos jogos): mexer o mouse vira a câmera; Esc solta
+    document.addEventListener('mousemove', e => {
+      if (!this.ativo || document.pointerLockElement !== this.mappa.canvas) return;
+      this.yaw -= e.movementX * 0.0028;
+      this.pitch = clamp(this.pitch + e.movementY * 0.0018, -0.05, 0.6);
+    });
+    document.addEventListener('pointerlockchange', () => {
+      if (!this.ativo) return;
+      if (document.pointerLockElement === this.mappa.canvas) this.dica('🖱️ Muovi il mouse per guardarti intorno · Esc per liberarlo', 3500);
+      else this._sblocco = performance.now();
+    });
   }
 
   montarUI() {
@@ -62,7 +82,7 @@ export class Passeggio {
     d.querySelector('.ps-strada').onclick = () => this.menuStrade();
     d.querySelector('.ps-menu').onclick = e => this.cliqueMenu(e);
     d.querySelector('.ps-menu').oninput = e => { if (e.target.classList.contains('ps-cerca')) this.cerca(e.target.value); };
-    d.querySelector('.ps-meta-x').onclick = () => { this.meta = null; this.el.querySelector('.ps-meta').hidden = true; };
+    d.querySelector('.ps-meta-x').onclick = () => this.annullaMeta();
     d.querySelector('.ps-pg').onclick = () => this.ui.conto?.editor.apri();
     d.querySelector('.ps-casa').onclick = () => { const c = this.D.porConta.get(this.ui.conto?.p?.conta); if (c) this.avvia(`casa:${c.conta}`); };
   }
@@ -153,36 +173,63 @@ export class Passeggio {
     if (!r) this.menu(`<h4>🌊 ${esc(dest.nome)}</h4><p>Non c'è una strada da ${esc(this.l.nome)} a ${esc(dest.nome)} (c'è il mare in mezzo).</p>`);
     return r;
   }
-  // a pé: bússola até a próxima cidade da rota
+  // ---------- destino (bússola + linha roxa no minimapa) ----------
+  // a pé: até uma cidade do menu Strada
   guida(dest) {
     const r = this.rota(dest); if (!r) return;
-    this.meta = { rota: r, i: 1 };
+    this.meta = { punto: { x: dest.x, z: dest.z, nome: dest.nome }, citta: true, raio: this.citta.raioCidade(dest) * 0.7, rota: r, i: 1, cittaDest: dest, linea: this.lineaRota(r, dest.x, dest.z) };
     this.chiudiMenu();
     this.el.querySelector('.ps-meta').hidden = false;
-    this.dica(`🧭 Segui la freccia in alto: ${km(Math.hypot(dest.x - this.pos.x, dest.z - this.pos.z))} km fino a ${dest.nome}`, 4500);
+    this.dica(`🧭 Segui la freccia in alto e la linea viola sulla mappa: ${distTxt(Math.hypot(dest.x - this.pos.x, dest.z - this.pos.z))} fino a ${dest.nome}`, 4500);
   }
+  // ponto marcado no mapa grande: estradas até a cidade mais perto do ponto e reta no fim
+  impostaMeta(x, z, nome) {
+    const p = this.pos, vic = this.strade.perto(x, z, 6)[0]?.[1] ?? this.strade.perto(x, z, 60)[0]?.[1] ?? null;
+    const daqui = this.naCitta(p.x, p.z) ?? this.vicina() ?? this.l, dist = Math.hypot(x - p.x, z - p.z);
+    let rota = null, mare = false;
+    if (vic && daqui && vic !== daqui && dist > 2) { rota = this.strade.percorso(daqui, vic); if (!rota) mare = true; }
+    const dentro = vic && Math.hypot(vic.x - x, vic.z - z) < this.citta.raioCidade(vic) + 0.1;
+    this.meta = { punto: { x, z, nome: nome ?? (vic ? (dentro ? vic.nome : `vicino a ${vic.nome}`) : 'Destinazione') }, raio: LOTE * 1.2, rota, i: 1, cittaDest: vic, mare, linea: this.lineaRota(rota, x, z) };
+    this.el.querySelector('.ps-meta').hidden = false;
+    this.aggiornaMeta();
+  }
+  // pontos da linha: estradas montadas (curvas reais) nos primeiros trechos, depois de cidade em cidade
+  lineaRota(rota, x, z) {
+    const L = [[this.pos.x, this.pos.z]];
+    if (rota) for (let i = 0; i < rota.length - 1; i++) {
+      const a = rota[i], b = rota[i + 1];
+      if (i < 8) { const s = this.strade.strada(a, b), P = s.A === a ? s.P : [...s.P].reverse(); for (let k = 0; k < P.length; k += 2) L.push([P[k].x, P[k].z]); }
+      else L.push([b.x, b.z]);
+    }
+    L.push([x, z]);
+    return L;
+  }
+  annullaMeta() { this.meta = null; this.el.querySelector('.ps-meta').hidden = true; }
   aggiornaMeta() {
     const m = this.meta; if (!m) return;
-    let alvo = m.rota[m.i];
-    while (alvo && m.i < m.rota.length - 1 && Math.hypot(alvo.x - this.pos.x, alvo.z - this.pos.z) < this.citta.raioCidade(alvo) + 0.05) alvo = m.rota[++m.i];
-    const fim = m.rota[m.rota.length - 1], dFim = Math.hypot(fim.x - this.pos.x, fim.z - this.pos.z);
-    if (dFim < this.citta.raioCidade(fim) * 0.7) { this.meta = null; this.el.querySelector('.ps-meta').hidden = true; this.ui.aviso(`🏁 Sei arrivato a ${fim.nome}!`); return; }
-    // segue a estrada: aponta para o portão da cidade de destino do trecho, não para o centro
-    const da = m.rota[m.i - 1], s = this.strade.strada(da, alvo), g = s.A === alvo ? s.gA : s.gB;
-    const tx = g.x - this.pos.x, tz = g.z - this.pos.z, sy = Math.sin(this.yaw), cy = Math.cos(this.yaw);
+    const p = this.pos, P = m.punto, dFim = Math.hypot(P.x - p.x, P.z - p.z);
+    if (dFim < m.raio) { this.annullaMeta(); this.ui.aviso(m.citta ? `🏁 Sei arrivato a ${P.nome}!` : '🏁 Sei arrivato a destinazione!'); return; }
+    // segue a estrada: aponta para o portão da próxima cidade da rota; no fim, direto para o ponto
+    let gx = P.x, gz = P.z, via = null;
+    if (m.rota) {
+      while (m.i < m.rota.length && Math.hypot(m.rota[m.i].x - p.x, m.rota[m.i].z - p.z) < this.citta.raioCidade(m.rota[m.i]) + 0.05) m.i++;
+      if (m.i < m.rota.length) { const da = m.rota[m.i - 1], alvo = m.rota[m.i], s = this.strade.strada(da, alvo), g = s.A === alvo ? s.gA : s.gB; gx = g.x; gz = g.z; via = alvo; }
+    }
+    const tx = gx - p.x, tz = gz - p.z, sy = Math.sin(this.yaw), cy = Math.cos(this.yaw);
     const f = -sy * tx - cy * tz, r = cy * tx - sy * tz, ang = Math.atan2(r, f);
     const el = this.el.querySelector('.ps-meta');
     el.querySelector('i').style.transform = `rotate(${ang.toFixed(2)}rad)`;
-    el.querySelector('span').textContent = `${fim.nome} · ${km(dFim)} km${alvo !== fim ? ` · via ${alvo.nome}` : ''}`;
+    el.querySelector('span').textContent = `📍 ${P.nome} · ${distTxt(dFim)}${via && via !== m.cittaDest ? ` · via ${via.nome}` : ''}`;
   }
 
-  // com veículo: pilota automático pela rede, trecho por trecho
-  parti(dest) {
+  // com veículo: pilota automático pela rede, trecho por trecho (pin: ponto do mapa que continua depois da chegada)
+  parti(dest, tieniPin = false) {
     const r = this.rota(dest); if (!r) return;
-    this.meta = null; this.el.querySelector('.ps-meta').hidden = true;
+    const pin = tieniPin && this.meta && !this.meta.citta ? this.meta.punto : null;
+    this.annullaMeta();
     const tratti = [];
     for (let i = 0; i < r.length - 1; i++) tratti.push([r[i], r[i + 1]]);
-    this.viaggio = { tratti, n: 0, dest };
+    this.viaggio = { tratti, n: 0, dest, pin };
     this.iniziaTratto();
     this.el.classList.add('viaggio');
     this.el.querySelector('.ps-menu').classList.add('basso');
@@ -230,6 +277,7 @@ export class Passeggio {
     this.mappa.scene.fog.near = 0.8; this.mappa.scene.fog.far = 4.5;
     this.aggiornaCitta();
     this.el.querySelector('.ps-et').innerHTML = '';
+    if ((this._q = (this._q ?? 0) + 1) % 3 === 0) this.mini.aggiorna();
     if (k < 1) return;
     if (!v.salta && v.n < v.tratti.length - 1) { v.n++; this.iniziaTratto(); return; }
     // chegou: fica no portão da cidade, já em cima da rua (sem pular para a piazza)
@@ -250,6 +298,7 @@ export class Passeggio {
     this.entraCitta(dest);
     this.aggiornaCitta(true);
     this.ui.aviso(`🏘️ Benvenuto a ${dest.nome}!`);
+    if (v.pin) this.impostaMeta(v.pin.x, v.pin.z, v.pin.nome);   // o último pedaço até o 📍 é a pé
   }
 
   // ---------- entrar / sair ----------  // alvo: "casa:<conta>" ou "luogo:<id>"
@@ -293,7 +342,7 @@ export class Passeggio {
     const mia = this.D.porConta.get(conto.p.conta);
     this.el.querySelector('.ps-casa').hidden = !mia;
     const toque = matchMedia('(pointer: coarse)').matches;
-    this.dica(toque ? '👈 Trascina a sinistra per camminare · 👉 a destra per girarti · vai dove vuoi: prati, strade, altre città' : '⌨️ WASD o frecce per camminare (Shift corre) · trascina per girarti · vai dove vuoi: prati, strade, altre città', 6000);
+    this.dica(toque ? '👈 Trascina a sinistra per camminare · 👉 a destra per girarti · 🗺️ tocca la mappa in basso per scegliere dove andare' : '⌨️ WASD per camminare (Shift corre) · 🖱️ clicca sulla scena e muovi il mouse per girarti (Q/E) · 🗺️ M apre la mappa', 7000);
     this.ultimoAgg = null;
     this.aggiornaCitta(true);
   }
@@ -311,7 +360,9 @@ export class Passeggio {
     this.omino.visible = false;
     if (this.mezzo) this.mezzo.visible = false;
     if (this.viaggio) { this.viaggio = null; this.el.querySelector('.ps-menu').classList.remove('basso'); this.el.classList.remove('viaggio'); }
-    this.meta = null; this.el.querySelector('.ps-meta').hidden = true;
+    this.annullaMeta();
+    this.mini.chiudi();
+    if (document.pointerLockElement) document.exitPointerLock();
     this.chiudiMenu();
     this.tesori?.esci();
     this.strade.grupo.visible = false;
@@ -384,6 +435,7 @@ export class Passeggio {
   evento(e) {
     if (e.type === 'wheel') { e.preventDefault(); this.pitch = clamp(this.pitch + e.deltaY * 0.0008, -0.05, 0.6); return; }
     const cv = this.mappa.canvas;
+    if (document.pointerLockElement === cv) return;   // mouse preso: quem gira é o mousemove (constructor)
     if (e.type === 'pointerdown') {
       cv.setPointerCapture(e.pointerId);
       const toque = e.pointerType !== 'mouse';
@@ -420,7 +472,11 @@ export class Passeggio {
       const g = this.giro;
       if (g && e.pointerId === g.id) {
         this.giro = null;
-        if (!g.moveu && e.type === 'pointerup' && performance.now() - g.t0 < 450) this.mappa.aoClique?.(e.clientX, e.clientY);
+        if (!g.moveu && e.type === 'pointerup' && performance.now() - g.t0 < 450) {
+          // PC: clique prende o mouse para olhar em volta (as casas abrem pelos rótulos @); celular: toque abre o cartão
+          if (e.pointerType === 'mouse' && cv.requestPointerLock && !this.viaggio) { try { cv.requestPointerLock()?.catch?.(() => {}); } catch { /* sem suporte */ } }
+          else this.mappa.aoClique?.(e.clientX, e.clientY);
+        }
       }
     }
   }
@@ -454,6 +510,9 @@ export class Passeggio {
     if (t.has('s') || t.has('arrowdown')) fx -= 1;
     if (t.has('d') || t.has('arrowright')) rx += 1;
     if (t.has('a') || t.has('arrowleft')) rx -= 1;
+    if (t.has('q')) this.yaw += dt * 2;      // Q/E giram a câmera (PC)
+    if (t.has('e')) this.yaw -= dt * 2;
+    if (this.mini.aperta()) fx = rx = 0;     // mapa grande aberto: o boneco espera
     const mag = Math.min(1, Math.hypot(fx, rx));
     const sy = Math.sin(this.yaw), cy = Math.cos(this.yaw);
     let mx = 0, mz = 0;
@@ -506,7 +565,7 @@ export class Passeggio {
     m.scene.fog.near = lAqui ? 0.35 : 0.6; m.scene.fog.far = lAqui ? 2.6 : 3.4;
     this.aggiornaCitta();
     this.etichette();
-    if ((this._q ?? 0) % 3 === 0) this.aggiornaMeta();
+    if ((this._q ?? 0) % 3 === 0) { this.aggiornaMeta(); this.mini.aggiorna(); }
   }
   vicina() {
     let best = this.l, bd = Infinity;
