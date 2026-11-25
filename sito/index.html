@@ -45,7 +45,7 @@
     window.addEventListener('unhandledrejection', function (e) { relata('promise: ' + (e.reason && (e.reason.message || e.reason))); });
     setTimeout(function () {
       var c = document.getElementById('caricamento');
-      if (!c || c.classList.contains('fora')) return;
+      if (!c || c.classList.contains('fora') || window.__fase === 'pronto') return;   // pronto = esperando o "Entra"
       // fase em que parou + o que já baixou + tipo de rede: separa "lento" de "travado"
       var net = navigator.connection ? ' rete=' + navigator.connection.effectiveType : '';
       window.__lento = true;
@@ -82,6 +82,7 @@
   <button id="zoom-meno" type="button" aria-label="Allontana">−</button>
   <button id="vedi-paese" type="button" aria-label="Vedi tutta l'Italia">⤢</button>
   <button id="vai-casa" type="button" aria-label="Vai alla mia casa" hidden>🏠</button>
+  <button id="musica" type="button" aria-label="Musica" hidden>🎵</button>
 </div>
 
 <section id="pannello" hidden>
@@ -108,7 +109,61 @@
 
 <footer id="piede"><span id="versione">caricamento…</span> · <a href="privacy.html">privacy</a> · <a href="termini.html">crediti</a></footer>
 
-<div id="caricamento"><div class="palla"></div><p>Costruendo l'Italia…</p></div>
+<!-- abertura: as casinhas sobem conforme carrega; no fim "Entra" (o toque liga a música: js/intro.js + js/musica.js) -->
+<div id="caricamento">
+  <div class="ap-sole"></div><div class="ap-nuvola n1"></div><div class="ap-nuvola n2"></div>
+  <div class="ap-logo"><span class="ap-it">Italia</span><span class="ap-cpc">Casa per Casa</span><span class="ap-tri"><i></i><i></i><i></i></span></div>
+  <div class="ap-case"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="ap-barra"><b id="intro-barra"></b></div>
+  <p id="intro-msg">Costruendo l'Italia…</p>
+  <div id="intro-dati" hidden></div>
+  <button id="intro-entra" type="button" hidden>▶ Entra</button>
+  <button id="intro-audio" type="button" hidden></button>
+</div>
+<script>
+  // progresso da abertura: segue window.__fase (main.js) e window.__fasi (dati.js); frases mudam sozinhas
+  (function () {
+    var frasi = ['Impastando la pizza…', 'Aprendo le persiane…', 'Stendendo i panni al sole…', 'Accendendo i lampioni…',
+      'Suonando le campane…', 'Preparando il caffè…', 'Spazzando la piazza…', 'Costruendo casa per casa…'];
+    var P = { html: 0.06, modulo: 0.16, dati: 0.74, mappa: 0.88, pronto: 1 };
+    var barra = document.getElementById('intro-barra'), msg = document.getElementById('intro-msg');
+    var casas = [].slice.call(document.querySelectorAll('.ap-case i')), visto = 0, k = 0, parou = false;
+    function alvo() {
+      var f = window.__fase, a = P[f] || 0.06;
+      if (f === 'modulo') a += Object.keys(window.__fasi || {}).length * 0.11;   // geo, comuni, snapshot, rilievo, terreno
+      return Math.min(a, 1);
+    }
+    var t = setInterval(function () {
+      if (parou) return clearInterval(t);
+      var a = alvo();
+      visto += (a - visto) * 0.12;
+      if (a < 1 && visto > a - 0.02) visto = Math.min(visto + 0.0012, a + 0.07);   // nunca parece parado
+      barra.style.width = (visto * 100).toFixed(1) + '%';
+      var n = Math.min(casas.length, Math.floor(visto * casas.length + 0.4));
+      for (var i = 0; i < n; i++) casas[i].className = 'su';
+    }, 50);
+    var tf = setInterval(function () {
+      if (parou || window.__fase === 'pronto') return clearInterval(tf);
+      if (!window.__lento) msg.textContent = frasi[k++ % frasi.length];
+    }, 1500);
+    window.__intro = {
+      pronto: function (dati) {
+        visto = 1; barra.style.width = '100%';
+        casas.forEach(function (c) { c.className = 'su'; });
+        setTimeout(function () {
+          parou = true;
+          document.getElementById('caricamento').classList.add('pronto');
+          msg.textContent = 'Benvenuti in Italia!';
+          var d = document.getElementById('intro-dati'); d.textContent = dati; d.hidden = false;
+          document.getElementById('intro-entra').hidden = false;
+          document.getElementById('intro-audio').hidden = false;
+          document.getElementById('intro-entra').focus({ preventScroll: true });
+        }, 350);
+      },
+      fim: function () { parou = true; },
+    };
+  })();
+</script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

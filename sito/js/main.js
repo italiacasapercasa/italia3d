@@ -11,6 +11,7 @@ import { Missioni } from './missioni.js';
 import { Conto } from './conto.js';
 import { Passeggio } from './passeggio.js';
 import { Interni } from './interni.js';
+import { intro } from './intro.js';
 
 const VERSAO = document.querySelector('meta[name="versione"]')?.content ?? 'dev';
 const DEMO = new URLSearchParams(location.search).has('demo');   // ?demo=1: mapa de demonstração
@@ -90,13 +91,13 @@ async function iniciar() {
   window.__fase = 'pronto';
   window.__conta?.('ok');
   if (window.__lento) window.__relata?.(`caricata dopo ${Math.round((Date.now() - window.__t0) / 1000)} s`);
-  document.getElementById('caricamento').classList.add('fora');
-  setTimeout(() => document.getElementById('caricamento').remove(), 600);
+  intro(D, mappa);   // tela de abertura: "Entra" liga a música e a câmera desce sobre a Itália
   if (!DEMO) checarVersao(D.snap.versao);
 }
 
 iniciar().catch(e => {
   console.error(e);
   window.__relata?.(`iniciar: ${e?.message ?? e}`);
+  window.__intro?.fim();
   document.querySelector('#caricamento p').textContent = 'Ops! Qualcosa è andato storto. Ricarica la pagina.';
 });
