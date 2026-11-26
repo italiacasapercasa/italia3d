@@ -38,6 +38,46 @@ if (preg_match('/^c[0-9a-f]{16}$/', $sck) || stripos($registro['prodotto'], 'cre
     http_response_code(200); echo 'ok'; exit;
 }
 
+// ---------- Natale sulla mappa (produto N108658925K): registra, ATIVA SOZINHO em data/natale.json e avisa por e-mail ----------
+// link: pay.hotmart.com/N108658925K?off=<oferta>&sck=<id da loja>[-DD p/ Avvento] (node strumenti/natale.mjs link <id> [DD])
+// reembolso/chargeback desativa só o que aquela compra ligou. Fica ANTES dos pedidos de loja: o sck é o id do mesmo pedido
+// e, sem isto, o pagamento do Natal sobrescreveria o pagamento da loja. natale.json passa a ser "do servidor".
+const NATALE_OFFERTE = ['v67dhxtb' => 'negozio', 'cg2s8ifg' => 'negozio', '18wqfhk0' => 'avvento', 'yy141hde' => 'sponsor'];
+$offNat = NATALE_OFFERTE[(string)($compra['offer']['code'] ?? '')] ?? null;
+if ($offNat || stripos($registro['prodotto'], 'natale') !== false) {
+    $logNat = CARTELLA . '/natale-pagamenti.jsonl';
+    $esito = in_array($evento, ['PURCHASE_APPROVED', 'PURCHASE_COMPLETE'], true) ? 'pagato' : (in_array($evento, ['PURCHASE_REFUNDED', 'PURCHASE_CHARGEBACK'], true) ? 'rimborsato' : '');
+    if ($esito !== '') {
+        preg_match('/^(\d{6}-[0-9a-f]{8})(?:-(\d{2}))?$/', $sck, $m);
+        $neg = $m[1] ?? ''; $dia = isset($m[2]) ? "2026-12-{$m[2]}" : '';
+        $ped = $neg !== '' && is_file("$pasta/$neg.json") ? (json_decode((string)file_get_contents("$pasta/$neg.json"), true) ?: []) : [];
+        $com = array_values(array_filter(json_decode((string)@file_get_contents(CARTELLA . '/../config-gioco/commerci.json'), true) ?: [], fn($c) => ($c['id'] ?? '') === $neg));
+        $nome = (string)($com[0]['nome'] ?? $ped['nome'] ?? $neg);
+        // a mesma compra chega 2× (APPROVED e, dias depois, COMPLETE): não reativa o que foi reembolsado nem repete o e-mail
+        $antes = []; $ligou = '';
+        foreach (array_filter(explode("\n", (string)@file_get_contents($logNat))) as $l) {
+            $x = json_decode($l, true); if (($x['transazione'] ?? '') !== $registro['transazione']) continue;
+            $antes[] = $x['esito'] ?? ''; if (($x['esito'] ?? '') === 'pagato' && $ligou === '') $ligou = (string)($x['mapa'] ?? '');
+        }
+        // reembolso de Avvento/Sponsor que não ativou (ganhou só o Negozio di Natale): desliga o Negozio
+        $offEf = $esito === 'rimborsato' && str_contains($ligou, 'Ganhou o Negozio') ? 'negozio' : $offNat;
+        if ($esito === 'pagato' && in_array('rimborsato', $antes, true)) $ativ = 'IGNORADO: compra já reembolsada';
+        elseif ($esito === 'pagato' && in_array('pagato', $antes, true)) $ativ = 'REPETIDO: já processado';
+        elseif ($esito === 'rimborsato' && in_array('rimborsato', $antes, true)) $ativ = 'REPETIDO: reembolso já processado';
+        elseif (!$offNat) $ativ = 'ERRO: oferta desconhecida (' . (string)($compra['offer']['code'] ?? '') . ')';
+        elseif ($neg === '' || (!$com && !$ped)) $ativ = "ERRO: loja não encontrada (sck '$sck')";
+        else $ativ = natale_aplica((string)$offEf, $neg, $dia, $esito === 'pagato');
+        file_put_contents($logNat, json_encode(['em' => gmdate('c'), 'evento' => $evento, 'esito' => $esito, 'offerta' => $offNat, 'negozio' => $neg, 'nome' => $nome, 'giorno' => $dia,
+            'transazione' => $registro['transazione'], 'valore' => $registro['valore'], 'email' => (string)($d['data']['buyer']['email'] ?? ''), 'mapa' => $ativ], JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+        if (defined('EMAIL_AVVISI') && EMAIL_AVVISI && !str_starts_with($ativ, 'REPETIDO')) {
+            $falhou = !str_starts_with($ativ, 'ATIVADO') && !str_starts_with($ativ, 'DESATIVADO');
+            @mail(EMAIL_AVVISI, ($falhou ? '⚠️ ' : '') . ($esito === 'pagato' ? 'PAGO Natale' : 'RIMBORSO Natale') . ": $nome ($offNat" . ($dia ? " $dia" : '') . ')',
+                "Natale Italia: $offNat · negozio $neg · {$registro['valore']} {$registro['valuta']}\nMappa: $ativ\n(vedere tutto: node strumenti/natale.mjs lista)", 'From: ' . EMAIL_AVVISI);
+        }
+    }
+    http_response_code(200); echo 'ok'; exit;
+}
+
 // carrinho abandonado (o cliente abriu o pagamento e saiu): a Hotmart não manda o sck, então acha o pedido pelo e-mail
 if ($evento === 'PURCHASE_OUT_OF_SHOPPING_CART') {
     $email = strtolower(trim((string)($d['data']['buyer']['email'] ?? '')));
@@ -102,6 +142,40 @@ if ($novo && preg_match('/^\d{6}-[0-9a-f]{8}$/', $sck) && is_file("$pasta/$sck.j
 }
 http_response_code(200);
 echo 'ok';
+
+// liga/desliga uma compra do Natal em data/natale.json (com trava: dois pagamentos ao mesmo tempo não se apagam)
+// Avvento num dia já vendido ou Sponsor já vendido: não toma o lugar de ninguém, liga só o Negozio di Natale e avisa
+function natale_aplica(string $off, string $neg, string $dia, bool $liga): string {
+    $arq = __DIR__ . '/../data/natale.json';
+    $fh = @fopen($arq, 'c+'); if (!$fh) return 'ERRO: não abriu data/natale.json';
+    flock($fh, LOCK_EX);
+    $nat = json_decode((string)stream_get_contents($fh), true) ?: [];
+    $nat += ['sponsor' => null, 'negozi' => [], 'avvento' => [], 'bonus' => 2];
+    $nat['avvento'] = (array)$nat['avvento'];
+    $addNeg = function () use (&$nat, $neg) { if (!in_array($neg, $nat['negozi'], true)) $nat['negozi'][] = $neg; };
+    if ($liga) {
+        if ($off === 'avvento') {
+            $dono = (string)($nat['avvento'][$dia] ?? '');
+            if (!preg_match('/^2026-12-(0[1-9]|1\d|2[0-4])$/', $dia)) { $addNeg(); $r = "NÃO ATIVOU o Avvento: sem dia válido no link ('$dia'). Ganhou o Negozio di Natale; ative o dia com natale.mjs avvento"; }
+            elseif ($dono !== '' && $dono !== $neg) { $addNeg(); $r = "NÃO ATIVOU o Avvento: $dia já é de outra loja ($dono). Ganhou o Negozio di Natale; combine outro dia ou reembolse a diferença"; }
+            else { $nat['avvento'][$dia] = $neg; ksort($nat['avvento']); $r = "ATIVADO: Avvento $dia"; }
+        } elseif ($off === 'sponsor') {
+            $sp = (string)($nat['sponsor']['id'] ?? '');
+            if ($sp !== '' && $sp !== $neg) { $addNeg(); $r = "NÃO ATIVOU o sponsor: já é de outra loja ($sp). Ganhou o Negozio di Natale; reembolse a diferença"; }
+            else { $nat['sponsor'] = ['id' => $neg]; $r = 'ATIVADO: sponsor ufficiale'; }
+        } else { $addNeg(); $r = 'ATIVADO: Negozio di Natale'; }
+    } else {
+        if ($off === 'avvento') { if ($dia !== '' && ($nat['avvento'][$dia] ?? '') === $neg) unset($nat['avvento'][$dia]); }
+        elseif ($off === 'sponsor') { if (($nat['sponsor']['id'] ?? '') === $neg) $nat['sponsor'] = null; }
+        else $nat['negozi'] = array_values(array_filter($nat['negozi'], fn($x) => $x !== $neg));
+        $r = 'DESATIVADO (rimborso/chargeback)';
+    }
+    if ($nat['avvento'] === []) $nat['avvento'] = new stdClass();   // continua {} no JSON
+    ftruncate($fh, 0); rewind($fh);
+    fwrite($fh, json_encode($nat, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n");
+    fflush($fh); flock($fh, LOCK_UN); fclose($fh);
+    return $r;
+}
 
 // lista pública das decorações ativas (o site lê data/decori.json): a compra mais recente de cada conta vale
 // (amministra.mjs "decori rimuovi" refaz a mesma lista no PC)
